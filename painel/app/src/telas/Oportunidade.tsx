@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft, Check, Copy, ExternalLink, Flame, Languages, Play, RefreshCw, Trash2, Video } from "lucide-react";
+import { ArrowLeft, Check, Clapperboard, Copy, ExternalLink, Flame, Languages, Play, RefreshCw, Trash2, Video } from "lucide-react";
 import { abrirLink, CODIGOS, embed, enviar, linkVideo, obter, type DetalheOp, type EstadoOp } from "../api";
 import type { MIN } from "../estado";
 import { Girando, Nota, Vazio, VideoThumb, useAcao, Bandeira, Rosto } from "../componentes/base";
@@ -82,7 +82,16 @@ export function Oportunidade({ m, id }: { m: MIN; id: number }) {
             <div><span className="label"><Flame size={11} aria-hidden /> Fome</span><span className="num">{o.fome >= 0 ? `${compacto(o.fome)}/ano` : "—"}</span></div>
           </div>
           <div className="row">
-            {o.estado !== "salva" && <button className="btn btn-primary btn-sm" disabled={!!rodando} onClick={() => marcar("salva", "Salva.")}>Salvar</button>}
+            {o.estado !== "descartada" && o.estado !== "inviavel" && (
+              <button className="btn btn-primary btn-sm" disabled={!!rodando || !m.estado?.claude}
+                      onClick={() => rodar("prod", async () => {
+                        const v = await enviar<{ id: string }>("/api/videos", { op_id: o.id });
+                        window.location.hash = link.video(v.id);
+                      }, "Projeto criado: o Claude já está lendo o viral.")}>
+                {rodando === "prod" ? <Girando /> : <Clapperboard size={14} aria-hidden />}Produzir vídeo
+              </button>
+            )}
+            {o.estado !== "salva" && <button className="btn btn-ghost btn-sm" disabled={!!rodando} onClick={() => marcar("salva", "Salva.")}>Salvar</button>}
             {o.estado !== "produzida" && <button className="btn btn-ghost btn-sm" disabled={!!rodando} onClick={() => marcar("produzida", "Marcada como produzida.")}><Video size={14} aria-hidden />Produzi</button>}
             {o.estado !== "descartada" ? (
               <button className="btn btn-quiet btn-sm" disabled={!!rodando} onClick={() => marcar("descartada", "Descartada.")}><Trash2 size={14} aria-hidden />Descartar</button>

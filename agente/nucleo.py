@@ -103,6 +103,9 @@ class Nucleo:
         self.pasta_retratos = _ret.PASTA
         self._fio_retrato = None
         self._fio = threading.Thread(target=self._trabalhar, daemon=True, name="minerador-fila")
+        # ⭐ a aba Producao: fio proprio, um video nunca segura um garimpo (agente/estudio.py)
+        from estudio import Estudio
+        self.estudio = Estudio(self) if iniciar else None
         if iniciar:
             for g in self.banco.garimpos_abertos():
                 # ⛔ rodando num processo vivo (outra janela, um script): e' dele, nao se toca
@@ -585,8 +588,16 @@ class Nucleo:
             time.sleep(0.05)
         return False
 
+    def produzir(self, oid):
+        """Projeto de video a partir da oportunidade `oid` (a aba Producao)."""
+        if not self.estudio: raise RuntimeError("a produção não está ligada nesta janela")
+        o = self.oportunidade(oid)
+        if o["estado"] in ("descartada", "inviavel"): raise ValueError("essa oportunidade foi descartada")
+        return self.estudio.criar(o)
+
     def encerrar(self):
         self._vivo = False
+        if self.estudio: self.estudio.encerrar()
         with self._t:
             if self._atual and self._atual["tipo"] == "garimpo": self._cancelar.add(self._atual["id"])
 

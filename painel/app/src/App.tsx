@@ -13,6 +13,8 @@ import { Ajustes } from "./telas/Ajustes";
 import { Idioma } from "./telas/Idioma";
 import { Mapa } from "./telas/Mapa";
 import { Retratos } from "./telas/Retratos";
+import { Producao } from "./telas/Producao";
+import { VideoProjeto } from "./telas/Video";
 
 export function App() {
   const m = useMinerador();
@@ -32,6 +34,8 @@ export function App() {
   else if (rota.tela === "idioma") tela = <Idioma m={m} cod={rota.cod} />;
   else if (rota.tela === "mapa") tela = <Mapa m={m} />;
   else if (rota.tela === "retratos") tela = <Retratos m={m} />;
+  else if (rota.tela === "producao") tela = <Producao m={m} />;
+  else if (rota.tela === "video") tela = <VideoProjeto m={m} id={rota.id} />;
   else tela = <Painel m={m} />;
 
   return (

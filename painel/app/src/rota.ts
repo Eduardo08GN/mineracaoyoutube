@@ -11,7 +11,9 @@ export type Rota =
   | { tela: "ajustes" }
   | { tela: "idioma"; cod: CodIdioma }
   | { tela: "mapa" }
-  | { tela: "retratos" };
+  | { tela: "retratos" }
+  | { tela: "producao" }
+  | { tela: "video"; id: string };
 
 function ler(): Rota {
   const [caminho, busca = ""] = window.location.hash.replace(/^#\/?/, "").split("?");
@@ -24,6 +26,8 @@ function ler(): Rota {
   if (partes[0] === "mapa") return { tela: "mapa" };
   if (partes[0] === "radar") return { tela: "radar" };
   if (partes[0] === "retratos") return { tela: "retratos" };
+  if (partes[0] === "producao" && partes[1]) return { tela: "video", id: decodeURIComponent(partes[1]) };
+  if (partes[0] === "producao") return { tela: "producao" };
   if (partes[0] === "ajustes") return { tela: "ajustes" };
   if (partes[0] === "idioma" && CODIGOS.includes(partes[1] as CodIdioma)) return { tela: "idioma", cod: partes[1] as CodIdioma };
   return { tela: "painel" };
@@ -52,6 +56,8 @@ export const link = {
   mapa: "#/mapa",
   radar: "#/radar",
   retratos: "#/retratos",
+  producao: "#/producao",
+  video: (id: string) => `#/producao/${encodeURIComponent(id)}`,
   ajustes: "#/ajustes",
   idioma: (c: CodIdioma) => `#/idioma/${c}`,
 };

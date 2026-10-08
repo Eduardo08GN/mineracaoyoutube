@@ -11,6 +11,7 @@ import "./estilo.css";
 import "./minerador.css";
 import "./minerador-midia.css";
 import "./minerador-mercados.css";
+import "./producao.css";
 import { App } from "./App";
 
 createRoot(document.getElementById("raiz")!).render(

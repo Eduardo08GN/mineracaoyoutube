@@ -273,7 +273,79 @@ export type Evento =
   | ({ tipo: "estado" } & Estado)
   | { tipo: "log"; linha: string }
   | { tipo: "aviso"; texto: string; tom?: "ok" | "erro" | "" }
-  | { tipo: "mudou"; o: "garimpos" | "oportunidades" | "radar" | "ajustes" | "retratos" };
+  | { tipo: "mudou"; o: "garimpos" | "oportunidades" | "radar" | "ajustes" | "retratos" | "producao"; id?: string };
+
+// ── a aba Producao (agente/estudio.py) ──
+export type EstadoEtapa = "pronta" | "pendente" | "bloqueada" | "futura";
+export interface EtapaVideo { id: string; nome: string; estado: EstadoEtapa }
+
+export interface ResumoVideo {
+  id: string;
+  nome: string;
+  persona: string;
+  idioma: CodIdioma;
+  criado: number;
+  op_id: number | null;
+  thumb: string;
+  palavras: number;
+  minutos: number;
+  n_planos: number;
+  etapas: EtapaVideo[];
+  trabalhando: string;
+}
+
+export type TipoPlano = "avatar" | "split" | "broll";
+export interface PlanoVideo {
+  n: number;
+  secao: number;
+  secao_nome: string;
+  tipo: TipoPlano;
+  voz: "veo" | "minimax";
+  texto: string;
+  palavras: number;
+  dur: number;
+  inicio: number;
+  cena: string;
+  camada: "" | "acao" | "objeto" | "lugar" | "epoca" | "pessoas";
+  busca: string;
+}
+
+export interface SecaoRoteiro { n: number; nome: string; texto: string }
+
+export interface PerfilVideo {
+  nome: string;
+  apresentacao: string;
+  companheiro: string;
+  linhagem: string;
+  tratamento: string;
+  livro: string;
+  site: string;
+  assinatura: string;
+  despedida: string;
+  cenario_avatar: string;
+}
+
+export interface Video {
+  id: string;
+  nome: string;
+  persona: string;
+  idioma: CodIdioma;
+  criado: number;
+  op_id: number | null;
+  fonte: {
+    video_id: string; titulo: string; canal: string; views: number; publicado: string; thumb: string;
+    pronta?: boolean; texto?: string; legenda?: string; sem_fala?: boolean; duracao?: number; descricao?: string;
+  };
+  mecanismo?: { resumo: string; pontos: string[]; promessa: string; itens: number; lacunas: string[] };
+  roteiro: { titulos: string[]; miniatura: { texto: string; objeto: string }; secoes: SecaoRoteiro[]; palavras: number; minutos: number } | null;
+  planos: PlanoVideo[];
+  registro: { t: number; texto: string }[];
+  perfil: PerfilVideo;
+  etapas: EtapaVideo[];
+  proporcoes: Record<TipoPlano, number>;
+  trabalhando: string;
+  na_fila: string[];
+}
 
 // A senha da sessao chega na URL (?t=...). Guardada na aba e tirada da barra de endereco.
 const token: string = (() => {

@@ -72,6 +72,23 @@ class Ids(BaseModel):
     ids: Optional[List[str]] = None
 
 
+class NovoProjeto(BaseModel):
+    op_id: int
+
+
+class Etapa(BaseModel):
+    etapa: str
+
+
+class Secao(BaseModel):
+    n: int
+    texto: str
+
+
+class Campos(BaseModel):
+    campos: dict
+
+
 class Chaves(BaseModel):
     chaves: List[str]
 
@@ -240,6 +257,43 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     @app.post("/api/producao/reavaliar")
     def reavaliar_producao():
         return nucleo.reavaliar_producao()
+
+    # ── a aba Producao (agente/estudio.py) ──
+    def _estudio():
+        if not nucleo.estudio: raise HTTPException(503, "a produção não está ligada nesta janela")
+        return nucleo.estudio
+
+    @app.get("/api/videos")
+    def videos():
+        return _estudio().lista()
+
+    @app.post("/api/videos")
+    def novo_video(c: NovoProjeto):
+        return nucleo.produzir(c.op_id)
+
+    @app.get("/api/videos/ajustes")
+    def ajustes_estudio():
+        return _estudio().ajustes()
+
+    @app.post("/api/videos/ajustes")
+    def salvar_ajustes_estudio(c: Campos):
+        return _estudio().salvar_ajustes(**c.campos)
+
+    @app.get("/api/videos/{pid}")
+    def video(pid: str):
+        return _estudio().projeto(pid)
+
+    @app.post("/api/videos/{pid}/rodar")
+    def rodar_etapa(pid: str, c: Etapa):
+        return _estudio().rodar(pid, c.etapa)
+
+    @app.post("/api/videos/{pid}/perfil")
+    def editar_perfil(pid: str, c: Campos):
+        return _estudio().editar_perfil(pid, c.campos)
+
+    @app.post("/api/videos/{pid}/secao")
+    def editar_secao(pid: str, c: Secao):
+        return _estudio().editar_secao(pid, c.n, c.texto)
 
     @app.post("/api/ajustes")
     def ajustes(c: Ajustes):
