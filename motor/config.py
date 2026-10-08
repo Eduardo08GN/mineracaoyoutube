@@ -27,9 +27,41 @@ def ler_env(arq=ARQ_ENV):
     return d
 
 
+def chaves(arq=ARQ_ENV):
+    """Todas as chaves da YouTube Data API, na ordem de uso, sem repetir.
+    ⭐ YOUTUBE_API_KEYS=a,b,c (varias) e YOUTUBE_API_KEY=a (a antiga, de uma so') valem as duas."""
+    env = ler_env(arq)
+    brutas = []
+    for fonte in (os.environ.get("YOUTUBE_API_KEYS", ""), env.get("YOUTUBE_API_KEYS", ""),
+                  os.environ.get("YOUTUBE_API_KEY", ""), env.get("YOUTUBE_API_KEY", "")):
+        brutas += [c.strip() for c in fonte.split(",") if c.strip()]
+    return list(dict.fromkeys(brutas))
+
+
 def chave_youtube(arq=ARQ_ENV):
-    """A chave da YouTube Data API: variavel de ambiente primeiro, depois o .env. "" se nao houver."""
-    return os.environ.get("YOUTUBE_API_KEY") or ler_env(arq).get("YOUTUBE_API_KEY", "")
+    """A primeira chave (compatibilidade). "" se nao houver."""
+    cs = chaves(arq)
+    return cs[0] if cs else ""
+
+
+def gravar_chaves(lista, arq=ARQ_ENV):
+    """Grava a lista inteira em YOUTUBE_API_KEYS e tira a linha antiga YOUTUBE_API_KEY."""
+    lista = list(dict.fromkeys(c.strip() for c in lista if c and c.strip()))
+    linhas = []
+    try:
+        linhas = open(arq, encoding="utf-8").read().splitlines()
+    except OSError:
+        pass
+    linhas = [l for l in linhas if not l.strip().startswith(("YOUTUBE_API_KEY=", "YOUTUBE_API_KEYS="))]
+    linhas.append("YOUTUBE_API_KEYS=" + ",".join(lista))
+    with open(arq, "w", encoding="utf-8") as f:
+        f.write("\n".join(linhas) + "\n")
+
+
+def id_chave(chave):
+    """Um apelido estavel da chave (o banco e o painel nunca guardam a chave em si)."""
+    import hashlib
+    return hashlib.sha1(chave.encode("utf-8")).hexdigest()[:10]
 
 
 def gravar_chave(valor, arq=ARQ_ENV):
@@ -66,6 +98,12 @@ def _autoteste():
     caso("troca a chave e mantem as outras", e["YOUTUBE_API_KEY"] == "novachave1234567" and e["OUTRA"] == "1")
     caso("⛔ o painel so' ve' a chave mascarada", mascarar("AIzaFAKEchaveDeTestexyz") == "AIza…xyz")
     caso("sem .env: vazio", ler_env(os.path.join(d, "nada")) == {})
+    gravar_chaves(["k1-xxxxxxxxxxxxxxxxxxxxx", "k2-yyyyyyyyyyyyyyyyyyyy", "k1-xxxxxxxxxxxxxxxxxxxxx"], arq)
+    caso("⭐ varias chaves, sem repetir, e a linha antiga sai", chaves(arq) == ["k1-xxxxxxxxxxxxxxxxxxxxx", "k2-yyyyyyyyyyyyyyyyyyyy"]
+         and "YOUTUBE_API_KEY=" not in open(arq, encoding="utf-8").read() and ler_env(arq)["OUTRA"] == "1")
+    open(arq, "a", encoding="utf-8").write("YOUTUBE_API_KEY=antiga-zzzzzzzzzzzzzzzzzz\n")
+    caso("a chave antiga entra no fim da lista", chaves(arq)[-1] == "antiga-zzzzzzzzzzzzzzzzzz")
+    caso("apelido estavel e sem a chave", id_chave("abc") == id_chave("abc") and "abc" not in id_chave("abc"))
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 

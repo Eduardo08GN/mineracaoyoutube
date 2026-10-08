@@ -56,16 +56,19 @@ export function Matriz({ m }: { m: MIN }) {
         <div className="panel matriz-caixa">
           <table className="matriz">
             <thead>
-              <tr><th scope="col">Persona</th>{temas.map((t) => <th key={t} scope="col">{t}</th>)}</tr>
+              <tr><th scope="col" className="matriz-th">Persona</th>{temas.map((t) => <th key={t} scope="col">{t}</th>)}</tr>
             </thead>
             <tbody>
               {usadas.map((p) => (
                 <tr key={p.id}>
-                  <th scope="row">
-                    <span className="matriz-persona">
-                      {d.resumo[p.id]?.capa && <img src={d.resumo[p.id].capa} alt="" loading="lazy" />}
-                      <span><strong>{p.nome}</strong><Selo status={saturacao(p.saturacao)} /></span>
-                    </span>
+                  <th scope="row" className="matriz-th">
+                    <div className="matriz-persona">
+                      {d.resumo[p.id]?.capa ? <img src={d.resumo[p.id].capa} alt="" loading="lazy" /> : <span className="sem-capa" />}
+                      <div className="matriz-persona-txt">
+                        <strong title={p.nome}>{p.nome}</strong>
+                        <span className={`sat sat-${saturacao(p.saturacao).tom}`}>{saturacao(p.saturacao).texto}</span>
+                      </div>
+                    </div>
                   </th>
                   {temas.map((t) => {
                     const c = cel(p.id, t);

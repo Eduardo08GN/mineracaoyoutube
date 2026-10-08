@@ -10,6 +10,7 @@ import "../../design-system/tokens.css";
 import "./estilo.css";
 import "./minerador.css";
 import "./minerador-midia.css";
+import "./minerador-mercados.css";
 import { App } from "./App";
 
 createRoot(document.getElementById("raiz")!).render(

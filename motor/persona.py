@@ -14,6 +14,10 @@ corta o argumento na primeira quebra de linha (licao do OW Agente, 22/09).
 """
 import json, os, re, shutil, subprocess, sys, tempfile
 
+AQUI = os.path.dirname(os.path.abspath(__file__))
+if AQUI not in sys.path: sys.path.insert(0, AQUI)
+import catalogo as _cat                                                     # noqa: E402
+
 PERSONAS = [
     {"id": "amish", "assinatura": ["amish"], "nome": "Amish", "marca": "AMISH",
      "quem": "an Amish man from Lancaster County: plain living, no grid dependence, old farm wisdom"},
@@ -54,14 +58,34 @@ PERSONAS = [
      "quem": "a retired lineman/electrician with 50 years of house calls: what fails in a home, hidden dangers, cheap fixes"},
 ]
 
+# ⭐ as dos EUA ganham pais e arquetipo; as de FR/DE/ES vem do catalogo (as personas se vestem por pais)
+for _p in PERSONAS:
+    _p.setdefault("idioma", "en")
+    _p.setdefault("arquetipo", _cat.ARQUETIPO_DOS_EUA.get(_p["id"], _p["id"]))
+    _p.setdefault("busca", _p["nome"])
+PERSONAS += _cat.LOCAIS
+
 TEMAS = ["jardim", "cozinha", "sobrevivência", "economia doméstica", "remédios caseiros",
          "casa e reparos", "animais e fazenda", "carros", "dinheiro", "saúde e longevidade", "outro"]
 
-# ⭐ a mesma oportunidade em outro idioma: a demanda nativa existe, a oferta com persona quase nao
-IDIOMAS = {
-    "fr": {"nome": "Francês", "sigla": "FR", "idioma": "fr", "regiao": "FR", "lingua": "French (France)"},
-    "de": {"nome": "Alemão", "sigla": "DE", "idioma": "de", "regiao": "DE", "lingua": "German (Germany)"},
-}
+# ⭐ os mercados: EN, FR, DE, ES (o pais de cada um, o publico aceito, o RPM de partida)
+IDIOMAS = _cat.PAISES
+
+
+def pele(arquetipo, idioma):
+    """A persona daquele arquetipo naquele pais, ou None."""
+    return next((p for p in PERSONAS if p["arquetipo"] == arquetipo and p["idioma"] == idioma), None)
+
+
+def local_de(p, idioma):
+    """(persona local, importada?). ⭐ Sem pele local, a persona vai como ela e', marcada como importada."""
+    if p.get("idioma", "en") == idioma: return p, False
+    q = pele(p.get("arquetipo", p["id"]), idioma)
+    return (q, False) if q else (p, True)
+
+
+def paises_do_arquetipo(arquetipo):
+    return {p["idioma"] for p in PERSONAS if p["arquetipo"] == arquetipo}
 
 
 def persona(pid):
@@ -69,7 +93,8 @@ def persona(pid):
     for p in PERSONAS:
         if p["id"] == pid: return p
     nome = (pid or "").strip()
-    return {"id": nome.lower(), "nome": nome, "marca": nome.upper(), "quem": nome, "assinatura": [nome.lower()]}
+    return {"id": nome.lower(), "nome": nome, "marca": nome.upper(), "quem": nome, "assinatura": [nome.lower()],
+            "idioma": "en", "arquetipo": nome.lower(), "busca": nome}
 
 
 def ja_tem_persona(titulo, p):
@@ -78,21 +103,26 @@ def ja_tem_persona(titulo, p):
     return any(re.search(r"\b" + re.escape(w) + r"\b", t) for w in p.get("assinatura") or [p["nome"].lower()])
 
 
-def tem_alguma_persona(titulo, atual=None):
-    """O titulo ja' e' remake de QUALQUER persona do catalogo (ou da atual, se for livre)?"""
-    return any(ja_tem_persona(titulo, p) for p in PERSONAS + ([atual] if atual else []))
+def tem_alguma_persona(titulo, atual=None, idioma=None):
+    """O titulo ja' e' remake de alguma persona do catalogo daquele mercado (ou da atual)?"""
+    lista = [p for p in PERSONAS if idioma is None or p.get("idioma", "en") == idioma]
+    return any(ja_tem_persona(titulo, p) for p in lista + ([atual] if atual else []))
 
 
 def palavras_chave(titulo, n=6):
     """O miolo do titulo para buscar remakes: sem numeros, emojis e palavras vazias."""
     vazias = {"how", "to", "the", "a", "an", "and", "or", "of", "in", "on", "for", "with", "your", "you", "my", "is",
               "are", "this", "that", "it", "do", "dont", "don't", "never", "ever", "will", "what", "why", "best",
-              "ways", "way", "tips", "easy", "simple", "every", "most", "from", "into", "at", "be", "can", "should"}
-    ws = [w for w in re.findall(r"[A-Za-z']+", titulo.lower()) if w not in vazias and len(w) > 2]
+              "ways", "way", "tips", "easy", "simple", "every", "most", "from", "into", "at", "be", "can", "should",
+              # fr / de / es
+              "les", "des", "une", "pour", "avec", "dans", "sur", "comment", "faire", "sans", "plus", "est",
+              "der", "die", "das", "und", "mit", "für", "wie", "ein", "eine", "den", "dem", "ohne", "auf",
+              "los", "las", "una", "con", "para", "por", "como", "del", "sin", "que", "muy", "más"}
+    ws = [w for w in re.findall(r"[^\W\d_][^\W\d_']*", titulo.lower()) if w not in vazias and len(w) > 2]
     return " ".join(list(dict.fromkeys(ws))[:n])
 
 
-INSTRUCAO = """You are a YouTube packaging strategist for faceless/persona channels aimed at US audiences aged 45+.
+INSTRUCAO = """You are a YouTube packaging strategist for faceless/persona channels aimed at {publico}.
 
 PERSONA: {quem}
 PERSONA TAG for titles: {marca}
@@ -107,7 +137,8 @@ a big number (7, 10, 25, 40) told by a warm old voice.
 
 For each item return:
 - "id": the same id
-- "titulos": 3 English titles, max 75 chars each: the first one closest to the original + persona,
+- "titulos": 3 titles written in {lingua} for natives (not translated-sounding), max 75 chars each:
+  the first one closest to the original + persona,
   the second with a curiosity gap, the third with a big number
 - "tema": one of {temas}
 - "angulo": ONE sentence in Brazilian Portuguese: what digital product (ebook/manual/course) this audience would buy after this video
@@ -121,7 +152,9 @@ VIDEOS:
 
 def montar_pedido(p, videos):
     lista = "\n".join(f'- id={v["id"]} | {v["views"]:,} views | "{v["titulo"]}"' for v in videos)
-    return INSTRUCAO.format(quem=p["quem"], marca=p["marca"], temas=json.dumps(TEMAS, ensure_ascii=False), lista=lista)
+    P = IDIOMAS[p.get("idioma", "en")]
+    return INSTRUCAO.format(quem=p["quem"], marca=p["marca"], temas=json.dumps(TEMAS, ensure_ascii=False), lista=lista,
+                            publico=P["publico"], lingua=P["lingua"])
 
 
 def interpretar(texto):
@@ -196,15 +229,20 @@ def chamar_claude(pedido, timeout=300):
 
 INSTRUCAO_EQUIV = """You localize winning YouTube packaging for native audiences in other countries (not literal translation).
 
-PERSONA: {quem}
+ORIGINAL PERSONA: {quem}
 
-For each video below and for each target language in {linguas}, return:
-- "titulo": the remake title transcreated for natives of that country (persona angle kept, max 75 chars)
+The persona does NOT get translated: in each country it is played by the LOCAL persona below
+(same archetype, local costume). Use it in the title.
+{alvos}
+
+For each video below and for each target language, return:
+- "titulo": the remake title written for natives of that country with the LOCAL persona (max 75 chars)
 - "consulta": the 2-5 word search query natives would actually type for the ORIGINAL topic, WITHOUT the persona
-- "persona_local": how natives write the persona word (e.g. Amish -> "Amish" in German, "amish" in French)
+- "persona_local": the word natives would see in titles for that local persona
 
 Answer with JSON only, no prose, no code fences:
-{{"itens": [{{"id": "...", "fr": {{"titulo": "...", "consulta": "...", "persona_local": "..."}}, "de": {{...}}}}]}}
+{exemplo}
+Every item MUST have ALL of these keys: {chaves}.
 
 VIDEOS:
 {lista}"""
@@ -212,8 +250,17 @@ VIDEOS:
 
 def montar_pedido_equiv(p, ops, idiomas):
     lista = "\n".join(f'- id={o["id"]} | original "{o["titulo"]}" | remake "{o.get("remake") or ""}"' for o in ops)
-    linguas = ", ".join(f'{k} = {IDIOMAS[k]["lingua"]}' for k in idiomas)
-    return INSTRUCAO_EQUIV.format(quem=p["quem"], linguas=linguas, lista=lista)
+    alvos = []
+    for k in idiomas:
+        q, importada = local_de(p, k)
+        alvos.append(f'- {k} = {IDIOMAS[k]["lingua"]}: LOCAL PERSONA "{q["nome"]}" — {q["quem"]}'
+                     + (" (no local equivalent: keep the original persona, explained for natives)" if importada else ""))
+    # ⛔ o exemplo leva TODOS os mercados pedidos: com "fr" e "de" fixos, o Claude devolvia so' esses
+    # dois e o ingles sumia (medido em 08/10, garimpo nativo em espanhol)
+    um = '{"titulo": "...", "consulta": "...", "persona_local": "..."}'
+    exemplo = '{"itens": [{"id": "...", ' + ", ".join(f'"{k}": {um}' for k in idiomas) + "}]}"
+    return INSTRUCAO_EQUIV.format(quem=p["quem"], alvos="\n".join(alvos), lista=lista, exemplo=exemplo,
+                                  chaves=", ".join(["id", *idiomas]))
 
 
 def interpretar_equiv(texto, idiomas):
@@ -279,6 +326,15 @@ def _autoteste():
     caso("⭐ equivalente FR lido", r["V1"]["fr"]["consulta"] == "choisir une pastèque")
     caso("⛔ idioma sem consulta ou nao pedido fica de fora", "de" not in r["V1"] and "es" not in r["V1"])
     caso("pedido de equivalencia cita as linguas", "German (Germany)" in montar_pedido_equiv(am, [{"id": "a", "titulo": "t"}], ["de"]))
+    caso("⭐ a avo da Depressao vira a Abuela de la posguerra em espanhol",
+         local_de(persona("depression"), "es") == (persona("abuela-posguerra"), False))
+    caso("⭐ Amish em frances nao tem pele: vai importada", local_de(am, "fr") == (am, True))
+    caso("⭐ o pedido FR leva a persona local", "Mémé de l'Occupation" in montar_pedido_equiv(persona("depression"),
+         [{"id": "a", "titulo": "t"}], ["fr"]))
+    caso("⭐ titulos no idioma do mercado", "German (Germany)" in montar_pedido(persona("alter-schrauber"), [{"id": "a", "views": 1, "titulo": "t"}]))
+    caso("palavras-chave em frances", palavras_chave("Comment faire du pain maison sans pétrir") == "pain maison pétrir")
+    caso("'Receta de la abuela' nao e' remake no catalogo ES", not tem_alguma_persona("Receta de la abuela", idioma="es"))
+    caso("'Recetas de la posguerra' ja' e' persona ES", tem_alguma_persona("Recetas de la posguerra", idioma="es"))
     caso("⭐ as apostas estao no catalogo", {"old-mechanic", "hutterite", "shaker", "sleep-farm", "victory-garden",
                                              "old-electrician"} <= {x["id"] for x in PERSONAS})
     caso("'salt shaker' nao e' remake Shaker", not ja_tem_persona("Salt Shaker Hack", persona("shaker")))

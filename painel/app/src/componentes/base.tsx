@@ -66,6 +66,7 @@ export function CardOportunidade({ o, personas }: { o: Oportunidade; personas?: 
         {o.thumb ? <img src={o.thumb} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" /> :
           <div className="stage-vazio">sem capa</div>}
         <Nota nota={o.nota} />
+        {o.idioma && o.idioma !== "en" && <span className="thumb-origem"><Bandeira cod={o.idioma} h={14} /></span>}
         {o.idiomas_eq && (
           <span className="thumb-idiomas">{o.idiomas_eq.split(",").sort().map((c) => <SiglaIdioma key={c} cod={c} />)}</span>
         )}
@@ -168,4 +169,21 @@ export function VideoThumb({ v, grande = false, rotulo }: { v: VideoCurto; grand
 
 export function SiglaIdioma({ cod, tom }: { cod: string; tom?: "aberto" | "fechado" }) {
   return <span className={`sigla-idioma${tom ? ` ${tom}` : ""}`}>{cod.toUpperCase()}</span>;
+}
+
+
+/** A bandeira do mercado desenhada (o Windows nao desenha bandeira em emoji: viraria "US", "FR"). */
+export function Bandeira({ cod, h = 14 }: { cod: string; h?: number }) {
+  const w = Math.round(h * 1.5);
+  const comum = { width: w, height: h, viewBox: "0 0 30 20", className: "bandeira-svg", "aria-hidden": true } as const;
+  if (cod === "fr") return <svg {...comum}><rect width="10" height="20" fill="#0055A4" /><rect x="10" width="10" height="20" fill="#fff" /><rect x="20" width="10" height="20" fill="#EF4135" /></svg>;
+  if (cod === "de") return <svg {...comum}><rect width="30" height="7" fill="#000" /><rect y="6.67" width="30" height="6.67" fill="#DD0000" /><rect y="13.33" width="30" height="6.67" fill="#FFCE00" /></svg>;
+  if (cod === "es") return <svg {...comum}><rect width="30" height="20" fill="#AA151B" /><rect y="5" width="30" height="10" fill="#F1BF00" /></svg>;
+  return (
+    <svg {...comum}>
+      <rect width="30" height="20" fill="#B22234" />
+      {[1, 3, 5, 7, 9, 11].map((i) => <rect key={i} y={(i * 20) / 13} width="30" height={20 / 13} fill="#fff" />)}
+      <rect width="13" height={(7 * 20) / 13} fill="#3C3B6E" />
+    </svg>
+  );
 }

@@ -1,31 +1,33 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Gem, Pickaxe, Square } from "lucide-react";
-import { CODIGOS, enviar, type Filtros, type Garimpo as G } from "../api";
+import { CODIGOS, enviar, NOME_IDIOMA, type CodIdioma, type Filtros, type Garimpo as G, type Persona } from "../api";
 import type { MIN } from "../estado";
-import { Girando, Selo, useAcao } from "../componentes/base";
+import { Girando, Selo, useAcao, Bandeira } from "../componentes/base";
 import { link } from "../rota";
 import { nomePersona, numero, quando, saturacao, statusDoGarimpo } from "../textos";
 
-// ⭐ sementes que viralizavam antes da era da IA: um ponto de partida, a pessoa troca
-const SUGESTOES = [
-  "how to pick a watermelon", "garden pests naturally", "bread from scratch", "save money on electricity",
-  "raised bed garden", "cast iron skillet", "root cellar", "how to sharpen a knife", "survival skills",
-  "homemade remedies", "canning vegetables", "keep chickens", "fix a leaky faucet", "grow tomatoes",
-];
+const EXEMPLO: Record<CodIdioma, string> = {
+  en: "how to pick a watermelon\ngarden pests naturally",
+  fr: "recette de grand-mère\npotager facile",
+  de: "omas rezepte\ngemüsegarten anlegen",
+  es: "recetas de la abuela\nhuerto en casa",
+};
 
-function custo(n: number, f: Filtros) {
-  return n * 102 + f.remakes * 101;
+/** O mesmo calculo do motor (garimpo.custo_estimado): buscas + remakes + equivalencias nos outros mercados. */
+function custo(n: number, f: Filtros, destinos: number) {
+  return n * 102 + f.remakes * 101 + f.equivalentes * destinos * 102;
 }
 
 function LinhaGarimpo({ g, m }: { g: G; m: MIN }) {
   const { rodando, rodar } = useAcao(m.avisar);
   const st = statusDoGarimpo(g.estado);
   const vivo = g.estado === "fila" || g.estado === "rodando";
+  const p = m.catalogo?.personas.find((x) => x.id === g.persona);
   return (
     <div className="panel attn garimpo-linha">
       <Selo status={st} />
       <div className="attn-texto">
-        <strong>#{g.id} · {nomePersona(g.persona, m.catalogo?.personas)} · {g.sementes.join(", ")}</strong>
+        <strong>#{g.id} · {p ? <Bandeira cod={p.idioma} /> : null} {nomePersona(g.persona, m.catalogo?.personas)} · {g.sementes.join(", ")}</strong>
         <p className="meta">
           {quando(g.criado)}<b>/</b>{g.achados} oportunidade(s)<b>/</b>{numero(g.cota)} unidades
           {g.etapa && <><b>/</b>{g.etapa}</>}
@@ -47,8 +49,24 @@ function LinhaGarimpo({ g, m }: { g: G; m: MIN }) {
   );
 }
 
+function CartaoPersona({ p, ativa, escolher, arquetipo }: { p: Persona; ativa: boolean; escolher: () => void; arquetipo?: string }) {
+  const sat = saturacao(p.saturacao);
+  return (
+    <label className="escolha persona-op">
+      <input type="radio" name="persona" value={p.id} checked={ativa} onChange={escolher} />
+      <span className="escolha-texto">
+        <strong>{p.nome}</strong>
+        {arquetipo && <span className="arq-tag">{arquetipo}</span>}
+        <small>{p.quem}</small>
+      </span>
+      <span className={`sat sat-${sat.tom}`}>{sat.texto}</span>
+    </label>
+  );
+}
+
 export function Garimpo({ m }: { m: MIN }) {
   const cat = m.catalogo;
+  const [mercado, setMercado] = useState<CodIdioma>("en");
   const [texto, setTexto] = useState("");
   const [persona, setPersona] = useState("amish");
   const [livre, setLivre] = useState("");
@@ -57,10 +75,20 @@ export function Garimpo({ m }: { m: MIN }) {
   const filtros = f ?? cat?.filtros ?? null;
   const { rodando, rodar } = useAcao(m.avisar);
 
+  const personas = (cat?.personas ?? []).filter((p) => p.idioma === mercado);
+  // ⭐ trocar de mercado troca as personas, as sementes sugeridas e as views minimas de partida
+  useEffect(() => {
+    const primeira = (cat?.personas ?? []).find((p) => p.idioma === mercado);
+    if (primeira && !personas.some((p) => p.id === persona)) setPersona(primeira.id);
+    if (cat && filtros) setF({ ...filtros, min_views: cat.min_views[mercado] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mercado, cat]);
+
   const sementes = useMemo(() => texto.split(/\n|;/).map((s) => s.trim()).filter(Boolean), [texto]);
   const pid = persona === "__livre" ? livre.trim() : persona;
   const idiomas = (filtros?.idiomas ?? "").split(",").filter(Boolean);
-  const gasto = filtros ? custo(sementes.length, filtros) + filtros.equivalentes * idiomas.length * 101 : 0;
+  const destinos = idiomas.filter((c) => c !== mercado);
+  const gasto = filtros ? custo(sementes.length, filtros, destinos.length) : 0;
   const livres = m.estado?.cota.livres ?? 0;
 
   const mudar = <K extends keyof Filtros>(k: K, v: Filtros[K]) => filtros && setF({ ...filtros, [k]: v });
@@ -69,13 +97,17 @@ export function Garimpo({ m }: { m: MIN }) {
     mudar("idiomas", novo.join(","));
   };
   const addSemente = (s: string) => setTexto((t) => (t.trim() ? `${t.trim()}\n${s}` : s));
+  const comuns = personas.filter((p) => (cat?.personas ?? []).some((q) => q.arquetipo === p.arquetipo && q.idioma !== p.idioma));
+  const exclusivas = personas.filter((p) => !comuns.includes(p));
 
   return (
     <div className="tela">
-      <div>
-        <p className="eyebrow">Garimpo</p>
-        <h1>Novo garimpo</h1>
-        <p className="lead">Escreva assuntos que viralizavam antes de 2022 (em inglês, um por linha). O Minerador acha os virais, mede o quanto passaram do canal, procura quem já remakou com a persona e pede ao Claude os títulos novos.</p>
+      <div className="tela-topo">
+        <div>
+          <p className="eyebrow">Garimpo</p>
+          <h1>Novo garimpo</h1>
+          <p className="lead">Escolha o mercado: a busca, as sementes, as personas e o idioma dos títulos passam a ser os dele. O Minerador acha os virais antigos, mede o quanto passaram do canal, procura quem já remakou com a persona e veste a oportunidade nos outros mercados.</p>
+        </div>
       </div>
 
       <form className="panel bloco form-garimpo" onSubmit={(e) => {
@@ -84,48 +116,58 @@ export function Garimpo({ m }: { m: MIN }) {
         void rodar("g", () => enviar("/api/garimpos", { sementes, persona: pid, filtros }), "Garimpo na fila.")
           .then((ok) => ok && setTexto(""));
       }}>
+        <div className="mercados" role="radiogroup" aria-label="Mercado">
+          {CODIGOS.map((c) => (
+            <button key={c} type="button" role="radio" aria-checked={mercado === c} className="mercado" onClick={() => setMercado(c)}>
+              <Bandeira cod={c} h={22} />
+              <span><strong>{NOME_IDIOMA[c]}</strong><small>{(cat?.personas ?? []).filter((p) => p.idioma === c).length} personas</small></span>
+            </button>
+          ))}
+        </div>
+
         <div className="campo-grupo">
-          <label className="label" htmlFor="sementes">Sementes</label>
-          <textarea id="sementes" className="campo" rows={5} value={texto} onChange={(e) => setTexto(e.target.value)}
-                    placeholder={"how to pick a watermelon\ngarden pests naturally"} />
+          <label className="label" htmlFor="sementes">Sementes em {NOME_IDIOMA[mercado].toLowerCase()} (uma por linha)</label>
+          <textarea id="sementes" className="campo" rows={4} value={texto} onChange={(e) => setTexto(e.target.value)}
+                    placeholder={EXEMPLO[mercado]} />
           <div className="sugestoes">
-            {SUGESTOES.filter((s) => !sementes.includes(s)).slice(0, 10).map((s) => (
+            {(cat?.sementes[mercado] ?? []).filter((s) => !sementes.includes(s)).slice(0, 10).map((s) => (
               <button key={s} type="button" className="filtro" onClick={() => addSemente(s)}>+ {s}</button>
             ))}
           </div>
         </div>
 
         <fieldset className="escolhas">
-          <legend className="label">Persona</legend>
+          <legend className="label">Persona · arquétipos que existem em outros mercados</legend>
           <div className="personas">
-            {cat?.personas.map((p) => {
-              const sat = saturacao(p.saturacao);
-              return (
-                <label key={p.id} className="escolha persona-op">
-                  <input type="radio" name="persona" value={p.id} checked={persona === p.id} onChange={() => setPersona(p.id)} />
-                  <span className="escolha-texto"><strong>{p.nome}</strong><small>{p.quem}</small></span>
-                  <span className={`sat sat-${sat.tom}`}>{sat.texto}</span>
-                </label>
-              );
-            })}
-            <label className="escolha persona-op">
-              <input type="radio" name="persona" value="__livre" checked={persona === "__livre"} onChange={() => setPersona("__livre")} />
-              <span className="escolha-texto"><strong>Outra</strong>
-                <input className="campo campo-livre" placeholder="ex.: Navy SEAL, Japanese Grandpa" value={livre}
-                       onFocus={() => setPersona("__livre")} onChange={(e) => setLivre(e.target.value)} /></span>
-            </label>
+            {comuns.map((p) => <CartaoPersona key={p.id} p={p} ativa={persona === p.id} escolher={() => setPersona(p.id)}
+                                              arquetipo={cat?.arquetipos[p.arquetipo]} />)}
           </div>
         </fieldset>
+        {exclusivas.length > 0 && (
+          <fieldset className="escolhas">
+            <legend className="label">Só neste mercado</legend>
+            <div className="personas">
+              {exclusivas.map((p) => <CartaoPersona key={p.id} p={p} ativa={persona === p.id} escolher={() => setPersona(p.id)} />)}
+              {mercado === "en" && (
+                <label className="escolha persona-op">
+                  <input type="radio" name="persona" value="__livre" checked={persona === "__livre"} onChange={() => setPersona("__livre")} />
+                  <span className="escolha-texto"><strong>Outra</strong>
+                    <input className="campo campo-livre" placeholder="ex.: Navy SEAL, Japanese Grandpa" value={livre}
+                           onFocus={() => setPersona("__livre")} onChange={(e) => setLivre(e.target.value)} /></span>
+                </label>
+              )}
+            </div>
+          </fieldset>
+        )}
 
         <div className="idiomas-linha">
-          <span className="idiomas-rotulo">Idiomas</span>
-          <span className="idioma-chip fixo">EN</span>
-          {CODIGOS.map((c) => (
+          <span className="idiomas-rotulo">Vestir também em</span>
+          {CODIGOS.filter((c) => c !== mercado).map((c) => (
             <button key={c} type="button" className="idioma-chip" aria-pressed={idiomas.includes(c)} onClick={() => alternarIdioma(c)}>
-              {c.toUpperCase()}
+              <Bandeira cod={c} h={11} /> {c.toUpperCase()}
             </button>
           ))}
-          <span className="meta">as {filtros?.equivalentes ?? 0} melhores ganham título local, busca nativa e o vão de oferta em cada idioma</span>
+          <span className="meta">as {filtros?.equivalentes ?? 0} melhores ganham a persona local, título nativo, busca nativa e o vão de oferta</span>
         </div>
 
         <button type="button" className="btn btn-quiet btn-sm avancado-btn" aria-expanded={avancado} onClick={() => setAvancado(!avancado)}>
@@ -144,7 +186,7 @@ export function Garimpo({ m }: { m: MIN }) {
             <label className="campo-grupo"><span className="label">Reescrever (top)</span>
               <input className="campo" type="number" min={0} max={40} value={filtros.reescrever}
                      onChange={(e) => mudar("reescrever", Number(e.target.value))} /></label>
-            <label className="campo-grupo"><span className="label">FR/DE (top)</span>
+            <label className="campo-grupo"><span className="label">Vestir nos outros (top)</span>
               <input className="campo" type="number" min={0} max={10} value={filtros.equivalentes}
                      onChange={(e) => mudar("equivalentes", Number(e.target.value))} /></label>
           </div>
@@ -152,10 +194,10 @@ export function Garimpo({ m }: { m: MIN }) {
 
         <div className="turbo-acoes">
           <p className={`meta${gasto > livres ? " erro-txt" : ""}`}>
-            {sementes.length} semente(s) · até {numero(gasto)} unidades · {numero(livres)} livres hoje
+            {sementes.length} semente(s) · até {numero(gasto)} unidades · {numero(livres)} livres hoje em {m.estado?.cota.chaves?.length ?? 1} chave(s)
           </p>
           <button className="btn btn-primary" disabled={!sementes.length || !pid || !!rodando}>
-            {rodando ? <Girando /> : <Pickaxe size={16} aria-hidden />}Garimpar
+            {rodando ? <Girando /> : <Pickaxe size={16} aria-hidden />}Garimpar em <Bandeira cod={mercado} h={12} />
           </button>
         </div>
       </form>

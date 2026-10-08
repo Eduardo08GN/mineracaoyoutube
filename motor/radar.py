@@ -27,8 +27,11 @@ def rodar(banco, yt, pid, meses=18, min_inscritos=5000, diz=print, hoje=None):
     """[canais] novos da persona, gravados no radar. Mais inscritos primeiro."""
     p = _persona.persona(pid)
     corte = _meses_atras(meses, hoje)
-    ids = set(yt.buscar(p["nome"], depois=corte, ordem="relevance", maximo=50, tipo="channel"))
-    vids = yt.buscar(p["nome"], depois=_meses_atras(6, hoje), ordem="viewCount", maximo=50)
+    # ⭐ cada persona e' procurada no mercado dela, com a palavra que o nativo usa
+    P = _persona.IDIOMAS[p.get("idioma", "en")]
+    q = p.get("busca") or p["nome"]
+    ids = set(yt.buscar(q, depois=corte, ordem="relevance", maximo=50, tipo="channel", idioma=P["idioma"], regiao=P["regiao"]))
+    vids = yt.buscar(q, depois=_meses_atras(6, hoje), ordem="viewCount", maximo=50, idioma=P["idioma"], regiao=P["regiao"])
     melhor = {}                     # ⭐ o video mais visto de cada canal: o painel mostra a thumb dele
     for v in (yt.videos(vids) if vids else []):
         ids.add(v["canal_id"])

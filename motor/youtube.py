@@ -7,6 +7,9 @@ r"""YOUTUBE — a YouTube Data API v3, com a cota contada e a busca guardada no 
 Custos (unidades): search.list = 100 · videos.list = 1 (ate' 50 ids) · channels.list = 1 (ate' 50 ids).
 A cota padrao e' 10.000 por dia e zera a meia-noite do Pacifico.
 
+⭐ VARIAS CHAVES (de contas diferentes: a cota e' por projeto do Google): cada uma tem a sua cota
+contada; quando uma acaba (pela nossa conta ou porque o Google respondeu quotaExceeded), a chamada
+segue na proxima, sem o garimpo perceber. Chave recusada (invalida, API desligada) sai do dia.
 ⛔ Busca e' cara: a mesma busca no mesmo dia vem do cache (banco), nunca da API de novo.
 ⛔ Antes de cada chamada a cota e' conferida: o motor para antes de estourar, nao depois.
 """
@@ -73,37 +76,97 @@ def _http_padrao(url):
 class YouTube:
     """`banco` guarda cota e cache. `http(url) -> dict` existe para o autoteste nao sair na rede."""
 
-    def __init__(self, banco, chave=None, http=None, cota_dia=COTA_DIA):
+    def __init__(self, banco, chave=None, http=None, cota_dia=COTA_DIA, chaves=None):
         self.banco = banco
-        self.chave = chave if chave is not None else config.chave_youtube()
+        if chaves is not None: self.chaves = list(chaves)
+        elif chave is not None: self.chaves = [chave] if chave else []
+        else: self.chaves = config.chaves()
         self.http = http or _http_padrao
         self.cota_dia = cota_dia
+        self.ao_trocar = None          # fn(texto): o nucleo poe no registro quando uma chave sai do dia
+        # ⭐ o gasto de hoje feito antes da cota por chave existir vai para a primeira chave
+        dia = dia_pacifico()
+        if self.chaves and not self.banco.tem_cota_por_chave(dia) and self.banco.cota_usada(dia):
+            self.banco._x("INSERT OR IGNORE INTO cota_chaves(dia, chave_id, usadas) VALUES(?, ?, ?)",
+                          (dia, config.id_chave(self.chaves[0]), self.banco.cota_usada(dia)))
+
+    @property
+    def chave(self):
+        return self.chaves[0] if self.chaves else ""
 
     # ── cota ──
-    def cota(self):
+    def estado_chaves(self):
         dia = dia_pacifico()
-        usadas = self.banco.cota_usada(dia)
-        return {"dia": dia, "usadas": usadas, "limite": self.cota_dia, "livres": max(0, self.cota_dia - usadas)}
+        saida, em_uso = [], None
+        for k in self.chaves:
+            cid = config.id_chave(k)
+            c = self.banco.cota_chave(dia, cid)
+            livres = 0 if c["esgotada"] else max(0, self.cota_dia - c["usadas"])
+            if em_uso is None and livres > 0: em_uso = cid
+            saida.append({"id": cid, "mascara": config.mascarar(k), "usadas": c["usadas"], "limite": self.cota_dia,
+                          "livres": livres, "esgotada": bool(c["esgotada"]), "motivo": c["motivo"]})
+        for s in saida: s["em_uso"] = s["id"] == em_uso
+        return saida
+
+    def cota(self):
+        cs = self.estado_chaves()
+        usadas = sum(c["usadas"] for c in cs) if cs else self.banco.cota_usada(dia_pacifico())
+        return {"dia": dia_pacifico(), "usadas": usadas, "limite": self.cota_dia * max(len(cs), 1),
+                "livres": sum(c["livres"] for c in cs), "chaves": cs}
 
     def cabe(self, unidades):
-        return self.cota()["livres"] >= unidades
+        return any(c["livres"] >= unidades for c in self.estado_chaves())
+
+    def _avisar(self, texto):
+        if self.ao_trocar:
+            try: self.ao_trocar(texto)
+            except Exception: pass                                         # noqa: BLE001
+
+    def _uma_chamada(self, k, recurso, params):
+        """(dados, problema). problema = None | 'cota' | 'recusada:<motivo>'."""
+        url = BASE + recurso + "?" + urllib.parse.urlencode({**params, "key": k})
+        d = self.http(url)
+        self.banco.gastar_cota(dia_pacifico(), CUSTO[recurso], config.id_chave(k))
+        if "error" not in d: return d, None
+        err = d["error"] or {}
+        motivos = {x.get("reason") for x in err.get("errors", [])}
+        if motivos & {"quotaExceeded", "dailyLimitExceeded", "rateLimitExceeded"}: return d, "cota"
+        if motivos & {"keyInvalid", "keyExpired", "accessNotConfigured", "forbidden", "ipRefererBlocked"} or \
+                err.get("code") in (400, 403) and "key" in str(err.get("message", "")).lower():
+            return d, "recusada:" + (str(err.get("message", "")) or ",".join(sorted(m for m in motivos if m)))[:120]
+        raise ErroYoutube(f"YouTube respondeu {err.get('code')}: {err.get('message', '')[:120]}")
 
     def _chamar(self, recurso, params):
-        if not self.chave: raise ChaveInvalida("sem chave da YouTube API (Ajustes)")
-        custo = CUSTO[recurso]
-        if not self.cabe(custo): raise CotaEsgotada("a cota de hoje acabou — volta depois da meia-noite do Pacífico")
-        url = BASE + recurso + "?" + urllib.parse.urlencode({**params, "key": self.chave})
-        d = self.http(url)
-        self.banco.gastar_cota(dia_pacifico(), custo)
-        if "error" in d:
-            err = d["error"] or {}
-            motivos = {x.get("reason") for x in err.get("errors", [])}
-            if "quotaExceeded" in motivos or "dailyLimitExceeded" in motivos:
-                raise CotaEsgotada("a cota de hoje acabou — volta depois da meia-noite do Pacífico")
-            if "keyInvalid" in motivos or err.get("code") in (400, 403) and "API key" in str(err.get("message")):
-                raise ChaveInvalida("a chave da YouTube API não foi aceita")
-            raise ErroYoutube(f"YouTube respondeu {err.get('code')}: {err.get('message', '')[:120]}")
-        return d
+        if not self.chaves: raise ChaveInvalida("sem chave da YouTube API (Ajustes)")
+        custo, dia = CUSTO[recurso], dia_pacifico()
+        for k in self.chaves:
+            cid = config.id_chave(k)
+            c = self.banco.cota_chave(dia, cid)
+            if c["esgotada"] or self.cota_dia - c["usadas"] < custo: continue
+            d, problema = self._uma_chamada(k, recurso, params)
+            if problema is None: return d
+            if problema == "cota":
+                # ⭐ o Google zerou antes da nossa conta: quase sempre e' chave do MESMO projeto de outra
+                cedo = c["usadas"] < self.cota_dia * 0.9
+                self.banco.marcar_chave(dia, cid, True, "o Google diz que a cota acabou" +
+                                        (" — parece ser do mesmo projeto de outra chave" if cedo else ""))
+            else:
+                self.banco.marcar_chave(dia, cid, True, "chave recusada: " + problema.split(":", 1)[1])
+            self._avisar(f"chave {config.mascarar(k)} saiu do dia ({self.banco.cota_chave(dia, cid)['motivo']}); "
+                         "seguindo na próxima")
+        if all(self.banco.cota_chave(dia, config.id_chave(k))["motivo"].startswith("chave recusada") for k in self.chaves):
+            raise ChaveInvalida("nenhuma chave da YouTube API foi aceita (Ajustes)")
+        raise CotaEsgotada(f"as {len(self.chaves)} chave(s) estão sem cota hoje — zera à meia-noite do Pacífico")
+
+    def testar_chave(self, k):
+        """(ok, motivo). Uma chamada de 1 unidade, so' com essa chave."""
+        try:
+            d, problema = self._uma_chamada(k, "videos", {"part": "id", "id": "dQw4w9WgXcQ"})
+        except ErroYoutube as e:
+            return False, str(e)
+        if problema is None: return True, "ok"
+        if problema == "cota": return True, "aceita, mas sem cota hoje"
+        return False, problema.split(":", 1)[1]
 
     # ── leitura ──
     def buscar(self, q, antes=None, depois=None, ordem="viewCount", maximo=50, tipo="video",
@@ -209,6 +272,27 @@ def _autoteste():
         YouTube(b, chave="", http=falso).buscar("x"); caso("⛔ sem chave: erro claro", False)
     except ChaveInvalida:
         caso("⛔ sem chave: erro claro", True)
+    # ⭐ rotacao: a primeira chave esgota no Google, a segunda e' recusada, a terceira atende
+    usadas_por = []
+    def tres(url):
+        k = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)["key"][0]
+        usadas_por.append(k)
+        if k == "A": return {"error": {"code": 403, "message": "quota", "errors": [{"reason": "quotaExceeded"}]}}
+        if k == "B": return {"error": {"code": 400, "message": "API key not valid", "errors": [{"reason": "keyInvalid"}]}}
+        return falso(url)
+    b3 = Banco(os.path.join(tempfile.mkdtemp(prefix="min-yt3-"), "t.db"))
+    trocas = []
+    y3 = YouTube(b3, chaves=["A", "B", "C"], http=tres)
+    y3.ao_trocar = trocas.append
+    caso("⭐ rotaciona sozinho ate a chave que atende", y3.videos(["V1"])[0]["views"] == 16_000_000 and usadas_por == ["A", "B", "C"])
+    est = {c["mascara"]: c for c in y3.cota()["chaves"]}
+    caso("⭐ chave esgotada cedo e' marcada como 'mesmo projeto'", "mesmo projeto" in y3.estado_chaves()[0]["motivo"])
+    caso("chave recusada sai do dia", y3.estado_chaves()[1]["motivo"].startswith("chave recusada"))
+    caso("a que atende fica 'em uso' e o registro ouviu as trocas", y3.estado_chaves()[2]["em_uso"] and len(trocas) == 2)
+    caso("cota total soma as chaves", y3.cota()["limite"] == 30000 and y3.cota()["livres"] == 10000 - 1)
+    usadas_por.clear(); y3.videos(["V1"])
+    caso("⭐ na chamada seguinte vai direto na que funciona", usadas_por == ["C"])
+    caso("testar chave: recusada", y3.testar_chave("B")[0] is False and y3.testar_chave("C") == (True, "ok"))
     def cheia(url):
         return {"error": {"code": 403, "message": "quota", "errors": [{"reason": "quotaExceeded"}]}}
     try:

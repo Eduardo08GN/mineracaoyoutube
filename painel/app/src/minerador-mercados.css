@@ -1,0 +1,93 @@
+/* Minerador — mercados (EN/FR/DE/ES), mapa de personas, chaves da API e a matriz sem sobreposicao. */
+
+.bandeira { font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif; font-size: 15px; line-height: 1; }
+.bandeira.grande { font-size: 26px; }
+.sigla-nav .bandeira, .nav-i .sigla-nav { font-size: 15px; }
+.persona-local { display: inline-flex; align-items: center; gap: 6px; font: 600 12.5px/1.2 var(--ow-font-body); color: var(--ow-text); }
+.importada { font: 500 10px/1 var(--ow-font-mono); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: var(--ow-warn); background: var(--ow-warn-soft); padding: 4px 6px; border-radius: var(--ow-radius-pill); }
+.thumb-origem { position: absolute; left: 56px; top: 12px; font-size: 18px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.6)); }
+.tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tres .equiv-top { grid-template-columns: repeat(2, 1fr); }
+.tres .equiv-numeros { grid-template-columns: repeat(2, 1fr); }
+
+/* ── garimpo: o mercado ── */
+.mercados { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.mercado { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--ow-line); border-radius: var(--ow-radius); background: var(--ow-bg-deep); color: var(--ow-text-2); cursor: pointer; text-align: left; font: inherit; transition: border-color var(--ow-fast), background var(--ow-fast); }
+.mercado:hover { border-color: var(--ow-line-strong); color: var(--ow-text); }
+.mercado[aria-checked="true"] { border-color: rgba(244, 185, 66, .55); background: var(--ow-sun-soft); color: var(--ow-text); box-shadow: inset 0 0 0 1px rgba(244, 185, 66, .25); }
+.mercado span:last-child { display: grid; gap: 2px; }
+.mercado small { font: 400 11px/1.2 var(--ow-font-mono); color: var(--ow-text-3); }
+.arq-tag { justify-self: start; font: 500 10px/1 var(--ow-font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ow-accent); background: var(--ow-accent-soft); padding: 4px 6px; border-radius: var(--ow-radius-pill); margin: 2px 0; }
+
+/* ── mapa de personas ── */
+.mapa { padding: 6px 0; overflow-x: auto; }
+.mapa-cabeca, .mapa-linha { display: grid; grid-template-columns: 220px repeat(4, minmax(190px, 1fr)); gap: 12px; padding: 10px 16px; align-items: stretch; min-width: 1040px; }
+.mapa-cabeca { position: sticky; top: 0; z-index: 1; background: var(--ow-surface); border-bottom: 1px solid var(--ow-line); align-items: center; }
+.mapa-pais { display: flex; align-items: center; gap: 8px; font: 600 13px/1 var(--ow-font-body); }
+.mapa-linha { border-bottom: 1px solid var(--ow-line); }
+.mapa-linha:last-child { border-bottom: 0; }
+.mapa-arq { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+.mapa-arq strong { font: 700 15px/1.25 var(--ow-font-display); }
+.regiao { align-self: flex-start; font: 500 10.5px/1 var(--ow-font-mono); letter-spacing: .06em; padding: 5px 8px; border-radius: var(--ow-radius-pill); background: rgba(143, 169, 166, .1); color: var(--ow-text-2); }
+.regiao-4 { background: var(--ow-accent-soft); color: var(--ow-accent); }
+.regiao-1 { background: var(--ow-sun-soft); color: var(--ow-sun); }
+.presenca { display: inline-flex; gap: 4px; }
+.presenca i { width: 9px; height: 9px; border-radius: 50%; background: var(--ow-line-strong); }
+.presenca i.on { background: var(--ow-sun); }
+.mapa-cel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; align-content: start; padding: 8px; border-radius: var(--ow-radius); border: 1px solid var(--ow-line); background: var(--ow-bg-deep); color: inherit; min-width: 0; transition: border-color var(--ow-fast); }
+a.mapa-cel:hover { border-color: rgba(244, 185, 66, .45); }
+.mapa-cel.vazia { place-items: center; color: var(--ow-text-off); border-style: dashed; background: transparent; }
+.mapa-capa { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 4px; overflow: hidden; background: #000; }
+.mapa-capa img { width: 100%; height: 100%; object-fit: cover; }
+.mapa-capa .nota { position: absolute; top: 6px; left: 6px; min-width: 32px; height: 24px; font-size: 12.5px; }
+.mapa-sem { display: grid; place-items: center; height: 100%; font: 400 11px var(--ow-font-mono); color: var(--ow-text-3); background: repeating-linear-gradient(135deg, #0b1412 0 10px, #0f1a17 10px 20px); }
+.mapa-nome { font: 650 13.5px/1.3 var(--ow-font-display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mapa-cel .sat { margin-top: 0; justify-self: start; grid-column: auto; }
+.mapa-linhas { display: grid; gap: 3px; font: 400 11px/1.35 var(--ow-font-mono); color: var(--ow-text-3); }
+.mapa-linhas svg { vertical-align: -1px; color: var(--ow-sun); }
+.legenda-sat { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── chaves da API ── */
+.lista-chaves { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.chave { display: grid; grid-template-columns: 26px 18px 1fr auto; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--ow-radius); border: 1px solid var(--ow-line); background: var(--ow-bg-deep); }
+.chave-run { border-color: rgba(95, 214, 206, .4); }
+.chave-no { border-color: rgba(238, 122, 102, .35); }
+.chave-ordem { font: 600 12px/1 var(--ow-font-mono); color: var(--ow-text-3); text-align: center; }
+.chave > svg { color: var(--ow-text-3); }
+.chave-meio { display: grid; gap: 6px; min-width: 0; }
+.chave-meio .linha-meta { margin: 0; align-items: center; }
+.chave .tag { height: 22px; font-size: 10px; }
+.colar-chaves { display: grid; gap: 8px; margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--ow-line); }
+.campo-chaves { font-family: var(--ow-font-mono); font-size: 12.5px; }
+.resultado-chaves { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13px; }
+.resultado-chaves svg { vertical-align: -2px; margin-right: 4px; }
+.aviso-chaves { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--ow-text-3); }
+.aviso-chaves svg { flex: none; margin-top: 2px; color: var(--ow-warn); }
+.rpms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rpms .input { gap: 8px; color: var(--ow-text-2); font-size: 13px; }
+.rpms .btn { grid-column: 1 / -1; justify-self: end; }
+
+/* ── a matriz sem sobreposicao ── */
+.matriz { border-collapse: separate; border-spacing: 0; }
+.matriz th.matriz-th { position: sticky; left: 0; z-index: 2; background: var(--ow-surface); text-align: left; width: 300px; min-width: 300px; max-width: 300px; box-shadow: 1px 0 0 var(--ow-line); display: table-cell; }
+.matriz thead th.matriz-th { z-index: 3; }
+.matriz tbody th.matriz-th { display: table-cell; }
+.matriz-persona { display: flex; gap: 10px; align-items: center; min-width: 0; }
+.matriz-persona img, .matriz-persona .sem-capa { width: 72px; height: 40px; flex: none; object-fit: cover; border-radius: 4px; background: var(--ow-bg-deep); }
+.matriz-persona-txt { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 0; }
+.matriz-persona-txt strong { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; }
+.matriz-persona-txt .sat { margin: 0; white-space: nowrap; }
+.matriz td { min-width: 96px; }
+
+@media (max-width: 1100px) {
+  .tres { grid-template-columns: 1fr; }
+  .mercados { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .rpms { grid-template-columns: 1fr; }
+}
+
+.bandeira-svg { display: inline-block; vertical-align: -2px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(255,255,255,.12); flex: none; }
+.mercado .bandeira-svg { border-radius: 3px; }
+.thumb-origem { line-height: 0; }
+.thumb-origem .bandeira-svg { box-shadow: 0 1px 4px rgba(0,0,0,.6); }

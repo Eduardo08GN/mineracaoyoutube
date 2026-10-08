@@ -11,6 +11,7 @@ import { Matriz } from "./telas/Matriz";
 import { Radar } from "./telas/Radar";
 import { Ajustes } from "./telas/Ajustes";
 import { Idioma } from "./telas/Idioma";
+import { Mapa } from "./telas/Mapa";
 
 export function App() {
   const m = useMinerador();
@@ -28,6 +29,7 @@ export function App() {
   else if (rota.tela === "radar") tela = <Radar m={m} />;
   else if (rota.tela === "ajustes") tela = <Ajustes m={m} />;
   else if (rota.tela === "idioma") tela = <Idioma m={m} cod={rota.cod} />;
+  else if (rota.tela === "mapa") tela = <Mapa m={m} />;
   else tela = <Painel m={m} />;
 
   return (

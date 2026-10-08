@@ -27,22 +27,19 @@ from youtube import CUSTO                                                   # no
 # Mechanics e Foreigner (medido em 08/10)
 CATEGORIAS_FORA = {"10"}
 
-# ⛔ o publico e' o americano 45+: "cooking for a large family" trouxe as receitas de vila indianas
-# (Mutton Biryani, 111 M views) como oportunidade Hutterite (medido em 08/10). Fica o video sem
-# lingua declarada ou com ingles de pais de RPM alto.
-LINGUAS_OK = {"", "en", "en-us", "en-gb", "en-ca", "en-au", "en-nz", "en-ie"}
+# ⛔ cada mercado aceita a sua lingua de audio e os seus paises de canal (catalogo.PAISES).
+# "cooking for a large family" trouxe receitas de vila indianas (Mutton Biryani, 111 M) como
+# oportunidade Hutterite: o video nao declarava lingua, o canal declarava IN (medido em 08/10).
+LINGUAS_OK = _persona.IDIOMAS["en"]["linguas"]
+PAISES_OK = _persona.IDIOMAS["en"]["paises"]
 
 
-# ⛔ e o canal tem de ser de pais de RPM alto: as receitas de vila nao declaram a lingua do audio,
-# mas o canal declara IN (Village Cooking Channel, Grandpa Kitchen — medido em 08/10)
-PAISES_OK = {"", "US", "CA", "GB", "AU", "NZ", "IE"}
-
-
-def publico_ok(v, pais=""):
-    """O video fala com o publico certo? Lingua do audio, pais do canal, sem escrita indiana no titulo
-    e nao e' feito para criancas (paga pouco e nao vende produto: Ryan's World, "Insects for Kids")."""
-    if (v.get("lingua") or "").lower() not in LINGUAS_OK: return False
-    if (pais or "").upper() not in PAISES_OK or v.get("kids"): return False
+def publico_ok(v, pais="", idioma="en"):
+    """O video fala com o publico daquele mercado? Lingua do audio, pais do canal, sem escrita indiana
+    no titulo e nao e' feito para criancas (paga pouco e nao vende produto: Ryan's World)."""
+    P = _persona.IDIOMAS[idioma]
+    if (v.get("lingua") or "").lower() not in P["linguas"]: return False
+    if (pais or "").upper() not in P["paises"] or v.get("kids"): return False
     return not any("\u0900" <= ch <= "\u0dff" for ch in v.get("titulo", ""))
 
 FILTROS_PADRAO = {
@@ -52,8 +49,8 @@ FILTROS_PADRAO = {
     "remakes": 6,               # quantas das melhores checam remake (101 unidades cada)
     "reescrever": 12,           # quantas das melhores vao para o Claude
     "remake_depois": "2023-01-01",
-    "equivalentes": 2,          # quantas das melhores ganham equivalente em cada idioma (101 unidades cada)
-    "idiomas": "fr,de",         # os idiomas das equivalencias (vazio = so' ingles)
+    "equivalentes": 2,          # quantas das melhores ganham equivalente em cada mercado (102 unidades cada)
+    "idiomas": "en,fr,de,es",   # os mercados das equivalencias (o de origem sai sozinho)
 }
 
 
@@ -73,19 +70,22 @@ def filtros_completos(f):
     return out
 
 
-def custo_estimado(n_sementes, filtros=None):
+def custo_estimado(n_sementes, filtros=None, origem="en"):
     """Unidades da API que um garimpo gasta no maximo (o cache do dia pode baixar)."""
     f = filtros_completos(filtros)
     por_semente = CUSTO["search"] + CUSTO["videos"] + CUSTO["channels"]
     busca = CUSTO["search"] + CUSTO["videos"]
-    return n_sementes * por_semente + f["remakes"] * busca + f["equivalentes"] * len(idiomas_de(f)) * busca
+    return (n_sementes * por_semente + f["remakes"] * busca
+            + f["equivalentes"] * len(idiomas_de(f, origem)) * (busca + CUSTO["channels"]))
 
 
-def idiomas_de(f):
-    return [k.strip() for k in str(f.get("idiomas") or "").split(",") if k.strip() in _persona.IDIOMAS]
+def idiomas_de(f, origem="en"):
+    """Os mercados de destino das equivalencias, sem o de origem."""
+    return [k.strip() for k in str(f.get("idiomas") or "").split(",")
+            if k.strip() in _persona.IDIOMAS and k.strip() != origem]
 
 
-def medir_equivalente(yt, p, eq, idioma, hoje=None):
+def medir_equivalente(yt, p, eq, idioma, hoje=None, local=None):
     """Busca a consulta nativa no pais do idioma (por views, sem data) e mede la':
     demanda (o maior viral nativo), oferta recente (top 50 publicados nos ultimos 12 meses) e
     quantos ja' trazem a persona. ⭐ Persona ausente + demanda alta = vao aberto naquele idioma."""
@@ -93,8 +93,12 @@ def medir_equivalente(yt, p, eq, idioma, hoje=None):
     I = _persona.IDIOMAS[idioma]
     ids = yt.buscar(eq["consulta"], ordem="viewCount", maximo=50, idioma=I["idioma"], regiao=I["regiao"])
     vids = [v for v in (yt.videos(ids) if ids else []) if v["duracao"] >= 60]
+    pais = {c["id"]: c.get("pais", "") for c in (yt.canais([v["canal_id"] for v in vids]) if vids else [])}
+    vids = [v for v in vids if publico_ok(v, pais.get(v["canal_id"], ""), idioma)]
     corte = ((hoje or _dt.date.today()) - _dt.timedelta(days=365)).isoformat()
-    marcas = {w.lower() for w in [eq.get("persona_local") or ""] + list(p.get("assinatura") or []) if w}
+    local = local or p
+    marcas = {w.lower() for w in [eq.get("persona_local") or ""] + list(local.get("assinatura") or [])
+              + list(p.get("assinatura") or []) if w}
     com = [v for v in vids if any(m in v["titulo"].lower() for m in marcas)]
     vids.sort(key=lambda v: -v["views"])
     top = [{k: v[k] for k in ("id", "titulo", "views", "publicado", "canal", "thumb")} for v in vids[:4]]
@@ -105,7 +109,7 @@ def medir_equivalente(yt, p, eq, idioma, hoje=None):
 def gerar_equivalentes(banco, yt, p, ops, idiomas, diz=print, checar=lambda: None, equivaler=None):
     """ops = [{oid, video_id, titulo, remake}]. Grava e devolve quantos equivalentes mediu."""
     equivaler = equivaler or _persona.equivalentes
-    idiomas = [k for k in idiomas if k in _persona.IDIOMAS]
+    idiomas = [k for k in idiomas if k in _persona.IDIOMAS and k != p.get("idioma", "en")]
     if not ops or not idiomas: return 0
     try:
         locais = equivaler(p, [{"id": o["video_id"], "titulo": o["titulo"], "remake": o.get("remake", "")} for o in ops], idiomas)
@@ -115,10 +119,11 @@ def gerar_equivalentes(banco, yt, p, ops, idiomas, diz=print, checar=lambda: Non
     for o in ops:
         for k, eq in (locais.get(o["video_id"]) or {}).items():
             checar()
-            if not yt.cabe(CUSTO["search"] + CUSTO["videos"]):
+            if not yt.cabe(CUSTO["search"] + CUSTO["videos"] + CUSTO["channels"]):
                 diz("⚠ cota baixa: parei as equivalências"); return n
-            m = medir_equivalente(yt, p, eq, k)
-            banco.gravar_equivalente(o["oid"], k, m)
+            local, importada = _persona.local_de(p, k)
+            m = medir_equivalente(yt, p, eq, k, local=local)
+            banco.gravar_equivalente(o["oid"], k, {**m, "persona": local["id"], "importada": importada})
             n += 1
             diz(f"{_persona.IDIOMAS[k]['sigla']} “{eq['consulta']}”: viral nativo {m['demanda']:,} views · "
                 f"{m['com_persona']} com a persona")
@@ -136,8 +141,10 @@ def equivalentes_uma(banco, yt, oid, idiomas, equivaler=None, diz=lambda *_: Non
 
 def checar_remakes(yt, p, video, depois):
     """[{id, titulo, views, publicado, canal}] de remakes com a persona feitos depois de `depois`."""
-    q = f'{p["nome"]} {_persona.palavras_chave(video["titulo"])}'
-    ids = [i for i in yt.buscar(q, depois=depois, ordem="relevance", maximo=10) if i != video["id"]]
+    P = _persona.IDIOMAS[p.get("idioma", "en")]
+    q = f'{p.get("busca") or p["nome"]} {_persona.palavras_chave(video["titulo"])}'
+    ids = [i for i in yt.buscar(q, depois=depois, ordem="relevance", maximo=10, idioma=P["idioma"], regiao=P["regiao"])
+           if i != video["id"]]
     chaves = _persona.palavras_chave(video["titulo"]).split()
     # ⛔ a busca devolve qualquer video da persona: so' conta como remake se repetir o miolo do titulo
     # (medido em 08/10: "10 Interesting Insects" ganhou 8 "remakes" Amish que nao eram sobre insetos)
@@ -155,6 +162,8 @@ def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: Fals
     reescrever = reescrever or _persona.reescrever
     f = filtros_completos(g.get("filtros"))
     p = _persona.persona(g["persona"])
+    origem = p.get("idioma", "en")
+    P = _persona.IDIOMAS[origem]
     gid = g["id"]
 
     def checar():
@@ -165,7 +174,7 @@ def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: Fals
     for i, s in enumerate(g["sementes"], 1):
         checar()
         etapa(f"buscando “{s}” ({i}/{len(g['sementes'])})")
-        novos = yt.buscar(s, antes=f["antes"], ordem="viewCount", maximo=50)
+        novos = yt.buscar(s, antes=f["antes"], ordem="viewCount", maximo=50, idioma=P["idioma"], regiao=P["regiao"])
         diz(f"“{s}”: {len(novos)} vídeos antes de {f['antes'][:4]}")
         ids += [(x, s) for x in novos]
     semente_de = {}
@@ -177,7 +186,8 @@ def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: Fals
     videos = yt.videos(list(semente_de))
     pais = {c["id"]: c.get("pais", "") for c in yt.canais([v["canal_id"] for v in videos])}
     bons = [v for v in videos if v["views"] >= f["min_views"] and v["duracao"] >= f["min_duracao"]
-            and not _persona.tem_alguma_persona(v["titulo"], p) and v.get("categoria") not in CATEGORIAS_FORA and publico_ok(v, pais.get(v["canal_id"], ""))]
+            and not _persona.tem_alguma_persona(v["titulo"], p, origem) and v.get("categoria") not in CATEGORIAS_FORA
+            and publico_ok(v, pais.get(v["canal_id"], ""), origem)]
     diz(f"{len(bons)} de {len(videos)} passaram no filtro (≥ {f['min_views']:,} views, ≥ {f['min_duracao']}s)")
 
     # 3. pontuar
@@ -235,11 +245,11 @@ def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: Fals
         o["final"], o["remake"] = campos["nota"], (r["titulos"][0] if r and r["titulos"] else "")
 
     # 7. equivalentes em frances e alemao
-    idiomas = idiomas_de(f)
+    idiomas = idiomas_de(f, origem)
     alvo_eq = sorted(ops, key=lambda o: -o["final"])[:f["equivalentes"]]
     if idiomas and alvo_eq:
         checar()
-        etapa(f"equivalentes em {', '.join(k.upper() for k in idiomas)}")
+        etapa(f"equivalentes em {', '.join(_persona.IDIOMAS[k]['sigla'] for k in idiomas)}")
         gerar_equivalentes(banco, yt, p, [{"oid": o["oid"], "video_id": o["v"]["id"], "titulo": o["v"]["titulo"],
                                            "remake": o["remake"]} for o in alvo_eq], idiomas, diz=diz, checar=checar,
                            equivaler=equivaler)
@@ -303,7 +313,7 @@ def _autoteste():
     n = rodar(b.garimpo(gid), b, yt, diz=falas.append, reescrever=claude, equivaler=equiv)
     ops = b.oportunidades()
     eqs = b.equivalentes(ops[0]["id"])
-    caso("⭐ equivalentes FR e DE medidos na melhor", set(eqs) == {"fr", "de"} and eqs["de"]["demanda"] == 16_000_000)
+    caso("⭐ equivalentes FR, DE e ES medidos na melhor", set(eqs) == {"fr", "de", "es"} and eqs["de"]["demanda"] == 16_000_000)
     caso("equivalente conta o que ja' tem a persona la'", eqs["fr"]["com_persona"] == 1 and eqs["fr"]["top"][0]["id"] == "V1")
     caso("⭐ so' o viral longo e sem persona vira oportunidade (sem short, sem pequeno, sem remake)",
          n == 1 and ops[0]["video_id"] == "V1")
@@ -317,7 +327,11 @@ def _autoteste():
     caso("⛔ canal da India fica fora, dos EUA entra", not publico_ok({"titulo": "x"}, "IN") and publico_ok({"titulo": "x"}, "US"))
     caso("⛔ feito para criancas fica fora", not publico_ok({"titulo": "x", "kids": True}, "US"))
     caso("⛔ titulo em devanagari fica fora", not publico_ok({"titulo": "खाना recipe", "lingua": ""}))
-    caso("custo conta as equivalencias", custo == 102 + 2 * 101 + 2 * 2 * 101 and custo_estimado(1, {"remakes": 2, "idiomas": ","}) == 304)
+    caso("custo conta as equivalencias (3 mercados alem da origem)", custo == 102 + 2 * 101 + 2 * 3 * 102
+         and custo_estimado(1, {"remakes": 2, "idiomas": ","}) == 304)
+    caso("⭐ o mercado de origem nao entra nas equivalencias", idiomas_de({"idiomas": "en,fr,de,es"}, "fr") == ["en", "de", "es"])
+    caso("⭐ publico frances aceita canal FR e recusa US", publico_ok({"titulo": "x", "lingua": "fr"}, "FR", "fr")
+         and not publico_ok({"titulo": "x"}, "US", "fr"))
     caso(f"custo estimado ({custo}) cobre o gasto real ({yt.cota()['usadas']})", custo >= yt.cota()["usadas"])
 
     gid2 = b.novo_garimpo(["x"], "amish", {})

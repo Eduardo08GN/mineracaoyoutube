@@ -18,7 +18,9 @@ Leitura                                   Acoes (POST)
   GET /api/matriz
   GET /api/radar?persona=
   GET /api/registro                          /api/oportunidades/{id}/equivalentes {idiomas}
-  GET /api/idiomas/{fr|de}
+  GET /api/idiomas/{en|fr|de|es}             /api/chaves                   {chaves: [...]}
+  GET /api/mapa                              /api/chaves/{id}/remover | /api/chaves/{id}/subir
+  GET /api/chaves
   WS  /api/eventos
 O WebSocket manda primeiro {"tipo": "estado", ...} e depois cada evento do nucleo.
 """
@@ -58,11 +60,16 @@ class Radar(BaseModel):
 
 
 class Idiomas(BaseModel):
-    idiomas: List[str] = ["fr", "de"]
+    idiomas: List[str] = ["en", "fr", "de", "es"]
+
+
+class Chaves(BaseModel):
+    chaves: List[str]
 
 
 class Ajustes(BaseModel):
     rpm: Optional[float] = None
+    rpms: Optional[dict] = None
     chave: Optional[str] = None
 
 
@@ -124,8 +131,8 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
         return nucleo.garimpos()
 
     @app.get("/api/oportunidades")
-    def oportunidades(persona: str = "", estado: str = "", garimpo: int = 0, ordem: str = "nota"):
-        return nucleo.oportunidades(persona=persona, estado=estado, garimpo=garimpo, ordem=ordem)
+    def oportunidades(persona: str = "", estado: str = "", garimpo: int = 0, ordem: str = "nota", idioma: str = ""):
+        return nucleo.oportunidades(idioma=idioma, persona=persona, estado=estado, garimpo=garimpo, ordem=ordem)
 
     @app.get("/api/oportunidades/{oid}")
     def oportunidade(oid: int):
@@ -142,6 +149,26 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     @app.get("/api/idiomas/{cod}")
     def idioma(cod: str):
         return nucleo.idioma(cod)
+
+    @app.get("/api/mapa")
+    def mapa():
+        return nucleo.mapa()
+
+    @app.get("/api/chaves")
+    def chaves():
+        return nucleo.chaves()
+
+    @app.post("/api/chaves")
+    def adicionar_chaves(c: Chaves):
+        return nucleo.adicionar_chaves(c.chaves)
+
+    @app.post("/api/chaves/{cid}/remover")
+    def remover_chave(cid: str):
+        return nucleo.remover_chave(cid)
+
+    @app.post("/api/chaves/{cid}/subir")
+    def subir_chave(cid: str):
+        return nucleo.subir_chave(cid)
 
     @app.get("/api/registro")
     def registro():
@@ -178,7 +205,7 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
 
     @app.post("/api/ajustes")
     def ajustes(c: Ajustes):
-        return nucleo.salvar_ajustes(rpm=c.rpm, chave=c.chave)
+        return nucleo.salvar_ajustes(rpm=c.rpm, rpms=c.rpms, chave=c.chave)
 
     @app.websocket("/api/eventos")
     async def eventos(ws: WebSocket):
@@ -345,6 +372,10 @@ def _autoteste():
     caso("salvar pela API", r.json()["estado"] == "salva")
     caso("idioma desconhecido: 404", c.get("/api/idiomas/xx", headers=h).status_code == 404)
     caso("idioma conhecido: lista", c.get("/api/idiomas/fr", headers=h).json() == [])
+    caso("mapa responde", len(c.get("/api/mapa", headers=h).json()["arquetipos"]) >= 10)
+    caso("chaves respondem sem mostrar a chave", "chave-de-teste" not in c.get("/api/chaves", headers=h).text)
+    caso("⛔ chave que nao existe: 404", c.post("/api/chaves/naoexiste/remover", headers=h).status_code == 404)
+    caso("⛔ colar nada: 400", c.post("/api/chaves", headers=h, json={"chaves": [" "]}).status_code == 400)
     caso("⛔ RPM absurdo: 400", c.post("/api/ajustes", headers=h, json={"rpm": 500}).status_code == 400)
     try:
         with c.websocket_connect("/api/eventos?t=errada") as ws:

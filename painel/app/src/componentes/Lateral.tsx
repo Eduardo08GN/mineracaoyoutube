@@ -1,6 +1,7 @@
-import { Gem, Grid3x3, LayoutDashboard, Pickaxe, Radar, SlidersHorizontal } from "lucide-react";
-import { CODIGOS, type Estado } from "../api";
+import { Gem, Globe2, Grid3x3, LayoutDashboard, Pickaxe, Radar, SlidersHorizontal } from "lucide-react";
+import { CODIGOS, NOME_IDIOMA, type Estado } from "../api";
 import { link, type Rota } from "../rota";
+import { Bandeira } from "./base";
 
 interface Props {
   rota: Rota;
@@ -33,6 +34,9 @@ export function Lateral({ rota, estado, conectado }: Props) {
           <Gem size={18} aria-hidden /><span>Oportunidades</span>
           {novas > 0 && <span className="count" aria-label={`${novas} novas`}>{novas}</span>}
         </a>
+        <a className="nav-i" href={link.mapa} aria-current={atual(["mapa"])}>
+          <Globe2 size={18} aria-hidden /><span>Mapa de personas</span>
+        </a>
         <a className="nav-i" href={link.matriz} aria-current={atual(["matriz"])}>
           <Grid3x3 size={18} aria-hidden /><span>Matriz</span>
         </a>
@@ -45,15 +49,12 @@ export function Lateral({ rota, estado, conectado }: Props) {
       </nav>
       {/* ⭐ as mesmas oportunidades em outros idiomas, igual a aba de idiomas do OW Agente */}
       <nav className="nav-idiomas" aria-label="Idiomas">
-        <span className="label nav-grupo">Idiomas</span>
-        <a className="nav-i" href={link.oportunidades} aria-current={undefined}>
-          <span className="sigla-nav" aria-hidden>EN</span><span>Inglês</span>
-          <span className="conta-idioma">{(estado?.contagem?.nova ?? 0) + (estado?.contagem?.salva ?? 0)}</span>
-        </a>
+        <span className="label nav-grupo">Mercados</span>
         {CODIGOS.map((c) => (
-          <a key={c} className="nav-i" href={link.idioma(c)} aria-current={rota.tela === "idioma" && rota.cod === c ? "page" : undefined}>
-            <span className="sigla-nav" aria-hidden>{c.toUpperCase()}</span><span>{c === "fr" ? "Francês" : "Alemão"}</span>
-            <span className="conta-idioma">{estado?.idiomas?.[c] ?? 0}</span>
+          <a key={c} className="nav-i" href={link.idioma(c)} aria-current={rota.tela === "idioma" && rota.cod === c ? "page" : undefined}
+             title={`${estado?.nativas?.[c] ?? 0} nativas · ${estado?.idiomas?.[c] ?? 0} equivalências`}>
+            <span className="sigla-nav" aria-hidden><Bandeira cod={c} h={11} /></span><span>{NOME_IDIOMA[c]}</span>
+            <span className="conta-idioma">{(estado?.nativas?.[c] ?? 0) + (estado?.idiomas?.[c] ?? 0)}</span>
           </a>
         ))}
       </nav>

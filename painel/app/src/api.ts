@@ -1,18 +1,36 @@
 // A conversa com o servidor local do Minerador (agente/servidor.py).
 
+/** Uma chave da YouTube API (o painel nunca ve' a chave: so' o apelido e a mascara). */
+export interface ChaveInfo {
+  id: string;
+  mascara: string;
+  usadas: number;
+  limite: number;
+  livres: number;
+  esgotada: boolean;
+  motivo: string;
+  em_uso: boolean;
+}
+
 export interface Cota {
   dia: string;
   usadas: number;
   limite: number;
   livres: number;
+  chaves: ChaveInfo[];
 }
 
-export type CodIdioma = "fr" | "de";
-export const CODIGOS: CodIdioma[] = ["fr", "de"];
+/** Os 4 mercados: o idioma e' o pais. */
+export type CodIdioma = "en" | "fr" | "de" | "es";
+export const CODIGOS: CodIdioma[] = ["en", "fr", "de", "es"];
+export const BANDEIRA: Record<CodIdioma, string> = { en: "🇺🇸", fr: "🇫🇷", de: "🇩🇪", es: "🇪🇸" };
+export const NOME_IDIOMA: Record<CodIdioma, string> = { en: "Inglês (EUA)", fr: "Francês", de: "Alemão", es: "Espanhol" };
 
 export interface InfoIdioma {
   nome: string;
   sigla: string;
+  bandeira: string;
+  lingua: string;
 }
 
 export interface Atual {
@@ -28,9 +46,10 @@ export interface Estado {
   na_fila: number;
   chave: string;
   claude: boolean;
-  ajustes: { rpm: number };
+  ajustes: { rpm: number; rpm_fr: number; rpm_de: number; rpm_es: number };
   contagem: Record<string, number>;
   idiomas: Partial<Record<CodIdioma, number>>;
+  nativas: Partial<Record<CodIdioma, number>>;
 }
 
 export interface Persona {
@@ -39,6 +58,9 @@ export interface Persona {
   marca: string;
   quem: string;
   saturacao: number;
+  idioma: CodIdioma;
+  arquetipo: string;
+  busca: string;
 }
 
 export interface Filtros {
@@ -56,6 +78,34 @@ export interface Catalogo {
   personas: Persona[];
   temas: string[];
   filtros: Filtros;
+  idiomas: Record<CodIdioma, InfoIdioma>;
+  arquetipos: Record<string, string>;
+  sementes: Record<CodIdioma, string[]>;
+  min_views: Record<CodIdioma, number>;
+}
+
+/** Uma celula do mapa: a persona local de um arquetipo num mercado. */
+export interface CelulaMapa {
+  persona: { id: string; nome: string; marca: string };
+  saturacao: number;
+  n: number;
+  melhor: number;
+  capa: string;
+  melhor_id?: number;
+  fome: number;
+  equiv: { n: number; abertos: number; melhor: number; capa: string; op_id: number | null; titulo: string } | null;
+}
+
+export interface LinhaMapa {
+  id: string;
+  nome: string;
+  regiao: string;
+  comum: number;
+  paises: Partial<Record<CodIdioma, CelulaMapa>>;
+}
+
+export interface Mapa {
+  arquetipos: LinhaMapa[];
   idiomas: Record<CodIdioma, InfoIdioma>;
 }
 
@@ -115,6 +165,8 @@ export interface Oportunidade {
   fome: number;
   /** "fr,de" quando ja' tem equivalentes */
   idiomas_eq: string | null;
+  /** o mercado de origem (o da persona) */
+  idioma: CodIdioma;
 }
 
 export interface VideoCurto {
@@ -138,10 +190,13 @@ export interface Equivalente {
   top: VideoCurto[];
   fome: number;
   aberto: boolean;
+  /** a persona local que veste a oportunidade naquele mercado */
+  persona: string;
+  importada: number;
 }
 
 export interface EquivalenteLista extends Equivalente {
-  persona: string;
+  persona_origem: string;
   nota: number;
   titulos: string[];
   original: string;

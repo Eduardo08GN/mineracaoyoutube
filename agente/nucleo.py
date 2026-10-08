@@ -24,6 +24,7 @@ RAIZ = os.path.dirname(AQUI)
 for _p in (AQUI, os.path.join(RAIZ, "motor")):
     if _p not in sys.path: sys.path.insert(0, _p)
 
+import catalogo as _cat                                                     # noqa: E402
 import config                                                               # noqa: E402
 import garimpo as _garimpo                                                  # noqa: E402
 import persona as _persona                                                  # noqa: E402
@@ -38,7 +39,15 @@ ARQ_AJUSTES = os.path.join(config.DATA, "ajustes.json")
 def _vivo(pid):
     from servidor import processo_vivo
     return processo_vivo(int(pid))
-AJUSTES_PADRAO = {"rpm": 5.0}
+# ⭐ o RPM de cada mercado (o americano 45+ paga mais): muda a receita estimada de cada oportunidade
+AJUSTES_PADRAO = {"rpm": _cat.PAISES["en"]["rpm"], "rpm_fr": _cat.PAISES["fr"]["rpm"],
+                  "rpm_de": _cat.PAISES["de"]["rpm"], "rpm_es": _cat.PAISES["es"]["rpm"]}
+# as views minimas de partida por mercado (FR/DE/ES sao mercados menores)
+MIN_VIEWS = {"en": 1_000_000, "fr": 300_000, "de": 300_000, "es": 500_000}
+
+
+def _rpm_de(ajustes, idioma):
+    return ajustes["rpm"] if idioma == "en" else ajustes.get(f"rpm_{idioma}", ajustes["rpm"])
 MAX_REGISTRO = 300
 
 
@@ -56,6 +65,7 @@ class Nucleo:
         self._t = threading.RLock()
         self.registro = []
         self._vivo = True
+        self.yt.ao_trocar = lambda texto: (self.log("⚠ " + texto), self._emitir("mudou", o="ajustes"))
         self._fio = threading.Thread(target=self._trabalhar, daemon=True, name="minerador-fila")
         if iniciar:
             for g in self.banco.garimpos_abertos():
@@ -94,20 +104,62 @@ class Nucleo:
             a = {}
         return {**AJUSTES_PADRAO, **{k: v for k, v in a.items() if k in AJUSTES_PADRAO}}
 
-    def salvar_ajustes(self, rpm=None, chave=None):
+    def salvar_ajustes(self, rpm=None, chave=None, rpms=None):
         a = self.ajustes()
-        if rpm is not None:
-            if not 0 < float(rpm) <= 100: raise ValueError("RPM fora do normal (0 a 100)")
-            a["rpm"] = round(float(rpm), 2)
+        novos = dict(rpms or {})
+        if rpm is not None: novos["rpm"] = rpm
+        for k, v in novos.items():
+            if k not in AJUSTES_PADRAO: raise ValueError(f"ajuste desconhecido: {k}")
+            if not 0 < float(v) <= 100: raise ValueError("RPM fora do normal (0 a 100)")
+            a[k] = round(float(v), 2)
         os.makedirs(os.path.dirname(self._arq_ajustes), exist_ok=True)
         json.dump(a, open(self._arq_ajustes, "w", encoding="utf-8"))
-        if chave is not None:
-            chave = chave.strip()
-            if len(chave) < 20: raise ValueError("essa chave parece curta demais")
-            config.gravar_chave(chave)
-            self.yt.chave = chave
+        if chave is not None: self.adicionar_chaves([chave])
         self._emitir("mudou", o="ajustes")
         return self.estado()
+
+    # ── as chaves da API (quantas a pessoa quiser; a rotacao mora no youtube.py) ──
+    def chaves(self):
+        return self.yt.cota()
+
+    def adicionar_chaves(self, brutas, arq_env=None):
+        """Testa cada chave nova (1 unidade dela mesma) e guarda as aceitas. Devolve o resultado de cada uma.
+        ⭐ Aceita colar varias de uma vez: uma por linha, ou separadas por virgula/espaco."""
+        import re as _re
+        novas = [c for c in _re.split(r"[\s,;]+", "\n".join(brutas)) if c]
+        if not novas: raise ValueError("cole pelo menos uma chave")
+        resultado, aceitas = [], []
+        for k in dict.fromkeys(novas):
+            m = config.mascarar(k)
+            if len(k) < 20: resultado.append({"mascara": m, "ok": False, "motivo": "curta demais"}); continue
+            if k in self.yt.chaves: resultado.append({"mascara": m, "ok": False, "motivo": "já estava na lista"}); continue
+            ok, motivo = self.yt.testar_chave(k)
+            resultado.append({"mascara": m, "ok": ok, "motivo": motivo})
+            if ok: aceitas.append(k)
+        if aceitas:
+            self.yt.chaves = self.yt.chaves + aceitas
+            config.gravar_chaves(self.yt.chaves, **({"arq": arq_env} if arq_env else {}))
+            self.log(f"{len(aceitas)} chave(s) nova(s) da API · agora são {len(self.yt.chaves)}")
+        self._emitir("mudou", o="ajustes")
+        return {"resultado": resultado, "cota": self.yt.cota()}
+
+    def remover_chave(self, cid, arq_env=None):
+        antes = len(self.yt.chaves)
+        self.yt.chaves = [k for k in self.yt.chaves if config.id_chave(k) != cid]
+        if len(self.yt.chaves) == antes: raise KeyError(cid)
+        config.gravar_chaves(self.yt.chaves, **({"arq": arq_env} if arq_env else {}))
+        self.log(f"chave removida · restam {len(self.yt.chaves)}")
+        self._emitir("mudou", o="ajustes")
+        return self.yt.cota()
+
+    def subir_chave(self, cid, arq_env=None):
+        """Poe a chave no topo da fila de uso."""
+        k = next((k for k in self.yt.chaves if config.id_chave(k) == cid), None)
+        if not k: raise KeyError(cid)
+        self.yt.chaves = [k] + [x for x in self.yt.chaves if x != k]
+        config.gravar_chaves(self.yt.chaves, **({"arq": arq_env} if arq_env else {}))
+        self._emitir("mudou", o="ajustes")
+        return self.yt.cota()
 
     # ── leitura ──
     def estado(self):
@@ -122,24 +174,37 @@ class Nucleo:
             "ajustes": self.ajustes(),
             "contagem": self.banco.contagem_por_estado(),
             "idiomas": self.banco.contagem_por_idioma(),
+            "nativas": self._nativas(),
         }
+
+    def _nativas(self):
+        """Quantas oportunidades ativas cada mercado tem de garimpo nativo."""
+        conta = {}
+        for pid, n in self.banco.contagem_por_persona().items():
+            k = _persona.persona(pid).get("idioma", "en")
+            conta[k] = conta.get(k, 0) + n
+        return conta
 
     def personas(self):
         seis = (_dt.date.today() - _dt.timedelta(days=183)).isoformat()
+        paises = {k: {c: v[c] for c in ("nome", "sigla", "bandeira", "lingua")} for k, v in _cat.PAISES.items()}
         return {"personas": [{**p, "saturacao": self.banco.saturacao(p["id"], seis)} for p in _persona.PERSONAS],
-                "temas": _persona.TEMAS, "filtros": _garimpo.FILTROS_PADRAO, "idiomas": _persona.IDIOMAS}
+                "temas": _persona.TEMAS, "filtros": _garimpo.FILTROS_PADRAO, "idiomas": paises,
+                "arquetipos": _cat.ARQUETIPOS, "sementes": _cat.SEMENTES, "min_views": MIN_VIEWS}
 
     def garimpos(self):
         return self.banco.garimpos()
 
     def _com_receita(self, o):
         if o:
-            o["receita"] = _score.receita(o.get("views") or 0, self.ajustes()["rpm"])
+            o["idioma"] = _persona.persona(o["persona"]).get("idioma", "en")
+            o["receita"] = _score.receita(o.get("views") or 0, _rpm_de(self.ajustes(), o["idioma"]))
             o["fome"] = _score.fome(o.get("views") or 0, o.get("publicado"), o.get("n_remakes", -1))
         return o
 
-    def oportunidades(self, **filtros):
-        return [self._com_receita(o) for o in self.banco.oportunidades(**filtros)]
+    def oportunidades(self, idioma="", **filtros):
+        ops = [self._com_receita(o) for o in self.banco.oportunidades(**filtros)]
+        return [o for o in ops if o["idioma"] == idioma] if idioma else ops
 
     def oportunidade(self, oid):
         o = self.banco.oportunidade(int(oid))
@@ -179,13 +244,45 @@ class Nucleo:
     def radar(self, persona=""):
         return self.banco.radar(persona)
 
+    def mapa(self):
+        """O diagrama de Venn em grade: cada arquetipo x os 4 mercados. Em cada celula, a persona local,
+        a saturacao (radar), o garimpo nativo dela e as equivalencias que caem nela vindas de outro mercado."""
+        seis = (_dt.date.today() - _dt.timedelta(days=183)).isoformat()
+        resumo = self.matriz()["resumo"]
+        eqs = {}
+        for e in self.banco._todas("""SELECT e.op_id, e.idioma, e.persona, e.demanda, e.com_persona, e.oferta_recente,
+                                             e.top, e.titulo, o.persona AS origem FROM equivalentes e
+                                      JOIN oportunidades o ON o.id=e.op_id WHERE o.estado!='descartada'"""):
+            local = e["persona"] or _persona.local_de(_persona.persona(e["origem"]), e["idioma"])[0]["id"]
+            c = eqs.setdefault(local, {"n": 0, "abertos": 0, "melhor": 0, "capa": "", "op_id": None, "titulo": ""})
+            c["n"] += 1
+            if e["com_persona"] == 0 and e["demanda"] >= 100_000: c["abertos"] += 1
+            if e["demanda"] > c["melhor"]:
+                top = json.loads(e["top"] or "[]")
+                c.update(melhor=e["demanda"], op_id=e["op_id"], titulo=e["titulo"],
+                         capa=(top[0].get("thumb") or f"https://i.ytimg.com/vi/{top[0]['id']}/mqdefault.jpg") if top else "")
+        linhas = {}
+        for p in _persona.PERSONAS:
+            arq = p.get("arquetipo", p["id"])
+            linha = linhas.setdefault(arq, {"id": arq, "nome": _cat.ARQUETIPOS.get(arq, p["nome"]), "paises": {}})
+            r = resumo.get(p["id"], {})
+            linha["paises"][p.get("idioma", "en")] = {
+                "persona": {k: p[k] for k in ("id", "nome", "marca")}, "saturacao": self.banco.saturacao(p["id"], seis),
+                "n": r.get("n", 0), "melhor": r.get("melhor", -1), "capa": r.get("capa", ""), "melhor_id": r.get("melhor_id"),
+                "fome": r.get("fome", -1), "equiv": eqs.get(p["id"])}
+        for l in linhas.values():
+            l["regiao"] = _cat.regiao_do_arquetipo(set(l["paises"]))
+            l["comum"] = len(l["paises"])
+        ordem = sorted(linhas.values(), key=lambda l: (-l["comum"], l["nome"]))
+        return {"arquetipos": ordem, "idiomas": self.personas()["idiomas"]}
+
     # ── acoes ──
     def novo_garimpo(self, sementes, persona, filtros=None):
         sementes = [s.strip() for s in sementes if s and s.strip()][:20]
         if not sementes: raise ValueError("escreva pelo menos uma semente")
         if not (persona or "").strip(): raise ValueError("escolha uma persona")
         f = _garimpo.filtros_completos(filtros)
-        custo = _garimpo.custo_estimado(len(sementes), f)
+        custo = _garimpo.custo_estimado(len(sementes), f, _persona.persona(persona.strip()).get("idioma", "en"))
         livres = self.yt.cota()["livres"]
         gid = self.banco.novo_garimpo(sementes, persona.strip(), f)
         self._fila.put(("garimpo", gid))
@@ -216,14 +313,15 @@ class Nucleo:
         self.log(f"radar {_persona.persona(persona)['nome']} na fila (até {_radar.CUSTO_RADAR} unidades)")
         return {"ok": True}
 
-    def gerar_equivalentes(self, oid, idiomas=("fr", "de")):
+    def gerar_equivalentes(self, oid, idiomas=("en", "fr", "de", "es")):
         """Roda na fila (gasta cota): o painel recebe `mudou` quando acabar."""
         if not self.banco.oportunidade(int(oid)): raise KeyError(oid)
-        idiomas = [k for k in idiomas if k in _persona.IDIOMAS]
-        if not idiomas: raise ValueError("escolha FR ou DE")
+        origem = _persona.persona(self.banco.oportunidade(int(oid))["persona"]).get("idioma", "en")
+        idiomas = [k for k in idiomas if k in _persona.IDIOMAS and k != origem]
+        if not idiomas: raise ValueError("escolha pelo menos um mercado diferente do de origem")
         self._fila.put(("equivalentes", (int(oid), idiomas)))
         self.log(f"equivalentes {'/'.join(k.upper() for k in idiomas)} da oportunidade #{oid} na fila "
-                 f"(até {len(idiomas) * 101} unidades)")
+                 f"(até {len(idiomas) * 102} unidades)")
         return {"ok": True}
 
     def marcar(self, oid, estado):
@@ -374,6 +472,17 @@ def _autoteste():
     e = n.estado()
     caso("estado inicial", e["cota"]["usadas"] == 0 and e["atual"] is None and e["ajustes"]["rpm"] == 5.0)
     caso("⛔ a chave sai mascarada no estado", e["chave"] == "chav…-20")
+    import json as _json
+    caso("⭐ o catalogo vai para o painel (sem sets)", _json.dumps(n.personas()) and "sementes" in n.personas())
+    env = os.path.join(d, ".env")
+    r = n.adicionar_chaves(["outra-chave-de-teste-123456\ncurta, chave-de-teste-com-mais-de-20"], arq_env=env)
+    caso("⭐ colar varias chaves: aceita a nova, recusa curta e repetida",
+         [x["ok"] for x in r["resultado"]] == [True, False, False] and len(n.yt.chaves) == 2)
+    caso("chaves gravadas no .env", "outra-chave-de-teste-123456" in open(env, encoding="utf-8").read())
+    n.subir_chave(config.id_chave("outra-chave-de-teste-123456"), arq_env=env)
+    caso("subir a chave para o topo", n.yt.chaves[0] == "outra-chave-de-teste-123456")
+    n.remover_chave(config.id_chave("outra-chave-de-teste-123456"), arq_env=env)
+    caso("remover a chave", n.yt.chaves == ["chave-de-teste-com-mais-de-20"])
     try:
         n.novo_garimpo(["  "], "amish"); caso("⛔ garimpo sem semente", False)
     except ValueError:
@@ -398,10 +507,17 @@ def _autoteste():
     n.salvar_ajustes(rpm=7.5)
     caso("⭐ RPM muda a receita", n.oportunidade(o["id"])["receita"] == 120000)
     caso("matriz conta a celula", n.matriz()["celulas"][0]["tema"] == "jardim")
+    mp = n.mapa()
+    esc = next(l for l in mp["arquetipos"] if l["id"] == "avo-escassez")
+    caso("⭐ mapa: a avo dos tempos dificeis nos 4 mercados", set(esc["paises"]) == {"en", "fr", "de", "es"}
+         and esc["regiao"] == "comum aos 4")
+    am = next(l for l in mp["arquetipos"] if l["id"] == "amish")
+    caso("⭐ mapa: Amish e' EN ∩ DE, com a oportunidade e a equivalencia DE", am["regiao"] == "EN ∩ DE"
+         and am["paises"]["en"]["n"] == 1 and am["paises"]["de"]["equiv"]["n"] == 1)
     caso("⭐ matriz traz a fome e a capa da persona", n.matriz()["resumo"]["amish"]["fome"] == 16_000_000)
     caso("⭐ o detalhe traz os equivalentes FR/DE com a fome nativa",
-         set(o["equivalentes"]) == {"fr", "de"} and "fome" in n.oportunidade(o["id"])["equivalentes"]["de"])
-    caso("lista por idioma", len(n.idioma("fr")) == 1 and n.estado()["idiomas"] == {"fr": 1, "de": 1})
+         set(o["equivalentes"]) == {"fr", "de", "es"} and "fome" in n.oportunidade(o["id"])["equivalentes"]["de"])
+    caso("lista por idioma", len(n.idioma("fr")) == 1 and n.estado()["idiomas"] == {"fr": 1, "de": 1, "es": 1})
     n.gerar_equivalentes(o["id"], ["de"]); n.esperar_fila()
     caso("gerar equivalente pela fila", n.estado()["idiomas"]["de"] == 1)
     g2 = n.novo_garimpo(["x"], "amish")

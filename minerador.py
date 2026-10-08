@@ -13,7 +13,7 @@ for _p in (os.path.join(AQUI, "motor"), os.path.join(AQUI, "agente")):
     if _p not in sys.path: sys.path.insert(0, _p)
 
 MODULOS_COM_AUTOTESTE = [
-    ("motor", "config.py"), ("motor", "banco.py"), ("motor", "youtube.py"), ("motor", "score.py"),
+    ("motor", "config.py"), ("motor", "catalogo.py"), ("motor", "banco.py"), ("motor", "youtube.py"), ("motor", "score.py"),
     ("motor", "persona.py"), ("motor", "garimpo.py"), ("motor", "radar.py"),
     ("agente", "nucleo.py"), ("agente", "servidor.py"), ("agente", "painel.py"),
 ]

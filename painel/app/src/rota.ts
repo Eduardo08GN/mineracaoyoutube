@@ -9,7 +9,8 @@ export type Rota =
   | { tela: "matriz" }
   | { tela: "radar" }
   | { tela: "ajustes" }
-  | { tela: "idioma"; cod: CodIdioma };
+  | { tela: "idioma"; cod: CodIdioma }
+  | { tela: "mapa" };
 
 function ler(): Rota {
   const [caminho, busca = ""] = window.location.hash.replace(/^#\/?/, "").split("?");
@@ -19,6 +20,7 @@ function ler(): Rota {
   if (partes[0] === "oportunidades") return { tela: "oportunidades", garimpo: Number(params.get("garimpo") || 0) };
   if (partes[0] === "garimpo") return { tela: "garimpo" };
   if (partes[0] === "matriz") return { tela: "matriz" };
+  if (partes[0] === "mapa") return { tela: "mapa" };
   if (partes[0] === "radar") return { tela: "radar" };
   if (partes[0] === "ajustes") return { tela: "ajustes" };
   if (partes[0] === "idioma" && CODIGOS.includes(partes[1] as CodIdioma)) return { tela: "idioma", cod: partes[1] as CodIdioma };
@@ -45,6 +47,7 @@ export const link = {
   doGarimpo: (id: number) => `#/oportunidades?garimpo=${id}`,
   oportunidade: (id: number) => `#/oportunidades/${id}`,
   matriz: "#/matriz",
+  mapa: "#/mapa",
   radar: "#/radar",
   ajustes: "#/ajustes",
   idioma: (c: CodIdioma) => `#/idioma/${c}`,

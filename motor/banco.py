@@ -53,6 +53,10 @@ CREATE TABLE IF NOT EXISTS equivalentes (
 );
 CREATE TABLE IF NOT EXISTS radar_rodadas (persona TEXT PRIMARY KEY, quando REAL);
 CREATE TABLE IF NOT EXISTS cota (dia TEXT PRIMARY KEY, usadas INTEGER);
+CREATE TABLE IF NOT EXISTS cota_chaves (
+  dia TEXT, chave_id TEXT, usadas INTEGER DEFAULT 0, esgotada INTEGER DEFAULT 0, motivo TEXT DEFAULT '',
+  PRIMARY KEY (dia, chave_id)
+);
 CREATE TABLE IF NOT EXISTS cache (chave TEXT PRIMARY KEY, dia TEXT, json TEXT);
 """
 
@@ -74,6 +78,8 @@ class Banco:
                         "ALTER TABLE videos ADD COLUMN categoria TEXT DEFAULT ''",
                         "ALTER TABLE videos ADD COLUMN kids INTEGER DEFAULT 0",
                         "ALTER TABLE canais ADD COLUMN pais TEXT DEFAULT ''",
+                        "ALTER TABLE equivalentes ADD COLUMN persona TEXT DEFAULT ''",
+                        "ALTER TABLE equivalentes ADD COLUMN importada INTEGER DEFAULT 0",
                         "ALTER TABLE radar ADD COLUMN video_id TEXT DEFAULT ''",
                         "ALTER TABLE radar ADD COLUMN video_views INTEGER DEFAULT 0"):
                 try: self._c.execute(sql)
@@ -105,9 +111,24 @@ class Banco:
         r = self._uma("SELECT usadas FROM cota WHERE dia=?", (dia,))
         return r["usadas"] if r else 0
 
-    def gastar_cota(self, dia, n):
+    def gastar_cota(self, dia, n, chave_id=None):
         self._x("INSERT INTO cota(dia, usadas) VALUES(?, ?) ON CONFLICT(dia) DO UPDATE SET usadas=usadas+?",
                 (dia, n, n))
+        if chave_id:
+            self._x("""INSERT INTO cota_chaves(dia, chave_id, usadas) VALUES(?, ?, ?)
+                       ON CONFLICT(dia, chave_id) DO UPDATE SET usadas=usadas+?""", (dia, chave_id, n, n))
+
+    def cota_chave(self, dia, chave_id):
+        r = self._uma("SELECT usadas, esgotada, motivo FROM cota_chaves WHERE dia=? AND chave_id=?", (dia, chave_id))
+        return r or {"usadas": 0, "esgotada": 0, "motivo": ""}
+
+    def tem_cota_por_chave(self, dia):
+        return bool(self._uma("SELECT 1 FROM cota_chaves WHERE dia=? LIMIT 1", (dia,)))
+
+    def marcar_chave(self, dia, chave_id, esgotada, motivo=""):
+        self._x("""INSERT INTO cota_chaves(dia, chave_id, esgotada, motivo) VALUES(?, ?, ?, ?)
+                   ON CONFLICT(dia, chave_id) DO UPDATE SET esgotada=excluded.esgotada, motivo=excluded.motivo""",
+                (dia, chave_id, int(esgotada), motivo))
 
     def cache_ler(self, chave, dia):
         r = self._uma("SELECT json FROM cache WHERE chave=? AND dia=?", (chave, dia))
@@ -200,6 +221,10 @@ class Banco:
         sql = self._SELECT_OP + (" WHERE " + " AND ".join(onde) if onde else "") + f" ORDER BY {col} DESC LIMIT ?"
         return [_op_py(o) for o in self._todas(sql, (*args, limite))]
 
+    def contagem_por_persona(self):
+        return {r["persona"]: r["n"] for r in self._todas(
+            "SELECT persona, COUNT(*) n FROM oportunidades WHERE estado!='descartada' GROUP BY persona")}
+
     def contagem_por_estado(self):
         return {r["estado"]: r["n"] for r in self._todas("SELECT estado, COUNT(*) n FROM oportunidades GROUP BY estado")}
 
@@ -217,17 +242,18 @@ class Banco:
     # ── equivalentes em outros idiomas ──
     def gravar_equivalente(self, op_id, idioma, e):
         self._x("""INSERT OR REPLACE INTO equivalentes(op_id, idioma, titulo, consulta, persona_local, demanda,
-                   oferta_recente, com_persona, top, checado) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   oferta_recente, com_persona, top, checado, persona, importada) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (op_id, idioma, e.get("titulo", ""), e.get("consulta", ""), e.get("persona_local", ""),
                  e.get("demanda", 0), e.get("oferta_recente", 0), e.get("com_persona", 0),
-                 json.dumps(e.get("top", []), ensure_ascii=False), time.time()))
+                 json.dumps(e.get("top", []), ensure_ascii=False), time.time(), e.get("persona", ""),
+                 int(bool(e.get("importada")))))
 
     def equivalentes(self, op_id):
         return {r["idioma"]: _eq_py(r) for r in self._todas("SELECT * FROM equivalentes WHERE op_id=?", (op_id,))}
 
     def equivalentes_por_idioma(self, idioma):
         """As oportunidades com equivalente neste idioma, a de mais demanda nativa primeiro."""
-        linhas = self._todas("""SELECT e.*, o.persona, o.nota, o.titulos, v.titulo AS original, v.thumb, v.views
+        linhas = self._todas("""SELECT e.*, o.persona AS persona_origem, o.nota, o.titulos, v.titulo AS original, v.thumb, v.views
                                 FROM equivalentes e JOIN oportunidades o ON o.id=e.op_id JOIN videos v ON v.id=o.video_id
                                 WHERE e.idioma=? AND o.estado!='descartada' ORDER BY e.demanda DESC""", (idioma,))
         return [{**_eq_py(r), "titulos": json.loads(r.get("titulos") or "[]")} for r in linhas]
@@ -282,6 +308,9 @@ def _autoteste():
     b = Banco(os.path.join(tempfile.mkdtemp(prefix="min-banco-"), "t.db"))
     b.gastar_cota("2026-10-08", 100); b.gastar_cota("2026-10-08", 3)
     caso("cota soma no dia", b.cota_usada("2026-10-08") == 103 and b.cota_usada("2026-10-09") == 0)
+    b.gastar_cota("2026-10-08", 100, "K1"); b.marcar_chave("2026-10-08", "K1", True, "cota acabou")
+    caso("⭐ cota e estado por chave", b.cota_chave("2026-10-08", "K1") == {"usadas": 100, "esgotada": 1, "motivo": "cota acabou"}
+         and b.cota_chave("2026-10-09", "K1")["usadas"] == 0)
     b.cache_gravar("busca:x", "2026-10-08", {"ids": ["a"]})
     caso("cache vale no dia", b.cache_ler("busca:x", "2026-10-08") == {"ids": ["a"]})
     caso("⭐ cache de ontem nao vale hoje", b.cache_ler("busca:x", "2026-10-09") is None)

@@ -20,12 +20,13 @@ function CopiarTitulo({ texto }: { texto: string }) {
 }
 
 /** Um idioma de uma oportunidade: o titulo local, a busca nativa, os numeros e os virais nativos em capa. */
-export function PainelEquivalente({ e, nome }: { e: Equivalente; nome: string }) {
+export function PainelEquivalente({ e, nome, persona }: { e: Equivalente; nome: string; persona?: string }) {
   return (
     <section className={`panel equiv${e.aberto ? " is-aberto" : ""}`}>
       <div className="equiv-topo">
         <SiglaIdioma cod={e.idioma} tom={e.aberto ? "aberto" : "fechado"} />
         <span className="label">{nome}</span>
+        {persona && <span className="persona-local">{persona}{e.importada ? <em className="importada">importada</em> : null}</span>}
         <Selo status={veredito(e)} />
       </div>
       {e.titulo && <div className="equiv-titulo"><span>{e.titulo}</span><CopiarTitulo texto={e.titulo} /></div>}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Check, Copy, ExternalLink, Flame, Languages, Play, RefreshCw, Trash2, Video } from "lucide-react";
 import { abrirLink, CODIGOS, embed, enviar, linkVideo, obter, type DetalheOp, type EstadoOp } from "../api";
 import type { MIN } from "../estado";
-import { Girando, Nota, Vazio, VideoThumb, useAcao } from "../componentes/base";
+import { Girando, Nota, Vazio, VideoThumb, useAcao, Bandeira } from "../componentes/base";
 import { PainelEquivalente } from "../componentes/equivalente";
 import { link } from "../rota";
 import { ano, compacto, dolares, duracao, nomePersona, numero, ROTULO_OP } from "../textos";
@@ -60,6 +60,7 @@ export function Oportunidade({ m, id }: { m: MIN; id: number }) {
   if (erro) return <div className="tela"><Vazio titulo="Não achei essa oportunidade" texto={erro} /></div>;
   if (!o) return <div className="tela"><p className="meta">Carregando…</p></div>;
 
+  const outros = CODIGOS.filter((c) => c !== o.idioma);
   const marcar = (estado: EstadoOp, texto: string) =>
     rodar(estado, async () => setO(await enviar<DetalheOp>(`/api/oportunidades/${id}/estado`, { estado })), texto);
 
@@ -70,7 +71,7 @@ export function Oportunidade({ m, id }: { m: MIN; id: number }) {
       <div className="op-topo">
         <PlayerEmbutido id={o.video_id} thumb={o.thumb} titulo={o.titulo} />
         <div className="op-info">
-          <p className="eyebrow">{nomePersona(o.persona, m.catalogo?.personas)} · {o.tema || "tema a definir"} · {ROTULO_OP[o.estado]}</p>
+          <p className="eyebrow"><Bandeira cod={o.idioma} /> {nomePersona(o.persona, m.catalogo?.personas)} · {o.tema || "tema a definir"} · {ROTULO_OP[o.estado]}</p>
           <h1 className="titulo-video">{o.titulo}</h1>
           <p className="meta">{o.canal}<b>/</b>{compacto(o.canal_info.inscritos)} inscritos<b>/</b>{ano(o.publicado)}<b>/</b>{duracao(o.duracao)}<b>/</b>semente “{o.semente}”</p>
           <div className="op-numeros">
@@ -117,19 +118,20 @@ export function Oportunidade({ m, id }: { m: MIN; id: number }) {
       <section className="bloco-equiv">
         <div className="linha-titulo">
           <h2><Languages size={20} aria-hidden /> Em outros idiomas</h2>
-          {CODIGOS.some((c) => !o.equivalentes[c]) && (
+          {outros.some((c) => !o.equivalentes[c]) && (
             <button className="btn btn-ghost btn-sm" disabled={!!rodando || !m.estado?.claude}
                     onClick={() => rodar("eq", () => enviar(`/api/oportunidades/${id}/equivalentes`,
-                      { idiomas: CODIGOS.filter((c) => !o.equivalentes[c]) }), "Equivalências na fila (≈ 100 unidades por idioma).")}>
+                      { idiomas: outros.filter((c) => !o.equivalentes[c]) }), "Equivalências na fila (≈ 100 unidades por mercado).")}>
               {rodando === "eq" ? <Girando /> : <Languages size={14} aria-hidden />}
-              Gerar {CODIGOS.filter((c) => !o.equivalentes[c]).map((c) => c.toUpperCase()).join(" e ")}
+              Vestir em {outros.filter((c) => !o.equivalentes[c]).map((c) => c.toUpperCase()).join(", ")}
             </button>
           )}
         </div>
-        {CODIGOS.some((c) => o.equivalentes[c]) ? (
-          <div className="duas">
-            {CODIGOS.filter((c) => o.equivalentes[c]).map((c) => (
-              <PainelEquivalente key={c} e={o.equivalentes[c]!} nome={m.catalogo?.idiomas?.[c]?.nome ?? c} />
+        {outros.some((c) => o.equivalentes[c]) ? (
+          <div className="tres">
+            {outros.filter((c) => o.equivalentes[c]).map((c) => (
+              <PainelEquivalente key={c} e={o.equivalentes[c]!} nome={m.catalogo?.idiomas?.[c]?.nome ?? c}
+                                 persona={m.catalogo?.personas.find((p) => p.id === o.equivalentes[c]!.persona)?.nome} />
             ))}
           </div>
         ) : <p className="meta">Ainda sem equivalências. Gere para ver o viral nativo e se alguém já faz com a persona lá.</p>}
