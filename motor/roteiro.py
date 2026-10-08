@@ -24,8 +24,10 @@ if AQUI not in sys.path: sys.path.insert(0, AQUI)
 # ── quem fala: o perfil de producao de cada persona (editavel no projeto) ──
 PERFIS = {
     "kloster-moench": {
-        "nome": "Bruder Anselm",
-        "apresentacao": "Ich bin Bruder Anselm. Ich bin Benediktinermönch und pflege seit über vierzig Jahren "
+        # ⛔ nao "Anselm": colide com o monge real Anselm Grün (17,5 mil inscritos, best-seller). Wendelin e' o
+        #    padroeiro dos camponeses e pastores, e nenhum canal usa o nome (checado em 08/10).
+        "nome": "Bruder Wendelin",
+        "apresentacao": "Ich bin Bruder Wendelin. Ich bin Benediktinermönch und pflege seit über vierzig Jahren "
                         "den Garten unseres kleinen Klosters im Allgäu.",
         "companheiro": "Bruder Konrad, der alte Koch unserer Klosterküche",
         "linhagem": "die Brüder vor mir, die diesen Garten seit Jahrhunderten bestellen, und die Lehre der heiligen Hildegard",
@@ -366,7 +368,7 @@ def _autoteste():
     corpo = " ".join(f"Satz Nummer {i} hat ein paar Worte mehr als nötig." for i in range(400))
     secs = [{"n": i, "nome": n, "texto": corpo if i in (7, 8) else " ".join(corpo.split()[: 60 + rnd.randrange(60)])}
             for i, (n, _) in enumerate(SECOES, 1)]
-    secs[2]["texto"] = "Ich bin Bruder Anselm. " + secs[2]["texto"]
+    secs[2]["texto"] = "Ich bin Bruder Wendelin. " + secs[2]["texto"]
     pl = segmentar(secs, "de", pf["nome"])
     durs = [p["dur"] for p in pl]
     caso(f"⭐ planos de ~4 s ({min(durs)}–{max(durs)} s, media {sum(durs)/len(durs):.1f})", 2.0 <= sum(durs) / len(durs) <= 5.0 and max(durs) <= TETO_S and min(durs) >= MIN_S)
@@ -375,7 +377,7 @@ def _autoteste():
     caso(f"⭐ proporcoes como o Elias (avatar {pr_['avatar']}%, split {pr_['split']}%, broll {pr_['broll']}%)",
          5 <= pr_["avatar"] <= 16 and 5 <= pr_["split"] <= 16 and 70 <= pr_["broll"] <= 88)
     caso("abre e fecha no avatar; a apresentacao tambem", pl[0]["tipo"] == "avatar" and pl[-1]["tipo"] == "avatar"
-         and any(p["tipo"] == "avatar" and "Anselm" in p["texto"] for p in pl))
+         and any(p["tipo"] == "avatar" and "Wendelin" in p["texto"] for p in pl))
     caso("⭐ avatar e split com a voz do Veo, b-roll com a MiniMax",
          all((p["voz"] == "veo") == (p["tipo"] != "broll") for p in pl))
     caso("nunca dois planos de avatar/split seguidos fora dos fixos",

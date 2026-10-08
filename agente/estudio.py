@@ -106,9 +106,22 @@ class Estudio:
         return {"ok": True}
 
     def editar_perfil(self, pid, campos):
+        """Muda o perfil de quem fala. ⭐ Nome, livro e site trocados tambem mudam no roteiro ja' escrito
+        (o "[SITE]" vira o site de verdade quando o infoproduto existir), sem reescrever nada."""
+        trocas = []
         def f(p):
-            p["perfil"] = {**(p.get("perfil") or {}), **{k: str(v) for k, v in campos.items() if k in _rot.PERFIS["kloster-moench"]}}
+            velho = p.get("perfil") or {}
+            novo = {**velho, **{k: str(v).strip() for k, v in campos.items() if k in _rot.PERFIS["kloster-moench"]}}
+            for k in ("nome", "livro", "site"):
+                if velho.get(k) and novo.get(k) and velho[k] != novo[k]: trocas.append((velho[k], novo[k]))
+            p["perfil"] = novo
+            r = p.get("roteiro") or {}
+            for a, b in trocas:
+                for s in r.get("secoes") or []: s["texto"] = s["texto"].replace(a, b)
+                r["titulos"] = [t.replace(a, b) for t in r.get("titulos") or []]
+                for pl in p.get("planos") or []: pl["texto"] = pl["texto"].replace(a, b)
         _proj.alterar(pid, f, self.base)
+        if trocas: _proj.registrar(pid, "perfil: " + ", ".join(f"“{a}” → “{b}”" for a, b in trocas) + " (no roteiro também)", self.base)
         self._mudou(pid)
         return self.projeto(pid)
 
@@ -222,7 +235,7 @@ def _autoteste():
         nonlocal ok; print(("  OK  " if cond else "  ERRO"), nome); ok &= bool(cond)
     base = tempfile.mkdtemp(prefix="min-estudio-")
     secoes = "".join(f"=== {i} | {n} ===\n" + " ".join(f"Satz {k} über Kräuter im Klostergarten." for k in range(25 if i in (7, 8) else 6))
-                     + ("\nIch bin Bruder Anselm." if i == 3 else "") + "\n\n" for i, (n, _) in enumerate(_rot.SECOES, 1))
+                     + ("\nIch bin Bruder Wendelin." if i == 3 else "") + "\n\n" for i, (n, _) in enumerate(_rot.SECOES, 1))
     pedidos = []
     def claude(pedido, timeout=0):
         pedidos.append(pedido)
@@ -244,13 +257,13 @@ def _autoteste():
     op = {"id": 548, "video_id": "OQeWS5Ktl0Y", "persona": "kloster-moench", "titulo": "Wie man natürliche Arznei herstellt | SWR",
           "titulos": ["Klosterarznei selber machen"], "views": 2207331}
     p = e.criar(op)
-    caso("projeto criado com o perfil do monge", p["perfil"]["nome"] == "Bruder Anselm")
+    caso("projeto criado com o perfil do monge", p["perfil"]["nome"] == "Bruder Wendelin")
     caso("as 3 etapas rodam sozinhas", e.esperar(30))
     p = e.projeto(p["id"])
     est = {x["id"]: x["estado"] for x in p["etapas"]}
     caso("⭐ fonte, roteiro e planos prontos", est["fonte"] == est["roteiro"] == est["planos"] == "pronta")
     caso("o titulo do roteiro vira o nome do projeto", p["nome"] == "Klosterarznei wie früher")
-    caso("⭐ o pedido do roteiro levou o mecanismo e o perfil", any("Andorn-Tinktur" in x and "Bruder Anselm" in x for x in pedidos))
+    caso("⭐ o pedido do roteiro levou o mecanismo e o perfil", any("Andorn-Tinktur" in x and "Bruder Wendelin" in x for x in pedidos))
     caso("⭐ cada plano de b-roll ganhou cena", all(pl["cena"] for pl in p["planos"] if pl["tipo"] != "avatar"))
     caso("proporcoes no projeto", sum(p["proporcoes"].values()) in (99, 100, 101))
     caso("eventos mudou/producao para o painel", any(t == "mudou" and d.get("o") == "producao" for t, d in eventos))
@@ -264,6 +277,10 @@ def _autoteste():
     p3 = e.projeto(p3["id"])
     caso("⛔ fonte que falha: registro explica e roteiro nem roda", "não está aberto" in p3["registro"][0]["texto"]
          and not p3.get("roteiro") and any(t == "aviso" for t, _ in eventos))
+    p4 = e.editar_perfil(p["id"], {"site": "klostergarten-buch.de", "nome": "Bruder Ambrosius", "inventado": "x"})
+    txt = " ".join(s["texto"] for s in p4["roteiro"]["secoes"])
+    caso("⭐ trocar nome e site no perfil troca no roteiro ja' escrito", "Ambrosius" in txt and "Wendelin" not in txt
+         and p4["perfil"]["site"] == "klostergarten-buch.de" and "inventado" not in p4["perfil"])
     caso("ajuste do perfil do Dolphin", e.salvar_ajustes(perfil_dolphin="123")["perfil_dolphin"] == "123")
     try:
         e.salvar_ajustes(outro="x"); caso("⛔ ajuste desconhecido", False)
