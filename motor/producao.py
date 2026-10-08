@@ -73,7 +73,13 @@ def avaliar(videos, chamar=None):
         from persona import chamar_claude as chamar
     saida = {}
     for i in range(0, len(videos), LOTE):
-        saida.update(interpretar(chamar(montar_pedido(videos[i:i + LOTE]))))
+        pedido = montar_pedido(videos[i:i + LOTE])
+        # ⭐ uma segunda tentativa: em 08/10 o pedido do Alter Förster (30 titulos) passou de 5 min sem resposta
+        try:
+            r = chamar(pedido)
+        except Exception:                                                  # noqa: BLE001
+            r = chamar(pedido)
+        saida.update(interpretar(r))
     return saida
 
 
@@ -99,6 +105,13 @@ def _autoteste():
     pedidos = []
     avaliar([{"id": str(i), "titulo": "t"} for i in range(130)], chamar=lambda p: pedidos.append(p) or "{}")
     caso(f"lotes de {LOTE} titulos", len(pedidos) == 3)
+    tentativas = []
+    def instavel(p):
+        tentativas.append(p)
+        if len(tentativas) == 1: raise TimeoutError("demorou")
+        return resp
+    caso("⭐ o Claude demorou: tenta de novo uma vez", avaliar(vs, chamar=instavel)["A"]["produzivel"] is False
+         and len(tentativas) == 2)
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 
