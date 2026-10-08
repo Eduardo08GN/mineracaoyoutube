@@ -48,7 +48,7 @@ def gravar_chave(valor, arq=ARQ_ENV):
 
 
 def mascarar(chave):
-    """AIza...2fA — o painel so' ve' isso."""
+    """AIza…xyz — o painel so' ve' isso."""
     return f"{chave[:4]}…{chave[-3:]}" if len(chave) > 10 else ("" if not chave else "…")
 
 
@@ -64,7 +64,7 @@ def _autoteste():
     gravar_chave("novachave1234567", arq)
     e = ler_env(arq)
     caso("troca a chave e mantem as outras", e["YOUTUBE_API_KEY"] == "novachave1234567" and e["OUTRA"] == "1")
-    caso("⛔ o painel so' ve' a chave mascarada", mascarar("AIzaSyBEKx5wBZ_Z2fA") == "AIza…2fA")
+    caso("⛔ o painel so' ve' a chave mascarada", mascarar("AIzaFAKEchaveDeTestexyz") == "AIza…xyz")
     caso("sem .env: vazio", ler_env(os.path.join(d, "nada")) == {})
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
