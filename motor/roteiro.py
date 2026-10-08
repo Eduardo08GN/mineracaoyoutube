@@ -33,7 +33,7 @@ PERFIS = {
         "linhagem": "die Brüder vor mir, die diesen Garten seit Jahrhunderten bestellen, und die Lehre der heiligen Hildegard",
         "tratamento": "Sie",
         "livro": "Das Klostergarten-Buch",
-        "site": "[SITE]",
+        "site": "bruderwendelin.online",
         "assinatura": "So wird es bis heute in jedem Klostergarten gemacht, der sich erinnert.",
         "despedida": "Gott befohlen, und bis zum nächsten Mal.",
         "cenario_avatar": "an old Benedictine monk in a black habit, white hair, kind face, speaking to camera in a "
@@ -341,7 +341,7 @@ def _autoteste():
         nonlocal ok; print(("  OK  " if cond else "  ERRO"), nome); ok &= bool(cond)
     monge = {"id": "kloster-moench", "nome": "Klostermönch", "quem": "a German Benedictine monk", "idioma": "de"}
     pf = perfil_de(monge)
-    caso("perfil do monge com o livro e o site a preencher", pf["livro"] and pf["site"] == "[SITE]")
+    caso("perfil do monge com o livro e o site do livro", pf["livro"] and pf["site"] == "bruderwendelin.online")
     caso("persona sem perfil ganha um generico", perfil_de({"id": "x", "nome": "Old Farmer", "quem": "q"})["nome"] == "Old Farmer")
     fonte = {"titulo": "Wie man natürliche Arznei herstellt", "canal": "SWR", "views": 2207331, "texto": "", "descricao": "Salben"}
     pm = montar_mecanismo(monge, fonte)
