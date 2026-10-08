@@ -28,6 +28,14 @@ import roteiro as _rot                                                      # no
 ARQ_AJUSTES = os.path.join(config.DATA, "estudio.json")
 AJUSTES_PADRAO = {"perfil_dolphin": "869356248"}    # "12 Ivone": a sessao do YouTube que o Eduardo autorizou (08/10)
 ETAPAS = ("fonte", "roteiro", "planos")
+
+# ⛔ Regras dos clipes de videos de terceiros (decisao do Eduardo, 08/10/2026) — o pipeline de b-roll (fase 2) obedece:
+#   - cada trecho tem no maximo 8 s (entra intercalado no ritmo do Elias: 1 ou 2 planos de ~4 s);
+#   - de CADA video de terceiro usa-se no maximo 10% da duracao dele (50 min -> ate' 5 min, em cortes de ate' 8 s);
+#     o total no nosso video pode passar disso, desde que venha de varios videos de origem;
+#   - nada com rosto de terceiros, nada com legenda ou texto queimado, nunca o audio original.
+REGRAS_TERCEIROS = {"max_s_trecho": 8.0, "max_fracao_por_fonte": 0.10, "sem_rosto": True, "sem_legenda": True,
+                    "sem_audio": True}
 LOTE_PLANOS = 60
 
 
