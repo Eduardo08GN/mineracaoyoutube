@@ -81,11 +81,13 @@ MAX_REGISTRO = 300
 
 
 class Nucleo:
-    def __init__(self, banco=None, yt=None, reescrever=None, arq_ajustes=ARQ_AJUSTES, iniciar=True, equivaler=None):
+    def __init__(self, banco=None, yt=None, reescrever=None, arq_ajustes=ARQ_AJUSTES, iniciar=True, equivaler=None,
+                 avaliar=None):
         self.banco = banco or Banco()
         self.yt = yt or YouTube(self.banco)
         self._reescrever = reescrever
         self._equivaler = equivaler
+        self._avaliar = avaliar
         self._arq_ajustes = arq_ajustes
         self._ouvintes = []
         self._fila = queue.Queue()
@@ -230,6 +232,21 @@ class Nucleo:
 
     def garimpos(self):
         return self.banco.garimpos()
+
+    def reavaliar_producao(self):
+        """Passa o filtro de producao nas oportunidades ja' gravadas (as de antes do filtro existir)."""
+        import producao as _producao
+        ops = self.banco.oportunidades(limite=100000)
+        vs = [{"id": o["video_id"], "titulo": o["titulo"]} for o in ops]
+        av = (self._avaliar or _producao.avaliar)(vs)
+        fora = _producao.inviaveis(vs, av)
+        for o in ops:
+            if o["video_id"] in fora:
+                self.banco.atualizar_oportunidade(o["id"], estado="inviavel", producao=av[o["video_id"]]["motivo"])
+        n = sum(o["video_id"] in fora for o in ops)
+        self.log(f"filtro de produção: {n} de {len(ops)} oportunidades eliminadas")
+        self._emitir("mudou", o="oportunidades")
+        return {"avaliadas": len(ops), "eliminadas": n}
 
     # ── retratos das personas ──
     def _info_retrato(self, p):
@@ -383,7 +400,7 @@ class Nucleo:
         eqs = {}
         for e in self.banco._todas("""SELECT e.op_id, e.idioma, e.persona, e.demanda, e.com_persona, e.oferta_recente,
                                              e.top, e.titulo, o.persona AS origem FROM equivalentes e
-                                      JOIN oportunidades o ON o.id=e.op_id WHERE o.estado!='descartada'"""):
+                                      JOIN oportunidades o ON o.id=e.op_id WHERE o.estado NOT IN ('descartada', 'inviavel')"""):
             local = e["persona"] or _persona.local_de(_persona.persona(e["origem"]), e["idioma"])[0]["id"]
             c = eqs.setdefault(local, {"n": 0, "abertos": 0, "melhor": 0, "capa": "", "op_id": None, "titulo": ""})
             c["n"] += 1
@@ -507,7 +524,7 @@ class Nucleo:
         try:
             n = _garimpo.rodar(g, self.banco, self.yt, diz=self.log, etapa=self._etapa,
                                cancelado=lambda: gid in self._cancelar, reescrever=self._reescrever,
-                               equivaler=self._equivaler)
+                               equivaler=self._equivaler, avaliar=self._avaliar)
             self.banco.atualizar_garimpo(gid, estado="pronto", etapa="", fim=time.time())
             self.avisar(f"Garimpo #{gid} terminou: {n} oportunidade(s).", "ok")
         except _garimpo.Cancelado:
@@ -597,7 +614,9 @@ def _autoteste():
                                       "encaixe": 8} for v in vs}
     equiv = lambda p, ops, idiomas: {o["id"]: {k: {"titulo": "t", "consulta": "q", "persona_local": "amish"}
                                                for k in idiomas} for o in ops}
-    n = Nucleo(banco=b, yt=yt, reescrever=claude, arq_ajustes=os.path.join(d, "aj.json"), equivaler=equiv)
+    avaliar = lambda vs: {v["id"]: {"produzivel": True, "motivo": "melancias genéricas"} for v in vs}
+    n = Nucleo(banco=b, yt=yt, reescrever=claude, arq_ajustes=os.path.join(d, "aj.json"), equivaler=equiv,
+               avaliar=avaliar)
     eventos = []
     n.ouvir(lambda t, dd: eventos.append((t, dd)))
     e = n.estado()

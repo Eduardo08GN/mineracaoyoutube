@@ -6,6 +6,8 @@ r"""GARIMPO — uma rodada de mineracao: sementes -> virais antigos -> nota -> r
 Passos (cada um avisa o painel por `etapa` e `diz`):
     1. buscar     cada semente na API, so' videos ANTES da data de corte, por views
     2. medir      views, duracao e inscritos do canal; tira short, tira o que ja' tem a persona
+    3. produzir?  o Claude olha os titulos: o que nao da' para refazer com avatar + b-roll gerado sai
+                  (fica gravado como "inviavel", com o motivo) antes de gastar cota checando remake
     3. pontuar    outlier + nota previa; grava as oportunidades
     4. remakes    para as melhores: alguem ja' remakou com a persona depois de 2023?
     5. reescrever o Claude escreve os titulos, o tema, o angulo do produto e o encaixe
@@ -20,6 +22,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 if AQUI not in sys.path: sys.path.insert(0, AQUI)
 
 import persona as _persona                                                  # noqa: E402
+import producao as _producao                                                # noqa: E402
 import score as _score                                                      # noqa: E402
 from youtube import CUSTO                                                   # noqa: E402
 
@@ -157,9 +160,11 @@ def checar_remakes(yt, p, video, depois):
     return sorted(achados, key=lambda r: -r["views"])
 
 
-def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: False, reescrever=None, equivaler=None):
+def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: False, reescrever=None, equivaler=None,
+          avaliar=None):
     """Roda o garimpo `g` (dict do banco). Devolve o numero de oportunidades achadas."""
     reescrever = reescrever or _persona.reescrever
+    avaliar = avaliar or _producao.avaliar
     f = filtros_completos(g.get("filtros"))
     p = _persona.persona(g["persona"])
     origem = p.get("idioma", "en")
@@ -190,6 +195,17 @@ def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: Fals
             and publico_ok(v, pais.get(v["canal_id"], ""), origem)]
     diz(f"{len(bons)} de {len(videos)} passaram no filtro (≥ {f['min_views']:,} views, ≥ {f['min_duracao']}s)")
 
+    # 3. da' para produzir? (antes de gastar cota com remake)
+    checar()
+    avaliacao = {}
+    if bons:
+        etapa(f"Claude conferindo se dá para produzir ({len(bons)} vídeos)")
+        try:
+            avaliacao = avaliar([{"id": v["id"], "titulo": v["titulo"]} for v in bons])
+        except Exception as e:                                             # noqa: BLE001
+            diz(f"⚠ checagem de produção falhou ({e}): nenhum vídeo eliminado")
+    fora = _producao.inviaveis(bons, avaliacao)
+
     # 3. pontuar
     etapa("pontuando")
     ops = []
@@ -199,9 +215,13 @@ def rodar(g, banco, yt, diz=print, etapa=lambda *_: None, cancelado=lambda: Fals
         nota = _score.nota(v["views"], c.get("inscritos", 0), v["publicado"])
         oid = banco.gravar_oportunidade({"video_id": v["id"], "persona": p["id"], "garimpo_id": gid,
                                          "semente": semente_de[v["id"]], "outlier": out, "nota": nota})
+        if v["id"] in fora:
+            banco.atualizar_oportunidade(oid, estado="inviavel", producao=avaliacao[v["id"]]["motivo"])
+            continue
         ops.append({"oid": oid, "v": v, "inscritos": c.get("inscritos", 0), "nota": nota})
     ops.sort(key=lambda o: -o["nota"])
     banco.atualizar_garimpo(gid, achados=len(ops))
+    if fora: diz(f"{len(fora)} eliminadas: não dá para refazer só com avatar + b-roll gerado")
     diz(f"{len(ops)} oportunidades gravadas")
 
     # 4. remakes
@@ -310,7 +330,8 @@ def _autoteste():
     def equiv(p, ops, idiomas):
         return {o["id"]: {k: {"titulo": f"{k} remake", "consulta": f"pasteque {k}", "persona_local": "amish"}
                           for k in idiomas} for o in ops}
-    n = rodar(b.garimpo(gid), b, yt, diz=falas.append, reescrever=claude, equivaler=equiv)
+    sim = lambda vs: {v["id"]: {"produzivel": True, "motivo": "ok"} for v in vs}
+    n = rodar(b.garimpo(gid), b, yt, diz=falas.append, reescrever=claude, equivaler=equiv, avaliar=sim)
     ops = b.oportunidades()
     eqs = b.equivalentes(ops[0]["id"])
     caso("⭐ equivalentes FR, DE e ES medidos na melhor", set(eqs) == {"fr", "de", "es"} and eqs["de"]["demanda"] == 16_000_000)
@@ -336,16 +357,27 @@ def _autoteste():
 
     gid2 = b.novo_garimpo(["x"], "amish", {})
     try:
-        rodar(b.garimpo(gid2), b, yt, diz=lambda *_: None, cancelado=lambda: True); caso("⛔ cancelar para", False)
+        rodar(b.garimpo(gid2), b, yt, diz=lambda *_: None, cancelado=lambda: True, avaliar=sim); caso("⛔ cancelar para", False)
     except Cancelado:
         caso("⛔ cancelar para antes de gastar", True)
 
     def quebra(p, vs): raise RuntimeError("o login do Claude Code desta máquina venceu")
     gid3 = b.novo_garimpo(["watermelon"], "mennonite", {"remakes": 0, "equivalentes": 0})
     falas.clear()
-    rodar(b.garimpo(gid3), b, yt, diz=falas.append, reescrever=quebra)
-    caso("⭐ Claude fora do ar nao derruba o garimpo", any("reescrita falhou" in f for f in falas)
-         and len(b.oportunidades(persona="mennonite")) == 1)
+    def quebra_av(vs): raise RuntimeError("o Claude Code atingiu o limite de uso")
+    rodar(b.garimpo(gid3), b, yt, diz=falas.append, reescrever=quebra, avaliar=quebra_av)
+    caso("⭐ Claude fora do ar nao derruba o garimpo nem elimina ninguem", any("reescrita falhou" in f for f in falas)
+         and any("checagem de produção falhou" in f for f in falas) and len(b.oportunidades(persona="mennonite")) == 1)
+    nao = lambda vs: {v["id"]: {"produzivel": False, "motivo": "o valor é ver a melancia real"} for v in vs}
+    gid4 = b.novo_garimpo(["watermelon"], "hutterite", {"remakes": 2, "equivalentes": 0})
+    falas.clear()
+    antes = yt.cota()["usadas"]
+    n4 = rodar(b.garimpo(gid4), b, yt, diz=falas.append, reescrever=claude, avaliar=nao)
+    inv = b.oportunidades(persona="hutterite", estado="inviavel")
+    caso("⭐ inviavel sai da lista, fica gravado com o motivo", n4 == 0 and b.oportunidades(persona="hutterite") == []
+         and inv and inv[0]["producao"] == "o valor é ver a melancia real")
+    caso("⭐ inviavel nao gasta cota checando remake", yt.cota()["usadas"] - antes <= custo_estimado(1, {"remakes": 0, "equivalentes": 0})
+         and any("eliminadas" in f for f in falas))
     o = reescrever_uma(b, b.oportunidades(persona="mennonite")[0]["id"], reescrever=claude)
     caso("reescrever uma so'", o["titulos"] and o["encaixe"] == 9)
     caso("gerar equivalente de uma so'", equivalentes_uma(b, yt, o["id"], ["de"], equivaler=equiv) == 1

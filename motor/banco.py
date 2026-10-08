@@ -60,7 +60,9 @@ CREATE TABLE IF NOT EXISTS cota_chaves (
 CREATE TABLE IF NOT EXISTS cache (chave TEXT PRIMARY KEY, dia TEXT, json TEXT);
 """
 
-ESTADOS_OPORTUNIDADE = ("nova", "salva", "descartada", "produzida")
+# ⭐ inviavel: nao da' para refazer so' com avatar + b-roll gerado (motor/producao.py). Some de tudo, como a
+# descartada, mas fica no banco com o motivo: o mesmo video nao e' reavaliado a cada garimpo.
+ESTADOS_OPORTUNIDADE = ("nova", "salva", "descartada", "produzida", "inviavel")
 
 
 class Banco:
@@ -81,7 +83,8 @@ class Banco:
                         "ALTER TABLE equivalentes ADD COLUMN persona TEXT DEFAULT ''",
                         "ALTER TABLE equivalentes ADD COLUMN importada INTEGER DEFAULT 0",
                         "ALTER TABLE radar ADD COLUMN video_id TEXT DEFAULT ''",
-                        "ALTER TABLE radar ADD COLUMN video_views INTEGER DEFAULT 0"):
+                        "ALTER TABLE radar ADD COLUMN video_views INTEGER DEFAULT 0",
+                        "ALTER TABLE oportunidades ADD COLUMN producao TEXT DEFAULT ''"):
                 try: self._c.execute(sql)
                 except sqlite3.OperationalError: pass
             self._c.commit()
@@ -215,7 +218,7 @@ class Banco:
         onde, args = [], []
         if persona: onde.append("o.persona=?"); args.append(persona)
         if estado: onde.append("o.estado=?"); args.append(estado)
-        else: onde.append("o.estado!='descartada'")
+        else: onde.append("o.estado NOT IN ('descartada', 'inviavel')")
         if garimpo: onde.append("o.garimpo_id=?"); args.append(int(garimpo))
         col = {"nota": "o.nota", "views": "v.views", "outlier": "o.outlier", "recente": "o.id"}.get(ordem, "o.nota")
         sql = self._SELECT_OP + (" WHERE " + " AND ".join(onde) if onde else "") + f" ORDER BY {col} DESC LIMIT ?"
@@ -223,7 +226,7 @@ class Banco:
 
     def contagem_por_persona(self):
         return {r["persona"]: r["n"] for r in self._todas(
-            "SELECT persona, COUNT(*) n FROM oportunidades WHERE estado!='descartada' GROUP BY persona")}
+            "SELECT persona, COUNT(*) n FROM oportunidades WHERE estado NOT IN ('descartada', 'inviavel') GROUP BY persona")}
 
     def contagem_por_estado(self):
         return {r["estado"]: r["n"] for r in self._todas("SELECT estado, COUNT(*) n FROM oportunidades GROUP BY estado")}
@@ -231,7 +234,7 @@ class Banco:
     def matriz(self):
         """[(persona, tema, n, nota_media, nota_max)] das oportunidades ja' classificadas."""
         return self._todas("""SELECT persona, tema, COUNT(*) n, AVG(nota) media, MAX(nota) maxima
-                              FROM oportunidades WHERE tema!='' AND estado!='descartada'
+                              FROM oportunidades WHERE tema!='' AND estado NOT IN ('descartada', 'inviavel')
                               GROUP BY persona, tema""")
 
     # ── radar ──
@@ -255,11 +258,13 @@ class Banco:
         """As oportunidades com equivalente neste idioma, a de mais demanda nativa primeiro."""
         linhas = self._todas("""SELECT e.*, o.persona AS persona_origem, o.nota, o.titulos, v.titulo AS original, v.thumb, v.views
                                 FROM equivalentes e JOIN oportunidades o ON o.id=e.op_id JOIN videos v ON v.id=o.video_id
-                                WHERE e.idioma=? AND o.estado!='descartada' ORDER BY e.demanda DESC""", (idioma,))
+                                WHERE e.idioma=? AND o.estado NOT IN ('descartada', 'inviavel') ORDER BY e.demanda DESC""", (idioma,))
         return [{**_eq_py(r), "titulos": json.loads(r.get("titulos") or "[]")} for r in linhas]
 
     def contagem_por_idioma(self):
-        return {r["idioma"]: r["n"] for r in self._todas("SELECT idioma, COUNT(*) n FROM equivalentes GROUP BY idioma")}
+        return {r["idioma"]: r["n"] for r in self._todas(
+            f"""SELECT e.idioma, COUNT(*) n FROM equivalentes e JOIN oportunidades o ON o.id=e.op_id
+                WHERE o.estado NOT IN ('descartada', 'inviavel') GROUP BY e.idioma""")}
 
     def saturacao(self, persona, desde):
         """Canais novos da persona no radar criados depois de `desde` (AAAA-MM-DD). -1 se o radar nunca rodou."""
@@ -333,6 +338,9 @@ def _autoteste():
     b.atualizar_oportunidade(oid, estado="descartada")
     caso("descartada some da lista padrao", b.oportunidades() == [] and len(b.oportunidades(estado="descartada")) == 1)
     caso("matriz ignora descartada", b.matriz() == [])
+    b.atualizar_oportunidade(oid, estado="inviavel", producao="o valor e' ver o motor real")
+    caso("⭐ inviavel some da lista padrao e guarda o motivo", b.oportunidades() == []
+         and b.oportunidades(estado="inviavel")[0]["producao"] == "o valor e' ver o motor real")
     b.marcar_radar("C1", "amish", "V1", 16000000)
     caso("radar junta o canal e o video", b.radar("amish")[0]["nome"] == "Daisy" and b.radar("amish")[0]["video_id"] == "V1")
     b.atualizar_oportunidade(oid, estado="nova")

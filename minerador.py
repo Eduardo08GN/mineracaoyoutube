@@ -14,7 +14,8 @@ for _p in (os.path.join(AQUI, "motor"), os.path.join(AQUI, "agente")):
 
 MODULOS_COM_AUTOTESTE = [
     ("motor", "config.py"), ("motor", "catalogo.py"), ("motor", "banco.py"), ("motor", "youtube.py"), ("motor", "score.py"),
-    ("motor", "persona.py"), ("motor", "garimpo.py"), ("motor", "radar.py"),
+    ("motor", "persona.py"), ("motor", "garimpo.py"), ("motor", "radar.py"), ("motor", "retratos.py"),
+    ("motor", "producao.py"),
     ("agente", "nucleo.py"), ("agente", "servidor.py"), ("agente", "painel.py"),
 ]
 

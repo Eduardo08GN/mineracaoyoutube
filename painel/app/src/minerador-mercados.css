@@ -149,3 +149,6 @@ a.mapa-cel:hover { border-color: rgba(244, 185, 66, .45); }
 @media (max-width: 700px) {
   .ret-grade { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 }
+
+.inviavel-linha { display: flex; gap: 6px; align-items: flex-start; margin-top: 6px; font: 400 12px/1.35 var(--ow-font-body); color: var(--ow-danger, #ee7a66); }
+.inviavel-linha svg { flex: none; margin-top: 1px; }

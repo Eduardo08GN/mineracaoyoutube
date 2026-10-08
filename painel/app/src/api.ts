@@ -136,7 +136,7 @@ export interface Remake {
   canal: string;
 }
 
-export type EstadoOp = "nova" | "salva" | "descartada" | "produzida";
+export type EstadoOp = "nova" | "salva" | "descartada" | "produzida" | "inviavel";
 
 export interface Oportunidade {
   id: number;
@@ -170,6 +170,8 @@ export interface Oportunidade {
   idiomas_eq: string | null;
   /** o mercado de origem (o da persona) */
   idioma: CodIdioma;
+  /** por que nao da' para refazer com avatar + b-roll gerado (so' nas inviaveis) */
+  producao?: string;
 }
 
 export interface VideoCurto {

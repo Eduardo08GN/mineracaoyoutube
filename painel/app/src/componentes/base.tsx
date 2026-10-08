@@ -89,6 +89,9 @@ export function CardOportunidade({ o, personas }: { o: Oportunidade; personas?: 
             <Flame size={13} aria-hidden />fome {compacto(o.fome)}/ano
           </div>
         )}
+        {o.estado === "inviavel" && o.producao && (
+          <div className="inviavel-linha"><X size={13} aria-hidden />{o.producao}</div>
+        )}
       </div>
     </a>
   );

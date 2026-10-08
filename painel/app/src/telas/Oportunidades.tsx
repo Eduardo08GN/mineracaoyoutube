@@ -6,7 +6,7 @@ import { link } from "../rota";
 import { ROTULO_OP } from "../textos";
 
 const ORDENS = [["nota", "Nota"], ["views", "Views"], ["outlier", "Outlier"], ["recente", "Recentes"]] as const;
-const ESTADOS: ("" | EstadoOp)[] = ["", "nova", "salva", "produzida", "descartada"];
+const ESTADOS: ("" | EstadoOp)[] = ["", "nova", "salva", "produzida", "descartada", "inviavel"];
 
 export function Oportunidades({ m, garimpo }: { m: MIN; garimpo: number }) {
   const [lista, setLista] = useState<Oportunidade[] | null>(null);

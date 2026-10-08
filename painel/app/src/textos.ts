@@ -18,7 +18,7 @@ export function statusDoGarimpo(e: EstadoGarimpo): Status {
 }
 
 export const ROTULO_OP: Record<EstadoOp, string> = {
-  nova: "Nova", salva: "Salva", descartada: "Descartada", produzida: "Produzida",
+  nova: "Nova", salva: "Salva", descartada: "Descartada", produzida: "Produzida", inviavel: "Inviável",
 };
 
 /** A nota vira um tom: 70+ quente, 50+ morna, abaixo fria. */

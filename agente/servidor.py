@@ -237,6 +237,10 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def rodar_radar(c: Radar):
         return nucleo.rodar_radar(c.persona)
 
+    @app.post("/api/producao/reavaliar")
+    def reavaliar_producao():
+        return nucleo.reavaliar_producao()
+
     @app.post("/api/ajustes")
     def ajustes(c: Ajustes):
         return nucleo.salvar_ajustes(rpm=c.rpm, rpms=c.rpms, chave=c.chave)
