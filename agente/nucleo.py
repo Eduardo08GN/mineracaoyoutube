@@ -29,6 +29,7 @@ import config                                                               # no
 import garimpo as _garimpo                                                  # noqa: E402
 import persona as _persona                                                  # noqa: E402
 import radar as _radar                                                      # noqa: E402
+import retratos as _ret                                                     # noqa: E402
 import score as _score                                                      # noqa: E402
 from banco import Banco, ESTADOS_OPORTUNIDADE                               # noqa: E402
 from youtube import YouTube, ErroYoutube                                    # noqa: E402
@@ -44,6 +45,34 @@ AJUSTES_PADRAO = {"rpm": _cat.PAISES["en"]["rpm"], "rpm_fr": _cat.PAISES["fr"]["
                   "rpm_de": _cat.PAISES["de"]["rpm"], "rpm_es": _cat.PAISES["es"]["rpm"]}
 # as views minimas de partida por mercado (FR/DE/ES sao mercados menores)
 MIN_VIEWS = {"en": 1_000_000, "fr": 300_000, "de": 300_000, "es": 500_000}
+
+
+def copiar_texto(texto):
+    """Poe o texto na area de transferencia do Windows (o prompt do retrato vai pronto para o Flow).
+    False fora do Windows ou se o Windows nao deixar."""
+    if os.name != "nt": return False
+    import ctypes
+    from ctypes import wintypes
+    u, k = ctypes.windll.user32, ctypes.windll.kernel32
+    k.GlobalAlloc.restype = wintypes.HGLOBAL; k.GlobalAlloc.argtypes = [wintypes.UINT, ctypes.c_size_t]
+    k.GlobalLock.restype = wintypes.LPVOID; k.GlobalLock.argtypes = [wintypes.HGLOBAL]
+    k.GlobalUnlock.argtypes = [wintypes.HGLOBAL]
+    u.SetClipboardData.argtypes = [wintypes.UINT, wintypes.HANDLE]
+    dados = (texto + "\0").encode("utf-16-le")
+    for _ in range(10):                       # outro programa pode estar com a area aberta: tenta de novo
+        if u.OpenClipboard(None): break
+        time.sleep(0.05)
+    else:
+        return False
+    try:
+        u.EmptyClipboard()
+        h = k.GlobalAlloc(0x0002, len(dados))  # GMEM_MOVEABLE
+        p = k.GlobalLock(h)
+        ctypes.memmove(p, dados, len(dados))
+        k.GlobalUnlock(h)
+        return bool(u.SetClipboardData(13, h))  # CF_UNICODETEXT
+    finally:
+        u.CloseClipboard()
 
 
 def _rpm_de(ajustes, idioma):
@@ -66,6 +95,11 @@ class Nucleo:
         self.registro = []
         self._vivo = True
         self.yt.ao_trocar = lambda texto: (self.log("⚠ " + texto), self._emitir("mudou", o="ajustes"))
+        # ⭐ o modo retrato: {fila, atual, desde, pasta}. Um fio olha a pasta de downloads enquanto ativo.
+        self._retrato = None
+        self.copiar = copiar_texto
+        self.pasta_retratos = _ret.PASTA
+        self._fio_retrato = None
         self._fio = threading.Thread(target=self._trabalhar, daemon=True, name="minerador-fila")
         if iniciar:
             for g in self.banco.garimpos_abertos():
@@ -175,6 +209,7 @@ class Nucleo:
             "contagem": self.banco.contagem_por_estado(),
             "idiomas": self.banco.contagem_por_idioma(),
             "nativas": self._nativas(),
+            "retrato": self.retrato_estado(),
         }
 
     def _nativas(self):
@@ -188,12 +223,108 @@ class Nucleo:
     def personas(self):
         seis = (_dt.date.today() - _dt.timedelta(days=183)).isoformat()
         paises = {k: {c: v[c] for c in ("nome", "sigla", "bandeira", "lingua")} for k, v in _cat.PAISES.items()}
-        return {"personas": [{**p, "saturacao": self.banco.saturacao(p["id"], seis)} for p in _persona.PERSONAS],
+        return {"personas": [{**p, "saturacao": self.banco.saturacao(p["id"], seis), **self._info_retrato(p)}
+                             for p in _persona.PERSONAS],
                 "temas": _persona.TEMAS, "filtros": _garimpo.FILTROS_PADRAO, "idiomas": paises,
                 "arquetipos": _cat.ARQUETIPOS, "sementes": _cat.SEMENTES, "min_views": MIN_VIEWS}
 
     def garimpos(self):
         return self.banco.garimpos()
+
+    # ── retratos das personas ──
+    def _info_retrato(self, p):
+        """{retrato: versao (0 = sem), retrato_de: de quem e' a imagem (emprestada, nos de mesma roupa)}."""
+        a = _ret.arquivo(p["id"], self.pasta_retratos)
+        if a: return {"retrato": int(os.path.getmtime(a)), "retrato_de": p["id"]}
+        if p.get("arquetipo") in _ret.MESMA_ROUPA:
+            for q in _persona.PERSONAS:
+                if q["arquetipo"] == p["arquetipo"] and q["id"] != p["id"]:
+                    b = _ret.arquivo(q["id"], self.pasta_retratos)
+                    if b: return {"retrato": int(os.path.getmtime(b)), "retrato_de": q["id"]}
+        return {"retrato": 0, "retrato_de": ""}
+
+    def caminho_retrato(self, pid):
+        info = self._info_retrato(_persona.persona(pid))
+        if not info["retrato"]: raise KeyError(pid)
+        return _ret.arquivo(info["retrato_de"], self.pasta_retratos)
+
+    def prompt_retrato(self, pid, copiar=True):
+        p = _persona.persona(pid)
+        texto = _ret.prompt(p)
+        return {"persona": pid, "prompt": texto, "copiado": bool(copiar and self.copiar(texto))}
+
+    def sem_retrato(self):
+        """As personas que ainda nao tem imagem (nem emprestada), na ordem do mapa."""
+        return [p["id"] for p in _persona.PERSONAS if not self._info_retrato(p)["retrato"]]
+
+    def retrato_estado(self):
+        r = self._retrato
+        total = len(_persona.PERSONAS)
+        feitos = total - len(self.sem_retrato())
+        if not r: return {"ativo": False, "feitos": feitos, "total": total}
+        return {"ativo": True, "atual": r["atual"], "restam": len(r["fila"]), "feitos": feitos, "total": total,
+                "prompt": _ret.prompt(_persona.persona(r["atual"])), "pasta": r["pasta"]}
+
+    def retrato_iniciar(self, ids=None, pasta=None):
+        """Comeca o modo retrato: copia o prompt da primeira e espera o download dela."""
+        fila = [i for i in (ids or self.sem_retrato())]
+        if not fila: raise ValueError("todas as personas já têm retrato")
+        self._retrato = {"fila": fila[1:], "atual": fila[0], "desde": time.time(), "pasta": pasta or _ret.pasta_downloads()}
+        self.copiar(_ret.prompt(_persona.persona(fila[0])))
+        self.log(f"modo retrato: prompt de {_persona.persona(fila[0])['nome']} copiado — gere no Flow e baixe")
+        if not (self._fio_retrato and self._fio_retrato.is_alive()):
+            self._fio_retrato = threading.Thread(target=self._vigiar_downloads, daemon=True, name="minerador-retratos")
+            self._fio_retrato.start()
+        self._emitir("mudou", o="retratos")
+        return self.retrato_estado()
+
+    def retrato_pular(self):
+        r = self._retrato
+        if not r: raise ValueError("o modo retrato não está ligado")
+        return self._proximo_retrato()
+
+    def retrato_parar(self):
+        self._retrato = None
+        self._emitir("mudou", o="retratos")
+        return self.retrato_estado()
+
+    def retrato_enviar(self, pid, dados_b64, ext):
+        """A imagem arrastada para a celula da persona."""
+        _ret.guardar_base64(pid, dados_b64, ext, self.pasta_retratos)
+        self.log(f"retrato de {_persona.persona(pid)['nome']} guardado")
+        if self._retrato and self._retrato["atual"] == pid: self._proximo_retrato()
+        self._emitir("mudou", o="retratos")
+        return self.retrato_estado()
+
+    def _proximo_retrato(self):
+        r = self._retrato
+        if not r: return self.retrato_estado()
+        if not r["fila"]:
+            self._retrato = None
+            self.avisar("Modo retrato terminado: todas as personas da fila têm imagem.", "ok")
+        else:
+            r["atual"], r["fila"], r["desde"] = r["fila"][0], r["fila"][1:], time.time()
+            self.copiar(_ret.prompt(_persona.persona(r["atual"])))
+            self.log(f"modo retrato: prompt de {_persona.persona(r['atual'])['nome']} copiado")
+        self._emitir("mudou", o="retratos")
+        return self.retrato_estado()
+
+    def _vigiar_downloads(self):
+        """Enquanto o modo retrato esta' ligado: a imagem nova na pasta de downloads e' da persona atual."""
+        while self._vivo and self._retrato:
+            r = self._retrato
+            novas = _ret.imagens_novas(r["pasta"], r["desde"])
+            if novas:
+                try:
+                    _ret.guardar(r["atual"], novas[0], self.pasta_retratos)
+                    nome = _persona.persona(r["atual"])["nome"]
+                    self.log(f"retrato de {nome} guardado ({os.path.basename(novas[0])})")
+                    self.avisar(f"Retrato de {nome} guardado. O prompt da próxima já está copiado.", "ok")
+                    self._proximo_retrato()
+                except Exception as e:                                     # noqa: BLE001
+                    self.log(f"⚠ retrato: {e}")
+                    r["desde"] = time.time()
+            time.sleep(1.5)
 
     def _com_receita(self, o):
         if o:
@@ -529,6 +660,27 @@ def _autoteste():
     caso("⛔ o segundo nao pega o mesmo", not b.pegar_garimpo(g3, 222))
     b.atualizar_garimpo(g3, estado="cancelado")
     caso("personas com saturacao -1 antes do radar", n.personas()["personas"][0]["saturacao"] == -1)
+    # ⭐ o modo retrato: prompt copiado, download percebido, imagem na persona certa, proxima ja' copiada
+    copiados = []
+    n.copiar = lambda t: copiados.append(t) or True
+    n.pasta_retratos = os.path.join(d, "personas")
+    dl = os.path.join(d, "Downloads"); os.makedirs(dl)
+    e = n.retrato_iniciar(["amish", "depression"], pasta=dl)
+    caso("modo retrato liga e copia o prompt da primeira", e["ativo"] and e["atual"] == "amish" and "Amish" in copiados[0])
+    time.sleep(0.2)
+    img = os.path.join(dl, "flow-image.png"); open(img, "wb").write(b"\x89PNG" + b"0" * 4000)
+    fim = time.time() + 8
+    while time.time() < fim and (n.retrato_estado().get("atual") == "amish"): time.sleep(0.3)
+    caso("⭐ o download vira o retrato da persona e a proxima e' copiada",
+         n._info_retrato(_persona.persona("amish"))["retrato"] > 0 and n.retrato_estado()["atual"] == "depression"
+         and "88-year-old American grandmother" in copiados[-1])
+    caso("⭐ a Amish alema empresta o retrato (mesma roupa)", n._info_retrato(_persona.persona("amish-de"))["retrato_de"] == "amish")
+    caso("a avo alema NAO empresta (roupa diferente)", n._info_retrato(_persona.persona("nachkriegs-oma"))["retrato"] == 0)
+    import base64 as _b64
+    n.retrato_enviar("depression", _b64.b64encode(b"\xff\xd8" + b"0" * 3000).decode(), "jpg")
+    caso("⭐ arrastar a imagem fecha a persona atual e termina a fila", n.retrato_estado()["ativo"] is False
+         and n.caminho_retrato("depression").endswith(".jpg"))
+    caso("prompt avulso", "Spanish grandmother" in n.prompt_retrato("abuela-posguerra")["prompt"])
     n.encerrar()
     b.fechar()
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")

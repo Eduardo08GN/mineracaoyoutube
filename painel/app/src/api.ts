@@ -50,6 +50,7 @@ export interface Estado {
   contagem: Record<string, number>;
   idiomas: Partial<Record<CodIdioma, number>>;
   nativas: Partial<Record<CodIdioma, number>>;
+  retrato: RetratosEstado;
 }
 
 export interface Persona {
@@ -61,6 +62,8 @@ export interface Persona {
   idioma: CodIdioma;
   arquetipo: string;
   busca: string;
+  retrato: number;
+  retrato_de: string;
 }
 
 export interface Filtros {
@@ -248,11 +251,27 @@ export interface CanalRadar {
   video_views: number;
 }
 
+export interface RetratosEstado {
+  ativo: boolean;
+  atual?: string;
+  restam?: number;
+  feitos: number;
+  total: number;
+  prompt?: string;
+  pasta?: string;
+}
+
+export interface PromptRetrato {
+  persona: string;
+  prompt: string;
+  copiado: boolean;
+}
+
 export type Evento =
   | ({ tipo: "estado" } & Estado)
   | { tipo: "log"; linha: string }
   | { tipo: "aviso"; texto: string; tom?: "ok" | "erro" | "" }
-  | { tipo: "mudou"; o: "garimpos" | "oportunidades" | "radar" | "ajustes" };
+  | { tipo: "mudou"; o: "garimpos" | "oportunidades" | "radar" | "ajustes" | "retratos" };
 
 // A senha da sessao chega na URL (?t=...). Guardada na aba e tirada da barra de endereco.
 const token: string = (() => {
@@ -326,6 +345,10 @@ export function abrirLink(url: string) {
   if (p) void p.abrir_link(url);
   else window.open(url, "_blank", "noopener,noreferrer");
 }
+
+/** A URL do retrato de uma persona (ou vazio se nao tem). */
+export const urlRetrato = (p: Persona) =>
+  p.retrato ? `/api/personas/${encodeURIComponent(p.retrato_de)}/retrato?v=${p.retrato}&t=${encodeURIComponent(token)}` : "";
 
 /** A capa de qualquer video do YouTube pelo id (nao precisa da API). */
 export const capa = (id: string, q: "mq" | "hq" = "mq") => `https://i.ytimg.com/vi/${encodeURIComponent(id)}/${q}default.jpg`;

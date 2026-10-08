@@ -8,3 +8,4 @@ work/
 .minerador.lock
 .minerador_api
 data/
+.playwright-mcp/

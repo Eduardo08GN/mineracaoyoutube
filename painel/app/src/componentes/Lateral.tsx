@@ -1,4 +1,4 @@
-import { Gem, Globe2, Grid3x3, LayoutDashboard, Pickaxe, Radar, SlidersHorizontal } from "lucide-react";
+import { Camera, Gem, Globe2, Grid3x3, LayoutDashboard, Pickaxe, Radar, SlidersHorizontal } from "lucide-react";
 import { CODIGOS, NOME_IDIOMA, type Estado } from "../api";
 import { link, type Rota } from "../rota";
 import { Bandeira } from "./base";
@@ -42,6 +42,10 @@ export function Lateral({ rota, estado, conectado }: Props) {
         </a>
         <a className="nav-i" href={link.radar} aria-current={atual(["radar"])}>
           <Radar size={18} aria-hidden /><span>Radar</span>
+        </a>
+        <a className="nav-i" href={link.retratos} aria-current={atual(["retratos"])}>
+          <Camera size={18} aria-hidden /><span>Retratos</span>
+          {estado?.retrato && <span className="conta-idioma">{estado.retrato.feitos}/{estado.retrato.total}</span>}
         </a>
         <a className="nav-i" href={link.ajustes} aria-current={atual(["ajustes"])}>
           <SlidersHorizontal size={18} aria-hidden /><span>Ajustes</span>

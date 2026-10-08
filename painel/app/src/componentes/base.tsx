@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AlertTriangle, ArrowRight, Check, ExternalLink, Flame, Play, X } from "lucide-react";
-import { abrirLink, capa, embed, linkVideo, type Cota, type Oportunidade, type Persona, type VideoCurto } from "../api";
+import { abrirLink, capa, embed, linkVideo, urlRetrato, type Cota, type Oportunidade, type Persona, type VideoCurto } from "../api";
 import type { Aviso } from "../estado";
 import { link } from "../rota";
 import { ano, compacto, dolares, nomePersona, tomDaNota, type Status } from "../textos";
@@ -80,7 +80,7 @@ export function CardOportunidade({ o, personas }: { o: Oportunidade; personas?: 
           <div className="remake vazio-remake">sem título reescrito ainda</div>
         )}
         <div className="meta">
-          {nomePersona(o.persona, personas)}<b>/</b>{o.outlier.toFixed(1).replace(".", ",")}x<b>/</b>{ano(o.publicado)}
+          <Rosto pid={o.persona} personas={personas} tam={18} />{nomePersona(o.persona, personas)}<b>/</b>{o.outlier.toFixed(1).replace(".", ",")}x<b>/</b>{ano(o.publicado)}
           <b>/</b>{o.n_remakes < 0 ? "remake ?" : o.n_remakes === 0 ? "sem remake" : `${o.n_remakes} remake(s)`}
           <b>/</b>~{dolares(o.receita)}
         </div>
@@ -164,6 +164,18 @@ export function VideoThumb({ v, grande = false, rotulo }: { v: VideoCurto; grand
       </button>
       {aberto && <PlayerYT id={v.id} titulo={v.titulo} fechar={() => setAberto(false)} />}
     </>
+  );
+}
+
+/** O rosto da persona (o retrato gerado no Flow) num circulo; sem retrato, as iniciais. */
+export function Rosto({ pid, personas, tam = 28 }: { pid: string; personas?: Persona[]; tam?: number }) {
+  const p = personas?.find((x) => x.id === pid);
+  const url = p ? urlRetrato(p) : "";
+  const iniciais = (p?.nome ?? pid).split(/[\s-]+/).filter(Boolean).map((s) => s[0]).join("").slice(0, 2).toUpperCase();
+  return (
+    <span className="rosto" style={{ width: tam, height: tam, fontSize: Math.round(tam * 0.38) }} title={p?.nome ?? pid} aria-hidden>
+      {url ? <img src={url} alt="" loading="lazy" decoding="async" /> : iniciais}
+    </span>
   );
 }
 

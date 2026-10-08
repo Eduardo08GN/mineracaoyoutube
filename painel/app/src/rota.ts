@@ -10,7 +10,8 @@ export type Rota =
   | { tela: "radar" }
   | { tela: "ajustes" }
   | { tela: "idioma"; cod: CodIdioma }
-  | { tela: "mapa" };
+  | { tela: "mapa" }
+  | { tela: "retratos" };
 
 function ler(): Rota {
   const [caminho, busca = ""] = window.location.hash.replace(/^#\/?/, "").split("?");
@@ -22,6 +23,7 @@ function ler(): Rota {
   if (partes[0] === "matriz") return { tela: "matriz" };
   if (partes[0] === "mapa") return { tela: "mapa" };
   if (partes[0] === "radar") return { tela: "radar" };
+  if (partes[0] === "retratos") return { tela: "retratos" };
   if (partes[0] === "ajustes") return { tela: "ajustes" };
   if (partes[0] === "idioma" && CODIGOS.includes(partes[1] as CodIdioma)) return { tela: "idioma", cod: partes[1] as CodIdioma };
   return { tela: "painel" };
@@ -49,6 +51,7 @@ export const link = {
   matriz: "#/matriz",
   mapa: "#/mapa",
   radar: "#/radar",
+  retratos: "#/retratos",
   ajustes: "#/ajustes",
   idioma: (c: CodIdioma) => `#/idioma/${c}`,
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { obter, type Matriz as M } from "../api";
 import type { MIN } from "../estado";
 import { Flame } from "lucide-react";
-import { Selo, Vazio } from "../componentes/base";
+import { Rosto, Selo, Vazio } from "../componentes/base";
 import { link } from "../rota";
 import { compacto, saturacao, tomDaNota } from "../textos";
 
@@ -39,7 +39,7 @@ export function Matriz({ m }: { m: MIN }) {
                   {r.capa ? <img src={r.capa} alt="" loading="lazy" /> : null}
                 </a>
                 <div className="rf-meio">
-                  <div className="linha-meta"><strong>{p.nome}</strong>
+                  <div className="linha-meta"><strong className="com-rosto"><Rosto pid={p.id} personas={m.catalogo?.personas} tam={22} />{p.nome}</strong>
                     <span className="meta">{compacto(r.fome)} · {r.remakes} remake(s) em {r.checados} checada(s)</span></div>
                   <div className="bar"><span style={{ width: `${(r.fome / maxFome) * 100}%` }} /></div>
                 </div>
@@ -63,7 +63,7 @@ export function Matriz({ m }: { m: MIN }) {
                 <tr key={p.id}>
                   <th scope="row" className="matriz-th">
                     <div className="matriz-persona">
-                      {d.resumo[p.id]?.capa ? <img src={d.resumo[p.id].capa} alt="" loading="lazy" /> : <span className="sem-capa" />}
+                      <Rosto pid={p.id} personas={m.catalogo?.personas} tam={40} />
                       <div className="matriz-persona-txt">
                         <strong title={p.nome}>{p.nome}</strong>
                         <span className={`sat sat-${saturacao(p.saturacao).tom}`}>{saturacao(p.saturacao).texto}</span>

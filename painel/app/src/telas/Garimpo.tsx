@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Gem, Pickaxe, Square } from "lucide-react";
-import { CODIGOS, enviar, NOME_IDIOMA, type CodIdioma, type Filtros, type Garimpo as G, type Persona } from "../api";
+import { CODIGOS, enviar, NOME_IDIOMA, urlRetrato, type CodIdioma, type Filtros, type Garimpo as G, type Persona } from "../api";
 import type { MIN } from "../estado";
-import { Girando, Selo, useAcao, Bandeira } from "../componentes/base";
+import { Girando, Selo, useAcao, Bandeira, Rosto } from "../componentes/base";
 import { link } from "../rota";
 import { nomePersona, numero, quando, saturacao, statusDoGarimpo } from "../textos";
 
@@ -27,7 +27,7 @@ function LinhaGarimpo({ g, m }: { g: G; m: MIN }) {
     <div className="panel attn garimpo-linha">
       <Selo status={st} />
       <div className="attn-texto">
-        <strong>#{g.id} · {p ? <Bandeira cod={p.idioma} /> : null} {nomePersona(g.persona, m.catalogo?.personas)} · {g.sementes.join(", ")}</strong>
+        <strong>#{g.id} · {p ? <Bandeira cod={p.idioma} /> : null} <Rosto pid={g.persona} personas={m.catalogo?.personas} tam={22} /> {nomePersona(g.persona, m.catalogo?.personas)} · {g.sementes.join(", ")}</strong>
         <p className="meta">
           {quando(g.criado)}<b>/</b>{g.achados} oportunidade(s)<b>/</b>{numero(g.cota)} unidades
           {g.etapa && <><b>/</b>{g.etapa}</>}
@@ -51,9 +51,11 @@ function LinhaGarimpo({ g, m }: { g: G; m: MIN }) {
 
 function CartaoPersona({ p, ativa, escolher, arquetipo }: { p: Persona; ativa: boolean; escolher: () => void; arquetipo?: string }) {
   const sat = saturacao(p.saturacao);
+  const url = urlRetrato(p);
   return (
     <label className="escolha persona-op">
       <input type="radio" name="persona" value={p.id} checked={ativa} onChange={escolher} />
+      <span className="persona-foto">{url ? <img src={url} alt="" loading="lazy" decoding="async" /> : <span>sem retrato</span>}</span>
       <span className="escolha-texto">
         <strong>{p.nome}</strong>
         {arquetipo && <span className="arq-tag">{arquetipo}</span>}
@@ -149,7 +151,7 @@ export function Garimpo({ m }: { m: MIN }) {
             <div className="personas">
               {exclusivas.map((p) => <CartaoPersona key={p.id} p={p} ativa={persona === p.id} escolher={() => setPersona(p.id)} />)}
               {mercado === "en" && (
-                <label className="escolha persona-op">
+                <label className="escolha persona-op persona-livre">
                   <input type="radio" name="persona" value="__livre" checked={persona === "__livre"} onChange={() => setPersona("__livre")} />
                   <span className="escolha-texto"><strong>Outra</strong>
                     <input className="campo campo-livre" placeholder="ex.: Navy SEAL, Japanese Grandpa" value={livre}

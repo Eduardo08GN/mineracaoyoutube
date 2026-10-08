@@ -91,3 +91,61 @@ a.mapa-cel:hover { border-color: rgba(244, 185, 66, .45); }
 .mercado .bandeira-svg { border-radius: 3px; }
 .thumb-origem { line-height: 0; }
 .thumb-origem .bandeira-svg { box-shadow: 0 1px 4px rgba(0,0,0,.6); }
+
+/* ── retratos das personas ── */
+.tela-acoes { display: flex; align-items: center; gap: 12px; }
+.ret-progresso { font: 700 22px/1 var(--ow-font-display); color: var(--ow-sun); letter-spacing: -.02em; }
+.ret-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
+.ret-cel { position: relative; display: grid; gap: 4px; padding: 8px; border-radius: var(--ow-radius); border: 1px solid var(--ow-line); background: var(--ow-bg-deep); text-align: center; transition: border-color var(--ow-fast), box-shadow var(--ow-fast); }
+.ret-cel.ret-ok { border-color: rgba(95, 214, 206, .3); }
+.ret-cel.ret-ativa { border-color: var(--ow-sun); box-shadow: 0 0 0 2px rgba(244, 185, 66, .25), inset 0 0 12px rgba(244, 185, 66, .06); animation: ret-pulso 2s ease-in-out infinite; }
+.ret-cel.ret-drop { border-color: var(--ow-accent); border-style: dashed; background: rgba(95, 214, 206, .06); }
+@keyframes ret-pulso { 0%, 100% { box-shadow: 0 0 0 2px rgba(244, 185, 66, .2); } 50% { box-shadow: 0 0 0 4px rgba(244, 185, 66, .35); } }
+.ret-img { position: relative; aspect-ratio: 16 / 9; border-radius: 4px; overflow: hidden; background: #0b1412; }
+.ret-img img { width: 100%; height: 100%; object-fit: cover; }
+.ret-sem { display: grid; place-items: center; height: 100%; color: var(--ow-text-off); background: repeating-linear-gradient(135deg, #0b1412 0 10px, #0f1a17 10px 20px); }
+.ret-badge { position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; background: var(--ow-accent); color: #fff; }
+.ret-emprestada { position: absolute; bottom: 4px; left: 4px; font: 500 9px/1 var(--ow-font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ow-text); background: rgba(0,0,0,.7); padding: 3px 5px; border-radius: 3px; }
+.ret-nome { font: 650 12.5px/1.3 var(--ow-font-display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ret-marca { font: 400 10.5px/1 var(--ow-font-mono); color: var(--ow-text-3); }
+.ret-btns { display: flex; justify-content: center; gap: 4px; margin-top: 2px; }
+.btn-xs { height: 24px; min-width: 24px; padding: 0 6px; font-size: 11px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+.ret-ativo { display: grid; gap: 16px; margin-bottom: 8px; }
+.ret-ativo-topo { display: flex; align-items: center; gap: 12px; }
+.ret-ativo-topo svg { color: var(--ow-sun); flex: none; }
+.ret-ativo-topo strong { font: 700 15px/1.3 var(--ow-font-display); }
+.ret-prompt-caixa { display: grid; gap: 8px; }
+.ret-prompt { margin: 0; padding: 12px; border-radius: var(--ow-radius); background: var(--ow-bg-deep); border: 1px solid var(--ow-line); font: 400 12px/1.6 var(--ow-font-mono); color: var(--ow-text-2); white-space: pre-wrap; word-break: break-word; max-height: 120px; overflow-y: auto; }
+.ret-passos { margin: 0; padding: 0 0 0 6px; list-style: none; display: grid; gap: 6px; font-size: 13px; color: var(--ow-text-2); }
+.ret-passos strong { color: var(--ow-sun); margin-right: 4px; }
+
+/* ── o rosto da persona por toda a interface ── */
+.rosto { display: inline-grid; place-items: center; flex: none; border-radius: 50%; overflow: hidden; vertical-align: middle; background: var(--ow-bg-deep); color: var(--ow-text-3); font: 600 11px/1 var(--ow-font-mono); box-shadow: 0 0 0 1px var(--ow-line-strong); }
+.rosto img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 30%; }
+.meta .rosto { margin-right: 6px; vertical-align: -4px; }
+.com-rosto { display: inline-flex; align-items: center; gap: 8px; }
+.matriz-persona .rosto { box-shadow: 0 0 0 2px var(--ow-line-strong); }
+
+.personas { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.persona-op { grid-template-columns: 1fr; gap: 0; padding: 0; overflow: hidden; align-items: stretch; }
+.persona-op input[type="radio"] { position: absolute; top: 10px; left: 10px; z-index: 1; margin: 0; }
+.persona-op > .sat { position: absolute; top: 8px; right: 8px; margin: 0; z-index: 1; grid-column: auto; width: auto; max-width: calc(100% - 44px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 4px 8px; border-radius: var(--ow-radius-pill); background: rgba(6, 12, 11, .82); box-shadow: 0 0 0 1px rgba(255,255,255,.12); }
+.persona-op .escolha-texto { padding: 10px 12px 12px; }
+.persona-foto { display: block; aspect-ratio: 16 / 9; background: repeating-linear-gradient(135deg, #0b1412 0 10px, #0f1a17 10px 20px); }
+.persona-foto img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.persona-foto > span { display: grid; place-items: center; height: 100%; font: 400 11px var(--ow-font-mono); color: var(--ow-text-3); }
+.persona-op:hover .persona-foto img { transform: scale(1.04); }
+.persona-op:has(input:checked) { box-shadow: 0 0 0 2px var(--ow-accent); }
+.persona-livre { grid-template-columns: 18px 1fr; padding: 10px 12px; align-items: start; }
+.persona-livre input[type="radio"] { position: static; margin-top: 3px; }
+.persona-livre .escolha-texto { padding: 0; }
+
+.mapa-capa .mapa-video { height: auto; position: absolute; right: 6px; bottom: 6px; width: 38%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.25); }
+.mapa-capa > img:first-child { object-position: 60% 30%; }
+.mapa-sem-garimpo { position: absolute; left: 6px; bottom: 6px; font: 500 10px/1 var(--ow-font-mono); color: var(--ow-text-2); background: rgba(0,0,0,.65); padding: 4px 6px; border-radius: 3px; }
+
+@media (max-width: 700px) {
+  .ret-grade { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}

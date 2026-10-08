@@ -63,6 +63,15 @@ class Idiomas(BaseModel):
     idiomas: List[str] = ["en", "fr", "de", "es"]
 
 
+class Retrato(BaseModel):
+    imagem: str
+    ext: str = "png"
+
+
+class Ids(BaseModel):
+    ids: Optional[List[str]] = None
+
+
 class Chaves(BaseModel):
     chaves: List[str]
 
@@ -149,6 +158,31 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     @app.get("/api/idiomas/{cod}")
     def idioma(cod: str):
         return nucleo.idioma(cod)
+
+    @app.get("/api/personas/{pid}/retrato")
+    def retrato(pid: str):
+        from fastapi.responses import FileResponse
+        return FileResponse(nucleo.caminho_retrato(pid), headers={"Cache-Control": "max-age=86400"})
+
+    @app.post("/api/personas/{pid}/retrato")
+    def enviar_retrato(pid: str, c: Retrato):
+        return nucleo.retrato_enviar(pid, c.imagem, c.ext)
+
+    @app.get("/api/personas/{pid}/prompt")
+    def prompt_retrato(pid: str, copiar: int = 0):
+        return nucleo.prompt_retrato(pid, copiar=bool(copiar))
+
+    @app.post("/api/retratos/iniciar")
+    def retrato_iniciar(c: Ids):
+        return nucleo.retrato_iniciar(c.ids)
+
+    @app.post("/api/retratos/pular")
+    def retrato_pular():
+        return nucleo.retrato_pular()
+
+    @app.post("/api/retratos/parar")
+    def retrato_parar():
+        return nucleo.retrato_parar()
 
     @app.get("/api/mapa")
     def mapa():

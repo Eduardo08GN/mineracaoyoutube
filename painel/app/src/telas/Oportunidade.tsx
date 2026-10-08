@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Check, Copy, ExternalLink, Flame, Languages, Play, RefreshCw, Trash2, Video } from "lucide-react";
 import { abrirLink, CODIGOS, embed, enviar, linkVideo, obter, type DetalheOp, type EstadoOp } from "../api";
 import type { MIN } from "../estado";
-import { Girando, Nota, Vazio, VideoThumb, useAcao, Bandeira } from "../componentes/base";
+import { Girando, Nota, Vazio, VideoThumb, useAcao, Bandeira, Rosto } from "../componentes/base";
 import { PainelEquivalente } from "../componentes/equivalente";
 import { link } from "../rota";
 import { ano, compacto, dolares, duracao, nomePersona, numero, ROTULO_OP } from "../textos";
@@ -71,7 +71,7 @@ export function Oportunidade({ m, id }: { m: MIN; id: number }) {
       <div className="op-topo">
         <PlayerEmbutido id={o.video_id} thumb={o.thumb} titulo={o.titulo} />
         <div className="op-info">
-          <p className="eyebrow"><Bandeira cod={o.idioma} /> {nomePersona(o.persona, m.catalogo?.personas)} · {o.tema || "tema a definir"} · {ROTULO_OP[o.estado]}</p>
+          <p className="eyebrow com-rosto"><Bandeira cod={o.idioma} /> <Rosto pid={o.persona} personas={m.catalogo?.personas} tam={26} /> {nomePersona(o.persona, m.catalogo?.personas)} · {o.tema || "tema a definir"} · {ROTULO_OP[o.estado]}</p>
           <h1 className="titulo-video">{o.titulo}</h1>
           <p className="meta">{o.canal}<b>/</b>{compacto(o.canal_info.inscritos)} inscritos<b>/</b>{ano(o.publicado)}<b>/</b>{duracao(o.duracao)}<b>/</b>semente “{o.semente}”</p>
           <div className="op-numeros">

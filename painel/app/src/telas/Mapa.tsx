@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Flame, Languages } from "lucide-react";
-import { CODIGOS, NOME_IDIOMA, obter, type CelulaMapa, type LinhaMapa, type Mapa as M } from "../api";
+import { CODIGOS, NOME_IDIOMA, obter, urlRetrato, type CelulaMapa, type LinhaMapa, type Mapa as M, type Persona } from "../api";
 import type { MIN } from "../estado";
 import { Nota, Selo, Bandeira } from "../componentes/base";
 import { link } from "../rota";
@@ -8,16 +8,20 @@ import { compacto, saturacao } from "../textos";
 
 type Filtro = "todos" | "comuns" | "pares" | "exclusivos";
 
-function Celula({ c, cod }: { c: CelulaMapa | undefined; cod: string }) {
+function Celula({ c, cod, personas }: { c: CelulaMapa | undefined; cod: string; personas?: Persona[] }) {
   if (!c) return <div className="mapa-cel vazia" aria-label={`não existe em ${cod}`}><span>—</span></div>;
   const capa = c.capa || c.equiv?.capa || "";
+  const p = personas?.find((x) => x.id === c.persona.id);
+  const rosto = p ? urlRetrato(p) : "";
   const destino = c.melhor_id ? link.oportunidade(c.melhor_id) : c.equiv?.op_id ? link.oportunidade(c.equiv.op_id) : undefined;
   const sat = saturacao(c.saturacao);
   const Conteudo = (
     <>
       <span className="mapa-capa">
-        {capa ? <img src={capa} alt="" loading="lazy" /> : <span className="mapa-sem">ainda sem garimpo</span>}
+        {rosto ? <img src={rosto} alt="" loading="lazy" /> : capa ? <img src={capa} alt="" loading="lazy" /> : <span className="mapa-sem">sem retrato</span>}
+        {rosto && capa && <img className="mapa-video" src={capa} alt="" loading="lazy" title="a melhor oportunidade" />}
         {c.melhor >= 0 && <Nota nota={c.melhor} />}
+        {!capa && <span className="mapa-sem-garimpo">ainda sem garimpo</span>}
       </span>
       <strong className="mapa-nome">{c.persona.nome}</strong>
       <span className={`sat sat-${sat.tom}`}>{sat.texto}</span>
@@ -77,7 +81,7 @@ export function Mapa({ m }: { m: MIN }) {
               <span className={`regiao regiao-${l.comum}`}>{l.regiao}</span>
               <Presenca l={l} />
             </div>
-            {CODIGOS.map((c) => <Celula key={c} c={l.paises[c]} cod={c} />)}
+            {CODIGOS.map((c) => <Celula key={c} c={l.paises[c]} cod={c} personas={m.catalogo?.personas} />)}
           </div>
         ))}
       </div>

@@ -86,6 +86,7 @@ export function useMinerador(): MIN {
         case "mudou":
           if (ev.o === "oportunidades") setVersaoOps((v) => v + 1);
           if (ev.o === "radar") { setVersaoRadar((v) => v + 1); setVersaoOps((v) => v + 1); }
+          if (ev.o === "retratos") setVersaoOps((v) => v + 1);
           agendar();
           break;
       }
