@@ -1,0 +1,171 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AlertTriangle, ArrowRight, Check, ExternalLink, Flame, Play, X } from "lucide-react";
+import { abrirLink, capa, embed, linkVideo, type Cota, type Oportunidade, type Persona, type VideoCurto } from "../api";
+import type { Aviso } from "../estado";
+import { link } from "../rota";
+import { ano, compacto, dolares, nomePersona, tomDaNota, type Status } from "../textos";
+
+export function Selo({ status }: { status: Status }) {
+  const icone =
+    status.tom === "ok" ? <Check size={13} strokeWidth={2.4} aria-hidden /> :
+    status.tom === "no" ? <X size={13} strokeWidth={2.4} aria-hidden /> :
+    <span className="dot" aria-hidden />;
+  return <span className={`tag tag-${status.tom}`}>{icone}{status.texto}</span>;
+}
+
+export function Nota({ nota, grande = false }: { nota: number; grande?: boolean }) {
+  return (
+    <span className={`nota nota-${tomDaNota(nota)}${grande ? " grande" : ""}`} title="Nota da oportunidade (0 a 100)">
+      {Math.round(nota)}
+    </span>
+  );
+}
+
+export function Girando() {
+  return <span className="spin" aria-hidden />;
+}
+
+/** Uma acao com "rodando" e o aviso de erro, igual ao useAcao do OW Agente. */
+export function useAcao(avisar: (t: string, tom?: "ok" | "erro") => void) {
+  const [rodando, setRodando] = useState("");
+  const rodar = useCallback(async (nome: string, fn: () => Promise<unknown>, ok?: string) => {
+    setRodando(nome);
+    try {
+      await fn();
+      if (ok) avisar(ok, "ok");
+      return true;
+    } catch (e) {
+      avisar(e instanceof Error ? e.message : String(e), "erro");
+      return false;
+    } finally {
+      setRodando("");
+    }
+  }, [avisar]);
+  return { rodando, rodar };
+}
+
+export function BarraCota({ cota }: { cota: Cota }) {
+  const pct = Math.min(100, (cota.usadas / cota.limite) * 100);
+  return (
+    <div className="cota">
+      <div className="linha-meta">
+        <span className="label">Cota da API hoje</span>
+        <span className="meta">{cota.usadas.toLocaleString("pt-BR")} / {cota.limite.toLocaleString("pt-BR")}</span>
+      </div>
+      <div className={`bar${pct > 85 ? " quase" : ""}`}><span style={{ width: `${pct}%` }} /></div>
+      <p className="meta">{cota.livres.toLocaleString("pt-BR")} livres · ~{Math.floor(cota.livres / 100)} buscas · zera à meia-noite do Pacífico</p>
+    </div>
+  );
+}
+
+export function CardOportunidade({ o, personas }: { o: Oportunidade; personas?: Persona[] }) {
+  const novo = o.titulos[0];
+  return (
+    <a className={`panel ocard${o.estado === "salva" ? " is-salva" : ""}`} href={link.oportunidade(o.id)}>
+      <div className="thumb">
+        {o.thumb ? <img src={o.thumb} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" /> :
+          <div className="stage-vazio">sem capa</div>}
+        <Nota nota={o.nota} />
+        {o.idiomas_eq && (
+          <span className="thumb-idiomas">{o.idiomas_eq.split(",").sort().map((c) => <SiglaIdioma key={c} cod={c} />)}</span>
+        )}
+        <span className="thumb-views">{compacto(o.views)} views</span>
+      </div>
+      <div className="body">
+        <div className="original">{o.titulo}</div>
+        {novo ? (
+          <div className="remake"><ArrowRight size={14} aria-hidden /><span>{novo}</span></div>
+        ) : (
+          <div className="remake vazio-remake">sem título reescrito ainda</div>
+        )}
+        <div className="meta">
+          {nomePersona(o.persona, personas)}<b>/</b>{o.outlier.toFixed(1).replace(".", ",")}x<b>/</b>{ano(o.publicado)}
+          <b>/</b>{o.n_remakes < 0 ? "remake ?" : o.n_remakes === 0 ? "sem remake" : `${o.n_remakes} remake(s)`}
+          <b>/</b>~{dolares(o.receita)}
+        </div>
+        {o.fome >= 0 && (
+          <div className={`fome-linha${o.fome >= 500_000 ? " alta" : ""}`} title="Views por ano ÷ (1 + remakes com a persona)">
+            <Flame size={13} aria-hidden />fome {compacto(o.fome)}/ano
+          </div>
+        )}
+      </div>
+    </a>
+  );
+}
+
+export function AvisoFlutuante({ aviso, fechar }: { aviso: Aviso | null; fechar: () => void }) {
+  useEffect(() => {
+    if (!aviso) return;
+    const t = window.setTimeout(fechar, 7000);
+    return () => window.clearTimeout(t);
+  }, [aviso, fechar]);
+  if (!aviso) return null;
+  const tom = aviso.tom === "erro" ? "erro" : aviso.tom === "ok" ? "ok" : "";
+  return (
+    <div className={`toast flutuante ${tom}`} role={tom === "erro" ? "alert" : "status"} key={aviso.id}>
+      {tom === "ok" ? <Check size={18} aria-hidden /> : <AlertTriangle size={18} aria-hidden />}
+      <p>{aviso.texto}</p>
+      <button className="btn btn-quiet btn-icon-sm" onClick={fechar} aria-label="Fechar aviso">
+        <X size={16} />
+      </button>
+    </div>
+  );
+}
+
+export function Vazio({ titulo, texto, children }: { titulo: string; texto: string; children?: React.ReactNode }) {
+  return (
+    <div className="panel vazio">
+      <h3>{titulo}</h3>
+      <p>{texto}</p>
+      {children}
+    </div>
+  );
+}
+
+/** O video do YouTube tocando dentro do painel (sem sair da janela). */
+export function PlayerYT({ id, titulo, fechar }: { id: string; titulo: string; fechar: () => void }) {
+  const caixa = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    caixa.current?.showModal();
+  }, []);
+  return (
+    <dialog ref={caixa} className="player player-yt" onClose={fechar} onClick={(e) => e.target === caixa.current && fechar()}
+            aria-label={titulo}>
+      <div className="player-topo">
+        <span className="label player-titulo">{titulo}</span>
+        <span className="row">
+          <button className="btn btn-quiet btn-sm" onClick={() => abrirLink(linkVideo(id))}><ExternalLink size={14} aria-hidden />YouTube</button>
+          <button className="btn btn-quiet btn-icon-sm" onClick={fechar} aria-label="Fechar"><X size={18} /></button>
+        </span>
+      </div>
+      <div className="yt-16x9">
+        <iframe src={embed(id)} title={titulo} allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+      </div>
+    </dialog>
+  );
+}
+
+/** A capa de um video com o play por cima: clique toca aqui dentro. */
+export function VideoThumb({ v, grande = false, rotulo }: { v: VideoCurto; grande?: boolean; rotulo?: React.ReactNode }) {
+  const [aberto, setAberto] = useState(false);
+  return (
+    <>
+      <button className={`vthumb${grande ? " grande" : ""}`} onClick={() => setAberto(true)} aria-label={`Tocar: ${v.titulo}`}>
+        <span className="vthumb-img">
+          <img src={v.thumb || capa(v.id)} alt="" loading="lazy" decoding="async" />
+          <span className="vthumb-play"><Play size={grande ? 22 : 16} fill="currentColor" aria-hidden /></span>
+          <span className="thumb-views">{compacto(v.views)} views</span>
+          {rotulo}
+        </span>
+        <span className="vthumb-titulo">{v.titulo}</span>
+        <span className="meta">{v.canal}{v.publicado && <><b>/</b>{ano(v.publicado)}</>}</span>
+      </button>
+      {aberto && <PlayerYT id={v.id} titulo={v.titulo} fechar={() => setAberto(false)} />}
+    </>
+  );
+}
+
+export function SiglaIdioma({ cod, tom }: { cod: string; tom?: "aberto" | "fechado" }) {
+  return <span className={`sigla-idioma${tom ? ` ${tom}` : ""}`}>{cod.toUpperCase()}</span>;
+}

@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+data/raw/
+work/
+*.mp4
+.minerador.lock
+.minerador_api
+data/
