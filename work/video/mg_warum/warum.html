@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>Das Warum</title>
+<link rel="stylesheet" href="../mg_comum/mg.css">
+<style>.erva { position:absolute; } .chip { position:absolute; padding:8px 18px; border:3px solid var(--tinte); border-radius:30px; background:#f6efdc;
+  font:700 30px/1 "Palatino Linotype", Georgia, serif; color:var(--tinte); white-space:nowrap; }</style></head>
+<body><div id="stage">
+  <div class="papier"></div><div class="falten"></div>
+  <div class="cena" id="welt">
+    <!-- A: a uma coisa -->
+    <div class="cena" id="cA">
+      <div class="el kick" id="A_kick" style="left:0;width:1920px;text-align:center;top:300px">Bevor wir zu den Pflanzen gehen</div>
+      <div class="el tit" id="A_tit" style="left:0;width:1920px;text-align:center;top:380px;font-size:130px">Die eine Sache</div>
+      <svg class="zeich" viewBox="0 0 1920 1080"><path id="A_unter" class="ink ocker dick" d="M560 560 C 800 590, 1120 590, 1360 560"/>
+        <path id="A_kl1" class="ink dick" d="M700 640 L670 640 L670 760 L700 760"/><path id="A_kl2" class="ink dick" d="M1220 640 L1250 640 L1250 760 L1220 760"/></svg>
+      <div class="el hand" id="A_haelfte" style="left:0;width:1920px;text-align:center;top:660px">… und Sie verstehen die Hälfte</div>
+    </div>
+    <!-- B: do sul -->
+    <div class="cena" id="cB">
+      <svg class="zeich" viewBox="0 0 1920 1080">
+        <path id="B_kueste" class="ink dick" d="M80 560 C 220 520, 300 600, 420 560 C 520 520, 560 640, 680 600 C 760 570, 800 700, 900 660 C 1000 620, 1040 560, 1160 600 C 1260 640, 1300 700, 1420 660 C 1540 620, 1600 560, 1840 600"/>
+        <path id="B_meer" class="ink wasser duenn" d="M300 760 q 30 -18 60 0 t 60 0 M700 820 q 30 -18 60 0 t 60 0 M1100 770 q 30 -18 60 0 t 60 0 M1500 830 q 30 -18 60 0 t 60 0"/>
+        <path id="B_pfeil" class="ink terra dick strich" d="M960 700 C 940 520, 980 330, 1000 180"/><path id="B_spitze" class="ink terra dick" d="M970 210 L1000 170 L1030 214"/>
+      </svg>
+      <div class="el hand" id="B_meertxt" style="left:820px;top:860px">Mittelmeer</div>
+      <div class="el hand klein" id="B_wir" style="left:1040px;top:150px">zu uns</div>
+      <div class="el kick" id="B_sued" style="left:0;width:1920px;text-align:center;top:90px">Sie kommen aus dem Süden</div>
+      <img class="cut erva" id="B_e1" src="../mg_comum/ervas/thymian.png" style="left:110px;top:250px;width:330px">
+      <img class="cut erva" id="B_e2" src="../mg_comum/ervas/salbei.png" style="left:470px;top:300px;width:330px">
+      <img class="cut erva" id="B_e3" src="../mg_comum/ervas/oregano.png" style="left:1130px;top:300px;width:330px">
+      <img class="cut erva" id="B_e4" src="../mg_comum/ervas/lorbeer.png" style="left:1480px;top:250px;width:330px">
+      <div class="chip" id="B_c1" style="left:180px;top:600px">Thymian</div><div class="chip" id="B_c2" style="left:560px;top:640px">Salbei</div>
+      <div class="chip" id="B_c3" style="left:1200px;top:640px">Oregano</div><div class="chip" id="B_c4" style="left:1560px;top:600px">Lorbeer</div>
+    </div>
+    <!-- C: a encosta seca -->
+    <div class="cena" id="cC">
+      <div class="el" id="C_sonne" style="left:1500px;top:110px;width:220px;height:220px;border-radius:50%;background:var(--ocker)"></div>
+      <svg class="zeich" viewBox="0 0 1920 1080"><g id="C_strahlen"></g>
+        <path id="C_hang" class="ink dick" d="M80 980 C 400 900, 700 600, 1000 480 C 1200 400, 1400 420, 1840 360"/>
+        <path id="C_steine" class="ink duenn" d="M380 900 a 26 18 0 1 0 52 0 a 26 18 0 1 0 -52 0 M640 760 a 34 22 0 1 0 68 0 a 34 22 0 1 0 -68 0 M880 610 a 22 15 0 1 0 44 0 a 22 15 0 1 0 -44 0 M1180 470 a 30 20 0 1 0 60 0 a 30 20 0 1 0 -60 0 M1500 410 a 24 16 0 1 0 48 0 a 24 16 0 1 0 -48 0"/>
+        <path id="C_lauf" class="ink wasser dick" d="M1300 380 C 1100 440, 900 560, 700 700 C 520 820, 300 930, 120 990"/><path id="C_laufsp" class="ink wasser dick" d="M150 960 L112 994 L162 1004"/>
+      </svg>
+      <img class="cut" id="C_thym" src="../mg_comum/ervas/thymian.png" style="left:930px;top:280px;width:260px">
+      <img class="cut" id="C_oreg" src="../mg_comum/ervas/oregano.png" style="left:560px;top:520px;width:230px">
+      <div class="el kick" id="C_kick" style="left:120px;top:110px">trockene, steinige Hänge</div>
+      <div class="el hand" id="C_ab" style="left:1180px;top:790px">das Wasser läuft sofort ab</div>
+      <div class="el tit" id="C_wenig" style="left:1150px;top:640px;font-size:80px">mit wenig leben</div>
+    </div>
+    <!-- D: os oleos -->
+    <div class="cena" id="cD">
+      <img class="cut" id="D_blatt" src="../mg_comum/ervas/salbei.png" style="left:420px;top:240px;width:700px">
+      <div id="D_oel"></div>
+      <svg class="zeich" viewBox="0 0 1920 1080">
+        <path id="D_duft" class="ink ocker" d="M800 230 c -30 -40, 30 -60, 0 -100 c -30 -40, 30 -60, 0 -100 M880 240 c -30 -40, 30 -60, 0 -100 c -30 -40, 30 -60, 0 -100 M960 230 c -30 -40, 30 -60, 0 -100 c -30 -40, 30 -60, 0 -100"/>
+        <path id="D_schild" class="ink terra dick" d="M1500 400 L1640 450 L1640 580 C 1640 680, 1560 740, 1500 770 C 1440 740, 1360 680, 1360 580 L1360 450 Z"/>
+        <path id="D_sonne" class="ink ocker dick" d="M1500 300 L1500 250 M1560 320 L1590 280 M1440 320 L1410 280"/>
+      </svg>
+      <div class="el kick" id="D_kick" style="left:1200px;top:180px">ätherische Öle</div>
+      <div class="el hand" id="D_reib" style="left:430px;top:860px">ein Blatt zwischen den Fingern reiben</div>
+      <div class="el hand" id="D_schutz" style="left:1330px;top:800px">Schutz gegen die Hitze</div>
+    </div>
+    <!-- E: o pe' molhado -->
+    <div class="cena" id="cE">
+      <div class="el" id="E_wasser" style="left:446px;top:440px;width:668px;height:470px;background:rgba(93,122,134,.45);transform-origin:50% 100%;clip-path:polygon(0 0,100% 0,85% 100%,15% 100%)"></div>
+      <svg class="zeich" viewBox="0 0 1920 1080">
+        <path id="E_topf" class="ink dick" d="M420 380 L540 920 L1020 920 L1140 380"/><path id="E_rand" class="ink dick" d="M390 380 L1170 380"/>
+        <path id="E_wurzel" class="ink salbei dick" d="M780 400 L780 560 M780 470 C 740 520, 700 560, 660 640 M780 500 C 820 560, 860 600, 900 680 M780 560 C 770 640, 790 700, 770 780"/>
+        <path id="E_flocke" class="ink dick" d="M1500 300 L1500 480 M1422 345 L1578 435 M1422 435 L1578 345"/><path id="E_strich" class="ink terra dick" d="M1390 470 L1610 310"/>
+      </svg>
+      <img class="cut" id="E_pfl" src="../mg_comum/ervas/thymian.png" style="left:660px;top:150px;width:240px">
+      <div class="el hand" id="E_faul" style="left:120px;top:720px;color:var(--terra)">Wurzeln faulen</div>
+      <div class="el hand" id="E_frost" style="left:1380px;top:520px">nicht am Frost</div>
+      <div class="el tit" id="E_fuss" style="left:1180px;top:650px;font-size:78px;color:var(--terra)">am nassen Fuß</div>
+      <div class="el kick" id="E_merk" style="left:1240px;top:200px">Merken Sie sich das</div>
+      <div class="el tit" id="E_viel" style="left:0;width:1920px;text-align:center;top:960px;font-size:56px">zu viel Wasser – nicht zu wenig</div>
+    </div>
+    <!-- F: a terra cansada -->
+    <div class="cena" id="cF">
+      <div class="el tit" id="F_tit" style="left:0;width:1920px;text-align:center;top:90px">Die Bodenmüdigkeit</div>
+      <svg class="zeich" viewBox="0 0 1920 1080"><g id="F_felder"></g>
+        <path id="F_kreis" class="ink terra dick" d="M815 846 m -250 0 a 250 56 0 1 0 500 0 a 250 56 0 1 0 -500 0"/>
+        <path id="F_ruhe" class="ink salbei dick" d="M1580 520 l 160 0 l 0 170 l -160 0 z M1580 570 l 160 0 M1610 500 l 0 40 M1710 500 l 0 40"/></svg>
+      <div id="F_pfl"></div>
+      <div class="el hand klein" id="F_j1" style="left:250px;top:700px">Jahr 1</div><div class="el hand klein" id="F_j2" style="left:560px;top:700px">Jahr 2</div>
+      <div class="el hand klein" id="F_j3" style="left:870px;top:700px">Jahr 3</div><div class="el hand klein" id="F_j4" style="left:1180px;top:700px">Jahr 4</div>
+      <div class="el hand" id="F_selbe" style="left:565px;top:818px;width:500px;text-align:center;color:var(--terra)">jedes Jahr dasselbe</div>
+      <div class="el hand" id="F_so" style="left:1560px;top:720px">Sonntag</div>
+      <div class="el kick" id="F_ruhen" style="left:1440px;top:420px;color:var(--salbei)">der Boden ruht</div>
+    </div>
+    <!-- G: luz, agua, descanso -->
+    <div class="cena" id="cG">
+      <div class="el" id="G_s" style="left:330px;top:330px;width:240px;height:240px;border-radius:50%;background:var(--ocker)"></div>
+      <div class="el" id="G_w" style="left:850px;top:330px;width:220px;height:260px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:var(--wasser)"></div>
+      <svg class="zeich" viewBox="0 0 1920 1080"><path id="G_r" class="ink salbei dick" d="M1360 540 l 280 0 M1390 540 l 0 -110 l 220 0 l 0 110 M1400 540 l 0 50 M1600 540 l 0 50"/></svg>
+      <div class="el kick" id="G_kick" style="left:0;width:1920px;text-align:center;top:200px">Das ist das Ganze</div>
+      <div class="el tit" id="G_t1" style="left:330px;top:640px;width:240px;text-align:center">Licht</div>
+      <div class="el tit" id="G_t2" style="left:780px;top:640px;width:360px;text-align:center">Wasser</div>
+      <div class="el tit" id="G_t3" style="left:1340px;top:640px;width:320px;text-align:center;color:var(--salbei)">Ruhe</div>
+      <div class="el hand" id="G_rest" style="left:0;width:1920px;text-align:center;top:860px">der Rest ist nur noch die einzelne Pflanze</div>
+    </div>
+    <svg class="zeich" viewBox="0 0 1920 1080" id="voegel"></svg>
+  </div>
+  <svg class="hud" viewBox="0 0 1920 1080"><g class="ink duenn" style="stroke:rgba(47,42,34,.55)">
+    <path d="M40 90 L40 40 L90 40"/><path d="M1830 40 L1880 40 L1880 90"/><path d="M40 990 L40 1040 L90 1040"/><path d="M1830 1040 L1880 1040 L1880 990"/></g></svg>
+  <div class="label" style="left:60px;top:58px">Klostergarten · Das Warum</div>
+  <div class="label" style="right:60px;top:58px">Bruder Wendelin</div>
+  <div class="korn"></div>
+</div>
+<script src="../mg_comum/mg.js"></script>
+<script>
+window.CUES = window.CUES || {};
+criar('D_oel', 14, i => { const d = document.createElement('div'); d.className = 'el'; d.id = 'D_o' + i;
+  d.style.cssText = `left:${560 + rnd(i + 2) * 420}px;top:${360 + rnd(i + 30) * 300}px;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f7dc8c,#b8862f);border:2px solid #fff6dd;opacity:0`; return d; });
+(function () { const g = $('C_strahlen'); for (let i = 0; i < 10; i++) { const a = i * Math.PI / 5; const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('class', 'ink ocker dick'); p.id = 'C_r' + i; p.setAttribute('d', `M${1610 + Math.cos(a) * 140} ${220 + Math.sin(a) * 140} L${1610 + Math.cos(a) * 200} ${220 + Math.sin(a) * 200}`); g.appendChild(p); } })();
+(function () { const g = $('F_felder'); for (let k = 0; k < 4; k++) { const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('class', 'ink dick'); p.id = 'F_f' + k; const x = 200 + k * 310; p.setAttribute('d', `M${x} 380 L${x + 260} 380 L${x + 260} 680 L${x} 680 Z`); g.appendChild(p); } })();
+criar('F_pfl', 4, k => { const im = document.createElement('img'); im.className = 'cut'; im.id = 'F_p' + k; im.src = '../mg_comum/ervas/petersilie.png';
+  im.style.cssText = `left:${215 + k * 310}px;top:410px;width:230px`; return im; });
+function render(t) {
+  const C = window.CUES; semVoegel();
+  if (cena('cA', t, 0, C.F3)) {
+    slam('A_kick', t, C.F1 + .3); const w = ease(prog(t, C.F1 + .9, 1.3)); $('A_tit').style.clipPath = `inset(0 ${100 - 100 * w}% 0 0)`; put('A_tit', t, { op: w > 0 ? 1 : 0, amp: .4 });
+    draw('A_unter', t, C.F1 + 2.4, .8); draw('A_kl1', t, C.F2 + .2, .4); draw('A_kl2', t, C.F2 + .3, .4); slam('A_haelfte', t, C.F2 + .3, .5);
+  }
+  if (cena('cB', t, C.F3, C.F5)) {
+    draw('B_kueste', t, C.F3 + .2, 1.6); draw('B_meer', t, C.F3 + 1.2, 1.0); slam('B_meertxt', t, C.F3 + 1.6, .4);
+    slam('B_sued', t, C.F3 + .5); draw('B_pfeil', t, C.F3 + 2.0, 1.0); draw('B_spitze', t, C.F3 + 2.9, .2); slam('B_wir', t, C.F3 + 3.0, .4);
+    for (let i = 1; i <= 4; i++) { pop('B_e' + i, t, C.F4 + (i - 1) * .55, .55); slam('B_c' + i, t, C.F4 + (i - 1) * .55 + .2, .4, { r: (i % 2 ? -3 : 3) }); }
+  }
+  if (cena('cC', t, C.F5, C.F8)) {
+    draw('C_hang', t, C.F5 + .1, 1.2); draw('C_steine', t, C.F5 + .8, 1.0); slam('C_kick', t, C.F5 + .3);
+    pop('C_thym', t, C.F5 + 1.4); pop('C_oreg', t, C.F5 + 1.7);
+    const s = back(prog(t, C.F6, .8)); $('C_sonne').style.transform = `scale(${s})`;
+    $('C_strahlen').style.transformOrigin = '1610px 220px'; $('C_strahlen').style.transform = `rotate(${(t - C.F6) * 10}deg)`;
+    for (let i = 0; i < 10; i++) draw('C_r' + i, t, C.F6 + .3 + i * .05, .3);
+    draw('C_lauf', t, C.F6 + 1.2, 1.4); draw('C_laufsp', t, C.F6 + 2.5, .2); slam('C_ab', t, C.F6 + 1.6, .45, { r: -4 });
+    slam('C_wenig', t, C.F7 + .3, .5);
+    voegel(t, C.F5, C.F8);
+  }
+  if (cena('cD', t, C.F8, C.F10)) {
+    put('D_blatt', t, { s: 1.15 - .15 * ease(prog(t, C.F8, 1.4)) }); slam('D_kick', t, C.F8 + .8);
+    for (let i = 0; i < 14; i++) pop('D_o' + i, t, C.F8 + 1.5 + i * .18, .4);
+    draw('D_duft', t, C.F8 + 3.6, 1.6); slam('D_reib', t, C.F8 + 4.6, .45, { r: -2 });
+    draw('D_schild', t, C.F9 + .2, .9); draw('D_sonne', t, C.F9 + .8, .4); slam('D_schutz', t, C.F9 + .9, .45);
+  }
+  if (cena('cE', t, C.F10, C.F15)) {
+    draw('E_topf', t, C.F10 + .1, 1.0); draw('E_rand', t, C.F10 + .5, .5); pop('E_pfl', t, C.F10 + .6);
+    draw('E_wurzel', t, C.F10 + 1.0, .9);
+    const w = ease(prog(t, C.F10 + 2.2, 2.4)); $('E_wasser').style.transform = `scaleY(${w})`; $('E_wasser').style.opacity = w > 0 ? 1 : 0;
+    const braun = prog(t, C.F10 + 4.0, 1.5); $('E_wurzel').style.stroke = braun > 0 ? `rgb(${111 + 54 * braun},${127 - 50 * braun},${88 - 30 * braun})` : '';
+    slam('E_faul', t, C.F10 + 4.6, .45);
+    draw('E_flocke', t, C.F11, .6); draw('E_strich', t, C.F11 + .7, .3); slam('E_frost', t, C.F11 + .3, .4);
+    slam('E_fuss', t, C.F12, .5, { s: 1.1 }); slam('E_merk', t, C.F13, .4); slam('E_viel', t, C.F14 + .3, .5);
+  }
+  if (cena('cF', t, C.F15, C.F21)) {
+    const w = ease(prog(t, C.F15 + .15, 1.2)); $('F_tit').style.clipPath = `inset(0 ${100 - 100 * w}% 0 0)`; put('F_tit', t, { op: w > 0 ? 1 : 0, amp: .4 });
+    for (let k = 0; k < 4; k++) {
+      draw('F_f' + k, t, C.F16 + k * .3, .6);
+      const p = prog(t, C.F17 + k * .5, .5); const fade = 1 - .22 * k * prog(t, C.F17 + 2.2, 1.2);
+      put('F_p' + k, t, { op: out(p * 2) * fade, s: back(p) * (1 - .14 * k * prog(t, C.F17 + 2.2, 1.2)) });
+      slam('F_j' + (k + 1), t, C.F17 + k * .5 + .1, .35);
+    }
+    slam('F_selbe', t, C.F17 + 1.6, .45, { r: -2 }); draw('F_kreis', t, C.F18, .9);
+    draw('F_ruhe', t, C.F20 + .8, .8); slam('F_ruhen', t, C.F20 + .4, .45); slam('F_so', t, C.F20 + 2.6, .4);
+  }
+  if (cena('cG', t, C.F21, C.FIM + 1)) {
+    const a = back(prog(t, C.F22, .5)), b = back(prog(t, C.F22 + .55, .5));
+    $('G_s').style.transform = `scale(${a})`; $('G_w').style.transform = `scale(${b})`;
+    draw('G_r', t, C.F22 + 1.1, .5); slam('G_t1', t, C.F22, .4); slam('G_t2', t, C.F22 + .55, .4); slam('G_t3', t, C.F22 + 1.1, .4);
+    slam('G_kick', t, C.F21 + .1, .45); slam('G_rest', t, C.F23 + .2, .5); voegel(t, C.F21, C.FIM);
+  }
+}
+render(0);
+</script></body></html>

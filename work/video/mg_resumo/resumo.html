@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>Zwölf Kräuter</title>
+<link rel="stylesheet" href="../mg_comum/mg.css">
+<style>
+  .karte { position:absolute; width:410px; height:250px; transform-origin:50% 50%; }
+  .karte .feld { position:absolute; inset:0; border:3px solid rgba(47,42,34,.75); border-radius:10px; background:rgba(250,244,228,.75); box-shadow:6px 8px 0 rgba(60,40,15,.15); }
+  .karte img { position:absolute; left:8px; top:20px; width:170px; height:210px; object-fit:contain; filter:drop-shadow(5px 7px 6px rgba(60,40,15,.3)); }
+  .karte .name { position:absolute; left:180px; top:28px; font:700 34px/1 "Palatino Linotype", Georgia, serif; color:var(--tinte); white-space:nowrap; }
+  .karte .wort { position:absolute; left:180px; font:400 19px/1.15 "Segoe Print", cursive; color:var(--terra); white-space:nowrap; opacity:0; }
+  .nr { position:absolute; left:-14px; top:-14px; width:46px; height:46px; border-radius:50%; background:var(--ocker); color:#fff8e8;
+    display:flex; align-items:center; justify-content:center; font:800 24px/1 "Palatino Linotype", Georgia, serif; }
+</style></head>
+<body><div id="stage">
+  <div class="papier"></div><div class="falten"></div>
+  <div class="cena" id="welt">
+    <div class="cena" id="cA">
+      <div class="el kick" id="A_kick" style="left:0;width:1920px;text-align:center;top:400px">Jetzt kommt alles zusammen</div>
+      <div class="el tit" id="A_tit" style="left:0;width:1920px;text-align:center;top:470px">Der Reihe nach</div>
+    </div>
+    <div class="cena" id="cB"><div id="karten"></div></div>
+    <div class="cena" id="cC">
+      <div class="el tit" id="C_1" style="left:0;width:1920px;text-align:center;top:260px;font-size:120px">Zwölf Kräuter.</div>
+      <div class="el tit" id="C_2" style="left:0;width:1920px;text-align:center;top:410px;font-size:120px;color:var(--salbei)">Ein Garten.</div>
+      <div class="el hand" id="C_3" style="left:0;width:1920px;text-align:center;top:620px">keine grünen oder schwarzen Daumen</div>
+      <svg class="zeich" viewBox="0 0 1920 1080"><path id="C_strich" class="ink terra dick" d="M560 650 L1360 650"/></svg>
+      <div class="el tit" id="C_4" style="left:0;width:1920px;text-align:center;top:760px;color:var(--terra)">Nur Kenntnis.</div>
+    </div>
+    <svg class="zeich" viewBox="0 0 1920 1080" id="voegel"></svg>
+  </div>
+  <svg class="hud" viewBox="0 0 1920 1080"><g class="ink duenn" style="stroke:rgba(47,42,34,.55)">
+    <path d="M40 90 L40 40 L90 40"/><path d="M1830 40 L1880 40 L1880 90"/><path d="M40 990 L40 1040 L90 1040"/><path d="M1830 1040 L1880 1040 L1880 990"/></g></svg>
+  <div class="label" style="left:60px;top:58px">Klostergarten · Die zwölf Kräuter</div>
+  <div class="label" style="right:60px;top:58px">Bruder Wendelin</div>
+  <div class="korn"></div>
+</div>
+<script src="../mg_comum/mg.js"></script>
+<script>
+window.CUES = window.CUES || {};
+const ERVAS = [
+  ["petersilie", "Petersilie", ["zweijährig", "braucht Dünger", "Töpfchen teilen"]],
+  ["dill", "Dill", ["einjährig", "direkt säen", "sät sich selbst aus"]],
+  ["basilikum", "Basilikum", ["einjährig", "Wärme", "nach den Eisheiligen"]],
+  ["schnittlauch", "Schnittlauch", ["mehrjährig", "erst Zwiebeln bilden"]],
+  ["minze", "Minze", ["Rhizome", "in den Kübel", "Halbschatten"]],
+  ["liebstoeckl", "Liebstöckl", ["riesig", "rechtzeitig teilen"]],
+  ["thymian", "Thymian", ["verholzt", "sandig", "trockener Fuß"]],
+  ["salbei", "Salbei", ["sieben Jahre", "wenig Dünger"]],
+  ["oregano", "Oregano", ["winterhart", "mager & sonnig"]],
+  ["lorbeer", "Lorbeer", ["stirbt an Nässe", "nicht an Frost"]],
+  ["koriander", "Koriander", ["Blatt oder Samen?", "dann säen"]],
+  ["melisse", "Zitronenmelisse", ["unverwüstlich", "Öl von großem Wert"]],
+];
+const POS = ERVAS.map((_, i) => [56 + (i % 4) * 452, 150 + Math.floor(i / 4) * 290]);
+criar('karten', 12, i => {
+  const [tag, nome, ws] = ERVAS[i]; const k = document.createElement('div'); k.className = 'karte'; k.id = 'K' + i;
+  k.style.left = POS[i][0] + 'px'; k.style.top = POS[i][1] + 'px';
+  k.innerHTML = `<div class="feld"></div><img src="../mg_comum/ervas/${tag}.png"><div class="name" style="${nome.length > 11 ? 'font-size:25px' : ''}">${nome}</div>` +
+    ws.map((w, j) => `<div class="wort" id="K${i}w${j}" style="top:${86 + j * 40}px">${w}</div>`).join('') + `<div class="nr">${i + 1}</div>`;
+  return k;
+});
+function render(t) {
+  const C = window.CUES; semVoegel();
+  if (cena('cA', t, 0, C.F3)) {
+    slam('A_kick', t, C.F1 + .1); const w = ease(prog(t, C.F2, 1.0)); $('A_tit').style.clipPath = `inset(0 ${100 - 100 * w}% 0 0)`; put('A_tit', t, { op: w > 0 ? 1 : 0, amp: .4 });
+  }
+  if (cena('cB', t, C.F3, C.F15)) {
+    for (let i = 0; i < 12; i++) {
+      const a = C['F' + (i + 3)], b = i < 11 ? C['F' + (i + 4)] : C.F15;
+      const e = $('K' + i);
+      const a0 = i === 0 ? a + .4 : a - .1;                                   // o 1o espera o titulo sair
+      if (t < a0) { e.style.opacity = 0; continue; }
+      e.style.opacity = 1;
+      // entra grande no centro, mostra as palavras, volta para o lugar na grade antes da proxima
+      const ent = back(prog(t, a0, .5)), volta = ease(prog(t, b - .55, .5));
+      const cx = 960 - 205, cy = 540 - 125, gx = POS[i][0], gy = POS[i][1];
+      const x = (cx - gx) * (1 - volta), y = (cy - gy) * (1 - volta), s = (1.75 - .75 * volta) * ent;
+      const j = jit('K' + i, t, .6);
+      e.style.transform = `translate(${x + j.x}px, ${y + j.y}px) rotate(${j.r + (1 - volta) * (i % 2 ? 1.5 : -1.5)}deg) scale(${s})`;
+      e.style.zIndex = t < b ? 10 : 1;
+      e.querySelector('.feld').style.background = 'rgb(251,246,232)';           // opaco: o cartao de baixo vazava
+      const ws = ERVAS[i][2];
+      for (let k = 0; k < ws.length; k++) { const p = prog(t, a + .45 + k * ((b - a - 1.0) / ws.length), .3); $(`K${i}w${k}`).style.opacity = p;
+        $(`K${i}w${k}`).style.transform = `translateX(${(1 - out(p)) * 20}px)`; }
+    }
+  }
+  if (cena('cC', t, C.F15, C.FIM + 1)) {
+    slam('C_1', t, C.F15, .45); slam('C_2', t, C.F16, .45); slam('C_3', t, C.F17 + .1, .45); draw('C_strich', t, C.F17 + 1.2, .5);
+    slam('C_4', t, C.F18, .5, { s: 1.1 }); voegel(t, C.F15, C.FIM);
+  }
+}
+render(0);
+</script></body></html>

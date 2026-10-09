@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>Handgriff 1</title>
+<style>
+  :root { --papier:#eee4cf; --tinte:#2f2a22; --ocker:#b8862f; --salbei:#6f7f58; --terra:#a5583a; --wasser:#5d7a86; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:1920px; height:1080px; overflow:hidden; background:var(--papier); }
+  #stage { position:absolute; inset:0; overflow:hidden; background:var(--papier); }
+  .papier { position:absolute; inset:-40px;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 30%, rgba(255,250,236,.75), rgba(255,250,236,0) 70%),
+      radial-gradient(ellipse 40% 30% at 78% 72%, rgba(150,110,50,.10), rgba(0,0,0,0) 70%),
+      radial-gradient(ellipse 25% 20% at 12% 85%, rgba(120,85,40,.10), rgba(0,0,0,0) 70%),
+      radial-gradient(ellipse 120% 110% at 50% 50%, rgba(0,0,0,0) 55%, rgba(70,48,20,.32) 100%); }
+  .korn { position:absolute; inset:-20px; opacity:.28; mix-blend-mode:multiply; pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .40  0 0 0 0 .32  0 0 0 0 .20  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .falten { position:absolute; inset:0; opacity:.22; mix-blend-mode:multiply; pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'><filter id='f'><feTurbulence type='turbulence' baseFrequency='.004 .012' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .4  0 0 0 0 .25  0 0 0 .9 -.25'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>"); }
+  .hud { position:absolute; inset:0; pointer-events:none; }
+  .label { position:absolute; font:600 17px/1 "Segoe UI", system-ui, sans-serif; letter-spacing:.32em; color:rgba(47,42,34,.7); text-transform:uppercase; }
+  .cena { position:absolute; inset:0; will-change:transform, opacity, filter; }
+  .el { position:absolute; transform-origin:50% 50%; will-change:transform, opacity; }
+  .cut { position:absolute; filter: drop-shadow(10px 14px 10px rgba(60,40,15,.28)); transform-origin:50% 50%; }
+  .tit { font:700 92px/1.02 "Palatino Linotype", Palatino, Georgia, serif; color:var(--tinte); white-space:nowrap; }
+  .kick { font:700 26px/1 "Segoe UI", system-ui, sans-serif; letter-spacing:.34em; color:var(--ocker); text-transform:uppercase; white-space:nowrap; }
+  .hand { font:400 44px/1.1 "Segoe Print", "Bradley Hand", cursive; color:var(--tinte); white-space:nowrap; }
+  .hand.klein { font-size:34px; }
+  .zahl { font:700 230px/1 "Palatino Linotype", Palatino, Georgia, serif; color:var(--terra); }
+  .stempel { position:absolute; width:210px; height:210px; border-radius:50%; border:7px double var(--terra); color:var(--terra);
+    display:flex; align-items:center; justify-content:center; text-align:center; font:800 54px/1 "Palatino Linotype", Georgia, serif; }
+  .badge { position:absolute; width:74px; height:74px; border-radius:50%; background:var(--ocker); color:#fff8e8;
+    display:flex; align-items:center; justify-content:center; font:800 40px/1 "Palatino Linotype", Georgia, serif; box-shadow:0 4px 0 rgba(60,40,15,.35); }
+  .preis { position:absolute; padding:16px 28px 16px 46px; background:#f6efdc; border:3px solid var(--tinte); color:var(--tinte);
+    font:700 46px/1 "Palatino Linotype", Georgia, serif; clip-path:polygon(22% 0,100% 0,100% 100%,22% 100%,0 50%); }
+  svg.zeich { position:absolute; inset:0; overflow:visible; pointer-events:none; }
+  .ink { fill:none; stroke:var(--tinte); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+  .ink.dick { stroke-width:7; } .ink.duenn { stroke-width:3; }
+  .ink.ocker { stroke:var(--ocker); } .ink.terra { stroke:var(--terra); } .ink.salbei { stroke:var(--salbei); } .ink.wasser { stroke:var(--wasser); }
+  .ink.strich { stroke-dasharray:14 12; }
+</style></head>
+<body><div id="stage">
+  <div class="papier"></div><div class="falten"></div>
+  <div class="cena" id="welt">
+    <!-- A: titulo -->
+    <div class="cena" id="cA">
+      <div class="el" id="A_sonne" style="left:660px;top:280px;width:600px;height:600px;border-radius:50%;background:var(--ocker);opacity:.9"></div>
+      <img class="cut" id="A_vaso" src="img/vaso.png" style="left:722px;top:420px;width:476px">
+      <div class="el kick" id="A_kick" style="left:0;width:1920px;text-align:center;top:92px">Handgriff Nr. 1</div>
+      <div class="el tit" id="A_tit" style="left:0;width:1920px;text-align:center;top:128px;overflow:hidden;height:110px">Der Supermarkt-Trick</div>
+      <div class="stempel" id="A_s1" style="left:300px;top:560px">0 €</div>
+      <div class="stempel" id="A_s2" style="left:1410px;top:560px;font-size:44px">5 Min.</div>
+    </div>
+    <!-- B: tirar do vaso -->
+    <div class="cena" id="cB">
+      <img class="cut" id="B_vaso" src="img/vaso.png" style="left:270px;top:390px;width:440px">
+      <img class="cut" id="B_raus" src="img/ballen_raus.png" style="left:1050px;top:400px;width:680px">
+      <svg class="zeich" viewBox="0 0 1920 1080"><path id="B_pfeil" class="ink dick" d="M560 360 C 760 150, 1080 150, 1270 330"/>
+        <path id="B_spitze" class="ink dick" d="M1228 296 L1272 334 L1218 350"/></svg>
+      <div class="el hand" id="B_txt" style="left:700px;top:150px">raus aus dem Plastiktopf</div>
+    </div>
+    <!-- C: o torrao, 40 plantas -->
+    <div class="cena" id="cC">
+      <img class="cut" id="C_ballen" src="img/ballen.png" style="left:150px;top:300px;width:1060px">
+      <svg class="zeich" viewBox="0 0 1920 1080"><ellipse id="C_kreis" class="ink terra dick" cx="610" cy="640" rx="430" ry="230" transform="rotate(-6 610 640)"/>
+        <path id="C_klam1" class="ink dick" d="M1330 300 L1300 300 L1300 760 L1330 760"/><path id="C_klam2" class="ink dick" d="M1790 300 L1820 300 L1820 760 L1790 760"/></svg>
+      <div class="el zahl" id="C_zahl" style="left:1330px;top:330px;width:490px;text-align:center">0</div>
+      <div class="el hand" id="C_pfl" style="left:1330px;top:570px;width:490px;text-align:center">Pflanzen</div>
+      <div class="el kick" id="C_ein" style="left:1300px;top:800px;width:520px;text-align:center;color:var(--terra)">in einem einzigen Topf</div>
+      <div id="C_punkte"></div>
+    </div>
+    <!-- D: partir -->
+    <div class="cena" id="cD">
+      <img class="cut" id="D_halb" src="img/haelften.png" style="left:470px;top:380px;width:980px">
+      <img class="cut" id="D_vier" src="img/vier.png" style="left:560px;top:300px;width:800px">
+      <svg class="zeich" viewBox="0 0 1920 1080">
+        <path id="D_d1" class="ink dick" d="M820 170 C 860 240, 900 300, 930 380"/><path id="D_d1s" class="ink dick" d="M900 352 L932 384 L944 340"/>
+        <path id="D_d2" class="ink dick" d="M1100 170 C 1060 240, 1020 300, 990 380"/><path id="D_d2s" class="ink dick" d="M976 340 L988 384 L1020 352"/>
+        <path id="D_schnitt" class="ink terra strich" d="M960 300 L960 800"/>
+        <path id="D_zug" class="ink dick" d="M700 880 L1220 880"/><path id="D_zugL" class="ink dick" d="M730 850 L700 880 L730 910"/><path id="D_zugR" class="ink dick" d="M1190 850 L1220 880 L1190 910"/>
+      </svg>
+      <div class="el kick" id="D_dau" style="left:760px;top:120px;width:400px;text-align:center">beide Daumen</div>
+      <div class="el hand" id="D_ausein" style="left:0;width:1920px;text-align:center;top:920px">vorsichtig auseinander</div>
+      <div class="el tit" id="D_1" style="left:250px;top:120px">1</div>
+      <div class="el tit" id="D_p1" style="left:330px;top:120px;color:var(--ocker)">→</div>
+      <div class="el tit" id="D_2" style="left:440px;top:120px">2</div>
+      <div class="el tit" id="D_p2" style="left:520px;top:120px;color:var(--ocker)">→</div>
+      <div class="el tit" id="D_4" style="left:630px;top:120px;color:var(--terra)">4</div>
+      <div class="badge" id="D_b1" style="left:595px;top:470px">1</div><div class="badge" id="D_b2" style="left:755px;top:450px">2</div>
+      <div class="badge" id="D_b3" style="left:867px;top:440px">3</div><div class="badge" id="D_b4" style="left:963px;top:430px">4</div>
+    </div>
+    <!-- E: o vaso novo -->
+    <div class="cena" id="cE">
+      <img class="cut" id="E_pfl" src="img/pflanzen.png" style="left:180px;top:300px;width:470px">
+      <svg class="zeich" viewBox="0 0 1920 1080">
+        <path id="E_topf" class="ink dick" d="M1060 420 L1160 900 L1300 900 M1380 900 L1520 900 L1620 420"/>
+        <path id="E_rand" class="ink dick" d="M1030 420 L1650 420"/>
+        <path id="E_erde" class="ink salbei duenn" d="M1080 500 L1600 500 M1090 560 L1590 560 M1105 620 L1575 620 M1115 680 L1565 680 M1128 740 L1552 740 M1140 800 L1540 800 M1150 860 L1530 860"/>
+        <path id="E_pflanze" class="ink salbei dick" d="M1340 500 L1340 330 M1340 400 C 1290 360, 1250 360, 1230 330 M1340 370 C 1390 330, 1430 330, 1450 300 M1340 330 C 1320 290, 1330 260, 1350 240"/>
+        <path id="E_lochpf" class="ink terra dick" d="M1340 1040 L1340 940"/><path id="E_lochsp" class="ink terra dick" d="M1312 968 L1340 936 L1368 968"/>
+        <path id="E_erdpf" class="ink ocker dick" d="M1780 520 C 1720 560, 1680 600, 1600 620"/><path id="E_erdsp" class="ink ocker dick" d="M1634 596 L1598 622 L1640 640"/>
+        <path id="E_druck" class="ink dick" d="M1220 250 L1250 330 M1480 250 L1450 330"/>
+      </svg>
+      <div class="el hand klein" id="E_loch" style="left:1400px;top:980px">Loch im Boden</div>
+      <div class="el hand klein" id="E_erdtxt" style="left:1700px;top:470px">frische<br>Kräutererde</div>
+      <div class="el kick" id="E_tt" style="left:0;width:1920px;text-align:center;top:110px">jedem Büschel seinen Tontopf</div>
+      <div class="el hand" id="E_giess" style="left:700px;top:880px">einmal gründlich gießen</div>
+      <div id="E_tropfen"></div>
+    </div>
+    <!-- F: o teste do dedo -->
+    <div class="cena" id="cF">
+      <svg class="zeich" viewBox="0 0 1920 1080">
+        <path id="F_topf" class="ink dick" d="M420 360 L540 940 L1000 940 L1120 360 Z"/>
+        <path id="F_erde" class="ink salbei duenn" d="M445 470 L1095 470 M460 540 L1080 540 M475 610 L1065 610 M490 680 L1050 680 M505 750 L1035 750 M520 820 L1020 820 M535 890 L1005 890"/>
+        <path id="F_finger" class="ink dick terra" d="M720 120 L720 520 C 720 560, 820 560, 820 520 L820 120"/>
+        <path id="F_mass" class="ink duenn" d="M880 470 L880 560 M865 470 L895 470 M865 560 L895 560"/>
+        <path id="F_ok" class="ink salbei dick" d="M1300 470 L1340 510 L1420 420"/>
+        <path id="F_uhr" class="ink ocker dick" d="M1360 640 m -50 0 a 50 50 0 1 0 100 0 a 50 50 0 1 0 -100 0 M1360 640 L1360 610 M1360 640 L1385 655"/>
+      </svg>
+      <div class="el kick" id="F_kick" style="left:0;width:1920px;text-align:center;top:70px">Die Fingerprobe</div>
+      <div class="el hand klein" id="F_cm" style="left:905px;top:490px">≈ 2 cm</div>
+      <div class="el hand" id="F_tr" style="left:1450px;top:430px">trocken → gießen</div>
+      <div class="el hand" id="F_fe" style="left:1450px;top:615px">feucht → warten</div>
+    </div>
+    <!-- G: luz e calor -->
+    <div class="cena" id="cG">
+      <div class="el" id="G_sonne" style="left:180px;top:120px;width:260px;height:260px;border-radius:50%;background:var(--ocker)"></div>
+      <svg class="zeich" viewBox="0 0 1920 1080"><g id="G_strahlen"></g>
+        <path id="G_therm" class="ink dick" d="M1560 200 L1560 700 M1640 200 L1640 700 M1560 200 C 1560 150, 1640 150, 1640 200 M1560 700 a 70 70 0 1 0 80 0"/>
+        <path id="G_skala" class="ink duenn" d="M1640 640 L1670 640 M1640 560 L1690 560 M1640 480 L1670 480 M1640 400 L1690 400 M1640 320 L1670 320"/>
+      </svg>
+      <div class="el" id="G_quecks" style="left:1576px;top:400px;width:48px;height:360px;background:var(--terra);border-radius:24px;transform-origin:50% 100%"></div>
+      <div class="el" id="G_kugel" style="left:1550px;top:705px;width:100px;height:100px;border-radius:50%;background:var(--terra)"></div>
+      <div class="el hand" id="G_15" style="left:1700px;top:525px">15 °C</div>
+      <img class="cut" id="G_fenster" src="img/fenster.png" style="left:420px;top:420px;width:960px">
+      <div class="el tit" id="G_hell" style="left:560px;top:130px">hell</div>
+      <div class="el tit" id="G_warm" style="left:850px;top:130px;color:var(--terra)">& warm</div>
+      <div class="el kick" id="G_min" style="left:560px;top:270px;color:var(--terra)">nicht unter 15 Grad</div>
+    </div>
+    <!-- H: resumo -->
+    <div class="cena" id="cH">
+      <img class="cut" id="H_vaso" src="img/vaso.png" style="left:110px;top:380px;width:420px">
+      <div class="preis" id="H_preis" style="left:150px;top:300px">1,49 €</div>
+      <div class="el tit" id="H_pfeil" style="left:580px;top:500px;color:var(--ocker);font-size:140px">→</div>
+      <img class="cut" id="H_p1" src="img/pflanzen.png" style="left:800px;top:420px;width:270px">
+      <img class="cut" id="H_p2" src="img/pflanzen.png" style="left:1060px;top:440px;width:270px">
+      <img class="cut" id="H_p3" src="img/pflanzen.png" style="left:1320px;top:420px;width:270px">
+      <img class="cut" id="H_p4" src="img/pflanzen.png" style="left:1580px;top:440px;width:270px">
+      <div class="el tit" id="H_tit" style="left:0;width:1920px;text-align:center;top:110px">1 Topf → 4 Pflanzen</div>
+      <div class="stempel" id="H_st" style="left:1600px;top:120px;width:250px;height:250px;font-size:34px;line-height:1.1">Hand-<br>griff<br>Nr. 1</div>
+    </div>
+    <!-- andorinhas -->
+    <svg class="zeich" viewBox="0 0 1920 1080" id="voegel"></svg>
+  </div>
+  <svg class="hud" viewBox="0 0 1920 1080"><g class="ink duenn" style="stroke:rgba(47,42,34,.55)">
+    <path d="M40 90 L40 40 L90 40"/><path d="M1830 40 L1880 40 L1880 90"/><path d="M40 990 L40 1040 L90 1040"/><path d="M1830 1040 L1880 1040 L1880 990"/></g></svg>
+  <div class="label" style="left:60px;top:58px">Klostergarten · Handgriff 1</div>
+  <div class="label" style="right:60px;top:58px">Bruder Wendelin</div>
+  <div class="korn"></div>
+</div>
+<script>
+window.CUES = { H1:0.6, H2:4.2, H3:7.0, H4:13.0, H5:15.5, H6:21.0, H7:26.5, H8:30.5, H9:36.5, H10:40.5, H11:45.5, H12:50.5, H13:55.5, FIM:62.0 };
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => cl((t - a) / d);
+const ease = x => { x = cl(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const out = x => 1 - Math.pow(1 - cl(x), 3);
+const back = x => { x = cl(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const $ = id => document.getElementById(id);
+// stop-motion: tremidinha a 12 qps, determinada pelo tempo e pelo nome
+function rnd(n) { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function hash(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) | 0; return h; }
+function jit(id, t, amp = 1) { const k = Math.floor(t * 12) + hash(id); return { x: (rnd(k) - .5) * 3 * amp, y: (rnd(k + 9) - .5) * 3 * amp, r: (rnd(k + 17) - .5) * 1.0 * amp }; }
+function put(id, t, o) {
+  const e = $(id); if (!e) return;
+  const j = o.jit === false ? { x: 0, y: 0, r: 0 } : jit(id, t, o.amp || 1);
+  e.style.opacity = o.op ?? 1;
+  e.style.transform = `translate(${(o.x || 0) + j.x}px, ${(o.y || 0) + j.y}px) rotate(${(o.r || 0) + j.r}deg) scale(${o.s ?? 1})`;
+  e.style.filter = o.blur ? `blur(${o.blur}px)` : (e.classList.contains('cut') ? '' : '');
+}
+// entrada "batendo": chega grande e desfocada, assenta com repique
+function slam(id, t, a, d = .45, extra = {}) {
+  const p = prog(t, a, d);
+  put(id, t, Object.assign({ op: p > 0 ? 1 : 0, s: 1 + (1 - back(p)) * 0.6, blur: (1 - out(p)) * 10 }, extra));
+}
+function pop(id, t, a, d = .5, extra = {}) {
+  const p = prog(t, a, d);
+  put(id, t, Object.assign({ op: out(p * 2), s: back(p) * (extra.s0 || 1) }, extra));
+}
+// traco que se desenha
+const comp = {};
+function draw(id, t, a, d) {
+  const e = $(id); if (!e) return;
+  if (!(id in comp)) { comp[id] = e.getTotalLength ? e.getTotalLength() : 1000; e.style.strokeDasharray = e.classList.contains('strich') ? '' : comp[id]; }
+  const p = ease(prog(t, a, d));
+  if (e.classList.contains('strich')) { e.style.opacity = p > 0 ? 1 : 0; e.style.clipPath = `inset(0 0 ${100 - 100 * p}% 0)`; return; }
+  e.style.strokeDashoffset = comp[id] * (1 - p); e.style.opacity = p > 0 ? 1 : 0;
+}
+function cena(id, t, ini, fim) {
+  // corte em empurrao: a cena entra da direita e sai pela esquerda com rastro
+  const e = $(id), T = .4;
+  if (t < ini - T || t > fim + T) { e.style.display = 'none'; return false; }
+  e.style.display = 'block';
+  let x = 0, blur = 0;
+  if (t < ini) { const p = ease(prog(t, ini - T, T)); x = (1 - p) * 1920; blur = (1 - p) * 18; }
+  else if (t > fim) { const p = ease(prog(t, fim, T)); x = -p * 1920; blur = p * 18; }
+  const push = 1 + 0.03 * prog(t, ini, fim - ini);
+  e.style.transform = `translateX(${x}px) scale(${push})`; e.style.filter = blur ? `blur(${blur}px)` : 'none';
+  return true;
+}
+// pontinhos das 40 plantas
+(function () { const c = $('C_punkte'); for (let i = 0; i < 40; i++) { const a = rnd(i) * Math.PI * 2, r = Math.sqrt(rnd(i + 50));
+  const d = document.createElement('div'); d.className = 'el'; d.id = 'C_pt' + i;
+  d.style.cssText = `left:${610 + Math.cos(a) * r * 360 - 9}px;top:${640 + Math.sin(a) * r * 180 - 9}px;width:18px;height:18px;border-radius:50%;background:var(--terra);border:3px solid #fff7e6`;
+  c.appendChild(d); } })();
+(function () { const c = $('E_tropfen'); for (let i = 0; i < 9; i++) { const d = document.createElement('div'); d.className = 'el'; d.id = 'E_tr' + i;
+  d.style.cssText = `left:${1180 + rnd(i + 3) * 320}px;top:140px;width:22px;height:34px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:var(--wasser);opacity:0`; c.appendChild(d); } })();
+(function () { const g = $('G_strahlen'); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('class', 'ink ocker dick'); p.id = 'G_r' + i; p.setAttribute('d', `M${310 + Math.cos(a) * 160} ${250 + Math.sin(a) * 160} L${310 + Math.cos(a) * 230} ${250 + Math.sin(a) * 230}`); g.appendChild(p); } })();
+(function () { const s = $('voegel'); for (let i = 0; i < 5; i++) { const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.id = 'V' + i; p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#2f2a22'); p.setAttribute('stroke-width', '4'); p.setAttribute('stroke-linecap', 'round'); s.appendChild(p); } })();
+function voegel(t, a, b) {
+  for (let i = 0; i < 5; i++) {
+    const e = $('V' + i); const p = prog(t, a + i * .35, b - a);
+    if (p <= 0 || p >= 1) { e.style.opacity = 0; continue; }
+    e.style.opacity = .8;
+    const x = -100 + p * 2200, y = 160 + i * 38 + Math.sin(p * 9 + i) * 25, w = 20 + i * 3, f = Math.sin(t * 14 + i) * 12;
+    e.setAttribute('d', `M${x - w} ${y - f} Q ${x - w / 2} ${y - 8} ${x} ${y} Q ${x + w / 2} ${y - 8} ${x + w} ${y - f}`);
+  }
+}
+function render(t) {
+  const C = window.CUES;
+  // A — titulo
+  if (cena('cA', t, 0, C.H3)) {
+    const s = back(prog(t, .3, 1.2)); $('A_sonne').style.transform = `scale(${s})`; $('A_sonne').style.opacity = s > 0 ? .92 : 0;
+    const pull = ease(prog(t, 0, 2.0)); put('A_vaso', t, { s: 2.3 - 1.3 * pull, y: (1 - pull) * -60 });
+    slam('A_kick', t, 1.2);
+    const w = ease(prog(t, 1.5, 1.4)); $('A_tit').style.clipPath = `inset(0 ${100 - 100 * w}% 0 0)`; put('A_tit', t, { op: w > 0 ? 1 : 0, amp: .4 });
+    slam('A_s1', t, C.H2 + .5, .45, { r: -12 }); slam('A_s2', t, C.H2 + 1.5, .45, { r: 10 });
+    voegel(t, .6, 7.5);
+  }
+  // B — tirar do vaso
+  if (cena('cB', t, C.H3, C.H4)) {
+    const l = t - C.H3;
+    put('B_vaso', t, { x: (1 - out(prog(l, 0, .8))) * -500, s: 1 });
+    pop('B_raus', t, C.H3 + 2.2, .6);
+    draw('B_pfeil', t, C.H3 + 2.8, .9); draw('B_spitze', t, C.H3 + 3.6, .3);
+    slam('B_txt', t, C.H3 + 3.7, .5, { r: -3 });
+  }
+  // C — o torrao e as 40 plantas
+  if (cena('cC', t, C.H4, C.H6)) {
+    put('C_ballen', t, { s: 1.25 - .25 * ease(prog(t, C.H4, 1.4)) });
+    draw('C_kreis', t, C.H4 + 1.0, 1.0);
+    const n = Math.round(40 * ease(prog(t, C.H5 + .3, 2.6)));
+    $('C_zahl').textContent = n; slam('C_zahl', t, C.H5 + .2, .4);
+    for (let i = 0; i < 40; i++) { const vis = i < n; put('C_pt' + i, t, { op: vis ? 1 : 0, s: vis ? 1 : .2, amp: .5 }); }
+    draw('C_klam1', t, C.H5 + .1, .5); draw('C_klam2', t, C.H5 + .3, .5);
+    slam('C_pfl', t, C.H5 + 1.0, .4); slam('C_ein', t, C.H5 + 3.0, .45);
+  }
+  // D — partir em 2 e em 4
+  if (cena('cD', t, C.H6, C.H8)) {
+    const troca = prog(t, C.H7 + 1.6, .25);
+    put('D_halb', t, { op: 1 - troca, s: 1 + .03 * Math.sin(t * 3) * (t > C.H6 + 3 ? 1 : 0) });
+    pop('D_vier', t, C.H7 + 1.6, .55); if (troca <= 0) $('D_vier').style.opacity = 0;
+    draw('D_d1', t, C.H6 + 1.0, .6); draw('D_d1s', t, C.H6 + 1.55, .2); draw('D_d2', t, C.H6 + 1.2, .6); draw('D_d2s', t, C.H6 + 1.75, .2);
+    slam('D_dau', t, C.H6 + 1.4);
+    draw('D_schnitt', t, C.H6 + 2.4, 1.0);
+    draw('D_zug', t, C.H6 + 3.4, .6); draw('D_zugL', t, C.H6 + 3.9, .2); draw('D_zugR', t, C.H6 + 3.9, .2);
+    slam('D_ausein', t, C.H6 + 3.8, .5);
+    // os tracos de "partir" somem quando os 4 tufos entram
+    for (const k of ['D_d1', 'D_d1s', 'D_d2', 'D_d2s', 'D_schnitt', 'D_zug', 'D_zugL', 'D_zugR', 'D_dau', 'D_ausein'])
+      if (troca > 0) $(k).style.opacity = Math.min(+$(k).style.opacity || 0, 1 - troca);
+    slam('D_1', t, C.H7 - .2); slam('D_p1', t, C.H7 + .3); slam('D_2', t, C.H7 + .6); slam('D_p2', t, C.H7 + 1.3); slam('D_4', t, C.H7 + 1.7, .5, { s: 1.15 });
+    pop('D_b1', t, C.H7 + 2.2); pop('D_b2', t, C.H7 + 2.4); pop('D_b3', t, C.H7 + 2.6); pop('D_b4', t, C.H7 + 2.8);
+  }
+  // E — o vaso novo
+  if (cena('cE', t, C.H8, C.H10)) {
+    put('E_pfl', t, { x: (1 - out(prog(t, C.H8, .8))) * -500 });
+    slam('E_tt', t, C.H8 + .6);
+    draw('E_topf', t, C.H8 + 1.2, 1.4); draw('E_rand', t, C.H8 + 1.6, .6);
+    draw('E_lochpf', t, C.H8 + 3.0, .5); draw('E_lochsp', t, C.H8 + 3.45, .2); slam('E_loch', t, C.H8 + 3.2, .4);
+    draw('E_erde', t, C.H8 + 4.0, 1.2); draw('E_erdpf', t, C.H8 + 4.3, .5); draw('E_erdsp', t, C.H8 + 4.75, .2); slam('E_erdtxt', t, C.H8 + 4.4, .4);
+    draw('E_pflanze', t, C.H8 + 4.8, 1.0);
+    draw('E_druck', t, C.H9 + .2, .5);
+    for (let i = 0; i < 9; i++) { const p = prog(t, C.H9 + 1.8 + i * .22, .7); put('E_tr' + i, t, { op: p > 0 && p < 1 ? .9 : 0, y: ease(p) * 360, jit: false }); }
+    slam('E_giess', t, C.H9 + 1.6, .45, { r: -2 });
+  }
+  // F — teste do dedo
+  if (cena('cF', t, C.H10, C.H12)) {
+    slam('F_kick', t, C.H10 + .2);
+    draw('F_topf', t, C.H10 + .4, 1.0); draw('F_erde', t, C.H10 + .9, 1.0);
+    const f = $('F_finger'); draw('F_finger', t, C.H10 + 1.6, .8);
+    const desce = ease(prog(t, C.H11, 1.2)); f.style.transform = `translateY(${desce * 330}px)`;
+    draw('F_mass', t, C.H11 + 1.1, .4); slam('F_cm', t, C.H11 + 1.2, .4);
+    slam('F_tr', t, C.H11 + 1.8, .45); draw('F_ok', t, C.H11 + 2.0, .4);
+    slam('F_fe', t, C.H11 + 2.9, .45); draw('F_uhr', t, C.H11 + 3.1, .6);
+  }
+  // G — luz e calor
+  if (cena('cG', t, C.H12, C.H13)) {
+    const s = back(prog(t, C.H12, .9)); $('G_sonne').style.transform = `scale(${s})`;
+    $('G_strahlen').style.transformOrigin = '310px 250px'; $('G_strahlen').style.transform = `rotate(${(t - C.H12) * 12}deg)`;
+    for (let i = 0; i < 12; i++) draw('G_r' + i, t, C.H12 + .4 + i * .05, .3);
+    pop('G_fenster', t, C.H12 + .2, .6);
+    slam('G_hell', t, C.H12 + .9); slam('G_warm', t, C.H12 + 1.4);
+    draw('G_therm', t, C.H12 + 1.6, .9); draw('G_skala', t, C.H12 + 2.1, .5);
+    const q = ease(prog(t, C.H12 + 2.4, 1.4)); $('G_quecks').style.transform = `scaleY(${.15 + .55 * q})`; $('G_quecks').style.opacity = prog(t, C.H12 + 2.2, .3); pop('G_kugel', t, C.H12 + 2.2, .4);
+    slam('G_15', t, C.H12 + 3.5, .4); slam('G_min', t, C.H12 + 3.3, .45);
+    voegel(t, C.H12 + .2, C.H12 + 5);
+  }
+  // H — resumo
+  if (cena('cH', t, C.H13, C.FIM + 1)) {
+    put('H_vaso', t, { x: (1 - out(prog(t, C.H13, .7))) * -400 });
+    slam('H_preis', t, C.H13 + 1.6, .45, { r: -8 });
+    slam('H_pfeil', t, C.H13 + 2.6, .4);
+    pop('H_p1', t, C.H13 + 3.0, .5); pop('H_p2', t, C.H13 + 3.25, .5); pop('H_p3', t, C.H13 + 3.5, .5); pop('H_p4', t, C.H13 + 3.75, .5);
+    slam('H_tit', t, C.H13 + .3, .5);
+    slam('H_st', t, C.H13 + 4.3, .5, { r: 14 });
+  }
+}
+render(0);
+</script></body></html>

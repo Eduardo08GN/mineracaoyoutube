@@ -3,7 +3,23 @@ __pycache__/
 *.pyc
 .venv/
 data/raw/
-work/
+# work/ e' rascunho e midia; so' o CODIGO do pipeline de video (work/video) e' versionado
+work/*
+!work/video/
+work/video/*
+!work/video/*.py
+!work/video/cta/
+!work/video/hack/
+!work/video/mg_comum/
+!work/video/mg_warum/
+!work/video/mg_resumo/
+work/video/**/*.wav
+work/video/**/*.bak
+work/video/**/*.log
+work/video/**/__pycache__/
+work/video/hack/narr/
+work/video/mg_*/narr/
+work/video/mg_comum/ervas/cand/
 *.mp4
 .minerador.lock
 .minerador_api
