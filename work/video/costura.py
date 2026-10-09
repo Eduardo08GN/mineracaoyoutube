@@ -54,8 +54,9 @@ def _ss(q):
     return ["-ss", f"{max(0.0, (q - 0.5) / FPS):.4f}"] if q > 0 else []
 
 
-def costurar_video(partes, trans, saida, tmp, nome="c"):
+def costurar_video(partes, trans, saida, tmp, nome="c", vid_args=None):
     tmp = os.path.abspath(tmp)
+    V = vid_args or VID                      # intermediario (dentro do bloco) ou entrega (entre blocos)
     """partes: [mp4]; trans[i]: (tipo, n_quadros) entre partes[i] e partes[i+1] (n=0 ou tipo 'corte' = corte seco).
     Duracao final = soma dos quadros - soma dos n. Grava saida (so' video)."""
     L = [quadros(p) for p in partes]
@@ -69,12 +70,12 @@ def costurar_video(partes, trans, saida, tmp, nome="c"):
         h = tr[i - 1][1] if i > 0 else 0
         t = tr[i][1] if i < len(tr) else 0
         seg = os.path.join(tmp, f"{nome}_n{i:03d}.mp4")
-        ff(*_ss(h), "-i", p, "-frames:v", str(L[i] - h - t), "-an", *VID, seg)
+        ff(*_ss(h), "-i", p, "-frames:v", str(L[i] - h - t), "-an", *V, seg)
         segs.append(seg)
         if t:
             tseg = os.path.join(tmp, f"{nome}_t{i:03d}.mp4")
             ff(*_ss(L[i] - t), "-i", p, "-i", partes[i + 1], "-filter_complex", _grafo(tr[i][0], t), "-map", "[v]",
-               "-frames:v", str(t), "-an", *VID, tseg)
+               "-frames:v", str(t), "-an", *V, tseg)
             segs.append(tseg)
     lst = os.path.join(tmp, nome + "_costura.txt")
     open(lst, "w").writelines(f"file '{s.replace(os.sep, '/')}'\n" for s in segs)

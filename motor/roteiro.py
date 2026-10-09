@@ -284,11 +284,16 @@ def _tipos(planos, nome_persona=""):
         for i, p in enumerate(planos):
             if nome_persona.split()[-1] in p["texto"]: fixos.add(i); break
     for i in fixos: planos[i]["tipo"] = "avatar"
+    # ⭐ (09/10, Eduardo) o monge volta a cada 15-25 s: um plano de avatar/tela dividida a cada ~4 de b-roll (~17 s),
+    #    e so' num plano que o Veo consiga falar bem (ate' 16 palavras, sem travessao, sem o nome do personagem) — antes
+    #    o take era pulado e o monge sumia por ate' 49 s
+    nome = (nome_persona.split()[-1] if nome_persona else "").lower()
+    falavel = lambda p: len(p["texto"].split()) <= 16 and "–" not in p["texto"] and (not nome or nome not in p["texto"].lower())  # noqa: E731
     desde, proximo = 0, "split"
     for i, p in enumerate(planos):
         if p["tipo"] != "broll": desde = 0; continue
         desde += 1
-        if desde >= 5 and i + 1 < len(planos) and planos[i + 1]["tipo"] == "broll":
+        if desde >= 4 and falavel(p) and i + 1 < len(planos) and planos[i + 1]["tipo"] == "broll":
             p["tipo"], proximo, desde = proximo, ("avatar" if proximo == "split" else "split"), 0
 
 

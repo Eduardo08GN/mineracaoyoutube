@@ -29,6 +29,10 @@ import pipeline_video as _pipe                                              # no
 ARQ_AJUSTES = os.path.join(config.DATA, "estudio.json")
 AJUSTES_PADRAO = {"perfil_dolphin": "869356248"}    # "12 Ivone": a sessao do YouTube que o Eduardo autorizou (08/10)
 ETAPAS = ("fonte", "roteiro", "planos")
+# ⭐ (09/10) as etapas 4-7 rodam o pipeline de video (work/video/projeto_video.py) num processo a parte, com o log no
+#    painel. "avatar" usa o Flow (o perfil do Dolphin aberto) no modelo GRATIS; so' roda quando o Eduardo aperta.
+ETAPAS_VIDEO = ("avatar", "voz", "broll", "montagem")
+PIPELINE = os.path.join(RAIZ, "work", "video", "projeto_video.py")
 
 # ⛔ Regras dos clipes de videos de terceiros (decisao do Eduardo, 08/10/2026) — o pipeline de b-roll (fase 2) obedece:
 #   - cada trecho tem no maximo 8 s (entra intercalado no ritmo do Elias: 1 ou 2 planos de ~4 s);
@@ -111,7 +115,7 @@ class Estudio:
         return self.projeto(p["id"])
 
     def rodar(self, pid, etapa):
-        if etapa not in ETAPAS: raise ValueError(f"etapa desconhecida: {etapa}")
+        if etapa not in ETAPAS + ETAPAS_VIDEO: raise ValueError(f"etapa desconhecida: {etapa}")
         _proj.carregar(pid, self.base)                     # KeyError/OSError se nao existir
         self._fila.put((pid, etapa))
         self._mudou(pid)
@@ -161,7 +165,8 @@ class Estudio:
             try:
                 _proj.alterar(pid, lambda p: p.update(trabalhando=etapa), self.base)
                 self._mudou(pid)
-                getattr(self, f"_etapa_{etapa}")(pid)
+                if etapa in ETAPAS_VIDEO: self._etapa_video(pid, etapa)
+                else: getattr(self, f"_etapa_{etapa}")(pid)
             except Exception as e:                                     # noqa: BLE001
                 msg = str(e)[:200] or e.__class__.__name__
                 try: _proj.registrar(pid, f"⚠ {etapa}: {msg}", self.base)
@@ -228,6 +233,24 @@ class Estudio:
         pr = _rot.proporcoes(planos)
         _proj.registrar(pid, f"{len(planos)} planos: avatar {pr['avatar']}%, tela dividida {pr['split']}%, b-roll {pr['broll']}%"
                              + (f" · ⚠ {sem} sem cena" if sem else ""), self.base)
+
+    def _etapa_video(self, pid, etapa):
+        """Uma das etapas 4-7: o script do pipeline de video, linha a linha no log do painel."""
+        import subprocess
+        if not os.path.isfile(PIPELINE): raise RuntimeError("o pipeline de vídeo (work/video/projeto_video.py) não está aqui")
+        self._log(f"produção: etapa {etapa} de “{_proj.carregar(pid, self.base)['nome'][:50]}”")
+        extra = {"creationflags": 0x08000000} if os.name == "nt" else {}
+        pr = subprocess.Popen([sys.executable, "-X", "utf8", PIPELINE, pid, etapa], cwd=os.path.dirname(PIPELINE),
+                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8",
+                              errors="replace", **extra)
+        ultimas = []
+        for linha in pr.stdout:
+            linha = linha.rstrip()
+            if not linha or "Warning" in linha: continue
+            ultimas = (ultimas + [linha])[-6:]
+            self._log(f"  {etapa}: {linha[:160]}")
+        if pr.wait():
+            raise RuntimeError(f"a etapa {etapa} parou: " + " | ".join(ultimas[-2:])[:180])
 
     def esperar(self, limite=60):
         fim = time.time() + limite

@@ -203,7 +203,7 @@ function ProducaoFeita({ v, m }: { v: Video; m: MIN }) {
       {mt && (
         <div className="pronto">
           <span className="label">Vídeo pronto</span>
-          <strong>{mt.minutos.toFixed(1)} min · {mt.blocos} blocos · {mt.lufs} LUFS</strong>
+          <strong>{mt.minutos.toFixed(1)} min · {mt.blocos} blocos · {mt.resolucao ?? "1920x1080"} · {mt.lufs} LUFS</strong>
           <span className="meta">{Object.entries(mt.transicoes).map(([k, n]) => `${n} ${NOME_TRANS[k] ?? k}`).join(" · ")} · montado {mt.feito}</span>
           <code className="caminho">{mt.arquivo}</code>
           <button className="btn btn-primary btn-sm" disabled={!!rodando}
@@ -281,8 +281,18 @@ export function VideoProjeto({ m, id }: { m: MIN; id: string }) {
 
       <section className="panel bloco">
         <div className="linha-titulo"><h3><Clapperboard size={18} aria-hidden /> 4–7. Avatar, voz, b-roll e montagem</h3></div>
+        {est.planos === "pronta" && (
+          <div className="row etapas-video-botoes">
+            <BotaoRefazer {...props} etapa="avatar" rotulo={est.avatar === "pronta" ? "4. Refazer takes" : "4. Gerar takes (Veo grátis)"} />
+            <BotaoRefazer {...props} etapa="voz" rotulo="5. Voz" />
+            <BotaoRefazer {...props} etapa="broll" rotulo={est.broll === "pronta" ? "6. Refazer b-roll" : "6. Buscar b-roll"} />
+            {est.broll === "pronta" && <BotaoRefazer {...props} etapa="montagem" rotulo={est.montagem === "pronta" ? "7. Remontar" : "7. Montar o vídeo"} />}
+          </div>
+        )}
+        {["avatar", "voz", "broll", "montagem"].includes(v.trabalhando) &&
+          <p className="meta"><Girando /> Rodando: acompanhe o andamento no log (painel inicial).</p>}
         {v.producao && Object.keys(v.producao).length ? <ProducaoFeita v={v} m={m} /> :
-          <p className="meta">Estas etapas rodam nos scripts de <code>work/video</code> (veja o pipeline na aba Produção) e gravam o resultado aqui.</p>}
+          <p className="meta">Cada etapa roda o pipeline de vídeo (<code>work/video/projeto_video.py</code>) e grava o resultado aqui. O avatar usa o Flow no modelo grátis; o b-roll busca em YouTube, Rutube e Bilibili e passa pela revisão no olho antes da montagem.</p>}
       </section>
 
       {v.registro.length > 0 && (

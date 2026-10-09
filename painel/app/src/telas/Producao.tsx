@@ -8,6 +8,7 @@ import { compacto, nomePersona, quando } from "../textos";
 
 const ROTULO_ETAPA: Record<string, string> = {
   fonte: "lendo o viral", roteiro: "escrevendo o roteiro", planos: "montando os planos",
+  avatar: "gerando os takes do avatar", voz: "narrando", broll: "buscando e revisando o b-roll", montagem: "montando o vídeo",
 };
 
 /** As 8 etapas em bolinhas: pronta, a fazer, bloqueada e as das fases seguintes. */

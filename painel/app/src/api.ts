@@ -304,7 +304,8 @@ export interface Producao {
   avatar?: { takes: number; entradas: number; creditos: number; modelo: string };
   voz?: { narracao: string; takes: string };
   broll?: { trechos_limpos: number; fora: number; motion_graphics: string[] };
-  montagem?: { arquivo: string; minutos: number; blocos: number; transicoes: Record<string, number>; lufs: number; feito: string };
+  montagem?: { arquivo: string; minutos: number; blocos: number; transicoes: Record<string, number>; lufs: number; feito: string;
+    resolucao?: string; avatar?: number; split?: number };
 }
 
 export type TipoPlano = "avatar" | "split" | "broll";

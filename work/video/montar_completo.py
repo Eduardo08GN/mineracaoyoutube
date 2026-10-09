@@ -59,7 +59,7 @@ class Banco:
     """Os trechos aprovados por etiqueta; nunca o mesmo trecho duas vezes no video.
     ⛔ so' trechos JA' revisados contra texto (revisar_texto.py), e nenhum de fonte com texto/selo/marca d'agua."""
     def __init__(self):
-        self.por_tag, self.fora = {}, 0
+        self.por_tag, self.fora, self.sem_olho = {}, 0, 0
         for pasta in (TERC, os.path.join(AQUI, "fatia01", "terceiros")):
             arq = os.path.join(pasta, "aprovados.json")
             if not os.path.exists(arq): continue
@@ -68,6 +68,8 @@ class Banco:
             segundas = {}
             for c in sorted(ap, key=lambda c: -float(c.get("acao") or 0)):        # mais acao primeiro
                 if "texto" not in c or fonte(c["clipe"]) in sujas or c.get("olho"): self.fora += 1; continue
+                # ⛔ (09/10) so' entra o que passou pela revisao no olho ANTES da montagem (revisar_olho.py aprovar)
+                if not c.get("olho_ok") and not os.environ.get("SEM_OLHO"): self.fora += 1; self.sem_olho += 1; continue
                 # ⛔ (Eduardo, 09/10) b-roll SEMPRE com acao: trecho parado (abaixo de ACAO_MIN %) nao entra
                 if float(c.get("acao") or 0) < ACAO_MIN: self.fora += 1; continue
                 tag = c.get("tag") or "basilikum"

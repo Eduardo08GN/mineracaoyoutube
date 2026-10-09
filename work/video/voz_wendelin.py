@@ -63,27 +63,62 @@ def clonar():
 EDGE_VOZ, EDGE_RATE, EDGE_PITCH = "de-DE-ConradNeural", "-10%", "-6Hz"  # (Eduardo, 09/10) o NOSSO ritmo, ~130 ppm
 
 
+def _sintetizar(texto, mp3, pal):
+    """edge-tts em stream: grava o mp3 e os limites de cada palavra [(palavra, ini, fim)] em segundos (offset/duration
+    vem em unidades de 100 ns)."""
+    import asyncio, edge_tts
+
+    async def go():
+        c = edge_tts.Communicate(texto, EDGE_VOZ, rate=EDGE_RATE, pitch=EDGE_PITCH, boundary="WordBoundary")
+        ws = []
+        with open(mp3, "wb") as f:
+            async for ch in c.stream():
+                if ch["type"] == "audio": f.write(ch["data"])
+                elif ch["type"] == "WordBoundary":
+                    a = ch["offset"] / 1e7
+                    ws.append((ch["text"], round(a, 3), round(a + ch["duration"] / 1e7, 3)))
+        return ws
+    ws = asyncio.run(go())
+    json.dump(ws, open(pal, "w", encoding="utf-8"), ensure_ascii=False)
+
+
 def narrar(texto, saida, velocidade=None):
     """Um trecho da narracao em wav 48 kHz mono. ⭐ (08/10, MiniMax sem saldo) voz neural gratis da
     Microsoft (edge-tts, de-DE-ConradNeural), a MESMA voz para a qual o audio dos takes do Veo e'
-    convertido (OpenVoice), entao avatar e narracao soam como uma pessoa so'. Cache pelo texto."""
-    import asyncio, edge_tts
+    convertido (OpenVoice), entao avatar e narracao soam como uma pessoa so'. Cache pelo texto.
+    ⭐ (09/10, velocidade) grava junto `<saida>.palavras.json` com o tempo de cada palavra (o proprio edge-tts informa):
+    a montagem corta nos vaos entre palavras sem precisar do Whisper. O silencio das pontas e' cortado pelas palavras."""
     os.makedirs(CACHE, exist_ok=True)
     h = hashlib.sha1(f"{EDGE_VOZ}|{EDGE_RATE}|{EDGE_PITCH}|{texto}".encode()).hexdigest()[:16]
-    c = os.path.join(CACHE, h + ".mp3")
-    if not os.path.exists(c):
+    c, pal = os.path.join(CACHE, h + ".mp3"), os.path.join(CACHE, h + ".palavras.json")
+    if not (os.path.exists(c) and os.path.exists(pal)):
         for t in range(4):
             try:
-                asyncio.run(edge_tts.Communicate(texto, EDGE_VOZ, rate=EDGE_RATE, pitch=EDGE_PITCH).save(c)); break
+                _sintetizar(texto, c, pal); break
             except Exception:                                                       # noqa: BLE001
                 time.sleep(3 * (t + 1))
         else:
             raise SystemExit("edge-tts falhou")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", c, "-af",
-                    "silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
-                    "silenceremove=start_periods=1:start_threshold=-45dB,areverse",
-                    "-ac", "1", "-ar", "48000", saida], check=True)
+    ws = json.load(open(pal, encoding="utf-8"))
+    if ws:
+        a = max(0.0, ws[0][1] - 0.06)
+        b = ws[-1][2] + 0.12
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-i", c,
+                        "-ac", "1", "-ar", "48000", saida], check=True)
+        ws = [(w, round(x - a, 3), round(y - a, 3)) for w, x, y in ws]
+    else:
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", c, "-af",
+                        "silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
+                        "silenceremove=start_periods=1:start_threshold=-45dB,areverse",
+                        "-ac", "1", "-ar", "48000", saida], check=True)
+    json.dump(ws, open(saida + ".palavras.json", "w", encoding="utf-8"), ensure_ascii=False)
     return saida
+
+
+def palavras_de(wav):
+    """Os tempos de palavra que narrar() gravou ao lado do wav, ou None."""
+    try: return [tuple(x) for x in json.load(open(wav + ".palavras.json", encoding="utf-8"))]
+    except (OSError, ValueError): return None
 
 
 if __name__ == "__main__":

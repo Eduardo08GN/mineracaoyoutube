@@ -115,8 +115,11 @@ CTA = [("Was in unserem Kloster über die Jahre gesammelt wurde,", 0.22, None),
        ("Ich werde es nicht noch einmal erwähnen.", 0.0, None)]
 
 # ⛔ o grao de filme a crf 17 sem teto dava ~80 Mbps (a fatia de 3 min com 1,9 GB e o disco cheio): teto de 25 Mbps
-VID = ["-c:v", "libx264", "-preset", "medium", "-crf", "20", "-maxrate", "8M", "-bufsize", "16M", "-pix_fmt", "yuv420p",
-       "-r", str(FPS)]
+# ⭐ (09/10, velocidade) VID e' o INTERMEDIARIO (plano, bloco, avatar, motion graphics): rapido e com folga de qualidade.
+#    A unica codificacao de entrega e' a da costura entre blocos (costura.VID). Antes cada plano era codificado 3-4 vezes
+#    em "medium".
+VID = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "15", "-pix_fmt", "yuv420p", "-r", str(FPS)]
+TRABALHOS = max(2, (os.cpu_count() or 4) // 3)          # planos renderizados ao mesmo tempo (o zoompan e' de 1 nucleo)
 AUD = ["-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2"]
 TOM_SALA = "anoisesrc=color=brown:amplitude=0.0025:r=48000"
 
@@ -236,10 +239,12 @@ def bloco_split(n, clipe, lado, texto, saida, avisos):
 
 def faixa_narrada(ns, man, nome):
     """UMA faixa com as frases do bloco (respiro curto entre elas). Devolve (wav, [(n, ini, fim)])."""
-    linhas, marcas, t = [], [], 0.0
+    linhas, marcas, t, ws = [], [], 0.0, []
     for i, n in enumerate(ns):
         w = voz.narrar(TEXTO_EXTRA.get(n) or man[n]["texto"], os.path.join(TMP, f"f{n:02d}.wav"))
         d = dur(w)
+        pw = voz.palavras_de(w) if hasattr(voz, "palavras_de") else None
+        ws = None if pw is None or ws is None else ws + [(x, a + t, b + t) for x, a, b in pw]
         gap = 0.0 if i == len(ns) - 1 else (RESPIRO_SECAO if man.get(ns[i + 1], {}).get("secao", 1) != man.get(n, {}).get("secao", 1) else RESPIRO)
         p = os.path.join(TMP, f"f{n:02d}_p.wav")
         ff("-i", w, "-af", f"apad=pad_dur={gap}", p)
@@ -248,13 +253,17 @@ def faixa_narrada(ns, man, nome):
     open(lst, "w").writelines(linhas)
     wav = os.path.join(TMP, nome + ".wav")
     ff("-f", "concat", "-safe", "0", "-i", lst, "-ac", "1", "-ar", "48000", wav)
+    if ws: PALAVRAS[wav] = ws                      # ⭐ (09/10) tempos de palavra do edge-tts: a grade nao chama o Whisper
     return wav, marcas
+
+
+PALAVRAS = {}          # wav da narracao -> [(palavra, ini, fim)] informado pelo edge-tts
 
 
 def grade_de_cortes(wav, marcas, visuais_livres):
     """[(ini, fim, n, visual)] — corte a ~4,2 s, no vao entre duas palavras, sem esperar a frase acabar."""
     total = dur(wav)
-    ws = palavras(wav)
+    ws = PALAVRAS.get(wav) or palavras(wav)
     vaos = [(ws[i][2] + ws[i + 1][1]) / 2 for i in range(len(ws) - 1)] + [total]
     frase_em = lambda t: next((n for n, a, b in marcas if a <= t < b + 0.3), marcas[-1][0])   # noqa: E731
     tomadas, t = [], 0.0
@@ -277,6 +286,7 @@ def com_respiro(wav, marcas):
     """PAD s de silencio antes e depois da narracao do bloco (as marcas andam junto)."""
     p = wav[:-4] + "_pad.wav"
     ff("-i", wav, "-af", f"adelay={int(PAD * 1000)}:all=1,apad=pad_dur={PAD}", p)
+    if wav in PALAVRAS: PALAVRAS[p] = [(x, a + PAD, b + PAD) for x, a, b in PALAVRAS[wav]]
     return p, [(n, a + PAD, b + PAD) for n, a, b in marcas]
 
 
@@ -294,14 +304,17 @@ def transicoes_internas(tomadas, assunto=lambda t: None):
 
 def render_tomadas(tomadas, trans, nome):
     """Cada tomada estendida pelos quadros da fusao que vem depois dela (a fusao come esse pedaco: a soma nao muda)."""
-    partes = []
+    partes, pedidos = [], []
     for i, (a, b, n, vis) in enumerate(tomadas):
         q = int(round(b * FPS)) - int(round(a * FPS))
         extra = trans[i][1] if i < len(trans) else 0
         if extra and vis[0] == "terc" and q + extra > int((dur(vis[1]) - vis[2]) * FPS): trans[i] = ("corte", 0); extra = 0
         p = os.path.join(TMP, f"{nome}_{i:02d}.mp4")
-        video(vis, (q + extra) / FPS, p)
-        partes.append(p)
+        pedidos.append((vis, (q + extra) / FPS, p)); partes.append(p)
+    # ⭐ (09/10, velocidade) os planos sao independentes: varios ffmpeg ao mesmo tempo
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=TRABALHOS) as ex:
+        list(ex.map(lambda r: video(*r), pedidos))
     return partes
 
 
@@ -309,10 +322,10 @@ def montar_narrado(wav, tomadas, nome, saida, assunto=lambda t: None):
     trans = transicoes_internas(tomadas, assunto)
     partes = render_tomadas(tomadas, trans, nome)
     vid = os.path.join(TMP, nome + "_v.mp4")
-    costura.costurar_video(partes, trans, vid, TMP, nome)
+    costura.costurar_video(partes, trans, vid, TMP, nome, vid_args=VID)
     ff("-i", vid, "-i", wav, "-f", "lavfi", "-i", TOM_SALA,
        "-filter_complex", "[1:a]apad[n];[n][2:a]amix=inputs=2:duration=first:normalize=0[a]",
-       "-map", "0:v", "-map", "[a]", *VID, *AUD, "-t", f"{dur(wav):.3f}", saida)
+       "-map", "0:v", "-map", "[a]", "-c:v", "copy", *AUD, "-t", f"{dur(wav):.3f}", saida)       # video ja' pronto: copia
     return trans
 
 

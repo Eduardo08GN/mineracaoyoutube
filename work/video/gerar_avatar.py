@@ -16,7 +16,7 @@ sys.path.insert(0, AQUI)
 ESTADO = os.path.join(AQUI, "completo", "estado_avatar.json")
 MODELOS = {"gratis": ("Veo 3.1 - Lite [Lower Priority]", 0), "pago": ("Veo 3.1 - Lite", 5)}
 # verba so' para o pago (autorizacao do Eduardo a cada producao): base = saldo no inicio, limite = creditos liberados
-VERBA = {"base": 23730, "limite": 0}
+VERBA = {"base": None, "limite": 0}       # base = o saldo no inicio de cada rodada (o enviar le)
 
 # onde ele esta' (o lugar, sem o enquadramento)
 CENARIO = {
@@ -91,8 +91,14 @@ def frases():
     return {f["n"]: f for f in json.load(open(os.path.join(AQUI, "completo", "frases.json"), encoding="utf-8"))}
 
 
+# ⭐ (09/10) uso generico pelo projeto_video.py: FALAS = {take: texto}, PASTA_TAKES = onde baixar, ESTADO = estado do projeto
+FALAS = None
+PASTA_TAKES = os.path.join(AQUI, "completo", "avatar")
+
+
 def fala_de(k):
     """O texto que o monge diz no take. ⛔ sem o travessao: no a05/a10 ele virou gaguejo ("Po, Petersilie")."""
+    if FALAS is not None: return FALAS[k].replace(" – ", " ").replace("–", " ")
     return " ".join(frases()[n]["texto"] for n in TAKES[k][1]).replace(" – ", " ")
 
 
@@ -216,6 +222,8 @@ def recarregar():
 def enviar(so=None, modelo="gratis"):
     import random
     custo = MODELOS[modelo][1]
+    if VERBA["base"] is None: VERBA["base"] = saldo()                 # gratis: qualquer queda a partir daqui PARA tudo
+    print("saldo no inicio:", VERBA["base"], "| modelo:", MODELOS[modelo][0], flush=True)
     est = carregar()
     for k in TAKES:
         if so and k not in so: continue
@@ -279,7 +287,7 @@ def baixar():
     s, c = fi.conectar()
     try:
         for k, v in est.items():
-            arq = os.path.join(AQUI, "completo", "avatar", k + ".mp4")
+            arq = os.path.join(PASTA_TAKES, k + ".mp4")
             if not v.get("id") or os.path.exists(arq): continue
             st = fh.poll(s, [v["id"]]).get(v["id"])
             if st != "pronto": print(f"  {k}: {st}", flush=True); continue

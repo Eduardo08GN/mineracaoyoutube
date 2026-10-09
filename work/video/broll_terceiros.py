@@ -10,6 +10,8 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 PASTA = os.environ.get("TERC_PASTA") or os.path.join(AQUI, "fatia01", "terceiros")
 SRC, CLIPS = os.path.join(PASTA, "src"), os.path.join(PASTA, "clips")
 REGRA = {"max_s_trecho": 8.0, "max_fracao_por_fonte": 0.10}
+# ⛔ (09/10) b-roll SEMPRE com acao: 1% deixou passar vaso de lavanda parado (1,55%); 3% e' o minimo
+ACAO_MIN = 3.0
 MIN_S, ALVO_S = 3.0, 5.0
 BUSCAS = ["Basilikum aus dem Supermarkt teilen umtopfen", "Basilikum vermehren teilen Wurzelballen",
           "Kräuter im Topf richtig gießen", "Kräuter umtopfen Anleitung Tontopf",
@@ -101,10 +103,15 @@ def candidatos(fonte, q, n=12):
     raise ValueError(fonte)
 
 
-def baixar_fonte(fonte, url, alvo):
-    extra = (["--cookies", COOKIES] if COOKIES else []) + ["--js-runtimes", "node", "--remote-components", "ejs:github"]         if fonte == "youtube" else []
+def baixar_fonte(fonte, url, alvo, dur=0):
+    """⭐ (09/10, velocidade) video longo (> 7 min): baixa so' de 1:00 a 6:00 — usamos no maximo 10% da fonte e o recorte
+    ja' pula abertura e encerramento; o servidor do Bilibili chega a 100 KB/s."""
+    cookies = os.environ.get("YT_COOKIES") or COOKIES
+    extra = (["--cookies", cookies] if cookies else []) + ["--js-runtimes", "node", "--remote-components", "ejs:github"]         if fonte == "youtube" else []
+    # ⛔ no Rutube (HLS) o recorte por trecho trava no ffmpeg (18 min parado num trecho de 5): la' baixa inteiro (~2 min)
+    if dur > 420 and fonte != "rutube": extra += ["--download-sections", "*60-360"]
     return sh("yt-dlp", *extra, "-f", FORMATO_720, "-S", "res:720", "--remux-video", "mp4", "-o", alvo, "--no-playlist", url,
-              timeout=1800)
+              timeout=600)
 
 
 def buscar(fontes=None):
@@ -153,9 +160,24 @@ def quadro(arq, t, w=640):
 _HAAR, _OCR = [], []
 
 
-def tem_rosto(img):
+# ⭐ (09/10) YuNet (rede do OpenCV, cv2.FaceDetectorYN) no lugar do Haar: no teste da OpenCV achou 37 rostos onde o Haar
+#    achou 7, e pega perfil e rosto parcial — o Haar deixou passar 11 rostos no banco do video do Klostergarten.
+#    O modelo (~230 KB) fica em work/video/modelos/; sem ele, cai no Haar de antes (e avisa uma vez).
+YUNET = os.path.join(AQUI, "modelos", "face_detection_yunet_2023mar.onnx")
+_YUNET = []
+
+
+def tem_rosto(img, limiar=0.6):
     import cv2
+    if os.path.exists(YUNET):
+        h, w = img.shape[:2]
+        if not _YUNET: _YUNET.append(cv2.FaceDetectorYN.create(YUNET, "", (w, h), limiar, 0.3, 5000))
+        det = _YUNET[0]; det.setInputSize((w, h))
+        _, faces = det.detect(img)
+        # rosto pequeno demais (multidao ao fundo, < 2,5% da altura) nao conta
+        return faces is not None and any(f[3] >= 0.025 * h for f in faces)
     if not _HAAR:
+        print("  ⚠ sem o modelo YuNet em", YUNET, "- usando o Haar (deixa passar perfil)", flush=True)
         _HAAR.extend(cv2.CascadeClassifier(cv2.data.haarcascades + x) for x in
                      ("haarcascade_frontalface_default.xml", "haarcascade_profileface.xml"))
     g = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -196,40 +218,54 @@ def acao(arq, a, b, fps=8):
     return round(float(np.mean(v)), 2) if v else 0.0
 
 
-def recortar():
+def _recortar_fonte(f):
+    """Os trechos aprovados de UMA fonte (roda num processo a parte: o recorte e' o gargalo de CPU da etapa)."""
+    arq = os.path.join(SRC, f); vid = f[:-4]
+    total = dur(arq)
+    if total <= 0: return vid, [], "sem duracao"
+    teto = REGRA["max_fracao_por_fonte"] * total
+    cs = [0.0] + cortes(arq) + [total]
+    tomadas = [(a, b) for a, b in zip(cs[:-1], cs[1:]) if b - a >= MIN_S and a > 8 and b < total - 8]  # sem abertura/encerramento
+    cand = []
+    for a, b in tomadas:
+        m = (a + b) / 2; x0 = max(a + .2, m - ALVO_S / 2); x1 = min(b - .2, x0 + min(ALVO_S, REGRA["max_s_trecho"]))
+        if x1 - x0 < MIN_S: continue
+        imgs = [quadro(arq, t) for t in (x0 + .3, (x0 + x1) / 2, x1 - .3)]
+        if any(i is None for i in imgs): continue
+        if any(tem_rosto(i) for i in imgs): continue
+        if any(tem_texto(i) for i in imgs): continue
+        ac = acao(arq, x0, x1)
+        if ac < ACAO_MIN: continue
+        cand.append((ac, x0, x1))
+    try: tag = json.load(open(os.path.join(SRC, vid + ".json"), encoding="utf-8")).get("tag", "")
+    except Exception: tag = ""                                                      # noqa: BLE001
+    usado, saidas = 0.0, []
+    for ac, x0, x1 in sorted(cand, reverse=True):
+        if usado + (x1 - x0) > teto: continue
+        usado += x1 - x0
+        saida = os.path.join(CLIPS, f"{vid}_{int(x0)}.mp4")
+        sh("ffmpeg", "-v", "error", "-y", "-ss", f"{x0:.2f}", "-t", f"{x1 - x0:.2f}", "-i", arq, "-an",
+           "-vf", "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,fps=30", "-c:v", "libx264", "-preset", "veryfast",
+           "-crf", "17", saida)                                      # ⛔ (09/10) nada acima de 720p
+        saidas.append({"clipe": os.path.basename(saida), "fonte": vid, "ini": round(x0, 2), "dur": round(x1 - x0, 2), "acao": ac, "tag": tag})
+    return vid, saidas, f"{len(tomadas)} tomadas, {len(cand)} aprovadas, usei {usado:.0f}s de {teto:.0f}s permitidos"
+
+
+def recortar(processos=3):
+    """⭐ (09/10) incremental (os trechos ja' aprovados e revisados ficam; so' as fontes novas sao cortadas) e em
+    paralelo (3 fontes ao mesmo tempo)."""
     os.makedirs(CLIPS, exist_ok=True)
-    aprovados = []
-    for f in sorted(os.listdir(SRC)):
-        if not f.endswith(".mp4"): continue
-        arq = os.path.join(SRC, f); vid = f[:-4]
-        total = dur(arq)
-        if total <= 0: continue
-        teto = REGRA["max_fracao_por_fonte"] * total
-        cs = [0.0] + cortes(arq) + [total]
-        tomadas = [(a, b) for a, b in zip(cs[:-1], cs[1:]) if b - a >= MIN_S and a > 8 and b < total - 8]  # sem abertura/encerramento
-        cand = []
-        for a, b in tomadas:
-            m = (a + b) / 2; x0 = max(a + .2, m - ALVO_S / 2); x1 = min(b - .2, x0 + min(ALVO_S, REGRA["max_s_trecho"]))
-            if x1 - x0 < MIN_S: continue
-            imgs = [quadro(arq, t) for t in (x0 + .3, (x0 + x1) / 2, x1 - .3)]
-            if any(i is None for i in imgs): continue
-            if any(tem_rosto(i) for i in imgs): continue
-            if any(tem_texto(i) for i in imgs): continue
-            ac = acao(arq, x0, x1)
-            if ac < 1.0: continue
-            cand.append((ac, x0, x1))
-        usado = 0.0
-        for ac, x0, x1 in sorted(cand, reverse=True):
-            if usado + (x1 - x0) > teto: continue
-            usado += x1 - x0
-            saida = os.path.join(CLIPS, f"{vid}_{int(x0)}.mp4")
-            sh("ffmpeg", "-v", "error", "-y", "-ss", f"{x0:.2f}", "-t", f"{x1 - x0:.2f}", "-i", arq, "-an",
-               "-vf", "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30", "-c:v", "libx264", "-crf", "18", saida)
-            try: tag = json.load(open(os.path.join(SRC, vid + ".json"), encoding="utf-8")).get("tag", "")
-            except Exception: tag = ""                                                  # noqa: BLE001
-            aprovados.append({"clipe": os.path.basename(saida), "fonte": vid, "ini": round(x0, 2), "dur": round(x1 - x0, 2), "acao": ac, "tag": tag})
-        print(f"  {vid}: {len(tomadas)} tomadas, {len(cand)} aprovadas, usei {usado:.0f}s de {teto:.0f}s permitidos", flush=True)
-    json.dump(aprovados, open(os.path.join(PASTA, "aprovados.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    arq_ap = os.path.join(PASTA, "aprovados.json")
+    aprovados = [c for c in (json.load(open(arq_ap, encoding="utf-8")) if os.path.exists(arq_ap) else [])
+                 if os.path.exists(os.path.join(CLIPS, c["clipe"]))]
+    feitos = {c["fonte"] for c in aprovados}
+    novas = [f for f in sorted(os.listdir(SRC)) if f.endswith(".mp4") and f[:-4] not in feitos]
+    from concurrent.futures import ProcessPoolExecutor
+    with ProcessPoolExecutor(max_workers=processos) as ex:
+        for vid, saidas, msg in ex.map(_recortar_fonte, novas):
+            aprovados += saidas
+            print(f"  {vid}: {msg}", flush=True)
+    json.dump(aprovados, open(arq_ap, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     folha(aprovados)
 
 
