@@ -24,6 +24,7 @@ import fonte as _fonte                                                      # no
 import persona as _persona                                                  # noqa: E402
 import projetos as _proj                                                    # noqa: E402
 import roteiro as _rot                                                      # noqa: E402
+import pipeline_video as _pipe                                              # noqa: E402
 
 ARQ_AJUSTES = os.path.join(config.DATA, "estudio.json")
 AJUSTES_PADRAO = {"perfil_dolphin": "869356248"}    # "12 Ivone": a sessao do YouTube que o Eduardo autorizou (08/10)
@@ -81,6 +82,17 @@ class Estudio:
     # ── leitura ──
     def lista(self):
         return _proj.lista(self.base)
+
+    def pipeline(self):
+        return _pipe.pipeline()
+
+    def abrir_video(self, pid):
+        """Abre o video pronto no player do Windows (so' o arquivo gravado em producao.montagem do projeto)."""
+        p = _proj.carregar(pid, self.base)
+        arq = ((p.get("producao") or {}).get("montagem") or {}).get("arquivo", "")
+        if not arq or not os.path.isfile(arq): raise KeyError("o vídeo pronto não está no disco")
+        os.startfile(arq)                                                           # noqa: S606
+        return {"ok": True, "arquivo": arq}
 
     def projeto(self, pid):
         p = _proj.carregar(pid, self.base)

@@ -19,7 +19,8 @@ import config                                                               # no
 PASTA = os.path.join(config.DATA, "projetos")
 _trava = threading.RLock()
 
-# as 8 etapas do video; a fase 1 faz as 3 primeiras
+# as 8 etapas do video; o painel faz as 3 primeiras, as do meio rodam nos scripts de work/video
+# (motor/pipeline_video.py) e gravam o resultado em p["producao"][etapa]
 ETAPAS = [
     ("fonte", "Fonte"), ("roteiro", "Roteiro"), ("planos", "Planos"), ("avatar", "Avatar"),
     ("voz", "Voz"), ("broll", "B-roll"), ("montagem", "Montagem"), ("miniatura", "Miniatura"),
@@ -88,8 +89,9 @@ def registrar(pid, texto, base=PASTA):
 def etapas(p):
     """[{id, nome, estado}] — estado: pronta | pendente | bloqueada | futura (fases seguintes)."""
     f = p.get("fonte") or {}
+    pr = p.get("producao") or {}
     feito = {"fonte": bool(f.get("pronta")), "roteiro": bool((p.get("roteiro") or {}).get("secoes")),
-             "planos": bool(p.get("planos"))}
+             "planos": bool(p.get("planos")), **{k: bool(pr.get(k)) for k in ("avatar", "voz", "broll", "montagem")}}
     saida, antes_ok = [], True
     for k, nome in ETAPAS:
         if k not in feito: estado = "futura"
@@ -107,7 +109,8 @@ def resumo(p):
     return {"id": p["id"], "nome": p["nome"], "persona": p["persona"], "idioma": p["idioma"], "criado": p["criado"],
             "op_id": p.get("op_id"), "thumb": (p.get("fonte") or {}).get("thumb", ""),
             "palavras": r.get("palavras", 0), "minutos": r.get("minutos", 0), "n_planos": len(pl),
-            "etapas": etapas(p), "trabalhando": p.get("trabalhando", "")}
+            "etapas": etapas(p), "trabalhando": p.get("trabalhando", ""),
+            "pronto": bool((p.get("producao") or {}).get("montagem"))}
 
 
 def lista(base=PASTA):
@@ -135,8 +138,9 @@ def _autoteste():
     caso("o nome do projeto e' o titulo reescrito", p["nome"].startswith("Klosterarznei"))
     caso("o mesmo titulo no mesmo dia ganha outro id", criar(op, per, base)["id"].endswith("-2"))
     e = {x["id"]: x["estado"] for x in etapas(p)}
-    caso("⭐ etapas derivadas: fonte pendente, roteiro bloqueado, avatar futuro",
-         e["fonte"] == "pendente" and e["roteiro"] == "bloqueada" and e["avatar"] == "futura")
+    caso("⭐ etapas derivadas: fonte pendente, roteiro bloqueado, avatar bloqueado, miniatura futura",
+         e["fonte"] == "pendente" and e["roteiro"] == "bloqueada" and e["avatar"] == "bloqueada"
+         and e["miniatura"] == "futura")
     alterar(p["id"], lambda q: q["fonte"].update(pronta=True), base)
     caso("fonte pronta libera o roteiro", {x["id"]: x["estado"] for x in etapas(carregar(p["id"], base))}["roteiro"] == "pendente")
     registrar(p["id"], "fonte lida", base)

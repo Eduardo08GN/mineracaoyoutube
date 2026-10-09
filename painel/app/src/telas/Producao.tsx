@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Clapperboard, Flame, Play } from "lucide-react";
-import { enviar, obter, type Oportunidade, type ResumoVideo } from "../api";
+import { Clapperboard, Flame, Play, Workflow } from "lucide-react";
+import { enviar, obter, type Oportunidade, type Pipeline, type ResumoVideo } from "../api";
 import type { MIN } from "../estado";
 import { Bandeira, Girando, Nota, Rosto, Vazio, useAcao } from "../componentes/base";
 import { link } from "../rota";
@@ -93,6 +93,41 @@ function Comecar({ m }: { m: MIN }) {
   );
 }
 
+/** O pipeline como roda hoje: cada etapa, onde roda e as regras que valem (motor/pipeline_video.py). */
+function PipelineAtual({ m }: { m: MIN }) {
+  const [p, setP] = useState<Pipeline | null>(null);
+  useEffect(() => { obter<Pipeline>("/api/videos/pipeline").then(setP).catch((e) => m.avisar(String(e), "erro")); }, [m.avisar]);
+  if (!p) return null;
+  return (
+    <section className="panel bloco pipeline">
+      <div className="linha-titulo">
+        <h3><Workflow size={18} aria-hidden /> O pipeline de produção</h3>
+        <span className="meta">atualizado em {p.atualizado}</span>
+      </div>
+      <ol className="pipe-etapas">
+        {p.etapas.map((e, i) => (
+          <li key={e.id}>
+            <details open={e.id === "avatar"}>
+              <summary>
+                <span className="pipe-num">{i + 1}</span>
+                <b>{e.nome}</b>
+                <span className="meta pipe-onde">{e.onde}</span>
+                {e.regras.length > 0 && <span className="pipe-n">{e.regras.length} regra{e.regras.length > 1 ? "s" : ""}</span>}
+              </summary>
+              <p className="pipe-faz">{e.faz}</p>
+              {e.regras.length > 0 && (
+                <ul className="pipe-regras">
+                  {e.regras.map((r, j) => <li key={j} className={r.startsWith("⭐") ? "nova" : ""}>{r.replace(/^⭐\s*/, "")}</li>)}
+                </ul>
+              )}
+            </details>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 export function Producao({ m }: { m: MIN }) {
   const [vs, setVs] = useState<ResumoVideo[] | null>(null);
   useEffect(() => {
@@ -105,8 +140,8 @@ export function Producao({ m }: { m: MIN }) {
           <p className="eyebrow">Produção</p>
           <h1>Do viral antigo ao vídeo, <em>no molde do Elias.</em></h1>
           <p className="lead">Cada vídeo parte de uma oportunidade: o Claude lê o viral original, tira o mecanismo, escreve o roteiro
-            no molde medido nos 12 vídeos do Elias e corta a narração em planos de ~4 s (avatar, tela dividida e b-roll).
-            As próximas fases trazem o avatar no Veo, a voz, o b-roll e a montagem.</p>
+            no molde medido nos 12 vídeos do Elias e corta a narração em planos de ~4 s. Depois vêm o avatar no Veo, a voz,
+            o b-roll de terceiros revisado no olho e a montagem com a costura de montador, até o vídeo pronto.</p>
         </div>
       </div>
       {vs && vs.length > 0 && (
@@ -114,6 +149,7 @@ export function Producao({ m }: { m: MIN }) {
       )}
       {vs && vs.length === 0 && <Vazio titulo="Nenhum vídeo ainda" texto="Escolha uma oportunidade abaixo para começar." />}
       <Comecar m={m} />
+      <PipelineAtual m={m} />
     </div>
   );
 }

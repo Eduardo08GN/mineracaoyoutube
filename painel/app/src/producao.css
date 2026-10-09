@@ -126,3 +126,25 @@
   .perfil-campos { grid-template-columns: 1fr; }
   .lp { grid-template-columns: 1fr; }
 }
+
+/* o pipeline de producao (motor/pipeline_video.py) */
+.pipe-etapas { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pipe-etapas details { border: 1px solid var(--ow-line); border-radius: var(--ow-radius); background: var(--ow-bg-deep); padding: 10px 12px; }
+.pipe-etapas summary { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-wrap: wrap; }
+.pipe-num { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 12px/1 var(--ow-font-mono);
+  background: var(--ow-line-strong); }
+.pipe-onde { font-family: var(--ow-font-mono); font-size: 11px; }
+.pipe-n { margin-left: auto; font: 500 11px/1 var(--ow-font-mono); color: var(--ow-sun); }
+.pipe-faz { margin: 10px 0 6px; }
+.pipe-regras { margin: 0; padding-left: 18px; display: grid; gap: 5px; }
+.pipe-regras li.nova { color: var(--ow-sun); }
+.pipe-regras li.nova::marker { content: "\2605  "; }
+.producao-feita { display: grid; gap: 14px; }
+.producao-feita .pronto { display: grid; gap: 6px; justify-items: start; padding: 12px; border: 1px solid rgba(95, 214, 206, .35);
+  border-radius: var(--ow-radius); background: var(--ow-bg-deep); }
+.producao-feita .caminho { font: 11px/1.4 var(--ow-font-mono); word-break: break-all; opacity: .8; }
+.pf-etapas { margin: 0; display: grid; gap: 8px; }
+.pf-etapas div { display: grid; grid-template-columns: 90px 1fr; gap: 10px; }
+.pf-etapas dt { font: 600 12px/1.4 var(--ow-font-mono); color: var(--ow-accent); }
+.pf-etapas dd { margin: 0; }
+@media (max-width: 640px) { .pf-etapas div { grid-template-columns: 1fr; gap: 2px; } }

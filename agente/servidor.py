@@ -279,6 +279,17 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def salvar_ajustes_estudio(c: Campos):
         return _estudio().salvar_ajustes(**c.campos)
 
+    @app.get("/api/videos/pipeline")
+    def pipeline_video():
+        return _estudio().pipeline()
+
+    @app.post("/api/videos/{pid}/abrir")
+    def abrir_video(pid: str):
+        try:
+            return _estudio().abrir_video(pid)
+        except KeyError as e:
+            raise HTTPException(404, str(e))
+
     @app.get("/api/videos/{pid}")
     def video(pid: str):
         return _estudio().projeto(pid)

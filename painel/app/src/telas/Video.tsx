@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Check, ExternalLink, FileText, Film, ListTree, Pencil, RefreshCw, Search, X } from "lucide-react";
+import { ArrowLeft, Check, Clapperboard, ExternalLink, FileText, Film, ListTree, Pencil, Play, RefreshCw, Search, X } from "lucide-react";
 import { abrirLink, capa, enviar, linkVideo, obter, type PerfilVideo, type PlanoVideo, type SecaoRoteiro, type TipoPlano, type Video } from "../api";
 import type { MIN } from "../estado";
 import { Bandeira, Girando, Rosto, Vazio, useAcao } from "../componentes/base";
@@ -191,6 +191,36 @@ function Planos({ v }: { v: Video }) {
   );
 }
 
+const NOME_TRANS: Record<string, string> = { fusao_curta: "fusões", papel: "mergulhos no papel", luz: "clarões de seção", fusao: "fusões" };
+
+/** As etapas que rodam fora do painel (work/video): avatar, voz, b-roll, montagem — e o vídeo pronto. */
+function ProducaoFeita({ v, m }: { v: Video; m: MIN }) {
+  const pr = v.producao ?? {};
+  const { rodando, rodar } = useAcao(m.avisar);
+  const mt = pr.montagem;
+  return (
+    <div className="producao-feita">
+      {mt && (
+        <div className="pronto">
+          <span className="label">Vídeo pronto</span>
+          <strong>{mt.minutos.toFixed(1)} min · {mt.blocos} blocos · {mt.lufs} LUFS</strong>
+          <span className="meta">{Object.entries(mt.transicoes).map(([k, n]) => `${n} ${NOME_TRANS[k] ?? k}`).join(" · ")} · montado {mt.feito}</span>
+          <code className="caminho">{mt.arquivo}</code>
+          <button className="btn btn-primary btn-sm" disabled={!!rodando}
+                  onClick={() => rodar("abrir", () => enviar(`/api/videos/${encodeURIComponent(v.id)}/abrir`, {}), "Abrindo no player…")}>
+            {rodando === "abrir" ? <Girando /> : <Play size={14} aria-hidden />}Assistir
+          </button>
+        </div>
+      )}
+      <dl className="pf-etapas">
+        <div><dt>Avatar</dt><dd>{pr.avatar ? `${pr.avatar.takes} takes novos (${pr.avatar.entradas} entradas do monge) · ${pr.avatar.creditos} créditos · ${pr.avatar.modelo}` : "—"}</dd></div>
+        <div><dt>Voz</dt><dd>{pr.voz ? `narração ${pr.voz.narracao} · takes ${pr.voz.takes}` : "—"}</dd></div>
+        <div><dt>B-roll</dt><dd>{pr.broll ? `${pr.broll.trechos_limpos} trechos limpos (${pr.broll.fora} tirados no olho) · motion graphics: ${pr.broll.motion_graphics.join(", ")}` : "—"}</dd></div>
+      </dl>
+    </div>
+  );
+}
+
 export function VideoProjeto({ m, id }: { m: MIN; id: string }) {
   const [v, setV] = useState<Video | null>(null);
   const [erro, setErro] = useState("");
@@ -247,6 +277,12 @@ export function VideoProjeto({ m, id }: { m: MIN; id: string }) {
         {v.trabalhando === "planos" && <p className="meta"><Girando /> Cortando a narração e descrevendo as cenas…</p>}
         {v.planos.length ? <Planos v={v} /> : est.roteiro === "pronta" && v.trabalhando !== "planos" ?
           <p>Sem planos (o roteiro mudou ou ainda não foram montados).</p> : null}
+      </section>
+
+      <section className="panel bloco">
+        <div className="linha-titulo"><h3><Clapperboard size={18} aria-hidden /> 4–7. Avatar, voz, b-roll e montagem</h3></div>
+        {v.producao && Object.keys(v.producao).length ? <ProducaoFeita v={v} m={m} /> :
+          <p className="meta">Estas etapas rodam nos scripts de <code>work/video</code> (veja o pipeline na aba Produção) e gravam o resultado aqui.</p>}
       </section>
 
       {v.registro.length > 0 && (

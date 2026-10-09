@@ -292,6 +292,19 @@ export interface ResumoVideo {
   n_planos: number;
   etapas: EtapaVideo[];
   trabalhando: string;
+  pronto: boolean;
+}
+
+/** O pipeline de producao como roda hoje (motor/pipeline_video.py): etapas, onde rodam e as regras. */
+export interface EtapaPipeline { id: string; nome: string; onde: string; faz: string; regras: string[] }
+export interface Pipeline { atualizado: string; etapas: EtapaPipeline[] }
+
+/** O que as etapas do meio (fora do painel) gravaram no projeto. */
+export interface Producao {
+  avatar?: { takes: number; entradas: number; creditos: number; modelo: string };
+  voz?: { narracao: string; takes: string };
+  broll?: { trechos_limpos: number; fora: number; motion_graphics: string[] };
+  montagem?: { arquivo: string; minutos: number; blocos: number; transicoes: Record<string, number>; lufs: number; feito: string };
 }
 
 export type TipoPlano = "avatar" | "split" | "broll";
@@ -345,6 +358,7 @@ export interface Video {
   proporcoes: Record<TipoPlano, number>;
   trabalhando: string;
   na_fila: string[];
+  producao?: Producao;
 }
 
 // A senha da sessao chega na URL (?t=...). Guardada na aba e tirada da barra de endereco.
