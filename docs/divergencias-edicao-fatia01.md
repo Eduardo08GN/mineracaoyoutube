@@ -107,3 +107,18 @@ O Eduardo viu a v3 e apontou três problemas: "cortes secos e amadores", texto s
   (mãos regando, cortando, plantando, carregando), câmera na mão, e quadro FINAL diferente do inicial
   (o estado depois da ação), senão o clipe só aproxima e volta.
 - **O avatar a cada ~20 s (2)** precisa de mais takes de fala: cada um é uma geração do Veo.
+
+## O veredito do Eduardo sobre as 11 divergências (09/10)
+
+| # | Divergência | Veredito | Virou regra em `motor/pipeline_video.py` |
+|---|---|---|---|
+| 1 | B-roll sem ação | **errou feio** | B-roll sempre com ação; trecho parado não entra (portão corta, não só avisa) |
+| 2 | O avatar some | **errou feio** | Avatar a cada 15–25 s no vídeo inteiro |
+| 4 | Enquadramento do avatar | ser criativo | Ângulos e planos variados, às vezes corpo inteiro |
+| 5 | Tela dividida | ok se bem enquadrada | Faixa de ~1/4 com o rosto inteiro e centrado |
+| 6 | CTA | nada a fazer | Fica como está |
+| 7 | Imagem repetida | **errou feio** | Nunca a mesma imagem duas vezes (acabou a 2ª metade do trecho) |
+| 8 | Pouca variedade | **errou feio** | Alternar geral / médio / fechado / foto antiga |
+| 9 | Corte curto demais | **errou feio** | Nenhum plano abaixo de 2,2 s |
+| 10 | Imagem polida demais | seguir a linha do Elias | Imagem natural e apagada |
+| 11 | Fala lenta | prefere a nossa | Ritmo nosso (Conrad -10%), sem acelerar |
