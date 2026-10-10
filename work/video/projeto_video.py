@@ -514,7 +514,17 @@ def bloco_narrado(run, nome, banco, rel, mf):
             if tomadas and y - x < mf.MIN_T:
                 pa, _pb, pn, pv = tomadas[-1]; tomadas[-1] = (pa, y, pn, pv); continue
             tomadas.append((x, y, pl["n"], banco.pegar(pl["n"], rel)))
+    # ⭐ regra dos 8 s: o 1o plano pode ser a SOBRA do take do avatar (o monge ouvindo, em plano aberto). Se ela e' mais
+    #    curta que o plano, ocupa o comeco dele e o resto ganha outro b-roll — antes a sobra era trocada e se perdia
+    if tomadas and os.sep + "takes" + os.sep in tomadas[0][3][1]:
+        a, b, n, v = tomadas[0]
+        resto = mf.dur(v[1]) - v[2]
+        if resto < b - a - 0.05:
+            meio = min(a + resto, b - mf.MIN_T)             # o resto do plano nunca fica menor que um plano minimo
+            if meio - a >= 1.0: tomadas[0:1] = [(a, meio, n, v), (meio, b, n, banco.pegar(n, rel))]
+            else: tomadas[0] = (a, b, n, banco.pegar(n, rel))   # sobra curta demais para um plano: fica de fora
     for i, (a, b, n, v) in enumerate(tomadas):              # o visual nunca e' mais curto que o plano
+        if i == 0 and os.sep + "takes" + os.sep in v[1]: continue
         if v[0] == "terc" and mf.dur(v[1]) - v[2] < b - a - 0.05:
             tomadas[i] = (a, b, n, banco.pegar(n, rel))
     saida = os.path.join(mf.TMP, nome + ".mp4")
@@ -576,6 +586,7 @@ def etapa_montagem(pid):
     import montar_fatia as mf, montar_completo as mc, costura, gerar_avatar as ga
     p = _proj.carregar(pid)
     mf.TMP = d["montagem"]; mc.TMP = d["montagem"]; mc.AVATAR = d["takes"]
+    mc.SOBRA_MIN = mf.MIN_T                  # sobra do take menor que um plano minimo (2,2 s) fica no plano do avatar
     ga.TAKES, ga.FALAS = planejar_takes(p)
     banco = Banco(d, assuntos(pid) if os.path.exists(os.path.join(d["raiz"], "assuntos.json")) else {})
     if not banco.por_tag: raise RuntimeError("não há b-roll revisado no olho: rode a etapa B-roll antes")
