@@ -33,7 +33,8 @@ ETAPAS = [
          "Antes do Enter, conferir que a miniatura do personagem está DENTRO da caixa de comando e que o texto é o do take. O texto é digitado, não colado: colar apagou o anexo e saiu outro monge, pago.",
          "A fala não leva travessão (vira gaguejo) nem o nome do monge (recusa por “pessoa famosa”).",
          "⭐ (09/10) O avatar volta a cada 15–25 s no vídeo inteiro (tela cheia ou tela dividida), como o Elias. Nunca some por mais de ~25 s nas seções narradas. Fala avulsa curta (até ~15 palavras), com gesto variado.",
-         "⭐ (09/10) Tela dividida vale, desde que bem enquadrada: o monge numa faixa de ~1/4 com o rosto inteiro e centrado (nada cortado), o b-roll nos ~3/4.",
+         "⭐ (09/10) Tela dividida vale, desde que bem enquadrada: o monge com o rosto inteiro e centrado (nada cortado), o b-roll ao lado.",
+         "⭐ (10/10) Na tela dividida o avatar tem mais área: faixa de ~45% da largura (não mais 1/4, onde ficava espremido no canto com o rosto cortado). O take de tela dividida é plano médio com o monge centrado e folga dos dois lados (nada de close).",
          "Cada take passa pelo Whisper antes da montagem: fala errada, refaz ou usa só a parte certa.",
      ]},
     {"id": "voz", "nome": "Voz", "onde": "botão 5 · projeto_video.py voz → voz_wendelin.py · voz_conrad.py",
@@ -54,7 +55,7 @@ ETAPAS = [
          "Conferir a espécie antes de etiquetar (alecrim não é tomilho). Buscar em alemão e em inglês.",
      ]},
     {"id": "montagem", "nome": "Montagem", "onde": "botão 7 · projeto_video.py montagem → montar_fatia.py · costura.py · render_paralelo.py",
-     "faz": "Segue os planos do roteiro na ordem: narração contínua cortada exatamente na fronteira de cada plano, b-roll do assunto daquele plano, avatar com o take inteiro, tela dividida 1/4 + 3/4, infográfico de vez em quando, motion graphics do projeto (se houver) e a costura de montador. Termina com a leitura a 1 fps em video/leitura.",
+     "faz": "Segue os planos do roteiro na ordem: narração contínua cortada exatamente na fronteira de cada plano, b-roll do assunto daquele plano, avatar com o take inteiro, tela dividida ~45% (avatar) + ~55% (b-roll), infográfico de vez em quando, motion graphics do projeto (se houver) e a costura de montador. Termina com a leitura a 1 fps em video/leitura.",
      "regras": [
          "⭐ (09/10) Velocidade: cada plano é codificado UMA vez (rápido) e só a costura final codifica para a entrega. Os planos rodam em paralelo (4 de cada vez), o zoom de foto é calculado em 4K (não 8K) e as animações são renderizadas em 6 processos, em JPEG direto para o ffmpeg (~25 min → ~1,5 min por animação).",
          "Corte seco só dentro do mesmo assunto (corte na ação). Fusão de 0,4 s quando a erva ou o assunto muda.",

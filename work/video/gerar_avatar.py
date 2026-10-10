@@ -46,6 +46,13 @@ PLANOS = {
     "close": ("Close-up of his face and shoulders {lugar}, slightly handheld, very shallow depth of field, he talks quietly "
               "and intimately to the camera.", "fechado"),
 }
+# ⭐ (10/10) tela dividida: o monge na faixa de ~45% da esquerda — plano medio CENTRADO, com folga dos dois lados,
+#    para o rosto nunca sair cortado no recorte da faixa (nada de close: a cabeca nao cabe).
+PLANOS["split"] = ("Medium shot from the waist up {lugar}: he stands in the exact horizontal center of the frame, facing the "
+                   "camera, with generous empty space on both sides of him, eye level, static camera, and talks to the camera.", "medio")
+PLANOS["split_mao"] = ("Medium shot from the waist up {lugar}: he stands in the exact horizontal center of the frame, holding a small "
+                       "bunch of fresh herbs at chest height, generous empty space on both sides of him, static camera, and talks "
+                       "to the camera.", "medio")
 PLANOS["peito"] = ("Medium close-up from the chest up {lugar}, eye level, static camera on a tripod.", "fechado")   # o antigo
 ROTACAO = ["em_pe", "trabalhando", "andando", "close", "sentado", "tres_quartos", "porta", "baixo"]
 ROTACAO_CEN = ["G", "S", "P", "K", "C", "W", "D", "T"]

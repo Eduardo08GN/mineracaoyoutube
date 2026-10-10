@@ -165,16 +165,19 @@ def bloco_narrado(frases, nome, banco, rel):
 
 
 def rosto_x(arq):
-    """Centro horizontal (fracao) do maior rosto no meio do take: o recorte do peito para cima centra nele."""
+    """Centro horizontal (fracao) do rosto no take: a mediana de 5 quadros (um quadro so' errava e caia no meio)."""
     import cv2, numpy as np
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", "2", "-i", arq, "-frames:v", "1", "-vf", "scale=640:360",
-                          "-f", "rawvideo", "-pix_fmt", "gray", "-"], capture_output=True).stdout
-    g = np.frombuffer(raw, np.uint8).reshape(360, 640)
     cc = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    f = cc.detectMultiScale(g, 1.1, 6, minSize=(30, 30))
-    if not len(f): return 0.5
-    x, y, w, h = max(f, key=lambda r: r[2] * r[3])
-    return (x + w / 2) / 640
+    xs = []
+    for t in (1, 2.5, 4, 5.5, 7):
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(t), "-i", arq, "-frames:v", "1", "-vf", "scale=640:360",
+                              "-f", "rawvideo", "-pix_fmt", "gray", "-"], capture_output=True).stdout
+        if len(raw) != 640 * 360: continue
+        f = cc.detectMultiScale(np.frombuffer(raw, np.uint8).reshape(360, 640), 1.1, 6, minSize=(30, 30))
+        if len(f):
+            x, y, w, h = max(f, key=lambda r: r[2] * r[3])
+            xs.append((x + w / 2) / 640)
+    return float(np.median(xs)) if xs else 0.5
 
 
 # ⛔⛔ REGRA (Eduardo, 09/10, vale das proximas producoes em diante): o take do Veo com o avatar e' PRECIOSO

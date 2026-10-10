@@ -11,7 +11,7 @@ Tudo do projeto fica em data/projetos/<id>/video/ e o resumo de cada etapa vai p
   broll     o Claude agrupa as buscas dos planos em assuntos (de/en/ru/zh) -> YouTube, Rutube e Bilibili em 720p ->
             trechos de acao (<=8 s, <=10% da fonte) -> sem rosto (YuNet), sem texto (OCR) -> revisao NO OLHO (Claude)
   montagem  planos na ordem: narracao continua cortada nas fronteiras dos planos, avatar com o take inteiro (8 s),
-            tela dividida 1/4 + 3/4, infografico de vez em quando, costura de montador, 720p, -16 LUFS
+            tela dividida 45% + 55%, infografico de vez em quando, costura de montador, 720p, -16 LUFS
 """
 import json, os, re, subprocess, sys, time
 
@@ -59,18 +59,18 @@ def _limpa_fala(t):
 
 def planejar_takes(p):
     """{chave: (cenario, [], gesto, plano)} + {chave: fala} — um take por plano de avatar/tela dividida.
-    Plano e cenario em rodizio (dois seguidos nunca iguais); a tela dividida pede plano medio/fechado (o rosto cabe
-    na faixa de 1/4). Fala longa demais ou com o nome do personagem: o plano vira narracao (fica fora dos takes)."""
+    Plano e cenario em rodizio (dois seguidos nunca iguais); a tela dividida pede plano medio centrado (o rosto cabe
+    inteiro na faixa de 45%). Fala longa demais ou com o nome do personagem: o plano vira narracao (fica fora dos takes)."""
     import gerar_avatar as ga
     nome = ((p.get("perfil") or {}).get("nome") or "").lower()
     cens = list(ga.ROTACAO_CEN) if p.get("persona") == "kloster-moench" else ["X"]
     if cens == ["X"]:
         ga.CENARIO["X"] = "in " + ((p.get("perfil") or {}).get("cenario_avatar") or "a quiet old farmhouse")
     # avatar em tela cheia: 3 de cada 4 de CORPO INTEIRO (em pe, andando e falando, sentado, saindo do arco) e 1 de baixo
-    # para cima; tela dividida: so' planos em que o rosto cabe na faixa de 1/4 (close, tres-quartos, trabalhando).
+    # para cima; tela dividida (⭐ 10/10): so' plano medio com o monge CENTRADO e folga dos lados (o rosto inteiro na faixa).
     # Os dois rodizios nao tem plano em comum: dois takes seguidos nunca repetem o plano.
     abertos = ["em_pe", "andando", "sentado", "baixo", "porta", "andando", "em_pe", "baixo", "sentado", "porta", "em_pe", "baixo"]
-    fechados = ["close", "tres_quartos", "trabalhando"]
+    fechados = ["split", "split_mao"]
     gestos = ["", "He gives a small nod.", "He opens one hand slightly.", "He smiles faintly.", "He leans slightly forward.",
               "He raises one finger slightly.", ""]
     takes, falas, i_ab, i_fe, i_cen = {}, {}, 0, 0, 0
@@ -664,8 +664,13 @@ def cta_do_livro(p, planos):
     return [tuple(c) for c in clausulas]
 
 
+# ⭐ (Eduardo, 10/10) na faixa de 1/4 o monge ficava espremido no canto, com ~1/3 do rosto cortado: a faixa dele tem 45%
+#    da largura e o take de tela dividida e' plano medio centrado (PLANOS["split"/"split_mao"] em gerar_avatar).
+FAIXA_SPLIT = 0.45
+
+
 def bloco_split(pl, k, d, banco, rel, mf, mc, avisos):
-    """Tela dividida: o monge numa faixa de 1/4 (rosto inteiro e centrado) + o b-roll em 3/4, com a voz do take."""
+    """Tela dividida: o monge numa faixa de FAIXA_SPLIT do quadro (rosto inteiro e centrado) + o b-roll no resto, com a voz do take."""
     import voz_conrad
     arq = os.path.join(d["takes"], k + ".mp4")
     vozw = voz_conrad.converter(arq)
@@ -674,7 +679,7 @@ def bloco_split(pl, k, d, banco, rel, mf, mc, avisos):
     dd = b - a
     lado = os.path.join(mf.TMP, f"lado_{k}.mp4")
     mf.video(banco.pegar(pl["n"], rel), dd, lado)
-    faixa = mf.W // 4
+    faixa = int(mf.W * FAIXA_SPLIT) // 2 * 2
     cx = mc.rosto_x(arq)
     filtro = (f"[0:v]scale={mf.W}:{mf.H},crop={faixa}:{mf.H}:'min(max(0,{cx:.4f}*iw-{faixa}/2),iw-{faixa})':0,"
               f"setsar=1,{mf.GRADE_AVATAR}[e];[1:v]crop={mf.W - faixa}:{mf.H}:{faixa // 2}:0,setpts=PTS-STARTPTS[d];"
