@@ -39,18 +39,20 @@ def folhas(pasta, saida, so_limpos=True, por_folha=16, n_quadros=3, w=240, h=135
                 S.paste(quadro(arq, dur * (0.1 + 0.8 * j / max(1, n_quadros - 1)), w, h), (x0 + j * w, y0))
             d.rectangle([x0, y0, x0 + 150, y0 + 14], fill=(0, 0, 0))
             d.text((x0 + 3, y0 + 1), f"{i} {ap[i].get('tag', '')}", fill=(255, 255, 0))
-        out = os.path.join(saida, f"folha_{f // por_folha:02d}.jpg"); S.save(out, quality=85); feitas.append(out)
+        out = os.path.join(saida, f"folha_{f // por_folha:02d}.jpg"); S.save(out, quality=85)
+        feitas.append((out, idx[f:f + por_folha]))         # a folha e os indices que ela mostra
     print(len(idx), "trechos,", len(feitas), "folhas em", saida)
     return feitas
 
 
-def aprovar(pasta):
+def aprovar(pasta, so=None):
     """Depois de olhar TODAS as folhas e marcar os rejeitados: o resto vira "olho_ok"."""
     arq = os.path.join(pasta, "aprovados.json")
     ap = json.load(open(arq, encoding="utf-8"))
     sujas = {c["clipe"].rsplit("_", 1)[0] for c in ap if c.get("texto") and c.get("texto_revisto") != "falso"}
     n = 0
-    for c in ap:
+    for i, c in enumerate(ap):
+        if so is not None and i not in so: continue           # so' os que o olho de fato viu
         if "texto" in c and c["clipe"].rsplit("_", 1)[0] not in sujas and not c.get("olho"):
             c["olho_ok"] = True; n += 1
     json.dump(ap, open(arq, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -60,7 +62,8 @@ def aprovar(pasta):
 def marcar(pasta, lista, motivo):
     arq = os.path.join(pasta, "aprovados.json")
     ap = json.load(open(arq, encoding="utf-8"))
-    for i in [int(x) for x in lista.split(",") if x.strip()]: ap[i]["olho"] = motivo
+    for i in [int(x) for x in lista.split(",") if x.strip()]:
+        if 0 <= i < len(ap): ap[i]["olho"] = motivo
     json.dump(ap, open(arq, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("marcados:", lista, "->", motivo)
 

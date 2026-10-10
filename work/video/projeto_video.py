@@ -97,9 +97,14 @@ def _contexto_avatar(pid, p):
     return ga
 
 
-def etapa_avatar(pid, pago=False):
+def etapa_avatar(pid, pago=False, verba=0):
+    """pago=True so' com verba liberada pelo Eduardo (VERBA["limite"] = verba). Ordem: primeiro os takes de avatar em tela
+    cheia, depois os de tela dividida — se a verba acabar, o que sobra vira narracao com b-roll."""
     p = _proj.carregar(pid)
     ga = _contexto_avatar(pid, p)
+    tipo = {f"t{pl['n']:03d}": pl["tipo"] for pl in p["planos"]}
+    ga.TAKES = dict(sorted(ga.TAKES.items(), key=lambda kv: (tipo.get(kv[0]) != "avatar", kv[0])))
+    if pago: ga.VERBA["limite"] = int(verba)
     registrar(pid, f"avatar: {len(ga.TAKES)} takes planejados ({'Veo 3.1 Lite x1 8 s, pago' if pago else 'Veo 3.1 Lite [Lower Priority], grátis'})")
     ga.enviar(None, "pago" if pago else "gratis")
     etapa_baixar(pid)
@@ -264,11 +269,19 @@ def etapa_broll(pid, por_assunto=None):
     importlib.reload(bt)                                  # o modulo le TERC_PASTA ao ser carregado
     p = _proj.carregar(pid)
     tops = assuntos(pid, max_t=int(os.environ.get("PV_ASSUNTOS") or 30))["topicos"]
+    # busca dirigida: so' os assuntos que tem plano nas secoes pedidas (o banco acabou no fim do video)
+    if os.environ.get("PV_TOPICOS_SECOES"):
+        alvo_s = {int(x) for x in os.environ["PV_TOPICOS_SECOES"].split(",")}
+        ns = {pl["n"] for pl in p["planos"] if pl["secao"] in alvo_s}
+        tops = [t for t in tops if set(t["planos"]) & ns]
     registrar(pid, f"b-roll: {len(tops)} assuntos para {sum(len(t['planos']) for t in tops)} planos; buscando em YouTube, Rutube e Bilibili")
     # ⭐ (09/10) em RODADAS: busca/baixa/recorta/confere ate' ter trecho limpo para todos os planos (alvo), no maximo 4
     #    rodadas; cada rodada pega candidatos novos (os ja' vistos ficam de fora).
     # alvo: 1 trecho por plano de b-roll/tela dividida, +40% (plano longo vira 2 tomadas e a revisao no olho ainda tira)
-    alvo = int(1.4 * sum(1 for pl in planos_de(p) if pl["tipo"] in ("broll", "split")))
+    sec_mg = {int(x["secao"]) for x in (p.get("producao") or {}).get("mg", [])}     # secoes que viram animacao
+    # a revisao no olho tira ~40% (plano sem maos agindo): a meta de trechos ANTES dela e' ~2x os planos
+    alvo = int(os.environ.get("PV_ALVO") or 2.0 * sum(1 for pl in planos_de(p) if pl["tipo"] in ("broll", "split")
+                                                      and pl["secao"] not in sec_mg))
     por_assunto = por_assunto or [("youtube", "en"), ("youtube", "de"), ("rutube", "ru"), ("bilibili", "zh")]
 
     def limpos():
@@ -359,9 +372,11 @@ def etapa_broll(pid, por_assunto=None):
         print(f"  rodada {r + 1}: {agora} trechos limpos (alvo {alvo})", flush=True)
         if agora >= alvo or agora == antes and r: break
         por_assunto = [("youtube", "en"), ("youtube", "de"), ("rutube", "ru"), ("bilibili", "zh"), ("youtube", "en")]
+        if os.environ.get("PV_FONTES"): por_assunto = [x for x in por_assunto if x[0] in os.environ["PV_FONTES"].split(",")]
 
-    # 3. revisao NO OLHO antes da montagem
+    # 3. revisao NO OLHO antes da montagem, e o pente fino (corte interno + rosto)
     rej = revisar_no_olho(pid, d, p)
+    pente_fino(pid, d)
     ap = json.load(open(os.path.join(d["terceiros"], "aprovados.json"), encoding="utf-8"))
     bons = sum(1 for c in ap if c.get("olho_ok") and float(c.get("acao") or 0) >= 3.0)
     from collections import Counter
@@ -385,16 +400,91 @@ def revisar_no_olho(pid, d=None, p=None, de_novo=False):
     folhas = revisar_olho.folhas(d["terceiros"], os.path.join(d["terceiros"], "folhas_olho"), por_folha=8, n_quadros=4,
                                  w=320, h=180, so_novos=True)
     tema = (p.get("mecanismo") or {}).get("resumo", "")[:200] or p["nome"]
-    rej = []
-    for f in folhas:
-        r = _json_de(_chamar_claude(PEDIDO_OLHO.format(tema=tema, arquivos=f), ferramentas="Read"))
-        rej += r.get("rejeitar") or []
-    for motivo in {x.get("motivo", "olho") for x in rej}:
-        idx = ",".join(str(int(x["i"])) for x in rej if x.get("motivo", "olho") == motivo)
-        if idx: revisar_olho.marcar(d["terceiros"], idx, motivo)
-    revisar_olho.aprovar(d["terceiros"])
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+    trava, rej, vistos = threading.Lock(), [], set()
+
+    def uma(folha):
+        f, ids = folha
+        try:
+            r = _json_de(_chamar_claude(PEDIDO_OLHO.format(tema=tema, arquivos=f), ferramentas="Read"))
+        except Exception as e:                                                       # noqa: BLE001
+            print("  olho: uma folha falhou (os trechos dela ficam sem aprovar):", str(e)[:100], flush=True); return
+        # ⛔ so' indices que estao NESTA folha (o Claude ja' citou um que nao existe e derrubou tudo); marca na hora
+        boas = [x for x in (r.get("rejeitar") or []) if str(x.get("i", "")).isdigit() and int(x["i"]) in ids]
+        with trava:
+            for motivo in {x.get("motivo", "olho") for x in boas}:
+                revisar_olho.marcar(d["terceiros"], ",".join(str(int(x["i"])) for x in boas if x.get("motivo", "olho") == motivo), motivo)
+            rej.extend(boas); vistos.update(ids)
+    with ThreadPoolExecutor(max_workers=4) as ex:             # 4 folhas ao mesmo tempo
+        list(ex.map(uma, folhas))
+    revisar_olho.aprovar(d["terceiros"], vistos)
     print(f"  olho: {len(rej)} rejeitados em {len(folhas)} folhas", flush=True)
     return len(rej)
+
+
+PEDIDO_ROSTO = """FACE CHECK of stock video clips. Read this image file with the Read tool:
+{arquivo}
+Each row is ONE clip (6 frames across its duration); "index" in yellow at the top-left of the row.
+For EACH clip look at all 6 frames: is ANY human face visible — even small, far away, partly cut, in profile, blurred,
+or for a single frame? A person seen only from behind, or only hands/arms/legs, is NOT a face.
+Also: does the row jump between clearly DIFFERENT scenes (a cut to another place/subject inside the clip)?
+Return ONLY JSON: {{"rosto": [indices with a face], "corte": [indices with a cut to a different scene]}}"""
+
+
+def corte_interno(arq, limiar=0.32):
+    """True se o trecho tem um corte de cena por dentro (o aUCprKd5Me0_39 ia do manjericao ao rosto de um homem)."""
+    r = subprocess.run(["ffmpeg", "-v", "info", "-i", arq, "-vf", f"scale=320:-2,select='gt(scene,{limiar})',showinfo",
+                        "-f", "null", "-"], capture_output=True, text=True)
+    return "pts_time" in r.stderr
+
+
+def pente_fino(pid, d=None):
+    """⭐ (10/10) depois da revisao no olho, nos APROVADOS: (1) corte de cena dentro do trecho -> sai; (2) uma 2a olhada
+    SO' para rosto, 6 quadros por trecho, 4 trechos por folha (a revisao de 4 quadros deixou passar rosto)."""
+    import revisar_olho, threading
+    from concurrent.futures import ThreadPoolExecutor
+    from PIL import Image, ImageDraw
+    d = d or pastas(pid)
+    arq = os.path.join(d["terceiros"], "aprovados.json")
+    ap = json.load(open(arq, encoding="utf-8"))
+    ok = [i for i, c in enumerate(ap) if c.get("olho_ok") and not c.get("pente")]
+    clip = lambda i: os.path.join(d["terceiros"], "clips", ap[i]["clipe"])   # noqa: E731
+    cortados = []                       # (o corte por limiar de cena marcava mao mexendo rapido: quem decide e' o Claude)
+    pasta = os.path.join(d["terceiros"], "folhas_rosto"); os.makedirs(pasta, exist_ok=True)
+    resto = [i for i in ok if i not in cortados]
+    folhas = []
+    for k in range(0, len(resto), 4):
+        ids = resto[k:k + 4]
+        S = Image.new("RGB", (6 * 320, len(ids) * 195), (20, 20, 20)); dr = ImageDraw.Draw(S)
+        for r, i in enumerate(ids):
+            dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                        clip(i)], capture_output=True, text=True).stdout or 0)
+            for j in range(6):
+                S.paste(revisar_olho.quadro(clip(i), dur * (0.05 + 0.9 * j / 5), 320, 180), (j * 320, r * 195))
+            dr.rectangle([0, r * 195, 60, r * 195 + 16], fill=(0, 0, 0)); dr.text((4, r * 195 + 2), str(i), fill=(255, 255, 0))
+        f = os.path.join(pasta, f"rosto_{k // 4:03d}.jpg"); S.save(f, quality=85); folhas.append((f, ids))
+    trava, rostos = threading.Lock(), []
+
+    def uma(fi):
+        f, ids = fi
+        try: r = _json_de(_chamar_claude(PEDIDO_ROSTO.format(arquivo=f), ferramentas="Read"))
+        except Exception as e:                                                       # noqa: BLE001
+            print("  rosto: folha falhou, os trechos dela saem por precaucao:", str(e)[:80], flush=True)
+            with trava: rostos.extend(ids)
+            return
+        with trava:
+            rostos.extend(int(x) for x in (r.get("rosto") or []) if str(x).isdigit() and int(x) in ids)
+            cortados.extend(int(x) for x in (r.get("corte") or []) if str(x).isdigit() and int(x) in ids)
+    with ThreadPoolExecutor(max_workers=4) as ex:
+        list(ex.map(uma, folhas))
+    ap = json.load(open(arq, encoding="utf-8"))
+    for i in cortados: ap[i]["olho"] = "corte interno"; ap[i].pop("olho_ok", None)
+    for i in rostos: ap[i]["olho"] = "rosto"; ap[i].pop("olho_ok", None)
+    for i in ok: ap[i]["pente"] = True
+    json.dump(ap, open(arq, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(f"  pente fino: {len(cortados)} com corte interno, {len(rostos)} com rosto; "
+          f"{sum(1 for c in ap if c.get('olho_ok'))} aprovados", flush=True)
 
 
 # ── 7. montagem ─────────────────────────────────────────────────────────────────────────────────
@@ -411,13 +501,17 @@ class Banco:
 
     def __init__(self, d, assuntos_json):
         self.por_tag, self.usados, self.cont, self.forcar, self.secao = {}, set(), 0, None, 0
-        self.ultimas, self.vezes = [], {}
+        self.ultimas, self.vezes, self.escolhas = [], {}, []
         arq = os.path.join(d["terceiros"], "aprovados.json")
         ap = json.load(open(arq, encoding="utf-8")) if os.path.exists(arq) else []
         for c in sorted(ap, key=lambda c: -float(c.get("acao") or 0)):
             if not c.get("olho_ok") or float(c.get("acao") or 0) < 3.0: continue      # (09/10) acao minima de 3%
             self.por_tag.setdefault(c.get("tag", ""), []).append(("terc", os.path.join(d["terceiros"], "clips", c["clipe"]), 0.0))
         self.tag_do_plano = {n: t["id"] for t in assuntos_json.get("topicos", []) for n in t["planos"]}
+        import montar_fatia as _mf, glob as _g
+        _movs = [(1.0, 1.12, (.45, .5), (.55, .5)), (1.12, 1.0, (.5, .45), (.5, .55)), (1.0, 1.1, (.55, .55), (.45, .45))]
+        _imgs = sorted(_g.glob(os.path.join(AQUI, "fatia01", "maos", "*.png"))) + sorted(_g.glob(os.path.join(AQUI, "hack", "img", "*.png")))
+        self.proprias = [_mf.F(f, *_movs[i % 3]) for i, f in enumerate(_imgs)]
         self.infos = []
         idx = os.path.join(d["infografos"], "infografos.json")
         if os.path.exists(idx):
@@ -428,6 +522,11 @@ class Banco:
                 if os.path.exists(img): self.infos.append((v.get("tag", ""), mf.F(img, *movs[i % 3])))
 
     def pegar(self, n, rel):
+        v = self._pegar(n, rel)
+        self.escolhas.append((n, os.path.basename(v[1]), v[2]))      # o registro: qual trecho entrou em cada plano
+        return v
+
+    def _pegar(self, n, rel):
         if self.forcar:
             v, self.forcar = self.forcar, None; return v
         tag = self.tag_do_plano.get(n, "")
@@ -451,6 +550,11 @@ class Banco:
                 return v
         for t, v in livres_i:
             self.usados.add(repr(v)); rel.append(f"plano {n}: infográfico (b-roll acabou)"); return v
+        # ultima reserva: imagens proprias do canal (maos do monge trabalhando, geradas no Veo; a raiz partida do hack),
+        # com movimento lento de camera — so' quando o b-roll de terceiros e os infograficos acabaram
+        for v in self.proprias:
+            if repr(v) not in self.usados:
+                self.usados.add(repr(v)); rel.append(f"plano {n}: imagem propria {os.path.basename(v[1])}"); return v
         raise SystemExit(f"plano {n}: acabou o b-roll limpo — busque mais (etapa B-roll) antes de montar")
 
 
@@ -587,6 +691,7 @@ def etapa_montagem(pid):
     p = _proj.carregar(pid)
     mf.TMP = d["montagem"]; mc.TMP = d["montagem"]; mc.AVATAR = d["takes"]
     mc.SOBRA_MIN = mf.MIN_T                  # sobra do take menor que um plano minimo (2,2 s) fica no plano do avatar
+    mf.MAX_CLIPE = 6.2                      # (10/10) a tomada mais longa medida no Elias: menos planos partidos em dois
     ga.TAKES, ga.FALAS = planejar_takes(p)
     banco = Banco(d, assuntos(pid) if os.path.exists(os.path.join(d["raiz"], "assuntos.json")) else {})
     if not banco.por_tag: raise RuntimeError("não há b-roll revisado no olho: rode a etapa B-roll antes")
@@ -642,10 +747,14 @@ def etapa_montagem(pid):
     solta()
     tipos = [costura.tipo_entre(x, y) for x, y in zip(generos, generos[1:])]
     json.dump({"blocos": blocos, "generos": generos, "tipos": tipos}, open(os.path.join(mf.TMP, "blocos.json"), "w"), indent=1)
-    saida = os.path.join(d["raiz"], "video.mp4")
+    json.dump(banco.escolhas, open(os.path.join(mf.TMP, "escolhas.json"), "w"), indent=1)
+    saida = os.path.join(d["raiz"], "video.mp4" if not SECOES else "previa.mp4")       # teste por secao: previa
     feitas = costura.costurar_blocos(blocos, tipos, saida, mf.TMP)
     from collections import Counter
     minutos = round(mf.dur(saida) / 60, 1)
+    if SECOES:
+        print("previa:", saida, round(mf.dur(saida), 1), "s", flush=True)
+        import leitura_1fps; leitura_1fps.main(saida, d["leitura"]); return
     gravar_producao(pid, "montagem", {"arquivo": saida, "minutos": minutos, "blocos": len(blocos),
                                       "transicoes": dict(Counter(t for t, q in feitas if q)), "lufs": -16.0,
                                       "resolucao": f"{mf.W}x{mf.H}", "avatar": n_av, "split": n_sp,
@@ -658,10 +767,12 @@ def etapa_montagem(pid):
 
 
 ETAPAS = {"avatar": etapa_avatar, "baixar": etapa_baixar, "infograficos": etapa_infograficos, "voz": etapa_voz, "broll": etapa_broll, "montagem": etapa_montagem,
-          "olho": lambda pid: revisar_no_olho(pid, de_novo="--de-novo" in sys.argv)}
+          "olho": lambda pid: revisar_no_olho(pid, de_novo="--de-novo" in sys.argv), "pente": pente_fino}
 
 if __name__ == "__main__":
     if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     pid, etapa = sys.argv[1], sys.argv[2]
-    if etapa == "avatar" and "--pago" in sys.argv: etapa_avatar(pid, pago=True)
+    if etapa == "avatar" and "--pago" in sys.argv:
+        verba = int(sys.argv[sys.argv.index("--verba") + 1]) if "--verba" in sys.argv else 0
+        etapa_avatar(pid, pago=True, verba=verba)
     else: ETAPAS[etapa](pid)
