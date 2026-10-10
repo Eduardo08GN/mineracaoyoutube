@@ -9,8 +9,8 @@
 import json, os, subprocess
 
 W, H, FPS = 1280, 720, 30                   # ⛔ (09/10) nada acima de 720p
-VID = ["-c:v", "libx264", "-preset", "medium", "-crf", "20", "-maxrate", "6M", "-bufsize", "12M", "-pix_fmt", "yuv420p",
-       "-r", str(FPS)]          # teto de 6 Mbps em 720p (o grao de filme sem teto passava de 80 Mbps)
+VID = ["-c:v", "libx264", "-preset", "medium", "-crf", "22", "-maxrate", "4M", "-bufsize", "8M", "-pix_fmt", "yuv420p",
+       "-r", str(FPS)]          # teto de 4 Mbps em 720p (~500 MB para 18 min) (o grao de filme sem teto passava de 80 Mbps)
 SR = 48000                                  # 1600 amostras por quadro: o audio corta exato no quadro
 CREME = (212, 113, 136)                     # #F1E4C6 em yuv420p (faixa limitada): Y, U, V
 QUADROS = {"fusao": 12, "fusao_curta": 10, "papel": 20, "luz": 24}

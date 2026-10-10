@@ -103,6 +103,43 @@ def etapa_avatar(pid, pago=False):
     registrar(pid, f"avatar: {len(ga.TAKES)} takes planejados ({'Veo 3.1 Lite x1 8 s, pago' if pago else 'Veo 3.1 Lite [Lower Priority], grátis'})")
     ga.enviar(None, "pago" if pago else "gratis")
     etapa_baixar(pid)
+    # os infograficos tambem saem do Flow (imagem, modelos gratis): no mesmo passo, com o assunto do b-roll ja' definido
+    if os.path.exists(os.path.join(pastas(pid)["raiz"], "assuntos.json")):
+        try: etapa_infograficos(pid)
+        except Exception as e: registrar(pid, f"⚠ infográficos: {str(e)[:150]}")        # noqa: BLE001
+
+
+PEDIDO_INFOS = """You plan EXPLANATORY SCHEMATIC ILLUSTRATIONS (infographics without any text) for a calm YouTube video.
+Video: {nome}
+B-roll topics of the video (id: description):
+{topicos}
+Propose {n} drawings that EXPLAIN something concrete the narration talks about (a cross-section, a step sequence left to
+right, a comparison side by side, a cycle with arrows). Each: "key" (short-slug), "tag" (one of the topic ids above),
+"desenho" (one English paragraph describing exactly what is drawn: objects, arrows, numbered circles; NO words or
+letters in the image). Return ONLY JSON: {{"infograficos": [{{"key": "...", "tag": "...", "desenho": "..."}}]}}"""
+
+
+def planejar_infograficos(pid, n=8):
+    d = pastas(pid)
+    arq = os.path.join(d["infografos"], "plano.json")
+    if os.path.exists(arq): return json.load(open(arq, encoding="utf-8"))
+    p = _proj.carregar(pid)
+    tops = assuntos(pid)["topicos"]
+    r = _json_de(_chamar_claude(PEDIDO_INFOS.format(nome=p["nome"], n=n, topicos=chr(10).join(f"{t['id']}: {t['en']}" for t in tops))))
+    infos = {x["key"]: (x.get("tag", ""), x["desenho"]) for x in r.get("infograficos") or [] if x.get("key") and x.get("desenho")}
+    json.dump(infos, open(arq, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    return infos
+
+
+def etapa_infograficos(pid):
+    """Os infograficos esquematicos do projeto, como IMAGEM nos modelos gratis do Flow (gerar_infografos.py)."""
+    import gerar_infografos as gi
+    d = pastas(pid)
+    gi.INFOGRAFOS = planejar_infograficos(pid)
+    gi.PASTA = d["infografos"]
+    gi.main()
+    feitos = [k for k in gi.INFOGRAFOS if os.path.exists(os.path.join(d["infografos"], k + ".png"))]
+    registrar(pid, f"infográficos: {len(feitos)} de {len(gi.INFOGRAFOS)} no disco (modelos de imagem grátis)")
 
 
 def etapa_baixar(pid):
@@ -204,8 +241,12 @@ Look at EVERY frame of EVERY clip one by one before answering.
 Read these image files with the Read tool:
 {arquivos}
 REJECT a clip if ANY frame shows: a human face (even in profile, small, or partly visible); any text, logo, subtitle
-or watermark (even semi-transparent); a still/static shot with nothing moving; something off-topic for {tema};
-a visible transition, split screen or graphic overlay. Hands, arms and people seen from behind are fine.
+or watermark (even semi-transparent); something off-topic for {tema} (kitchens stoves, furniture, pallets, machines,
+landscapes without the topic); a visible transition, glitch, split screen or graphic overlay.
+⛔ ALSO REJECT every clip WITHOUT HUMAN ACTION: the channel only uses footage of someone DOING something — hands or arms
+visibly working (planting, watering, cutting, sieving, harvesting, pouring, touching the soil...). Plants just swaying
+in the wind, an empty tray, a jar standing still, a pot with nobody touching it -> "parado". Hands, arms and people seen
+from behind are fine.
 Return ONLY JSON: {{"rejeitar": [{{"i": index, "motivo": "rosto|texto|parado|fora do tema|transicao"}}]}}"""
 
 
@@ -362,9 +403,15 @@ class Banco:
     """Trechos aprovados por assunto. Nunca a mesma imagem duas vezes; so' com acao e revisados no olho;
     um infografico a cada INFO_CADA planos; imagens proprias (takes de maos) como ultima reserva."""
     INFO_CADA = 10
+    ESPACO = 8
+
+    @staticmethod
+    def _fonte(v):
+        return os.path.basename(v[1]).rsplit("_", 1)[0]
 
     def __init__(self, d, assuntos_json):
         self.por_tag, self.usados, self.cont, self.forcar, self.secao = {}, set(), 0, None, 0
+        self.ultimas, self.vezes = [], {}
         arq = os.path.join(d["terceiros"], "aprovados.json")
         ap = json.load(open(arq, encoding="utf-8")) if os.path.exists(arq) else []
         for c in sorted(ap, key=lambda c: -float(c.get("acao") or 0)):
@@ -390,12 +437,18 @@ class Banco:
             t, v = next(((t, v) for t, v in livres_i if t == tag), livres_i[0])
             self.usados.add(repr(v)); rel.append(f"plano {n}: infográfico"); return v
         ordem = [tag] + sorted((t for t in self.por_tag if t != tag), key=lambda t: -len(self.por_tag[t]))
-        for t in ordem:
-            for v in self.por_tag.get(t, []):
-                if repr(v) not in self.usados:
-                    self.usados.add(repr(v))
-                    if t != tag: rel.append(f"plano {n} ({tag}): sem trecho livre, usei '{t}'")
-                    return v
+        # ⭐ (09/10) a mesma FONTE nao volta antes de ESPACO planos e a menos usada vem primeiro (o corte de microverdes
+        #    aparecia 3 vezes em 100 s); so' se nao houver outra a regra afrouxa
+        for espaco in (self.ESPACO, 3, 0):
+            recentes = set(self.ultimas[-espaco:]) if espaco else set()
+            for t in ordem:
+                livres = [v for v in self.por_tag.get(t, []) if repr(v) not in self.usados and self._fonte(v) not in recentes]
+                if not livres: continue
+                v = min(livres, key=lambda v: self.vezes.get(self._fonte(v), 0))
+                self.usados.add(repr(v)); self.ultimas.append(self._fonte(v))
+                self.vezes[self._fonte(v)] = self.vezes.get(self._fonte(v), 0) + 1
+                if t != tag: rel.append(f"plano {n} ({tag}): sem trecho livre, usei '{t}'")
+                return v
         for t, v in livres_i:
             self.usados.add(repr(v)); rel.append(f"plano {n}: infográfico (b-roll acabou)"); return v
         raise SystemExit(f"plano {n}: acabou o b-roll limpo — busque mais (etapa B-roll) antes de montar")
@@ -469,6 +522,34 @@ def bloco_narrado(run, nome, banco, rel, mf):
     return saida, len(tomadas)
 
 
+def cta_do_livro(p, planos):
+    """⭐ (09/10) a secao do livro, no Bruder Wendelin, vira a animacao do livro (cta/cta.html), cortada em planos:
+    as frases dos planos de b-roll da secao, partidas nas virgulas/dois-pontos, com as marcas que a animacao usa
+    (B0 = "Buch", TITEL = o nome do livro, URL = o site falado, C0 = a frase seguinte). None se a secao nao casa."""
+    import roteiro as _rot
+    perf = p.get("perfil") or {}
+    livro, site, nome = perf.get("livro", ""), perf.get("site", ""), perf.get("nome", "")
+    if p.get("persona") != "kloster-moench" or not livro or not site: return None
+    base, _, tld = site.partition(".")
+    falado = f"{nome} Punkt {tld}" if base == nome.replace(" ", "").lower() else site.replace(".", " Punkt ")
+    clausulas = []
+    for pl in planos:
+        for f in _rot.frases(pl["texto"]) or [pl["texto"]]:
+            partes = re.split(r"(?<=[:,])\s+", f.replace(site, falado))
+            for i, c in enumerate(partes):
+                clausulas.append([c, 0.22 if c.rstrip()[-1:] in ",:" else 0.45, None])
+    marca = lambda m, cond: next((c for c in clausulas if c[2] is None and cond(c[0])), None)  # noqa: E731
+    for m, cond in (("B0", lambda t: "Buch" in t and livro not in t), ("TITEL", lambda t: livro in t),
+                    ("URL", lambda t: falado in t)):
+        c = marca(m, cond)
+        if not c: return None
+        c[2] = m
+    iu = next(i for i, c in enumerate(clausulas) if c[2] == "URL")
+    if iu + 1 >= len(clausulas): return None
+    clausulas[iu + 1][2] = "C0"
+    return [tuple(c) for c in clausulas]
+
+
 def bloco_split(pl, k, d, banco, rel, mf, mc, avisos):
     """Tela dividida: o monge numa faixa de 1/4 (rosto inteiro e centrado) + o b-roll em 3/4, com a voz do take."""
     import voz_conrad
@@ -512,8 +593,21 @@ def etapa_montagem(pid):
         blocos.append(b); generos.append(("narr", run[0]["secao"], run[-1]["secao"])); run = []
 
     feitas_mg = set()
+    # a secao do livro (Bruder Wendelin): os planos de b-roll dela viram a animacao do livro
+    sec_livro = next((pl["secao"] for pl in planos if (p.get("perfil") or {}).get("livro", "@@") in pl["texto"]), None)
+    planos_cta = [pl for pl in planos if pl["secao"] == sec_livro and pl["tipo"] == "broll"]
+    cta = cta_do_livro(p, planos_cta) if planos_cta else None
+    ns_cta = {pl["n"] for pl in planos_cta} if cta else set()
     for i, pl in enumerate(planos):
         s = pl["secao"]
+        if pl["n"] in ns_cta:
+            if pl["n"] == min(ns_cta):
+                solta()
+                mf.CTA = cta
+                saida = os.path.join(mf.TMP, f"cta_{s:02d}.mp4")
+                mf.bloco_cta(saida)
+                blocos.append(saida); generos.append(("cta", s, s))
+            continue
         if s in mg:
             if s not in feitas_mg:
                 solta(); feitas_mg.add(s)
@@ -552,7 +646,7 @@ def etapa_montagem(pid):
     leitura_1fps.main(saida, d["leitura"])
 
 
-ETAPAS = {"avatar": etapa_avatar, "baixar": etapa_baixar, "voz": etapa_voz, "broll": etapa_broll, "montagem": etapa_montagem,
+ETAPAS = {"avatar": etapa_avatar, "baixar": etapa_baixar, "infograficos": etapa_infograficos, "voz": etapa_voz, "broll": etapa_broll, "montagem": etapa_montagem,
           "olho": lambda pid: revisar_no_olho(pid, de_novo="--de-novo" in sys.argv)}
 
 if __name__ == "__main__":
