@@ -273,7 +273,7 @@ export type Evento =
   | ({ tipo: "estado" } & Estado)
   | { tipo: "log"; linha: string }
   | { tipo: "aviso"; texto: string; tom?: "ok" | "erro" | "" }
-  | { tipo: "mudou"; o: "garimpos" | "oportunidades" | "radar" | "ajustes" | "retratos" | "producao"; id?: string };
+  | { tipo: "mudou"; o: "garimpos" | "oportunidades" | "radar" | "ajustes" | "retratos" | "producao" | "instagram"; id?: string };
 
 // ── a aba Producao (agente/estudio.py) ──
 export type EstadoEtapa = "pronta" | "pendente" | "bloqueada" | "futura";
@@ -362,6 +362,28 @@ export interface Video {
   producao?: Producao;
 }
 
+// ── a aba Instagram (agente/instagram.py) ──
+export type EstadoCena = "pendente" | "pronta" | "aprovada" | "recusada";
+export interface CenaIG { id: string; nome: string; cena: string; estado: EstadoCena; tem: boolean; na_fila: boolean; usos: number }
+export interface AvatarIG {
+  id: string; nome: string; criado: number; descricao: string; prefixo: string; voz: string; quem: string;
+  cenas: CenaIG[]; foto: boolean; livro: boolean;
+}
+export interface TakeIG { n: number; fala: string; movimento: string; cta: boolean; video: string }
+export interface TakeOrigemIG { n: number; ini: number; fim: number; texto: string }
+export interface ReelIG {
+  id: string; avatar: string; criado: number; idioma: string; url: string; cena: string;
+  cta: { tipo: "bio" | "palavra"; palavra: string; livro: boolean }; modelo: "gratis" | "pago";
+  takes_origem: TakeOrigemIG[]; takes: TakeIG[]; legenda_post: string; registro: { t: number; texto: string }[];
+  publicado: string; idioma_origem?: string; duracao?: number;
+  etapas: EtapaVideo[]; trabalhando: string; na_fila: string[]; final: boolean;
+}
+export interface AjustesIG { backend: string; repo_dir: string; auto_subir: boolean; dias: number; cookies: string }
+export interface InstagramTudo {
+  avatares: AvatarIG[]; reels: ReelIG[]; ajustes: AjustesIG; idiomas: Record<string, string>;
+  gerador: { ok: boolean; texto: string }; publicados: { rid: string; nome: string; data: string }[];
+}
+
 // A senha da sessao chega na URL (?t=...). Guardada na aba e tirada da barra de endereco.
 const token: string = (() => {
   const url = new URL(window.location.href);
@@ -381,6 +403,10 @@ const token: string = (() => {
 })();
 
 export const temSenha = token !== "";
+
+/** Um arquivo servido pela API (imagem, video) com a senha na URL, para <img>/<video>. */
+export const comSenha = (caminho: string, v: string | number = "") =>
+  `${caminho}?t=${encodeURIComponent(token)}${v !== "" ? `&v=${encodeURIComponent(String(v))}` : ""}`;
 
 export class ErroApi extends Error {
   status: number;

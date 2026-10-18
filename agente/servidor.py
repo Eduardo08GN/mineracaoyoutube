@@ -93,6 +93,50 @@ class Chaves(BaseModel):
     chaves: List[str]
 
 
+class NovoAvatar(BaseModel):
+    nome: str
+    imagem: str
+    ext: str = "png"
+    tomiko: bool = False
+    descricao: str = ""
+    prefixo: str = ""
+    voz: str = ""
+    quem: str = ""
+
+
+class Imagem(BaseModel):
+    imagem: str
+    ext: str = "png"
+
+
+class NovaCena(BaseModel):
+    nome: str = ""
+    cena: str
+
+
+class AcaoCena(BaseModel):
+    acao: str
+    texto: Optional[str] = None
+
+
+class NovoReel(BaseModel):
+    avatar: str
+    idioma: str
+    url: str = ""
+    video: str = ""
+    ext: str = "mp4"
+    cta: str = "bio"
+    palavra: str = ""
+    livro: bool = False
+    modelo: str = "gratis"
+
+
+class Take(BaseModel):
+    n: int
+    fala: Optional[str] = None
+    movimento: Optional[str] = None
+
+
 class Ajustes(BaseModel):
     rpm: Optional[float] = None
     rpms: Optional[dict] = None
@@ -306,6 +350,85 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def editar_secao(pid: str, c: Secao):
         return _estudio().editar_secao(pid, c.n, c.texto)
 
+    # ── a aba Instagram (agente/instagram.py) ──
+    def _ig():
+        if not nucleo.instagram: raise HTTPException(503, "a aba Instagram não está ligada nesta janela")
+        return nucleo.instagram
+
+    @app.get("/api/instagram")
+    def instagram():
+        return _ig().tudo()
+
+    @app.post("/api/instagram/ajustes")
+    def ig_ajustes(c: Campos):
+        return _ig().salvar_ajustes(**c.campos)
+
+    @app.post("/api/instagram/avatares")
+    def ig_novo_avatar(c: NovoAvatar):
+        return _ig().criar_avatar(c.nome, c.imagem, c.ext, c.descricao, c.prefixo, c.voz, c.quem, c.tomiko)
+
+    @app.post("/api/instagram/avatares/{aid}")
+    def ig_editar_avatar(aid: str, c: Campos):
+        return _ig().editar_avatar(aid, c.campos)
+
+    @app.post("/api/instagram/avatares/{aid}/imagem/{qual}")
+    def ig_imagem(aid: str, qual: str, c: Imagem):
+        return _ig().enviar_imagem(aid, qual, c.imagem, c.ext)
+
+    @app.get("/api/instagram/avatares/{aid}/imagem/{qual}")
+    def ig_ver_imagem(aid: str, qual: str):
+        from fastapi.responses import FileResponse
+        return FileResponse(_ig().arquivo_avatar(aid, qual), headers={"Cache-Control": "no-cache"})
+
+    @app.post("/api/instagram/avatares/{aid}/pool")
+    def ig_pool(aid: str):
+        return _ig().gerar_pool(aid)
+
+    @app.post("/api/instagram/avatares/{aid}/cenas")
+    def ig_nova_cena(aid: str, c: NovaCena):
+        return _ig().adicionar_cena(aid, c.nome, c.cena)
+
+    @app.post("/api/instagram/avatares/{aid}/cenas/{cid}")
+    def ig_cena(aid: str, cid: str, c: AcaoCena):
+        return _ig().cena(aid, cid, c.acao, c.texto)
+
+    @app.post("/api/instagram/reels")
+    def ig_novo_reel(c: NovoReel):
+        return _ig().criar_reel(c.avatar, c.idioma, c.url, c.video, c.ext, c.cta, c.palavra, c.livro, c.modelo)
+
+    @app.get("/api/instagram/reels/{rid}")
+    def ig_reel(rid: str):
+        return _ig().reel(rid)
+
+    @app.get("/api/instagram/reels/{rid}/arquivo/{qual}")
+    def ig_arquivo(rid: str, qual: str):
+        from fastapi.responses import FileResponse
+        return FileResponse(_ig().arquivo_reel(rid, qual), headers={"Cache-Control": "no-cache"})
+
+    @app.post("/api/instagram/reels/{rid}/rodar")
+    def ig_rodar(rid: str, c: Etapa):
+        return _ig().rodar(rid, c.etapa)
+
+    @app.post("/api/instagram/reels/{rid}/take")
+    def ig_take(rid: str, c: Take):
+        return _ig().editar_take(rid, c.n, c.fala, c.movimento)
+
+    @app.post("/api/instagram/reels/{rid}/subir")
+    def ig_subir(rid: str):
+        return _ig().subir(rid)
+
+    @app.post("/api/instagram/reels/{rid}/abrir")
+    def ig_abrir(rid: str):
+        return _ig().abrir(rid)
+
+    @app.post("/api/instagram/reels/{rid}/apagar")
+    def ig_apagar(rid: str):
+        return _ig().apagar(rid)
+
+    @app.post("/api/instagram/repo/limpar")
+    def ig_limpar():
+        return _ig().limpar_repo()
+
     @app.post("/api/ajustes")
     def ajustes(c: Ajustes):
         return nucleo.salvar_ajustes(rpm=c.rpm, rpms=c.rpms, chave=c.chave)
@@ -480,6 +603,11 @@ def _autoteste():
     caso("⛔ chave que nao existe: 404", c.post("/api/chaves/naoexiste/remover", headers=h).status_code == 404)
     caso("⛔ colar nada: 400", c.post("/api/chaves", headers=h, json={"chaves": [" "]}).status_code == 400)
     caso("⛔ RPM absurdo: 400", c.post("/api/ajustes", headers=h, json={"rpm": 500}).status_code == 400)
+    caso("aba Instagram responde", "avatares" in c.get("/api/instagram", headers=h).json())
+    caso("⛔ Instagram: id com ../ = 404",
+         c.get("/api/instagram/reels/..%2F..%2Fdata/arquivo/final", headers=h).status_code == 404)
+    caso("⛔ Instagram: Reel sem avatar = 404", c.post("/api/instagram/reels", headers=h,
+                                                       json={"avatar": "nao-existe", "idioma": "pt"}).status_code == 404)
     try:
         with c.websocket_connect("/api/eventos?t=errada") as ws:
             ws.receive_json()
