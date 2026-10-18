@@ -369,18 +369,19 @@ export interface AvatarIG {
   id: string; nome: string; criado: number; descricao: string; prefixo: string; voz: string; quem: string;
   cenas: CenaIG[]; foto: boolean; livro: boolean; aviso?: string;
 }
-export interface TakeIG { n: number; fala: string; movimento: string; cta: boolean; video: string }
+export interface TakeIG { n: number; fala: string; quadro?: string; movimento: string; cta: boolean; video: string }
 export interface TakeOrigemIG { n: number; ini: number; fim: number; texto: string }
 export interface ReelIG {
   id: string; avatar: string; criado: number; idioma: string; url: string; cena: string;
-  cta: { tipo: "bio" | "palavra"; palavra: string; livro: boolean }; modelo: "gratis" | "pago";
+  cta: { tipo: "bio" | "palavra"; palavra: string; livro: boolean }; modelo: "gratis" | "pago"; legenda?: number;
   takes_origem: TakeOrigemIG[]; takes: TakeIG[]; legenda_post: string; registro: { t: number; texto: string }[];
   publicado: string; idioma_origem?: string; duracao?: number;
   etapas: EtapaVideo[]; trabalhando: string; na_fila: string[]; final: boolean;
 }
 export interface AjustesIG { backend: string; repo_dir: string; auto_subir: boolean; dias: number; cookies: string }
 export interface InstagramTudo {
-  avatares: AvatarIG[]; reels: ReelIG[]; ajustes: AjustesIG; idiomas: Record<string, string>;
+  avatares: AvatarIG[]; reels: ReelIG[]; ajustes: AjustesIG; idiomas: Record<string, string>; legendas: Record<string, string>;
+  producao?: { agora: { tipo: "reel" | "cena" | "repo"; id: string; etapa: string } | null; fila: number };
   gerador: { ok: boolean; texto: string }; publicados: { rid: string; nome: string; data: string }[];
 }
 

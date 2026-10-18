@@ -5,10 +5,12 @@ r"""INSTAGRAM MIDIA — baixar o Reel de origem, transcrever, montar o Reel 9:16
 
     baixar(url, pasta, cookies="")        yt-dlp -> pasta/fonte.mp4
     palavras(arquivo, idioma=None)        faster-whisper com tempo por palavra -> ([{"w","ini","fim"}], idioma)
+    quadro(video, t, saida)               um quadro do video (o enquadramento de origem de cada take)
     fim_da_fala(palavras, duracao)        onde aparar a cauda de um take (o Veo devolve 8 s mesmo com fala curta)
     montar(clipes, saida)                 [(mp4, ate_s)] -> um mp4 1080x1920 30 fps, -14 LUFS
     legenda_ass(palavras)                 palavras -> legenda .ass (2 a 3 palavras por vez, centro-baixo)
     queimar(video, ass, saida)            a legenda dentro da imagem
+    queimar_estilo(video, palavras, saida, n, cta)   a legenda no estilo N do OW Agente (2 = PILULA)
 """
 import json, os, shutil, subprocess, sys
 
@@ -81,6 +83,13 @@ def alinhar(fala, pals, ate, inicio=0.0):
     return saida
 
 
+def quadro(video, t, saida):
+    """Um quadro do video no segundo `t` (JPG): o enquadramento de origem de um take."""
+    _rodar(["ffmpeg", "-y", "-v", "error", "-ss", f"{max(0.0, t):.2f}", "-i", video, "-frames:v", "1", "-q:v", "2", saida])
+    if not os.path.isfile(saida): raise RuntimeError(f"o ffmpeg não tirou o quadro de {t:.1f} s")
+    return saida
+
+
 def montar(clipes, saida):
     """[(mp4, ate_s)] -> um mp4 9:16 numa passada so' do ffmpeg (corte, escala, concat, loudnorm)."""
     if not clipes: raise ValueError("nenhum take para montar")
@@ -144,6 +153,75 @@ def queimar(video, ass_texto, saida):
     return saida
 
 
+# ── a legenda nos estilos do OW Agente (o mesmo pool numerado do /produzir: 1 CLASSICA, 2 PILULA...) ──
+OW_MOTOR = r"C:\Users\edlut\ow_agente\organic-wave-studio\motor"
+CY_LEGENDA = 0.60          # o centro do cartao: no peito, abaixo do rosto do close (onde a fonte poe a dela)
+
+
+def _ow_legendas():
+    if OW_MOTOR not in sys.path: sys.path.insert(0, OW_MOTOR)
+    import legendas
+    return legendas
+
+
+def estilos_legenda():
+    """{numero: "NOME, desc"} do pool do OW Agente; {} se o OW nao estiver nesta maquina."""
+    try:
+        return {e["numero"]: f'{e["nome"].title()}, {e["desc"]}' for e in _ow_legendas().ESTILOS}
+    except ImportError:
+        return {}
+
+
+def _juntar_cta(pals, cta):
+    """⭐ CTA de varias palavras ("eu quero") vira UMA peca do cartao: o destaque do OW casa a peca inteira."""
+    alvo = cta.lower().split()
+    if len(alvo) < 2: return pals
+    limpa = lambda w: "".join(c for c in w.lower() if c.isalnum())                       # noqa: E731
+    saida, i = [], 0
+    while i < len(pals):
+        trecho = pals[i:i + len(alvo)]
+        if len(trecho) == len(alvo) and [limpa(p["w"]) for p in trecho] == [limpa(a) for a in alvo]:
+            saida.append({"w": " ".join(p["w"] for p in trecho), "ini": trecho[0]["ini"], "fim": trecho[-1]["fim"]})
+            i += len(alvo)
+        else:
+            saida.append(pals[i]); i += 1
+    return saida
+
+
+def queimar_estilo(video, pals, saida, estilo, cta=""):
+    """A legenda no estilo N do OW Agente: cartoes de ate' 3 palavras, a palavra falada em realce e, na frase do
+    CTA, so' o CTA em destaque. Cada cartao e' um PNG (legendas.png_cartao) posto por cima no tempo da palavra."""
+    leg = _ow_legendas()
+    est = leg.POR_NUMERO[int(estilo)]
+    pasta = os.path.dirname(os.path.abspath(saida))
+    sub = os.path.join(pasta, "cartoes")
+    shutil.rmtree(sub, ignore_errors=True); os.makedirs(sub, exist_ok=True)
+    fora, blocos = [], list(_blocos(_juntar_cta(pals, cta)))
+    for b_i, b in enumerate(blocos):
+        fim_bloco = b[-1]["fim"] + 0.08
+        if b_i + 1 < len(blocos): fim_bloco = min(fim_bloco, blocos[b_i + 1][0]["ini"])  # ⛔ um cartao por vez
+        pecas = [p["w"].strip(",.!?;:") for p in b]
+        for j, p in enumerate(b):
+            png = os.path.join(sub, f"c{len(fora):03d}.png")
+            w, h = leg.png_cartao(pecas, j, est["alt"] * H, png, W, int(W * 0.88), cta, est)
+            x = min(max(int(W / 2 - w / 2), int(W * 0.02)), int(W * 0.98) - w)
+            t0 = p["ini"] if j else b[0]["ini"]
+            t1 = b[j + 1]["ini"] if j + 1 < len(b) else fim_bloco
+            if t1 > t0: fora.append((os.path.relpath(png, pasta), x, int(CY_LEGENDA * H - h / 2), t0, t1))
+    if not fora: return queimar(video, legenda_ass(pals), saida)
+    cmd, filtros, cur = ["ffmpeg", "-y", "-v", "error", "-i", os.path.abspath(video)], [], "0:v"
+    for i, (png, x, y, t0, t1) in enumerate(fora, 1):
+        cmd += ["-i", png]
+        filtros.append(f"[{cur}][{i}:v]overlay={x}:{y}:enable='between(t,{t0:.3f},{t1:.3f})'[v{i}]")
+        cur = f"v{i}"
+    script = os.path.join(pasta, "cartoes.txt")              # ⛔ o filtro inteiro na linha de comando passa do limite
+    open(script, "w", encoding="utf-8").write(";".join(filtros))
+    cmd += ["-filter_complex_script", "cartoes.txt", "-map", f"[{cur}]", "-map", "0:a?", "-c:v", "libx264",
+            "-preset", "medium", "-crf", "20", "-c:a", "copy", "-movflags", "+faststart", os.path.abspath(saida)]
+    _rodar(cmd, cwd=pasta)
+    return saida
+
+
 def _autoteste():
     import tempfile
     ok = True
@@ -185,6 +263,15 @@ def _autoteste():
     caso("⛔ legenda: chaves nao viram comando do ASS", "{x}" not in ass.split("[Events]")[1])
     f = queimar(m, ass, os.path.join(d, "final.mp4"))
     caso("queimar: final gravado com audio", os.path.getsize(f) > 10_000 and abs(duracao(f) - 5.5) < 0.2)
+    cta = [{"w": w, "ini": 2 + i * 0.4, "fim": 2 + i * 0.4 + 0.35} for i, w in enumerate("Comente eu quero, aqui".split())]
+    junto = _juntar_cta(cta, "eu quero")
+    caso("⭐ CTA de duas palavras vira uma peca so'", [p["w"] for p in junto] == ["Comente", "eu quero,", "aqui"]
+         and junto[1]["ini"] == 2.4 and junto[1]["fim"] == 3.15)
+    caso("CTA de uma palavra nao mexe nas palavras", _juntar_cta(cta, "yes") == cta)
+    if 2 in estilos_legenda():
+        f2 = queimar_estilo(m, pals[:5] + cta, os.path.join(d, "estilo", "final.mp4"), 2, "eu quero")
+        caso("⭐ legenda estilo 2 (PILULA) queimada, com audio", abs(duracao(f2) - 5.5) < 0.2
+             and len(os.listdir(os.path.join(d, "estilo", "cartoes"))) == 8)
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 

@@ -59,6 +59,26 @@ def _upload(caminho, diz):
     return mid
 
 
+def _tropeco_recaptcha(e):
+    """⛔ (18/10) a pagina do Flow as vezes fica sem o grecaptcha.enterprise.execute por um instante (e o wrapper
+    da sessao some junto): reconectar refaz o bootstrap e a segunda tentativa passa."""
+    return "grecaptcha" in str(e) or "token reCAPTCHA" in str(e)
+
+
+def _com_segunda_chance(fn):
+    def f(*args):
+        diz = args[-1]
+        try:
+            return fn(*args)
+        except Exception as e:                                              # noqa: BLE001
+            if not _tropeco_recaptcha(e): raise
+            diz("  reCAPTCHA do Flow tropeçou: reconectando e tentando de novo")
+            _reconectar(diz)
+            return fn(*args)
+    f.__wrapped__ = fn
+    return f
+
+
 # ── contrato do backend (motor/instagram_backend.py) ───────────────────────
 
 def gerar_imagem(prompt, refs, destino, diz):
@@ -108,6 +128,10 @@ def gerar_videos(pedidos, pasta, modelo, diz):
     return resultado
 
 
+gerar_imagem = _com_segunda_chance(gerar_imagem)
+gerar_videos = _com_segunda_chance(gerar_videos)
+
+
 # ── utilitários (uso manual) ───────────────────────────────────────────────
 
 def conectar():
@@ -127,8 +151,10 @@ def _autoteste():
     def caso(nome, cond):
         nonlocal ok; print(("  OK  " if cond else "  ERRO"), nome); ok &= bool(cond)
 
-    caso("gerar_imagem existe e aceita 4 args", callable(gerar_imagem) and gerar_imagem.__code__.co_argcount == 4)
-    caso("gerar_videos existe e aceita 4 args", callable(gerar_videos) and gerar_videos.__code__.co_argcount == 4)
+    caso("gerar_imagem existe e aceita 4 args", callable(gerar_imagem) and gerar_imagem.__wrapped__.__code__.co_argcount == 4)
+    caso("gerar_videos existe e aceita 4 args", callable(gerar_videos) and gerar_videos.__wrapped__.__code__.co_argcount == 4)
+    caso("⭐ tropeco do reCAPTCHA reconhecido", _tropeco_recaptcha(RuntimeError("CDP JS error: grecaptcha.enterprise.execute is not a function"))
+         and not _tropeco_recaptcha(RuntimeError("filtro de conteudo")))
     caso("ASPECTO_IMG_916 == 2", ASPECTO_IMG_916 == 2)
     caso("MODELO_GRATIS é o lower priority", "low_priority" in fh.MODELO_GRATIS)
     caso("flow_ivone.PROJETO definido", bool(flow_ivone.PROJETO))

@@ -211,8 +211,14 @@ class Instagram:
         reels.sort(key=lambda r: -r["criado"])
         aj = self.ajustes()
         return {"avatares": avs, "reels": reels, "ajustes": aj,
-                "idiomas": {k: v["nome"] for k, v in _rot.IDIOMAS.items()},
-                "gerador": self._estado_gerador(aj), "publicados": self._publicados()}
+                "idiomas": {k: v["nome"] for k, v in _rot.IDIOMAS.items()}, "legendas": _midia.estilos_legenda(),
+                "gerador": self._estado_gerador(aj), "publicados": self._publicados(), "producao": self._producao()}
+
+    def _producao(self):
+        """O que o fio da aba faz agora, para o painel de producao: {"tipo", "id", "etapa"} | None, e a fila."""
+        trab = self._trabalhando
+        agora = {"tipo": trab[0], "id": trab[1], "etapa": NOMES.get(trab[2], trab[2])} if trab else None
+        return {"agora": agora, "fila": self._fila.qsize()}
 
     def _estado_gerador(self, aj):
         if self._backend_fixo: return {"ok": True, "texto": "gerador de teste"}
@@ -360,13 +366,16 @@ class Instagram:
 
     # ── reels ──
     def criar_reel(self, avatar, idioma, url="", video="", ext="mp4", cta="bio", palavra="", livro=False,
-                   modelo="gratis"):
+                   modelo="gratis", legenda=0):
         a = self._avatar(_valida(avatar))
         if idioma not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
         if modelo not in ("gratis", "pago"): raise ValueError("modelo desconhecido")
         if cta not in ("bio", "palavra"): raise ValueError("CTA desconhecido")
-        if cta == "palavra" and not re.fullmatch(r"[A-Za-zÀ-ÿ0-9]{2,20}", (palavra or "").strip()):
-            raise ValueError("a palavra do CTA é uma palavra só (letras, sem espaço)")
+        palavra = " ".join((palavra or "").split())
+        if cta == "palavra" and not re.fullmatch(r"[A-Za-zÀ-ÿ0-9]{2,20}( [A-Za-zÀ-ÿ0-9]{1,20}){0,2}", palavra):
+            raise ValueError("o CTA é uma palavra ou uma frase curta de até 3 palavras (só letras)")
+        legenda = int(legenda or 0)
+        if legenda and legenda not in _midia.estilos_legenda(): raise ValueError("estilo de legenda desconhecido")
         if livro and not self._achar(self._pasta_av(a["id"]), "livro"): raise ValueError("suba a capa do livro primeiro")
         url = (url or "").strip()
         if not url and not video: raise ValueError("cole o link do Reel ou envie o vídeo")
@@ -382,8 +391,9 @@ class Instagram:
             if len(dados) > MAX_VIDEO_MB * 1024 * 1024: raise ValueError(f"o vídeo passa de {MAX_VIDEO_MB} MB")
             open(os.path.join(p, "fonte.mp4"), "wb").write(dados)
         r = {"id": rid, "avatar": a["id"], "criado": time.time(), "idioma": idioma, "url": url, "cena": cid,
-             "cta": {"tipo": cta, "palavra": _slug(palavra).replace("-", "") if cta == "palavra" else "", "livro": bool(livro)},
-             "modelo": modelo, "takes_origem": [], "takes": [], "legenda_post": "", "registro": [], "publicado": ""}
+             "cta": {"tipo": cta, "palavra": _slug(palavra).replace("-", " ") if cta == "palavra" else "", "livro": bool(livro)},
+             "modelo": modelo, "legenda": legenda, "takes_origem": [], "takes": [], "legenda_post": "", "registro": [],
+             "publicado": ""}
         with self._t: self._gravar(os.path.join(p, "reel.json"), r)
         self._alterar_avatar(a["id"], lambda x: x.setdefault("usos", {}).setdefault(cid, []).append(time.time()))
         nome_cena = next(c["nome"] for c in a["cenas"] if c["id"] == cid)
@@ -559,8 +569,9 @@ class Instagram:
         if not lido: raise RuntimeError("a adaptação veio fora do formato")
         for t in lido["takes"]: t["video"] = ""
         self._alterar_reel(rid, lambda x: x.update(takes=lido["takes"], legenda_post=lido["legenda_post"]))
-        final = os.path.join(self._pasta_reel(rid), "final.mp4")
-        if os.path.isfile(final): os.remove(final)
+        p = self._pasta_reel(rid)
+        for arq in os.listdir(p):                  # ⛔ quadro velho seria de outra fala: roteiro novo = quadros novos
+            if arq == "final.mp4" or re.fullmatch(r"(quadro_\d{2}\.png|origem_\d{2}\.jpg)", arq): os.remove(os.path.join(p, arq))
         self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - 1} + CTA)")
 
     def _etapa_gerar(self, rid):
@@ -568,22 +579,41 @@ class Instagram:
         if not r.get("takes"): raise RuntimeError("faça o roteiro primeiro")
         a = self._avatar(r["avatar"])
         pa, p = self._pasta_av(a["id"]), self._pasta_reel(rid)
-        quadro = os.path.join(pa, "cenas", f"{r['cena']}.png")
-        if not os.path.isfile(quadro): raise RuntimeError("a imagem do cômodo deste Reel sumiu: refaça o cômodo")
+        comodo = os.path.join(pa, "cenas", f"{r['cena']}.png")
+        if not os.path.isfile(comodo): raise RuntimeError("a imagem do cômodo deste Reel sumiu: refaça o cômodo")
         g = self._gerador()
-        fim_cta = quadro
-        if r["cta"]["livro"]:
-            fim_cta = os.path.join(p, "cta.png")
-            if not os.path.isfile(fim_cta):
+        faltam = [t for t in r["takes"] if not (t.get("video") and os.path.isfile(t["video"]))]
+        if not faltam: return
+        # ⭐ cada take abre no SEU quadro, com o angulo e o zoom do video de origem naquele trecho (o take do CTA usa
+        #    o ultimo). O comodo entra so' pelo texto: a imagem dele como referencia dominava o quadro e punha o avatar
+        #    de corpo inteiro, longe da camera (18/10). Sem video de origem, vale a imagem do comodo.
+        foto, fonte, origem = self._achar(pa, "foto"), os.path.join(p, "fonte.mp4"), r.get("takes_origem") or []
+        lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
+        inicios = {}
+        for t in faltam:
+            inicios[t["n"]] = comodo
+            if not (foto and origem and os.path.isfile(fonte)): continue
+            arq = os.path.join(p, f"quadro_{t['n']:02d}.png")
+            if not os.path.isfile(arq):
+                o = origem[min(t["n"], len(origem)) - 1]
+                ref = self.midia.quadro(fonte, (o["ini"] + o["fim"]) / 2, os.path.join(p, f"origem_{t['n']:02d}.jpg"))
+                self._log(f"instagram: gerando o quadro do take {t['n']} de {rid}")
+                g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", "")), [ref, foto], arq, self._log)
+                if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {t['n']}")
+            inicios[t["n"]] = arq
+        fins = dict(inicios)
+        cta = next((t for t in faltam if t["cta"]), None)
+        if cta and r["cta"]["livro"]:
+            fins[cta["n"]] = os.path.join(p, "cta.png")
+            if not os.path.isfile(fins[cta["n"]]):
                 livro = self._achar(pa, "livro")
                 if not livro: raise RuntimeError("a capa do livro sumiu: suba de novo")
                 self._log(f"instagram: gerando o quadro do livro de {rid}")
-                g.gerar_imagem(_rot.PROMPT_OBJETO, [quadro, livro], fim_cta, self._log)
-                if not os.path.isfile(fim_cta): raise RuntimeError("o gerador não gravou o quadro do livro")
-        pedidos = [{"nome": f"take_{t['n']:02d}", "prompt": _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"], muda=t["cta"] and fim_cta != quadro),
-                    "inicio": quadro, "fim": fim_cta if t["cta"] else quadro}
-                   for t in r["takes"] if not (t.get("video") and os.path.isfile(t["video"]))]
-        if not pedidos: return
+                g.gerar_imagem(_rot.PROMPT_OBJETO, [inicios[cta["n"]], livro], fins[cta["n"]], self._log)
+                if not os.path.isfile(fins[cta["n"]]): raise RuntimeError("o gerador não gravou o quadro do livro")
+        pedidos = [{"nome": f"take_{t['n']:02d}", "inicio": inicios[t["n"]], "fim": fins[t["n"]],
+                    "prompt": _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"], muda=fins[t["n"]] != inicios[t["n"]])}
+                   for t in faltam]
         self._log(f"instagram: {len(pedidos)} take(s) de {rid} no gerador ({r['modelo']})")
         feitos = g.gerar_videos(pedidos, p, r["modelo"], self._log) or {}
 
@@ -612,7 +642,11 @@ class Instagram:
             legenda += self.midia.alinhar(t["fala"], pals, ate, inicio)
             inicio += ate
         sem = self.midia.montar(clipes, os.path.join(p, "sem_legenda.mp4"))
-        self.midia.queimar(sem, self.midia.legenda_ass(legenda), os.path.join(p, "final.mp4"))
+        if r.get("legenda"):
+            cta = r["cta"]["palavra"] if r["cta"]["tipo"] == "palavra" else ""
+            self.midia.queimar_estilo(sem, legenda, os.path.join(p, "final.mp4"), r["legenda"], cta)
+        else:
+            self.midia.queimar(sem, self.midia.legenda_ass(legenda), os.path.join(p, "final.mp4"))
         if r.get("legenda_post"):
             open(os.path.join(p, "legenda_post.txt"), "w", encoding="utf-8").write(r["legenda_post"] + "\n")
         dur = round(sum(c[1] for c in clipes), 1)
@@ -667,7 +701,14 @@ def _autoteste():
         montar = staticmethod(_midia.montar)
         legenda_ass = staticmethod(_midia.legenda_ass)
         queimar = staticmethod(_midia.queimar)
+        queimar_estilo = staticmethod(_midia.queimar_estilo)
         alinhar = staticmethod(_midia.alinhar)
+
+        quadros = []
+
+        @classmethod
+        def quadro(cls, video, t, saida):
+            cls.quadros.append(round(t, 2)); open(saida, "wb").write(b"0" * 50); return saida
 
         @classmethod
         def baixar(cls, url, pasta, cookies=""):
@@ -688,7 +729,9 @@ def _autoteste():
     def claude(pedido, timeout=0):
         pedidos.append(pedido)
         n = len(re.findall(r"^\d+\. \(", pedido, flags=re.M))
-        return json.dumps({"takes": [{"n": i, "fala": f"Fala {i} da Tomiko", "movimento": "She smiles at the camera."}
+        quadro = "Target language: American English." in pedido          # ⭐ o Reel em ingles traz os itens do quadro
+        return json.dumps({"takes": [{"n": i, "fala": f"Fala {i} da Tomiko", "movimento": "She smiles at the camera.",
+                                      **({"quadro": f"A blender with soaked rice, step {i}."} if quadro else {})}
                                      for i in range(1, n + 2)], "legenda_post": "Chá de gengibre 🍵"})
 
     eventos = []
@@ -746,10 +789,13 @@ def _autoteste():
             caso(nome, True)
     for c in ("cozinha", "varanda"): ig.cena(aid, c, "aprovar")
     ig.enviar_imagem(aid, "livro", png, "jpg")
+    n0 = len(g.imagens)
     r1 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/abc/", cta="palavra", palavra="Umeboshi", livro=True)
     caso("⛔ link de fora recusado", _erro(lambda: ig.criar_reel(aid, "pt", url="https://evil.com/x")))
-    caso("⛔ palavra com espaco recusada", _erro(lambda: ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/x/",
-                                                                       cta="palavra", palavra="duas palavras")))
+    caso("⛔ CTA de mais de 3 palavras recusado", _erro(lambda: ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/x/",
+                                                                              cta="palavra", palavra="eu quero muito isso")))
+    caso("⛔ estilo de legenda desconhecido", _erro(lambda: ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/x/",
+                                                                           legenda=99)))
     ig.esperar(120)
     r1 = ig.reel(r1["id"])
     est = {e["id"]: e["estado"] for e in r1["etapas"]}
@@ -759,9 +805,12 @@ def _autoteste():
     caso("roteiro: pediu em portugues com a palavra do CTA", "Brazilian Portuguese" in pedidos[0] and '"umeboshi,"' in pedidos[0])
     caso("roteiro: um take a mais para o CTA", len(r1["takes"]) == len(r1["takes_origem"]) + 1 and r1["takes"][-1]["cta"])
     vs = g.videos
-    caso("⭐ todos os takes no mesmo comodo (inicio)", len({v["inicio"] for v in vs}) == 1 and vs[0]["inicio"].endswith("cozinha.png"))
+    caso("⭐ o comodo do Reel entra como texto, nunca como referencia do quadro",
+         all("dark wood cabinets" in i[0] and not any(x.endswith(".png") and "cenas" in x for x in i[1])
+             for i in g.imagens[n0:] if "SECOND reference image for the object" not in i[0])
+         and [os.path.basename(v["inicio"]) for v in vs] == [f"quadro_{i:02d}.png" for i in range(1, len(vs) + 1)])
     caso("⭐ o CTA termina no quadro do livro", vs[-1]["fim"].endswith("cta.png") and vs[0]["fim"] == vs[0]["inicio"])
-    caso("o quadro do livro usou o comodo e a capa", g.imagens[-1][1][0].endswith("cozinha.png")
+    caso("o quadro do livro parte do quadro do take do CTA, com a capa", g.imagens[-1][1][0] == vs[-1]["inicio"]
          and g.imagens[-1][1][1].endswith("livro.jpg") and "SECOND reference" in g.imagens[-1][0])
     caso("⭐ o take do livro pede a mudanca durante a fala", "in step with the speech" in vs[-1]["prompt"]
          and "in step with the speech" not in vs[0]["prompt"])
@@ -770,9 +819,23 @@ def _autoteste():
     ass = open(os.path.join(ig._pasta_reel(r1["id"]), "legenda.ass"), encoding="utf-8").read()
     caso("⭐ a legenda queimada usa a fala do roteiro", "Fala 1 da" in ass and "Olá" not in ass)
     caso("legenda do post gravada", open(os.path.join(ig._pasta_reel(r1["id"]), "legenda_post.txt"), encoding="utf-8").read().startswith("Chá"))
-    r2 = ig.criar_reel(aid, "en", url="https://www.instagram.com/reel/def/")
+    n_vid = len(g.videos)
+    r2 = ig.criar_reel(aid, "en", url="https://www.instagram.com/reel/def/", legenda=2)
     caso("⭐ o video seguinte vai para o outro comodo", r2["cena"] == "varanda")
+    n_img = len(g.imagens)
     ig.esperar(120)
+    vs2 = g.videos[n_vid:]
+    caso("⭐ cada take abre no seu quadro", [os.path.basename(v["inicio"]) for v in vs2]
+         == [f"quadro_{i:02d}.png" for i in range(1, len(vs2) + 1)] and all(v["fim"] == v["inicio"] for v in vs2))
+    caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + len(vs2)
+         and [os.path.basename(x) for x in g.imagens[n_img][1]][0] == "origem_01.jpg"
+         and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]).startswith("foto.")
+         and "bamboo bench" in g.imagens[n_img][0]
+         and "same camera angle" in g.imagens[n_img][0] and "step 1." in g.imagens[n_img][0])
+    caso("o take do CTA usa o ultimo trecho da origem", Midia.quadros[len(vs2) - 1] == Midia.quadros[len(vs2) - 2])
+    caso("⭐ legenda estilo 2: cartoes por cima, sem .ass", ig.reel(r2["id"])["final"]
+         and os.path.isdir(os.path.join(ig._pasta_reel(r2["id"]), "cartoes"))
+         and not os.path.isfile(os.path.join(ig._pasta_reel(r2["id"]), "legenda.ass")))
     n_antes = len(g.videos)
     ig.editar_take(r2["id"], 1, fala="Uma fala nova — com travessão")
     r2 = ig.reel(r2["id"])
@@ -780,10 +843,13 @@ def _autoteste():
          and "—" not in r2["takes"][0]["fala"])
     ig.rodar(r2["id"], "gerar"); ig.esperar(120)
     caso("⭐ refazer a geracao gera so' o take editado", len(g.videos) == n_antes + 1 and ig.reel(r2["id"])["final"])
+    caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + len(vs2))
     g.falhar = {"take_02"}
-    r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/")
+    r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/", cta="palavra", palavra=" Eu  Quero ")
+    caso("⭐ CTA de frase curta guardado em minusculas", r3["cta"]["palavra"] == "eu quero")
     ig.esperar(120)
     r3 = ig.reel(r3["id"])
+    caso("roteiro: o CTA de frase vai inteiro no pedido", '"eu quero,"' in pedidos[-1])
     caso("⛔ take que falha para a montagem e explica", not r3["final"] and "take(s) 2 falharam" in r3["registro"][0]["texto"]
          and any(e[0] == "aviso" and e[2] == "erro" for e in eventos))
     caso("⛔ caminho de arquivo nao sai da pasta", _erro(lambda: ig.arquivo_reel("../../x", "final"), KeyError)
@@ -801,7 +867,8 @@ def _autoteste():
          and any(x.endswith(f"{r1['id']}.txt") for x in nomes) and ig.reel(r1["id"])["publicado"] == _dt.date.today().isoformat())
     caso("⛔ ajuste de dias fora do intervalo", _erro(lambda: ig.salvar_ajustes(dias=0)))
     caso("⛔ backend que nao existe", _erro(lambda: ig.salvar_ajustes(backend=os.path.join(base, "nao.py")), Exception))
-    caso("tudo() para o painel", len(ig.tudo()["reels"]) == 3 and ig.tudo()["gerador"]["ok"])
+    caso("tudo() para o painel", len(ig.tudo()["reels"]) == 3 and ig.tudo()["gerador"]["ok"]
+         and ig.tudo()["producao"] == {"agora": None, "fila": 0})
     caso("eventos mudou/instagram", any(e[0] == "mudou" and e[1].get("o") == "instagram" for e in eventos))
     ig.encerrar()
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")

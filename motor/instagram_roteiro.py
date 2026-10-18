@@ -147,9 +147,9 @@ def pedido_adaptacao(takes, idioma, avatar, cta):
     info = IDIOMAS[idioma]
     lim = PALAVRAS_TAKE.get(idioma, 18)
     if cta.get("tipo") == "palavra":
-        regra_cta = (f'The LAST take is the call to action: invite viewers to comment the single word '
+        regra_cta = (f'The LAST take is the call to action: invite viewers to comment '
                      f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
-                     f'receive the full material. Write the word exactly like that inside the line.')
+                     f'receive the full material. Write it exactly like that inside the line.')
     else:
         regra_cta = ("The LAST take is the call to action: a plain, calm line saying the complete material is at the "
                      "link in the profile. No hype.")
@@ -168,9 +168,12 @@ Write, for EACH original take, in the same order:
 - "fala": what the presenter says in {info["lingua"]}, keeping the meaning, the hook and the rhythm of the original,
   in her own warm voice. At most {lim} words. Never end a take on a word that asks for continuation
   (articles, prepositions, conjunctions). No dash characters of any kind inside the line. Numbers in words.
+- "quadro": one short English sentence naming the items of this exact step of the line that are in front of her
+  (ingredients, bowl, blender, pan, the finished food), concretely. Only the items: never the camera, the framing,
+  her face, hair or clothes (the shot itself is copied from the source video).
 - "movimento": one or two short English sentences describing ONLY her action in the shot, in positive phrasing
-  (what she does, never what she does not do): small natural gestures, looking at the camera, handling a jar,
-  a tea cup, herbs or a cutting board when it fits the line. She stays in the same spot.
+  (what she does, never what she does not do): a small natural action with the items of the "quadro", looking
+  at the camera between gestures. She stays in the same spot and ends the shot in the pose she started.
 If an original take is itself a call to action (comment, follow, share, link), rewrite it as a short closing
 line of the content instead: the call to action lives ONLY in the extra take below.
 Then add ONE extra take at the end for the call to action, with the same fields. {regra_cta}
@@ -184,11 +187,11 @@ Also write "legenda_post": the Instagram post caption in {info["lingua"]} (2 to 
 line, ending with the same call to action).
 
 JSON format:
-{{"takes": [{{"n": 1, "fala": "...", "movimento": "..."}}, ...], "legenda_post": "..."}}"""
+{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "movimento": "..."}}, ...], "legenda_post": "..."}}"""
 
 
 def ler_adaptacao(texto, n_origem):
-    """A resposta do Claude -> {"takes": [{"n", "fala", "movimento", "cta"}], "legenda_post"} ou None.
+    """A resposta do Claude -> {"takes": [{"n", "fala", "quadro", "movimento", "cta"}], "legenda_post"} ou None.
     ⛔ Fora do formato (sem JSON, takes faltando, campo vazio) = None: quem chama tenta de novo."""
     m = re.search(r"\{.*\}", texto or "", flags=re.S)
     if not m: return None
@@ -204,7 +207,9 @@ def ler_adaptacao(texto, n_origem):
         mov = t.get("movimento") if isinstance(t, dict) else None
         if not isinstance(fala, str) or not fala.strip() or not isinstance(mov, str) or not mov.strip(): return None
         fala = re.sub(r"\s*[—–]\s*|\s+-\s+", ", ", fala.strip())      # ⛔ o Veo vocaliza o travessao
-        saida.append({"n": i, "fala": fala, "movimento": mov.strip(), "cta": i == n_origem + 1})
+        quadro = t.get("quadro")
+        saida.append({"n": i, "fala": fala, "quadro": quadro.strip() if isinstance(quadro, str) else "",
+                      "movimento": mov.strip(), "cta": i == n_origem + 1})
     return {"takes": saida, "legenda_post": str(d.get("legenda_post") or "").strip()}
 
 
@@ -229,6 +234,19 @@ def prompt_cena(avatar, cena):
     """A imagem 9:16 de um comodo do lar, com a foto do avatar como referencia."""
     return (f"Vertical 9:16 photo, smartphone UGC style. Using the reference image for the person: "
             f"{avatar.get('descricao', '').strip()} {cena.strip()} Upper body visible, looking at the camera. "
+            f"No text, no captions, no logos, no watermark.")
+
+
+def prompt_quadro(avatar, lugar, quadro):
+    """O quadro de abertura de UM take. Refs: 1a = o quadro do video de origem naquele take, 2a = a foto do avatar.
+    ⛔ O angulo, a distancia e a composicao vem SO' do video de origem (cada Reel tem os seus). O comodo entra so'
+    pelo TEXTO: a imagem dele como referencia domina o quadro e poe o avatar de corpo inteiro, longe da camera."""
+    return (f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
+            f"zoom, the same framing and crop, the same hand positions and the same kind of items in the same places "
+            f"of the frame. Replace the person with the person of the SECOND reference image (same face, hair and "
+            f"clothes): {avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the "
+            f"face, the hair, the headwear or the clothes. Change only the setting behind the items to this place: "
+            f"{lugar.strip()} {quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
             f"No text, no captions, no logos, no watermark.")
 
 

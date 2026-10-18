@@ -8,6 +8,7 @@ import {
 } from "../api";
 import type { MIN } from "../estado";
 import { Girando, useAcao } from "../componentes/base";
+import { Atividade } from "./Painel";
 
 type Avisar = (t: string, tom?: "ok" | "erro") => void;
 
@@ -73,6 +74,8 @@ export function Instagram({ m }: { m: MIN }) {
         </div>
       </div>
 
+      <ProducaoIG dados={dados} m={m} />
+
       {!dados.gerador.ok && (
         <div className="panel ig-alerta">
           <strong>Nenhum gerador de imagem e vídeo configurado.</strong>
@@ -107,7 +110,7 @@ export function Instagram({ m }: { m: MIN }) {
       {avatar && !criando && (
         <>
           <Pool a={avatar} avisar={m.avisar} recarregar={recarregar} rodando={rodando} rodar={rodar} />
-          <NovoReel a={avatar} idiomas={dados.idiomas} avisar={m.avisar} recarregar={recarregar} />
+          <NovoReel a={avatar} idiomas={dados.idiomas} legendas={dados.legendas ?? {}} avisar={m.avisar} recarregar={recarregar} />
           <section className="ig-secao">
             <div className="ig-secao-topo"><h2>Reels de {avatar.nome}</h2><span className="meta">{reels.length}</span></div>
             {reels.length === 0 && <p className="meta">Nenhum Reel ainda.</p>}
@@ -380,8 +383,42 @@ function CartaoCena({ a, c, avisar, recarregar }: { a: AvatarIG; c: CenaIG; avis
   );
 }
 
-function NovoReel({ a, idiomas, avisar, recarregar }: {
-  a: AvatarIG; idiomas: Record<string, string>; avisar: Avisar; recarregar: () => Promise<void>;
+function ProducaoIG({ dados, m }: { dados: InstagramTudo; m: MIN }) {
+  const agora = dados.producao?.agora ?? null;
+  const reel = agora?.tipo === "reel" ? dados.reels.find((r) => r.id === agora.id) : undefined;
+  const nomeCena = (r: ReelIG) =>
+    dados.avatares.find((a) => a.id === r.avatar)?.cenas.find((c) => c.id === r.cena)?.nome ?? r.cena;
+  const titulo = !agora ? "Parado" : agora.tipo === "reel" ? `Reel em ${agora.etapa.toLowerCase()}` :
+    agora.tipo === "cena" ? "Gerando um cômodo" : "Subindo para o repositório";
+  const detalhe = reel ? `${dados.idiomas[reel.idioma] ?? reel.idioma} · ${nomeCena(reel)} · ${reel.id}` :
+    agora?.tipo === "cena" ? agora.id : dados.producao?.fila ? `${dados.producao.fila} na fila` :
+    "Nada rodando. Produza um Reel embaixo quando quiser.";
+  const linhas = m.registro.filter((l) => /instagram/i.test(l.texto))
+    .map((l) => ({ ...l, texto: l.texto.replace(/^(⚠\s*)?instagram(\s*\([^)]*\))?:\s*/i, "$1") }));
+  return (
+    <section className={`panel pilot${agora ? "" : " is-off"}`} aria-label="Produção">
+      <div className="pilot-l">
+        <div className="pilot-state">
+          <span className="live" aria-hidden />
+          <div><h3>{titulo}</h3><p>{detalhe}</p></div>
+        </div>
+        <div className="metrics">
+          <div><span className="label">Reels</span><span className="num">{dados.reels.length}</span></div>
+          <div><span className="label">Prontos</span><span className="num accent">{dados.reels.filter((r) => r.final).length}</span></div>
+          <div><span className="label">Na fila</span><span className="num">{dados.producao?.fila ?? 0}</span></div>
+          <div><span className="label">Publicados</span><span className="num">{dados.reels.filter((r) => r.publicado).length}</span></div>
+        </div>
+      </div>
+      <div className="pilot-r">
+        <span className="label">Atividade</span>
+        <Atividade linhas={linhas} vazio="Nada da aba Instagram desde que o painel abriu." />
+      </div>
+    </section>
+  );
+}
+
+function NovoReel({ a, idiomas, legendas, avisar, recarregar }: {
+  a: AvatarIG; idiomas: Record<string, string>; legendas: Record<string, string>; avisar: Avisar; recarregar: () => Promise<void>;
 }) {
   const [url, setUrl] = useState("");
   const [arquivo, setArquivo] = useState<File | null>(null);
@@ -390,6 +427,7 @@ function NovoReel({ a, idiomas, avisar, recarregar }: {
   const [palavra, setPalavra] = useState("");
   const [livro, setLivro] = useState(false);
   const [modelo, setModelo] = useState<"gratis" | "pago">("gratis");
+  const [legenda, setLegenda] = useState(0);
   const { rodando, rodar } = useAcao(avisar);
   const input = useRef<HTMLInputElement>(null);
   const aprovadas = a.cenas.filter((c) => c.estado === "aprovada").length;
@@ -399,7 +437,7 @@ function NovoReel({ a, idiomas, avisar, recarregar }: {
   const produzir = () => rodar("reel", async () => {
     await enviar("/api/instagram/reels", {
       avatar: a.id, idioma, url: arquivo ? "" : url.trim(), video: arquivo ? await lerArquivo(arquivo) : "",
-      ext: arquivo ? extDe(arquivo) : "mp4", cta, palavra, livro, modelo,
+      ext: arquivo ? extDe(arquivo) : "mp4", cta, palavra, livro, modelo, legenda,
     });
     setUrl(""); setArquivo(null);
     await recarregar();
@@ -432,15 +470,22 @@ function NovoReel({ a, idiomas, avisar, recarregar }: {
             <span className="label">CTA</span>
             <div className="seg" role="group" aria-label="CTA">
               <button aria-pressed={cta === "bio"} onClick={() => setCta("bio")}>Link na bio</button>
-              <button aria-pressed={cta === "palavra"} onClick={() => setCta("palavra")}>Comente a palavra</button>
+              <button aria-pressed={cta === "palavra"} onClick={() => setCta("palavra")}>Comente</button>
             </div>
           </div>
           {cta === "palavra" && (
             <label className="campo-grupo">
-              <span className="label">Palavra</span>
-              <input className="campo" value={palavra} placeholder="umeboshi" onChange={(e) => setPalavra(e.target.value)} />
+              <span className="label">Palavra ou frase</span>
+              <input className="campo" value={palavra} placeholder="eu quero" onChange={(e) => setPalavra(e.target.value)} />
             </label>
           )}
+          <label className="campo-grupo">
+            <span className="label">Legenda</span>
+            <select className="campo" value={legenda} onChange={(e) => setLegenda(Number(e.target.value))}>
+              <option value={0}>Simples (branca)</option>
+              {Object.entries(legendas).map(([k, v]) => <option key={k} value={k}>{k}. {v}</option>)}
+            </select>
+          </label>
           <div className="campo-grupo">
             <span className="label">Modelo do vídeo</span>
             <div className="seg" role="group" aria-label="Modelo">
@@ -501,7 +546,7 @@ function CartaoReel({ r, a, idiomas, temRepo, avisar, recarregar }: {
         <p className="meta">
           {new Date(r.criado * 1000).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}
           {r.duracao ? <><b>·</b>{r.duracao} s</> : null}
-          <b>·</b>{r.cta.tipo === "palavra" ? `comente ${r.cta.palavra}` : "link na bio"}{r.cta.livro ? " + livro" : ""}
+          <b>·</b>{r.cta.tipo === "palavra" ? `comente ${r.cta.palavra}` : "link na bio"}{r.cta.livro ? " + livro" : ""}{r.legenda ? ` · legenda ${r.legenda}` : ""}
           {r.modelo === "pago" ? <><b>·</b>Lite pago</> : null}
         </p>
         {r.publicado && <span className={`tag ${r.publicado === "na fila" ? "tag-run" : r.publicado.startsWith("20") ? "tag-ok" : "tag-fila"}`}>
