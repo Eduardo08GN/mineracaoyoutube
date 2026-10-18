@@ -313,14 +313,36 @@ function CartaoCena({ a, c, avisar, recarregar }: { a: AvatarIG; c: CenaIG; avis
     setEditando(false);
     await recarregar();
   });
+  const input = useRef<HTMLInputElement>(null);
+  const [sobre, setSobre] = useState(false);
+  const enviarImagem = (f?: File) => {
+    if (!f) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { avisar("A imagem tem de ser PNG, JPG ou WEBP.", "erro"); return; }
+    void rodar("imagem", async () => {
+      const r = await enviar<AvatarIG>(`/api/instagram/avatares/${a.id}/cenas/${c.id}/imagem`,
+        { imagem: await lerArquivo(f), ext: extDe(f) });
+      await recarregar();
+      avisar(r.aviso ? `Imagem guardada, mas ${r.aviso}.` : `Imagem de “${c.nome}” guardada: aprove se ficou boa.`,
+        r.aviso ? "erro" : "ok");
+    });
+  };
   const tom = c.estado === "aprovada" ? "tag-ok" : c.estado === "recusada" ? "tag-no" : c.estado === "pronta" ? "tag-voce" : "tag-fila";
   return (
-    <div className={`ig-cena ig-cena-${c.estado}`}>
+    <div className={`ig-cena ig-cena-${c.estado}${sobre ? " ig-cena-sobre" : ""}`}
+         onDragOver={(e) => { if (!c.na_fila) { e.preventDefault(); setSobre(true); } }}
+         onDragLeave={() => setSobre(false)}
+         onDrop={(e) => { e.preventDefault(); setSobre(false); if (!c.na_fila) enviarImagem(e.dataTransfer.files?.[0]); }}>
       <div className="ig-cena-img">
-        {c.tem ? <img src={urlImg(a.id, `cena-${c.id}`, `${c.estado}${c.na_fila}`)} alt={c.nome} loading="lazy" />
-          : <span className="ig-cena-vazia">{c.na_fila ? <Girando /> : <ImagePlus size={20} aria-hidden />}</span>}
-        {c.na_fila && c.tem && <span className="ig-cena-girando"><Girando /></span>}
+        {c.tem ? <img src={urlImg(a.id, `cena-${c.id}`, c.v)} alt={c.nome} loading="lazy" />
+          : <button type="button" className="ig-cena-vazia" onClick={() => input.current?.click()} disabled={c.na_fila}
+                    title="Enviar a imagem deste cômodo">
+              {c.na_fila ? <Girando /> : <><Upload size={20} aria-hidden /><span>Enviar imagem</span></>}
+            </button>}
+        {(c.na_fila || rodando === "imagem") && c.tem && <span className="ig-cena-girando"><Girando /></span>}
+        {rodando === "imagem" && !c.tem && <span className="ig-cena-girando"><Girando /></span>}
       </div>
+      <input ref={input} type="file" accept="image/png,image/jpeg,image/webp" className="sr-only" tabIndex={-1}
+             onChange={(e) => { enviarImagem(e.target.files?.[0]); e.target.value = ""; }} />
       <div className="ig-cena-corpo">
         <strong title={c.cena}>{c.nome}</strong>
         <span className="ig-cena-linha">
@@ -345,6 +367,8 @@ function CartaoCena({ a, c, avisar, recarregar }: { a: AvatarIG; c: CenaIG; avis
                     title="Recusar" aria-label="Recusar"><X size={14} /></button>
             <button className="btn btn-icon-sm btn-quiet" onClick={() => acao("refazer")} disabled={!!rodando || c.na_fila || !a.foto}
                     title="Gerar de novo" aria-label="Gerar de novo"><RefreshCw size={14} /></button>
+            <button className="btn btn-icon-sm btn-quiet" onClick={() => input.current?.click()} disabled={!!rodando || c.na_fila}
+                    title="Enviar a imagem deste cômodo (ou arraste para o cartão)" aria-label="Enviar imagem"><Upload size={14} /></button>
             <button className="btn btn-icon-sm btn-quiet" onClick={() => { setTexto(c.cena); setEditando(true); }}
                     title="Editar a descrição" aria-label="Editar a descrição"><Clipboard size={14} /></button>
             <button className="btn btn-icon-sm btn-quiet" onClick={() => acao("remover")} disabled={!!rodando || c.na_fila}
@@ -462,7 +486,7 @@ function CartaoReel({ r, a, idiomas, temRepo, avisar, recarregar }: {
     <div className="panel ig-reel">
       <div className="ig-reel-midia">
         {r.final ? <video src={urlReel(r.id, "final", r.duracao ?? 0)} controls preload="metadata" playsInline />
-          : cena?.tem ? <img src={urlImg(a.id, `cena-${cena.id}`, cena.estado)} alt="" />
+          : cena?.tem ? <img src={urlImg(a.id, `cena-${cena.id}`, cena.v)} alt="" />
           : <span className="ig-cena-vazia" />}
         {ocupado && <span className="ig-reel-girando"><Girando />{r.trabalhando ? r.etapas.find((e) => e.id === r.trabalhando)?.nome : "na fila"}</span>}
       </div>

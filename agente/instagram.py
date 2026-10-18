@@ -161,7 +161,10 @@ class Instagram:
     # ── leitura para o painel ──
     def _info_avatar(self, a):
         p = self._pasta_av(a["id"])
-        cenas = [{**c, "tem": os.path.isfile(os.path.join(p, "cenas", f"{c['id']}.png")),
+        def versao(cid):
+            arq = os.path.join(p, "cenas", f"{cid}.png")
+            return int(os.path.getmtime(arq)) if os.path.isfile(arq) else 0
+        cenas = [{**c, "tem": os.path.isfile(os.path.join(p, "cenas", f"{c['id']}.png")), "v": versao(c["id"]),
                   "na_fila": self._na_fila(("cena", a["id"], c["id"])), "usos": len(a.get("usos", {}).get(c["id"], []))}
                  for c in a.get("cenas", [])]
         return {**{k: v for k, v in a.items() if k != "usos"}, "cenas": cenas,
@@ -313,6 +316,34 @@ class Instagram:
         if acao == "refazer": self._fila.put(("cena", aid, cid))
         self._mudou(aid)
         return self._info_avatar(a)
+
+    def enviar_cena(self, aid, cid, imagem, ext):
+        """A imagem do comodo feita fora do gerador (ex.: no Flow, a mao). Vira cenas/<cid>.png e fica para aprovar."""
+        from PIL import Image
+        import io
+        _valida(cid)
+        ext = (ext or "").lower().lstrip(".")
+        if ext not in EXT_IMAGEM: raise ValueError("a imagem tem de ser PNG, JPG ou WEBP")
+        a = self._avatar(aid)
+        if not any(c["id"] == cid for c in a["cenas"]): raise KeyError(cid)
+        if self._na_fila(("cena", aid, cid)): raise ValueError("esse cômodo está na fila do gerador agora")
+        try:
+            img = Image.open(io.BytesIO(_bytes_de(imagem))).convert("RGB")
+        except OSError as e:
+            raise ValueError("não consegui abrir essa imagem") from e
+        destino = os.path.join(self._pasta_av(aid), "cenas", f"{cid}.png")
+        os.makedirs(os.path.dirname(destino), exist_ok=True)
+        img.save(destino + ".tmp.png", "PNG")
+        os.replace(destino + ".tmp.png", destino)
+        a = self._alterar_avatar(aid, lambda x: [y.update(estado="pronta") for y in x["cenas"] if y["id"] == cid])
+        w, h = img.size
+        nome = next(c["nome"] for c in a["cenas"] if c["id"] == cid)
+        self._log(f"instagram: imagem do cômodo “{nome}” de {a['nome']} enviada ({w}x{h})")
+        self._mudou(aid)
+        info = self._info_avatar(a)
+        # ⛔ o take do Veo e' 9:16: quadro deitado ou quadrado sai cortado na montagem
+        if abs(w / h - 9 / 16) > 0.06: info["aviso"] = f"a imagem tem {w}x{h}, não é vertical 9:16: o Reel vai cortar as bordas"
+        return info
 
     def gerar_pool(self, aid):
         """Manda gerar a imagem de todo comodo pendente ou recusado (os aprovados ficam)."""
@@ -691,6 +722,28 @@ def _autoteste():
         ig.cena(aid, "nao-existe", "aprovar"); caso("⛔ comodo inexistente", False)
     except KeyError:
         caso("⛔ comodo inexistente", True)
+
+    def _img(w, h, fmt):
+        from PIL import Image
+        import io
+        b = io.BytesIO(); Image.new("RGB", (w, h), "green").save(b, fmt)
+        return base64.b64encode(b.getvalue()).decode()
+    v0 = next(c["v"] for c in ig._info_avatar(ig._avatar(aid))["cenas"] if c["id"] == "horta")
+    ig.cena(aid, "horta", "recusar"); time.sleep(1.1)
+    e = ig.enviar_cena(aid, "horta", "data:image/jpeg;base64," + _img(720, 1280, "JPEG"), "jpg")
+    h = next(c for c in e["cenas"] if c["id"] == "horta")
+    caso("⭐ imagem enviada a mao: vira o PNG do comodo e fica para aprovar", h["estado"] == "pronta" and h["tem"]
+         and h["v"] > v0 and "aviso" not in e)
+    from PIL import Image
+    caso("enviada em JPG, gravada em PNG", Image.open(ig.arquivo_avatar(aid, "cena-horta")).format == "PNG")
+    caso("⛔ imagem deitada avisa do corte", "9:16" in ig.enviar_cena(aid, "sala", _img(1280, 720, "PNG"), "png").get("aviso", ""))
+    for nome, args, erro in (("⛔ envio para comodo inexistente", ("nao-existe", _img(9, 16, "PNG"), "png"), KeyError),
+                             ("⛔ arquivo que nao e' imagem", ("horta", base64.b64encode(b"lixo").decode(), "png"), ValueError),
+                             ("⛔ extensao estranha no envio", ("horta", _img(9, 16, "PNG"), "gif"), ValueError)):
+        try:
+            ig.enviar_cena(aid, *args); caso(nome, False)
+        except erro:
+            caso(nome, True)
     for c in ("cozinha", "varanda"): ig.cena(aid, c, "aprovar")
     ig.enviar_imagem(aid, "livro", png, "jpg")
     r1 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/abc/", cta="palavra", palavra="Umeboshi", livro=True)

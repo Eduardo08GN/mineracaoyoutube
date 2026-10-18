@@ -364,10 +364,10 @@ export interface Video {
 
 // ── a aba Instagram (agente/instagram.py) ──
 export type EstadoCena = "pendente" | "pronta" | "aprovada" | "recusada";
-export interface CenaIG { id: string; nome: string; cena: string; estado: EstadoCena; tem: boolean; na_fila: boolean; usos: number }
+export interface CenaIG { id: string; nome: string; cena: string; estado: EstadoCena; tem: boolean; v: number; na_fila: boolean; usos: number }
 export interface AvatarIG {
   id: string; nome: string; criado: number; descricao: string; prefixo: string; voz: string; quem: string;
-  cenas: CenaIG[]; foto: boolean; livro: boolean;
+  cenas: CenaIG[]; foto: boolean; livro: boolean; aviso?: string;
 }
 export interface TakeIG { n: number; fala: string; movimento: string; cta: boolean; video: string }
 export interface TakeOrigemIG { n: number; ini: number; fim: number; texto: string }

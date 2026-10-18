@@ -388,6 +388,10 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def ig_nova_cena(aid: str, c: NovaCena):
         return _ig().adicionar_cena(aid, c.nome, c.cena)
 
+    @app.post("/api/instagram/avatares/{aid}/cenas/{cid}/imagem")
+    def ig_cena_imagem(aid: str, cid: str, c: Imagem):
+        return _ig().enviar_cena(aid, cid, c.imagem, c.ext)
+
     @app.post("/api/instagram/avatares/{aid}/cenas/{cid}")
     def ig_cena(aid: str, cid: str, c: AcaoCena):
         return _ig().cena(aid, cid, c.acao, c.texto)

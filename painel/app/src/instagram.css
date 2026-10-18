@@ -34,7 +34,12 @@
 .ig-cena-recusada { opacity: .6; }
 .ig-cena-img { position: relative; aspect-ratio: 9 / 16; background: var(--ow-bg-deep); }
 .ig-cena-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ig-cena-vazia { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ow-text-3); }
+.ig-cena-vazia { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px;
+  color: var(--ow-text-3); }
+button.ig-cena-vazia { width: 100%; border: 0; background: transparent; cursor: pointer; font: 400 11px/1.3 var(--ow-font-mono); }
+button.ig-cena-vazia:hover:not(:disabled), button.ig-cena-vazia:focus-visible { color: var(--ow-accent); background: var(--ow-surface); }
+button.ig-cena-vazia:disabled { cursor: default; }
+.ig-cena-sobre { border-color: var(--ow-accent); border-style: dashed; }
 .ig-cena-girando { position: absolute; right: 8px; top: 8px; }
 .ig-cena-corpo { display: grid; gap: 6px; padding: 8px 10px 10px; align-content: start; }
 .ig-cena-corpo strong { font: 600 13px/1.3 var(--ow-font-body); }
