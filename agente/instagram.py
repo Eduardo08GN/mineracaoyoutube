@@ -321,8 +321,11 @@ class Instagram:
 
     def editar_avatar(self, aid, campos):
         def f(a):
-            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta"):
+            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta", "mundo"):
                 if k in campos: a[k] = str(campos[k]).strip()
+            if "persona" in campos:
+                if campos["persona"] and campos["persona"] not in _rot.PERSONAS: raise ValueError("ficha de avatar desconhecida")
+                a["persona"] = campos["persona"]
             if "idioma" in campos:
                 if campos["idioma"] not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
                 a["idioma"] = campos["idioma"]
@@ -1176,7 +1179,7 @@ class Instagram:
             o = origem[min(n, len(origem)) - 1]
             ref = os.path.join(p, f"origem_{n:02d}.jpg")
             if not os.path.isfile(ref): self.midia.quadro(fonte, o["ini"] + 0.15 * (o["fim"] - o["ini"]), ref)
-            lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
+            lugar = _rot.mundo(a, next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), ""))
             self._log(f"instagram: gerando o quadro do take {n} de {r['id']}")
             g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", "")), [ref, foto], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {n}")
@@ -1197,7 +1200,7 @@ class Instagram:
             o = origem[min(n, len(origem)) - 1]
             ref = os.path.join(p, f"origem_fim_{n:02d}.jpg")
             if not os.path.isfile(ref): self.midia.quadro(fonte, o["fim"] - 0.1 * (o["fim"] - o["ini"]), ref)
-            lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
+            lugar = _rot.mundo(a, next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), ""))
             self._log(f"instagram: gerando o quadro final do take {n} de {r['id']}")
             g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t["quadro_fim"]), [ref, inicio, foto], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro final do take {n}")
@@ -1504,8 +1507,9 @@ def _autoteste():
     caso("roteiro: pediu em portugues com a palavra do CTA", "Brazilian Portuguese" in pedidos[0] and '"umeboshi,"' in pedidos[0])
     caso("roteiro: um take a mais para o CTA", len(r1["takes"]) == len(r1["takes_origem"]) + 1 and r1["takes"][-1]["cta"])
     vs = g.videos
-    caso("⭐ o comodo do Reel entra como texto, nunca como referencia do quadro",
-         all("dark wood cabinets" in i[0] and not any(x.endswith(".png") and "cenas" in x for x in i[1])
+    caso("⭐ o lugar vem do video-fonte, no mundo do avatar (texto); o comodo nunca e' referencia do quadro",
+         all("garden bed stays a garden bed" in i[0] and "chácara" in i[0] and "dark wood cabinets" not in i[0]
+             and not any(x.endswith(".png") and "cenas" in x for x in i[1])
              for i in g.imagens[n0:] if "SECOND reference image for the object" not in i[0])
          and [os.path.basename(v["inicio"]) for v in vs] == [f"quadro_{i:02d}.png" for i in range(1, len(vs) + 1)])
     caso("⭐ o CTA termina no quadro do livro", vs[-1]["fim"].endswith("cta.png") and vs[0]["fim"] == vs[0]["inicio"])
@@ -1716,7 +1720,7 @@ def _autoteste():
     caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + 2 * len(vs2)
          and [os.path.basename(x) for x in g.imagens[n_img][1]][0] == "origem_01.jpg"
          and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]).startswith("foto.")
-         and "bamboo bench" in g.imagens[n_img][0]
+         and "Londrina" in g.imagens[n_img][0] and "bamboo bench" not in g.imagens[n_img][0]
          and "same camera angle" in g.imagens[n_img][0] and "step 1." in g.imagens[n_img][0])
     qs = Midia.quadros[nq0:]
     caso("o take do CTA usa o ultimo trecho da origem; o quadro final vem depois do inicial",

@@ -102,6 +102,8 @@ TOMIKO = {
          "on a low wooden stand, green garden visible, late afternoon light."),
     ],
     "idioma": "pt", "cta": "livro", "genero": "f",
+    "mundo": ("her small farm (chácara) near Londrina, Paraná, Brazil: rustic dark wood, ceramic fermentation jars, "
+              "potted herbs, red earth, warm natural light"),
 }
 
 # ⭐⭐ (19/10, ordem do Eduardo) um avatar por mercado, cada um com o seu universo-lar: um video-fonte vira 3 Reels.
@@ -141,6 +143,8 @@ CUCA = {
          "ferns and geraniums, a wooden chair with a woven palm seat."),
     ],
     "idioma": "es", "cta": "libro", "genero": "f",
+    "mundo": ("her humble home in Atlixco, Puebla, Mexico: Talavera tiles, clay pots, painted tin planters, colorful "
+              "walls, warm light"),
 }
 
 WENDELIN = {
@@ -175,6 +179,8 @@ WENDELIN = {
          "beside him, bees on the lavender."),
     ],
     "idioma": "de", "cta": "Buch", "genero": "m",
+    "mundo": ("his small Benedictine monastery in the Allgäu, Bavaria: old stone walls, a walled herb garden, simple "
+              "wooden furniture, the Alps in the distance, soft light"),
 }
 
 # ⭐⭐ (19/10, ordem do Eduardo) a segunda conta em pt-BR, no nicho de horta e plantio (substitui o espanhol e o
@@ -213,6 +219,8 @@ BEPPE = {
          "picked fruit."),
     ],
     "idioma": "pt", "cta": "livro", "genero": "m",
+    "mundo": ("his family farm (sítio) in the green mountains of Espírito Santo, Brazil, built by Italian immigrants: "
+              "old wooden colonial buildings, stone walls, rows of vegetables, mountains in the background, natural light"),
 }
 
 PERSONAS = {"tomiko": TOMIKO, "beppe": BEPPE, "cuca": CUCA, "wendelin": WENDELIN}
@@ -227,6 +235,13 @@ def genero(texto, avatar):
                  (r"\bHer\b", "His"), (r"\bher\b", "his"), (r"\bwoman\b", "man"), (r"\bgrandmother\b", "old man")):
         texto = re.sub(a, b, texto)
     return texto
+
+
+def mundo(avatar, cena=""):
+    """⭐⭐ (19/10, ordem do Eduardo) o ambiente de cada take vem do VIDEO-FONTE (o canteiro, o tanque de peixes, a
+    cozinha); o universo do avatar entra so' como estilo: "o mundo dele". Sem ficha, vale o texto do comodo."""
+    base = PERSONAS.get(avatar.get("persona", ""), {})
+    return avatar.get("mundo") or base.get("mundo") or cena
 
 
 def prompt_retrato(persona):
@@ -465,8 +480,9 @@ def prompt_quadro(avatar, lugar, quadro):
             f"zoom, the same framing and crop, and the same kind of items in the same places of the frame, as they are "
             f"at the START of the step (nothing being poured yet). Replace the person with the person of the SECOND reference image (same face, hair and "
             f"clothes): {avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the "
-            f"face, the hair, the headwear or the clothes. Change only the setting behind the items to this place: "
-            f"{lugar.strip()} {quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
+            f"face, the hair, the headwear or the clothes. Keep the kind of place and setting of the FIRST reference "
+            f"image (what is around and behind the items: a kitchen stays a kitchen, a garden bed stays a garden bed, a "
+            f"chicken coop stays a chicken coop), restyled as part of {lugar.strip()} {quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
             f"No text, no captions, no logos, no watermark.", avatar)
 
 
@@ -481,7 +497,7 @@ def prompt_quadro_fim(avatar, lugar, quadro_fim):
                   f"items in the same places, except what the action changed: {quadro_fim.strip()} The person is the "
                   f"person of the THIRD reference image (same face, hair and clothes): {avatar.get('descricao', '').strip()} "
                   f"Nothing of the first reference's person stays: not the face, the hair, the headwear or the clothes. "
-                  f"Place: {lugar.strip()} Vertical 9:16 photo, smartphone UGC style. "
+                  f"It is part of {lugar.strip()} Vertical 9:16 photo, smartphone UGC style. "
                   f"No text, no captions, no logos, no watermark.", avatar)
 
 
@@ -535,6 +551,13 @@ def _autoteste():
     caso("ler: quadro_fim lido; sem ele, vale o quadro (passo sem acao)",
          lq["takes"][0]["quadro_fim"] == "Q2" and lq["takes"][1]["quadro_fim"] == "Q3")
     pf = prompt_quadro_fim(WENDELIN, "garden", "the salt is inside the blender jar")
+    caso("⭐ mundo: o universo da ficha (Beppe no sitio capixaba); sem ficha, o texto do comodo",
+         "Espírito Santo" in mundo({"persona": "beppe"}) and mundo({}, "a kitchen") == "a kitchen"
+         and mundo({"persona": "beppe", "mundo": "outro"}) == "outro")
+    pq = prompt_quadro(BEPPE, mundo({"persona": "beppe"}), "Seed potatoes in a black bucket.")
+    caso("⭐ o lugar do quadro vem do video-fonte, refeito no mundo do avatar (nao o comodo sorteado)",
+         "Keep the kind of place and setting of the FIRST reference" in pq and "restyled as part of his family farm" in pq
+         and "Change only the setting" not in pq)
     caso("⭐ quadro final: enquadramento do fim da origem, o resto do quadro de abertura, e o resultado da acao",
          "END of the same step" in pf and "SECOND reference image (the" in pf and "the salt is inside the blender jar" in pf
          and "THIRD reference" in pf and " she " not in pf)
