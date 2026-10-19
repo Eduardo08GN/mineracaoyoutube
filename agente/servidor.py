@@ -94,14 +94,31 @@ class Chaves(BaseModel):
 
 
 class NovoAvatar(BaseModel):
-    nome: str
-    imagem: str
+    nome: str = ""
+    imagem: str = ""
     ext: str = "png"
     tomiko: bool = False
+    persona: str = ""
+    idioma: str = ""
     descricao: str = ""
     prefixo: str = ""
     voz: str = ""
     quem: str = ""
+
+
+class ItemLote(BaseModel):
+    avatar: str
+    palavra: str = ""
+
+
+class NovoLote(BaseModel):
+    itens: List[ItemLote]
+    url: str = ""
+    video: str = ""
+    ext: str = "mp4"
+    legenda: int = 0
+    livro: bool = False
+    modelo: str = "gratis"
 
 
 class Imagem(BaseModel):
@@ -390,7 +407,13 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
 
     @app.post("/api/instagram/avatares")
     def ig_novo_avatar(c: NovoAvatar):
-        return _ig().criar_avatar(c.nome, c.imagem, c.ext, c.descricao, c.prefixo, c.voz, c.quem, c.tomiko)
+        return _ig().criar_avatar(c.nome, c.imagem, c.ext, c.descricao, c.prefixo, c.voz, c.quem, c.tomiko,
+                                  c.persona, c.idioma)
+
+    @app.post("/api/instagram/lotes")
+    def ig_novo_lote(c: NovoLote):
+        return _ig().criar_lote([i.model_dump() if hasattr(i, "model_dump") else i.dict() for i in c.itens], c.url,
+                                c.video, c.ext, c.legenda, c.livro, c.modelo)
 
     @app.post("/api/instagram/avatares/{aid}")
     def ig_editar_avatar(aid: str, c: Campos):

@@ -85,34 +85,37 @@ export function Instagram({ m }: { m: MIN }) {
         </div>
       )}
 
+      {dados.avatares.length > 0 && (
+        <NovoLote avatares={dados.avatares} idiomas={dados.idiomas} legendas={dados.legendas ?? {}} avisar={m.avisar}
+                  recarregar={recarregar} />
+      )}
+
+      {/* ⭐ (19/10) uma sub-aba por avatar (um por mercado), cada uma com o seu universo-lar e os seus Reels */}
+      <nav className="ig-subabas" aria-label="Avatares">
+        {dados.avatares.map((a) => (
+          <button key={a.id} className="ig-subaba" aria-current={!criando && a.id === avatar?.id ? "page" : undefined}
+                  onClick={() => { setEscolhido(a.id); setCriando(false); }}>
+            <span aria-hidden>{BANDEIRA_IG[a.idioma] ?? ""}</span>{a.nome}
+            <span className="meta">{dados.reels.filter((r) => r.avatar === a.id).length}</span>
+          </button>
+        ))}
+        <button className="ig-subaba ig-subaba-nova" aria-current={criando || !dados.avatares.length ? "page" : undefined}
+                onClick={() => setCriando(true)}><Plus size={14} aria-hidden />Novo avatar</button>
+      </nav>
+
       <section className="ig-secao">
-        <div className="ig-secao-topo">
-          <h2>Avatar</h2>
-          {dados.avatares.length > 0 && !criando && (
-            <button className="btn btn-sm btn-quiet" onClick={() => setCriando(true)}><Plus size={14} aria-hidden />Novo avatar</button>
-          )}
-        </div>
         {(criando || dados.avatares.length === 0) ? (
-          <NovoAvatar avisar={m.avisar} cancelar={dados.avatares.length ? () => setCriando(false) : undefined}
+          <NovoAvatar avisar={m.avisar} personas={dados.personas ?? {}} jaTem={dados.avatares.map((a) => a.persona ?? "")}
+                      cancelar={dados.avatares.length ? () => setCriando(false) : undefined}
                       criado={(a) => { setEscolhido(a.id); setCriando(false); void recarregar(); }} />
         ) : (
-          <>
-            {dados.avatares.length > 1 && (
-              <div className="seg" role="group" aria-label="Avatares">
-                {dados.avatares.map((a) => (
-                  <button key={a.id} aria-pressed={a.id === avatar?.id} onClick={() => setEscolhido(a.id)}>{a.nome}</button>
-                ))}
-              </div>
-            )}
-            {avatar && <FichaAvatar a={avatar} avisar={m.avisar} recarregar={recarregar} />}
-          </>
+          avatar && <FichaAvatar a={avatar} avisar={m.avisar} recarregar={recarregar} />
         )}
       </section>
 
       {avatar && !criando && (
         <>
           <Pool a={avatar} avisar={m.avisar} recarregar={recarregar} rodando={rodando} rodar={rodar} />
-          <NovoReel a={avatar} idiomas={dados.idiomas} legendas={dados.legendas ?? {}} avisar={m.avisar} recarregar={recarregar} />
           <section className="ig-secao">
             <div className="ig-secao-topo"><h2>Reels de {avatar.nome}</h2><span className="meta">{reels.length}</span></div>
             {reels.length === 0 && <p className="meta">Nenhum Reel ainda.</p>}
@@ -133,13 +136,18 @@ export function Instagram({ m }: { m: MIN }) {
   );
 }
 
-function NovoAvatar({ avisar, cancelar, criado }: { avisar: Avisar; cancelar?: () => void; criado: (a: AvatarIG) => void }) {
+function NovoAvatar({ avisar, personas, jaTem, cancelar, criado }: {
+  avisar: Avisar; personas: Record<string, { nome: string; idioma: string; cta: string }>; jaTem: string[];
+  cancelar?: () => void; criado: (a: AvatarIG) => void;
+}) {
+  const livre = Object.keys(personas).find((k) => !jaTem.includes(k)) ?? "";
+  const [persona, setPersona] = useState(livre);
   const [nome, setNome] = useState("");
-  const [tomiko, setTomiko] = useState(true);
   const [foto, setFoto] = useState<File | null>(null);
   const [previa, setPrevia] = useState("");
   const { rodando, rodar } = useAcao(avisar);
   const input = useRef<HTMLInputElement>(null);
+  const ficha = personas[persona];
 
   useEffect(() => {
     if (!foto) { setPrevia(""); return; }
@@ -149,37 +157,43 @@ function NovoAvatar({ avisar, cancelar, criado }: { avisar: Avisar; cancelar?: (
   }, [foto]);
 
   const criar = () => rodar("criar", async () => {
-    if (!foto) throw new Error("escolha a foto de referência do avatar");
+    if (!foto && !ficha) throw new Error("escolha a foto de referência do avatar ou uma ficha pronta");
     const a = await enviar<AvatarIG>("/api/instagram/avatares", {
-      nome: nome || (tomiko ? "Tomiko Hayashi" : ""), imagem: await lerArquivo(foto), ext: extDe(foto), tomiko,
+      nome: nome || ficha?.nome || "", persona, imagem: foto ? await lerArquivo(foto) : "", ext: foto ? extDe(foto) : "png",
     });
     criado(a);
-  }, "Avatar criado.");
+  }, foto || !ficha ? "Avatar criado." : "Avatar criado: o retrato e os 8 cômodos estão sendo gerados no Flow.");
 
   return (
     <div className="panel ig-novo-avatar">
       <button type="button" className={`ig-foto ig-foto-vazia${previa ? " tem" : ""}`} onClick={() => input.current?.click()}
               aria-label="Escolher a foto do avatar">
-        {previa ? <img src={previa} alt="" /> : <><ImagePlus size={22} aria-hidden /><span>Foto de referência</span></>}
+        {previa ? <img src={previa} alt="" /> : <><ImagePlus size={22} aria-hidden /><span>{ficha ? "Foto (opcional)" : "Foto de referência"}</span></>}
       </button>
       <input ref={input} type="file" accept="image/png,image/jpeg,image/webp" className="sr-only"
              onChange={(e) => setFoto(e.target.files?.[0] ?? null)} />
       <div className="ig-form">
+        <div className="campo-grupo">
+          <span className="label">Ficha</span>
+          <div className="seg" role="group" aria-label="Ficha do avatar">
+            {Object.entries(personas).map(([k, p]) => (
+              <button key={k} aria-pressed={persona === k} onClick={() => setPersona(k)}>
+                {BANDEIRA_IG[p.idioma] ?? ""} {p.nome}
+              </button>
+            ))}
+            <button aria-pressed={!persona} onClick={() => setPersona("")}>Sem ficha</button>
+          </div>
+          <p className="meta">
+            {ficha ? `Descrição, voz, idioma, CTA “${ficha.cta}” e os 8 cômodos já preenchidos.${foto ? "" : " Sem foto, o retrato-âncora é gerado no Flow e os cômodos em seguida."}`
+              : "Avatar do zero: suba a foto e preencha a ficha depois."}
+          </p>
+        </div>
         <label className="campo-grupo">
           <span className="label">Nome</span>
-          <input className="campo" value={nome} placeholder={tomiko ? "Tomiko Hayashi" : "Nome do avatar"}
-                 onChange={(e) => setNome(e.target.value)} />
+          <input className="campo" value={nome} placeholder={ficha?.nome ?? "Nome do avatar"} onChange={(e) => setNome(e.target.value)} />
         </label>
-        <div className="switch-linha">
-          <div>
-            <span className="label">Usar a ficha da Tomiko</span>
-            <p className="meta">Descrição, voz e os 8 cômodos da chácara em Londrina já preenchidos.</p>
-          </div>
-          <button type="button" className="switch" role="switch" aria-checked={tomiko} aria-label="Usar a ficha da Tomiko"
-                  onClick={() => setTomiko(!tomiko)} />
-        </div>
         <div className="ig-linha-botoes">
-          <button className="btn btn-primary" onClick={criar} disabled={!!rodando || !foto}>
+          <button className="btn btn-primary" onClick={criar} disabled={!!rodando || (!foto && !ficha)}>
             {rodando ? <Girando /> : <Check size={15} aria-hidden />}Criar avatar
           </button>
           {cancelar && <button className="btn btn-quiet" onClick={cancelar}>Cancelar</button>}
@@ -424,35 +438,40 @@ function ProducaoIG({ dados, m }: { dados: InstagramTudo; m: MIN }) {
   );
 }
 
-function NovoReel({ a, idiomas, legendas, avisar, recarregar }: {
-  a: AvatarIG; idiomas: Record<string, string>; legendas: Record<string, string>; avisar: Avisar; recarregar: () => Promise<void>;
+const BANDEIRA_IG: Record<string, string> = { pt: "🇧🇷", es: "🇲🇽", de: "🇩🇪", en: "🇺🇸", fr: "🇫🇷" };
+
+/** ⭐⭐ (19/10) UM video-fonte -> um Reel por avatar (cada um no idioma e com o CTA dele). */
+function NovoLote({ avatares, idiomas, legendas, avisar, recarregar }: {
+  avatares: AvatarIG[]; idiomas: Record<string, string>; legendas: Record<string, string>; avisar: Avisar;
+  recarregar: () => Promise<void>;
 }) {
+  const prontos = avatares.filter((a) => a.cenas.some((c) => c.estado === "aprovada"));
   const [url, setUrl] = useState("");
   const [arquivo, setArquivo] = useState<File | null>(null);
-  const [idioma, setIdioma] = useState("pt");
-  const [cta, setCta] = useState<"bio" | "palavra">("bio");
-  const [palavra, setPalavra] = useState("");
+  const [marcados, setMarcados] = useState<Record<string, boolean>>({});
+  const [palavras, setPalavras] = useState<Record<string, string>>({});
   const [livro, setLivro] = useState(false);
   const [modelo, setModelo] = useState<"gratis" | "pago">("gratis");
-  const [legenda, setLegenda] = useState(0);
+  const [legenda, setLegenda] = useState(2);
   const { rodando, rodar } = useAcao(avisar);
   const input = useRef<HTMLInputElement>(null);
-  const aprovadas = a.cenas.filter((c) => c.estado === "aprovada").length;
+  const marcado = (a: AvatarIG) => marcados[a.id] ?? true;
+  const palavra = (a: AvatarIG) => palavras[a.id] ?? a.cta ?? "";
+  const escolhidos = prontos.filter(marcado);
 
-  useEffect(() => { if (!a.livro) setLivro(false); }, [a.livro]);
-
-  const produzir = () => rodar("reel", async () => {
-    await enviar("/api/instagram/reels", {
-      avatar: a.id, idioma, url: arquivo ? "" : url.trim(), video: arquivo ? await lerArquivo(arquivo) : "",
-      ext: arquivo ? extDe(arquivo) : "mp4", cta, palavra, livro, modelo, legenda,
+  const produzir = () => rodar("lote", async () => {
+    await enviar("/api/instagram/lotes", {
+      itens: escolhidos.map((a) => ({ avatar: a.id, palavra: palavra(a).trim() })),
+      url: arquivo ? "" : url.trim(), video: arquivo ? await lerArquivo(arquivo) : "",
+      ext: arquivo ? extDe(arquivo) : "mp4", livro, modelo, legenda,
     });
     setUrl(""); setArquivo(null);
     await recarregar();
-  }, "Reel na fila: fonte, roteiro, geração e montagem rodam sozinhos.");
+  }, `Lote na fila: ${escolhidos.length} Reel(s), um por avatar. Fonte, roteiro, geração e montagem rodam sozinhos.`);
 
   return (
     <section className="ig-secao">
-      <div className="ig-secao-topo"><h2>Novo Reel</h2></div>
+      <div className="ig-secao-topo"><h2>Novo lote</h2><span className="meta">um vídeo-fonte vira um Reel por avatar</span></div>
       <div className="panel ig-form ig-novo-reel">
         <div className="ig-fonte">
           <label className="campo-grupo">
@@ -466,26 +485,29 @@ function NovoReel({ a, idiomas, legendas, avisar, recarregar }: {
           <input ref={input} type="file" accept="video/mp4,video/quicktime" className="sr-only"
                  onChange={(e) => setArquivo(e.target.files?.[0] ?? null)} />
         </div>
+        <div className="ig-lote-avatares">
+          {avatares.map((a) => {
+            const pronto = prontos.includes(a);
+            return (
+              <div key={a.id} className={`ig-lote-av${pronto && marcado(a) ? " on" : ""}${pronto ? "" : " off"}`}>
+                <label className="ig-lote-check">
+                  <input type="checkbox" checked={pronto && marcado(a)} disabled={!pronto}
+                         onChange={(e) => setMarcados({ ...marcados, [a.id]: e.target.checked })} />
+                  <span>{BANDEIRA_IG[a.idioma] ?? ""} {a.nome}</span>
+                  <span className="meta">{idiomas[a.idioma] ?? a.idioma}</span>
+                </label>
+                {pronto ? (
+                  <label className="campo-grupo">
+                    <span className="label">CTA: comente</span>
+                    <input className="campo" value={palavra(a)} placeholder="livro (vazio = link na bio)"
+                           onChange={(e) => setPalavras({ ...palavras, [a.id]: e.target.value })} />
+                  </label>
+                ) : <p className="meta">{a.gerando_retrato ? "gerando o retrato…" : "aprove um cômodo do universo-lar"}</p>}
+              </div>
+            );
+          })}
+        </div>
         <div className="ig-opcoes">
-          <label className="campo-grupo">
-            <span className="label">Idioma</span>
-            <select className="campo" value={idioma} onChange={(e) => setIdioma(e.target.value)}>
-              {Object.entries(idiomas).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-            </select>
-          </label>
-          <div className="campo-grupo">
-            <span className="label">CTA</span>
-            <div className="seg" role="group" aria-label="CTA">
-              <button aria-pressed={cta === "bio"} onClick={() => setCta("bio")}>Link na bio</button>
-              <button aria-pressed={cta === "palavra"} onClick={() => setCta("palavra")}>Comente</button>
-            </div>
-          </div>
-          {cta === "palavra" && (
-            <label className="campo-grupo">
-              <span className="label">Palavra ou frase</span>
-              <input className="campo" value={palavra} placeholder="eu quero" onChange={(e) => setPalavra(e.target.value)} />
-            </label>
-          )}
           <label className="campo-grupo">
             <span className="label">Legenda</span>
             <select className="campo" value={legenda} onChange={(e) => setLegenda(Number(e.target.value))}>
@@ -504,17 +526,18 @@ function NovoReel({ a, idiomas, legendas, avisar, recarregar }: {
         <div className="switch-linha">
           <div>
             <span className="label">Livro no CTA</span>
-            <p className="meta">{a.livro ? "O último take termina com o avatar segurando o livro." : "Suba a capa do livro na ficha do avatar."}</p>
+            <p className="meta">O último take termina com o avatar segurando o livro (só nos avatares com a capa do livro).</p>
           </div>
           <button type="button" className="switch" role="switch" aria-checked={livro} aria-label="Livro no CTA"
-                  disabled={!a.livro} onClick={() => setLivro(!livro)} />
+                  onClick={() => setLivro(!livro)} />
         </div>
         <div className="ig-linha-botoes">
           <button className="btn btn-primary" onClick={produzir}
-                  disabled={!!rodando || !aprovadas || (!url.trim() && !arquivo) || (cta === "palavra" && !palavra.trim())}>
-            {rodando ? <Girando /> : <Play size={14} fill="currentColor" aria-hidden />}Produzir Reel
+                  disabled={!!rodando || !escolhidos.length || (!url.trim() && !arquivo)}>
+            {rodando ? <Girando /> : <Play size={14} fill="currentColor" aria-hidden />}
+            Produzir {escolhidos.length} Reel{escolhidos.length === 1 ? "" : "s"}
           </button>
-          {!aprovadas && <span className="meta">Aprove pelo menos um cômodo do universo-lar.</span>}
+          {!prontos.length && <span className="meta">Aprove pelo menos um cômodo de algum avatar.</span>}
         </div>
       </div>
     </section>

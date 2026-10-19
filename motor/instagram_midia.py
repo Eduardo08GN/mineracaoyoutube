@@ -22,6 +22,10 @@ RESPIRO_S = 0.15
 #    Mais baixo que isso ela entra embaixo da descricao, do @ e dos botoes que o Instagram poe por cima do video.
 #    A base (nao o centro) e' que fica fixa: cartao de 2 linhas cresce para cima, nunca para dentro da faixa do app.
 BASE_LEGENDA = 0.82
+# ⭐ (19/10, ordem do Eduardo) cada take entra no Reel a 1,11x, com +-5% de variacao sorteada por take: o ritmo fica
+#    mais vivo e nao soa como o mesmo acelerador aplicado igual no video inteiro.
+VELOCIDADE = 1.11
+JITTER = 0.05
 _SEM_JANELA = {"creationflags": 0x08000000} if os.name == "nt" else {}
 _modelo = {}
 
@@ -103,16 +107,24 @@ def quadro(video, t, saida):
     return saida
 
 
+def velocidade(chave):
+    """A velocidade de um take no Reel: VELOCIDADE com JITTER para cima ou para baixo, sorteada pela `chave` (o mesmo
+    take na mesma versao sai sempre na mesma velocidade: remontar nao muda o ritmo)."""
+    import random
+    return round(VELOCIDADE * (1 + random.Random(str(chave)).uniform(-JITTER, JITTER)), 4)
+
+
 def montar(clipes, saida):
-    """[(mp4, ate_s)] -> um mp4 9:16 numa passada so' do ffmpeg (corte, escala, concat, loudnorm)."""
+    """[(mp4, ate_s) | (mp4, de_s, ate_s) | (mp4, de_s, ate_s, velocidade)] -> um mp4 9:16 numa passada so' do ffmpeg
+    (corte, velocidade, escala, concat, loudnorm). A velocidade acelera imagem e voz juntas, sem mudar o tom."""
     if not clipes: raise ValueError("nenhum take para montar")
     cmd, filtros, rotulos = ["ffmpeg", "-y", "-v", "error"], [], ""
     for i, c in enumerate(clipes):
-        arq, de, ate = (c[0], 0.0, c[1]) if len(c) == 2 else c
+        arq, de, ate, vel = (c[0], 0.0, c[1], 1.0) if len(c) == 2 else (*c, 1.0) if len(c) == 3 else c
         cmd += ["-ss", f"{de:.2f}", "-t", f"{ate - de:.2f}", "-i", arq]
-        filtros.append(f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},"
-                       f"setsar=1,format=yuv420p[v{i}]")
-        filtros.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo[a{i}]")
+        filtros.append(f"[{i}:v]setpts=(PTS-STARTPTS)/{vel:.4f},scale={W}:{H}:force_original_aspect_ratio=increase,"
+                       f"crop={W}:{H},fps={FPS},setsar=1,format=yuv420p[v{i}]")
+        filtros.append(f"[{i}:a]asetpts=PTS-STARTPTS,atempo={vel:.4f},aresample=48000,aformat=channel_layouts=stereo[a{i}]")
         rotulos += f"[v{i}][a{i}]"
     filtros.append(f"{rotulos}concat=n={len(clipes)}:v=1:a=1[v][a0]")
     filtros.append("[a0]loudnorm=I=-14:TP=-1.5:LRA=11[a]")
@@ -264,6 +276,12 @@ def _autoteste():
     caso("inicio_da_fala: um respiro antes da primeira palavra", inicio_da_fala([{"w": "Oi", "ini": 0.9, "fim": 1.2}]) == 0.75
          and inicio_da_fala([{"w": "Oi", "ini": 0.05, "fim": 0.3}]) == 0.0 and inicio_da_fala([]) == 0.0)
     caso("montar: duracao = soma dos cortes", abs(duracao(m) - 5.5) < 0.2)
+    vs = [velocidade(f"reel-{n}-v1") for n in range(40)]
+    caso("⭐ velocidade: 1,11x com +-5%, varia entre takes e repete no mesmo take",
+         all(1.11 * 0.95 <= v <= 1.11 * 1.05 for v in vs) and len(set(vs)) > 30 and velocidade("reel-3-v1") == velocidade("reel-3-v1"))
+    mv = montar([(clipes[0], 0.0, 3.0, 1.2), (clipes[1], 0.5, 3.0, 1.0)], os.path.join(d, "rapido.mp4"))
+    caso("⭐ montar com velocidade: o take acelerado encurta, com audio", abs(duracao(mv) - (3.0 / 1.2 + 2.5)) < 0.2
+         and "audio" in _rodar(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", mv]))
     info = json.loads(_rodar(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
                               "stream=width,height", "-of", "json", m]))["streams"][0]
     caso("⭐ montar: 1080x1920 mesmo com take deitado", (info["width"], info["height"]) == (W, H))

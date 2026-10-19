@@ -235,3 +235,21 @@ button.ig-cena-vazia:disabled { cursor: default; }
 .ed-tag-corrigido { color: var(--ow-accent); background: var(--ow-accent-soft); }
 .ed-tag-precisa { color: var(--ow-warn); background: var(--ow-warn-soft); }
 .ed-aviso-voce { color: var(--ow-warn); background: var(--ow-warn-soft); }
+
+/* sub-abas: um avatar por mercado */
+.ig-subabas { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--ow-line); }
+.ig-subaba { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 14px; border: 0;
+  border-bottom: 2px solid transparent; background: transparent; color: var(--ow-text-2); font: 600 14px/1 var(--ow-font-body);
+  cursor: pointer; margin-bottom: -1px; transition: color var(--ow-fast), border-color var(--ow-fast); }
+.ig-subaba:hover { color: var(--ow-text); }
+.ig-subaba[aria-current="page"] { color: var(--ow-text); border-bottom-color: var(--ow-accent); }
+.ig-subaba .meta { font-size: 11px; }
+.ig-subaba-nova { margin-left: auto; color: var(--ow-text-3); font-weight: 500; }
+/* o lote: um cartao por avatar, com o CTA dele */
+.ig-lote-avatares { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.ig-lote-av { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid var(--ow-line); border-radius: var(--ow-radius);
+  background: var(--ow-bg-deep); }
+.ig-lote-av.on { border-color: var(--ow-accent); }
+.ig-lote-av.off { opacity: .6; }
+.ig-lote-check { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font: 600 14px/1.3 var(--ow-font-body); cursor: pointer; }
+.ig-lote-check input { accent-color: var(--ow-accent); }

@@ -69,7 +69,7 @@ def pedido_correcao(avatar, idioma, cta, take, defeito, etiquetas, ouvido, promp
     maos"): mandado direto, isso virava o prompt do Veo. `extras` = as licoes ativas (as mesmas do roteiro)."""
     rotulos = dict(ETIQUETAS)
     marcas = ", ".join(rotulos[e] for e in etiquetas if e in rotulos) or "nenhuma"
-    regra_cta = f"\nThis take is the call to action. {_rot.regra_cta(cta)}" if take.get("cta") else ""
+    regra_cta = f"\nThis take is the call to action. {_rot.regra_cta(cta, avatar)}" if take.get("cta") else ""
     mao = "".join(f'\n- the reviewer also rewrote the {k} by hand: "{v}"' for k, v in (edicao or {}).items() if v)
     if mao: mao += ("\n  (treat these as the reviewer's intent: it may be a note in Portuguese about the defect, not "
                     "text to copy; the final fields must follow the rules below)")
@@ -81,9 +81,9 @@ The presenter: {avatar.get("quem") or avatar.get("descricao", "")}
 Target language: {_rot.IDIOMAS[idioma]["lingua"]}.
 
 The take as it was generated:
-- fala (the line she had to say): {take.get("fala", "")}
+- fala (the line the presenter had to say): {take.get("fala", "")}
 - what a speech recognizer heard in the generated video: {ouvido or "(not measured)"}
-- quadro (items in front of her in the opening frame): {take.get("quadro", "")}
+- quadro (items in front of the presenter in the opening frame): {take.get("quadro", "")}
 - movimento: {take.get("movimento", "")}
 - the full prompt sent to Veo: {prompt}
 
@@ -93,7 +93,7 @@ Rewrite the take to remove the reported defect with the smallest change that can
 the line and its place in the video. Typical fixes: a word the voice mispronounces becomes a common synonym; an
 action that did not happen or deformed the hands becomes a simpler, slower gesture with fewer items; a line that
 was cut or repeated becomes shorter.
-{_rot.regras_take(idioma, extras)}{regra_cta}
+{_rot.regras_take(idioma, extras, avatar)}{regra_cta}
 Set "refazer_quadro" to true ONLY when the defect is in the opening frame itself (wrong or missing items, hands in
 mid-air, an item that should not be there); then "quadro" names the corrected items. Otherwise keep "quadro" as is.
 

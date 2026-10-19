@@ -46,6 +46,7 @@ import instagram_roteiro as _rot                                            # no
 PASTA = os.path.join(config.DATA, "instagram")
 ETAPAS = ("fonte", "roteiro", "gerar", "montagem")
 NOMES = {"fonte": "Fonte", "roteiro": "Roteiro", "gerar": "Geração", "montagem": "Montagem", "curadoria": "Curadoria",
+         "retrato": "Retrato",
          "qa": "QA dos takes", "destilar": "Lições"}
 AJUSTES_PADRAO = {"backend": "", "repo_dir": "", "auto_subir": False, "dias": 5, "cookies": ""}
 EXT_IMAGEM = {"png", "jpg", "jpeg", "webp"}
@@ -196,8 +197,11 @@ class Instagram:
         cenas = [{**c, "tem": os.path.isfile(os.path.join(p, "cenas", f"{c['id']}.png")), "v": versao(c["id"]),
                   "na_fila": self._na_fila(("cena", a["id"], c["id"])), "usos": len(a.get("usos", {}).get(c["id"], []))}
                  for c in a.get("cenas", [])]
+        base = _rot.PERSONAS.get(a.get("persona", ""), {})
         return {**{k: v for k, v in a.items() if k != "usos"}, "cenas": cenas,
-                "foto": bool(self._achar(p, "foto")), "livro": bool(self._achar(p, "livro"))}
+                "idioma": a.get("idioma") or base.get("idioma", "pt"), "cta": a.get("cta") or base.get("cta", ""),
+                "foto": bool(self._achar(p, "foto")), "livro": bool(self._achar(p, "livro")),
+                "gerando_retrato": self._na_fila(("retrato", a["id"], ""))}
 
     @staticmethod
     def _achar(pasta, nome):
@@ -241,6 +245,7 @@ class Instagram:
         aj = self.ajustes()
         return {"avatares": avs, "reels": reels, "ajustes": aj,
                 "idiomas": {k: v["nome"] for k, v in _rot.IDIOMAS.items()}, "legendas": _midia.estilos_legenda(),
+                "personas": {k: {"nome": v["nome"], "idioma": v["idioma"], "cta": v["cta"]} for k, v in _rot.PERSONAS.items()},
                 "gerador": self._estado_gerador(aj), "publicados": self._publicados(), "producao": self._producao()}
 
     def _producao(self):
@@ -280,16 +285,27 @@ class Instagram:
         return arq
 
     # ── avatares e universo-lar ──
-    def criar_avatar(self, nome, imagem, ext, descricao="", prefixo="", voz="", quem="", tomiko=False):
+    def criar_avatar(self, nome, imagem, ext, descricao="", prefixo="", voz="", quem="", tomiko=False, persona="",
+                     idioma=""):
+        """Um avatar novo. `persona` = uma ficha pronta (motor/instagram_roteiro.py: PERSONAS): descricao, voz,
+        idioma, CTA e os 8 comodos ja' preenchidos. ⭐ Com ficha e sem foto, o retrato-ancora e' gerado no Flow e os
+        8 comodos sao gerados em seguida, sozinhos."""
+        persona = persona or ("tomiko" if tomiko else "")
+        if persona and persona not in _rot.PERSONAS: raise ValueError("ficha de avatar desconhecida")
+        base = _rot.PERSONAS.get(persona, {})
+        nome = (nome or base.get("nome", "")).strip()
+        if not nome: raise ValueError("dê um nome ao avatar")
         ext = (ext or "").lower().lstrip(".")
-        if ext not in EXT_IMAGEM: raise ValueError("a foto do avatar tem de ser PNG, JPG ou WEBP")
-        if not (nome or "").strip(): raise ValueError("dê um nome ao avatar")
-        base = _rot.TOMIKO if tomiko else {}
+        if imagem and ext not in EXT_IMAGEM: raise ValueError("a foto do avatar tem de ser PNG, JPG ou WEBP")
+        if not imagem and not base: raise ValueError("suba a foto do avatar ou escolha uma ficha pronta")
+        idioma = idioma or base.get("idioma", "pt")
+        if idioma not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
         aid = f"{_slug(nome)}-{secrets.token_hex(2)}"
         p = self._pasta_av(aid)
         os.makedirs(os.path.join(p, "cenas"), exist_ok=True)
-        open(os.path.join(p, f"foto.{ext}"), "wb").write(_bytes_de(imagem))
-        a = {"id": aid, "nome": nome.strip(), "criado": time.time(),
+        if imagem: open(os.path.join(p, f"foto.{ext}"), "wb").write(_bytes_de(imagem))
+        a = {"id": aid, "nome": nome, "criado": time.time(), "persona": persona, "idioma": idioma,
+             "cta": base.get("cta", ""), "genero": base.get("genero", "f"),
              "descricao": (descricao or base.get("descricao", "")).strip(),
              "prefixo": (prefixo or base.get("prefixo", "")).strip(),
              "voz": (voz or base.get("voz", "")).strip(), "quem": (quem or base.get("quem", "")).strip(),
@@ -299,13 +315,17 @@ class Instagram:
         if not a["voz"]: a["voz"] = "a natural, warm voice in {lingua}, spoken by the person in frame"
         with self._t: self._gravar(os.path.join(p, "avatar.json"), a)
         self._log(f"instagram: avatar {a['nome']} criado")
+        if not imagem: self._fila.put(("retrato", aid, ""))
         self._mudou(aid)
         return self._info_avatar(a)
 
     def editar_avatar(self, aid, campos):
         def f(a):
-            for k in ("nome", "descricao", "prefixo", "voz", "quem"):
+            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta"):
                 if k in campos: a[k] = str(campos[k]).strip()
+            if "idioma" in campos:
+                if campos["idioma"] not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
+                a["idioma"] = campos["idioma"]
         a = self._alterar_avatar(aid, f)
         self._mudou(aid)
         return self._info_avatar(a)
@@ -398,7 +418,7 @@ class Instagram:
 
     # ── reels ──
     def criar_reel(self, avatar, idioma, url="", video="", ext="mp4", cta="bio", palavra="", livro=False,
-                   modelo="gratis", legenda=0):
+                   modelo="gratis", legenda=0, lote=""):
         a = self._avatar(_valida(avatar))
         if idioma not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
         if modelo not in ("gratis", "pago"): raise ValueError("modelo desconhecido")
@@ -425,7 +445,7 @@ class Instagram:
         r = {"id": rid, "avatar": a["id"], "criado": time.time(), "idioma": idioma, "url": url, "cena": cid,
              "cta": {"tipo": cta, "palavra": _slug(palavra).replace("-", " ") if cta == "palavra" else "", "livro": bool(livro)},
              "modelo": modelo, "legenda": legenda, "takes_origem": [], "takes": [], "legenda_post": "", "registro": [],
-             "publicado": ""}
+             "publicado": "", "lote": lote}
         with self._t: self._gravar(os.path.join(p, "reel.json"), r)
         self._alterar_avatar(a["id"], lambda x: x.setdefault("usos", {}).setdefault(cid, []).append(time.time()))
         nome_cena = next(c["nome"] for c in a["cenas"] if c["id"] == cid)
@@ -434,6 +454,23 @@ class Instagram:
         self._log(f"instagram: Reel {rid} na fila")
         self._mudou(rid)
         return self.reel(rid)
+
+    def criar_lote(self, itens, url="", video="", ext="mp4", legenda=0, livro=False, modelo="gratis"):
+        """⭐⭐ (19/10) UM video-fonte -> um Reel por avatar, cada um no idioma e com o CTA dele.
+        itens = [{"avatar": id, "palavra": "livro"}] (sem palavra, vale o CTA da ficha do avatar).
+        ⭐ A fonte e' baixada e transcrita uma vez so': os outros Reels do lote copiam (_etapa_fonte)."""
+        if not itens: raise ValueError("escolha pelo menos um avatar para o lote")
+        lote = f"{_dt.date.today().isoformat()}-{secrets.token_hex(3)}"
+        reels = []
+        for it in itens:
+            a = self._avatar(_valida(it["avatar"]))
+            info = self._info_avatar(a)
+            palavra = (it.get("palavra") or info["cta"] or "").strip()
+            reels.append(self.criar_reel(a["id"], info["idioma"], url=url, video=video, ext=ext,
+                                         cta="palavra" if palavra else "bio", palavra=palavra,
+                                         livro=bool(livro) and info["livro"], modelo=modelo, legenda=legenda, lote=lote))
+        self._log(f"instagram: lote {lote} com {len(reels)} Reel(s) na fila")
+        return {"lote": lote, "reels": [r["id"] for r in reels]}
 
     def rodar(self, rid, etapa):
         if etapa not in ETAPAS: raise ValueError(f"etapa desconhecida: {etapa}")
@@ -986,8 +1023,11 @@ class Instagram:
                 elif tipo == "qa": self._etapa_qa(alvo)
                 elif tipo == "licoes": self._etapa_destilar()
                 elif tipo == "cena": self._etapa_cena(alvo, etapa)
+                elif tipo == "retrato": self._etapa_retrato(alvo)
                 elif tipo == "repo": self._etapa_repo()
-            except Exception as e:                                         # noqa: BLE001
+            # ⛔ (19/10) o gerador do Flow sai com SystemExit quando a aba do projeto sumiu: sem pegar isso, o fio da aba
+            #    morria calado e a fila ficava parada para sempre (o painel mostrava "Parado" com montagem na fila)
+            except (Exception, SystemExit) as e:                           # noqa: BLE001
                 msg = str(e)[:240] or e.__class__.__name__
                 self._log(f"⚠ instagram ({etapa or tipo}): {msg}")
                 self._avisar(f"Instagram, {NOMES.get(etapa, etapa or tipo)}: {msg}", "erro")
@@ -1017,6 +1057,18 @@ class Instagram:
                 self._mudou(alvo)
                 self._fila.task_done()
 
+    def _etapa_retrato(self, aid):
+        """O retrato-ancora de um avatar criado de uma ficha, sem foto; em seguida os comodos pendentes."""
+        a = self._avatar(aid)
+        p = self._pasta_av(aid)
+        if not self._achar(p, "foto"):
+            destino = os.path.join(p, "foto.png")
+            self._log(f"instagram: gerando o retrato de {a['nome']}")
+            self._gerador().gerar_imagem(_rot.prompt_retrato(a), [], destino, self._log)
+            if not os.path.isfile(destino): raise RuntimeError(f"o gerador não gravou o retrato de {a['nome']}")
+            self._log(f"instagram: retrato de {a['nome']} pronto; os cômodos vão para a fila")
+        if any(c["estado"] in ("pendente", "recusada") for c in a["cenas"]): self.gerar_pool(aid)
+
     def _etapa_cena(self, aid, cid):
         a = self._avatar(aid)
         c = next((x for x in a["cenas"] if x["id"] == cid), None)
@@ -1028,10 +1080,28 @@ class Instagram:
         if not os.path.isfile(destino): raise RuntimeError(f"o gerador não gravou a imagem de “{c['nome']}”")
         self._alterar_avatar(aid, lambda x: [y.update(estado="pronta") for y in x["cenas"] if y["id"] == cid])
 
+    def _irmao_com_fonte(self, r):
+        """Um Reel do mesmo lote que ja' tem a fonte (e, se tiver, a transcricao)."""
+        if not r.get("lote"): return None
+        for rid in sorted(os.listdir(os.path.join(self.base, "reels"))):
+            if rid == r["id"]: continue
+            x = self._ler(os.path.join(self.base, "reels", rid, "reel.json"))
+            if x and x.get("lote") == r["lote"] and os.path.isfile(os.path.join(self.base, "reels", rid, "fonte.mp4")):
+                if x.get("takes_origem"): return x
+        return None
+
     def _etapa_fonte(self, rid):
         r = self._reel(rid)
         p = self._pasta_reel(rid)
         fonte = os.path.join(p, "fonte.mp4")
+        irmao = self._irmao_com_fonte(r)
+        if irmao:
+            # ⭐ mesmo video-fonte: copia o mp4 e a transcricao em vez de baixar e transcrever de novo
+            if not os.path.isfile(fonte): shutil.copyfile(os.path.join(self._pasta_reel(irmao["id"]), "fonte.mp4"), fonte)
+            self._alterar_reel(rid, lambda x: x.update(takes_origem=irmao["takes_origem"],
+                                                       idioma_origem=irmao.get("idioma_origem", "en"), takes=[]))
+            self._registrar(rid, f"fonte: a mesma do lote ({len(irmao['takes_origem'])} take(s))")
+            return
         if not os.path.isfile(fonte):
             self._log(f"instagram: baixando o Reel de origem de {rid}")
             self.midia.baixar(r["url"], p, cookies=self.ajustes()["cookies"])
@@ -1199,16 +1269,20 @@ class Instagram:
         self._log(f"instagram: montando {rid}")
         # ⭐ o whisper mede onde a fala de cada take comeca e acaba; o take vai de um respiro antes da primeira palavra a
         #    um respiro depois da ultima. O texto da legenda vem do roteiro (grafia certa).
+        # ⭐ cada take entra acelerado (midia.velocidade: 1,11x +-5%, fixo por take e versao); a legenda e a timeline
+        #    andam no tempo do Reel, ja' acelerado
         clipes, legenda, inicio, cortes = [], [], 0.0, {}
         for t in r["takes"]:
             pals = self._palavras(t["video"], lingua)
             ate = self.midia.fim_da_fala(pals, self.midia.duracao(t["video"]))
             de = min(self.midia.inicio_da_fala(pals), max(0.0, ate - 1.0))
-            clipes.append((t["video"], de, ate))
-            cortes[t["n"]] = {"corte": [de, ate], "no_reel": [round(inicio, 2), round(inicio + ate - de, 2)]}
-            pals = [{**w, "ini": w["ini"] - de, "fim": w["fim"] - de} for w in pals]
-            legenda += self.midia.alinhar(t["fala"], pals, ate - de, inicio)
-            inicio += ate - de
+            vel = self.midia.velocidade(f"{rid}-{t['n']}-v{t.get('v', 1)}")
+            dur_t = (ate - de) / vel
+            clipes.append((t["video"], de, ate, vel))
+            cortes[t["n"]] = {"corte": [de, ate], "velocidade": vel, "no_reel": [round(inicio, 2), round(inicio + dur_t, 2)]}
+            pals = [{**w, "ini": (w["ini"] - de) / vel, "fim": (w["fim"] - de) / vel} for w in pals]
+            legenda += self.midia.alinhar(t["fala"], pals, dur_t, inicio)
+            inicio += dur_t
         sem = self.midia.montar(clipes, os.path.join(p, "sem_legenda.mp4"))
         if r.get("legenda"):
             cta = r["cta"]["palavra"] if r["cta"]["tipo"] == "palavra" else ""
@@ -1217,7 +1291,7 @@ class Instagram:
             self.midia.queimar(sem, self.midia.legenda_ass(legenda), os.path.join(p, "final.mp4"))
         if r.get("legenda_post"):
             open(os.path.join(p, "legenda_post.txt"), "w", encoding="utf-8").write(r["legenda_post"] + "\n")
-        dur = round(sum(c[2] - c[1] for c in clipes), 1)
+        dur = round(inicio, 1)
         # ⭐ onde cada take entra no Reel: a timeline do editor de curadoria anda por aqui
         self._alterar_reel(rid, lambda x: (x.update(duracao=dur, montado=round(time.time(), 2)),
                                            [t.update(cortes[t["n"]]) for t in x["takes"] if t["n"] in cortes]))
@@ -1272,6 +1346,7 @@ def _autoteste():
         duracao = staticmethod(_midia.duracao)
         fim_da_fala = staticmethod(_midia.fim_da_fala)
         inicio_da_fala = staticmethod(_midia.inicio_da_fala)
+        velocidade = staticmethod(_midia.velocidade)
         montar = staticmethod(_midia.montar)
         legenda_ass = staticmethod(_midia.legenda_ass)
         queimar = staticmethod(_midia.queimar)
@@ -1423,6 +1498,10 @@ def _autoteste():
     caso("⭐ editor: cada take ja' tem a v1, com miniatura, e onde entra no Reel",
          [len(t["versoes"]) for t in ed["takes"]] == [1] * len(ed["takes"]) and t1["versoes"][0]["mini"] == "mini_01_v1"
          and t1["no_reel"][0] == 0 and ed["takes"][1]["no_reel"][0] == t1["no_reel"][1] and ed["reel"]["montado"])
+    caso("⭐ montagem acelerada: cada take a 1,11x +-5%, e o lugar no Reel ja' no tempo acelerado",
+         all(1.0545 <= t["velocidade"] <= 1.1655 for t in ed["takes"])
+         and abs((t1["no_reel"][1] - t1["no_reel"][0]) - (t1["corte"][1] - t1["corte"][0]) / t1["velocidade"]) < 0.02
+         and abs(ed["reel"]["duracao"] - _midia.duracao(ig.arquivo_reel(rid1, "final"))) < 0.3)
     caso("editor: as etiquetas de defeito vem do motor", any(e["id"] == "pronuncia" for e in ed["etiquetas"]))
     q1, q2 = t1["versoes"][0].get("qa") or {}, ed["takes"][1]["versoes"][0].get("qa") or {}
     caso("⭐ QA: cada versao gerada ja' vem checada; fala ouvida certa = sem flag", ed["sem_qa"] == 0 and q1["flags"] == []
@@ -1648,6 +1727,35 @@ def _autoteste():
     caso("tudo() para o painel", len(ig.tudo()["reels"]) == 3 and ig.tudo()["gerador"]["ok"]
          and ig.tudo()["producao"] == {"agora": None, "fila": 0})
     caso("eventos mudou/instagram", any(e[0] == "mudou" and e[1].get("o") == "instagram" for e in eventos))
+    # ── avatares por mercado: ficha sem foto (retrato + comodos sozinhos) e o lote de 1 fonte -> N Reels ──
+    n_img = len(g.imagens)
+    caso("⛔ avatar sem foto e sem ficha", _erro(lambda: ig.criar_avatar("Fulano", "", "")))
+    w = ig.criar_avatar("", "", "", persona="wendelin")
+    caso("⭐ avatar da ficha: nome, idioma, CTA e 8 comodos ja' preenchidos, retrato na fila",
+         w["nome"] == "Bruder Wendelin" and w["idioma"] == "de" and w["cta"] == "Buch" and len(w["cenas"]) == 8
+         and not w["foto"] and w["gerando_retrato"])
+    ig.esperar(120)
+    w = next(a for a in ig.tudo()["avatares"] if a["id"] == w["id"])
+    retrato = g.imagens[n_img]
+    caso("⭐ retrato-ancora gerado sem referencia, e os 8 comodos em seguida a partir dele",
+         w["foto"] and retrato[1] == [] and "Benedictine monk" in retrato[0] and len(g.imagens) == n_img + 9
+         and all(c["estado"] == "pronta" for c in w["cenas"]) and os.path.basename(g.imagens[-1][1][0]) == "foto.png")
+    ig.cena(w["id"], "klostergarten", "aprovar")
+    n_vid, g.falhar = len(g.videos), set()
+    lote = ig.criar_lote([{"avatar": aid, "palavra": "livro"}, {"avatar": w["id"]}],
+                         url="https://www.instagram.com/reel/lote/", legenda=0)
+    caso("⛔ lote vazio", _erro(lambda: ig.criar_lote([], url="https://www.instagram.com/reel/x/")))
+    ig.esperar(240)
+    ra, rw = (ig.reel(x) for x in lote["reels"])
+    caso("⭐ lote: um Reel por avatar, cada um no idioma e com o CTA dele", len(lote["reels"]) == 2
+         and (ra["idioma"], ra["cta"]["palavra"]) == ("pt", "livro") and (rw["idioma"], rw["cta"]["palavra"]) == ("de", "buch")
+         and ra["lote"] == rw["lote"] == lote["lote"] and ra["final"] and rw["final"])
+    caso("⭐ lote: a fonte do segundo vem do primeiro, sem baixar de novo",
+         Midia.baixados.count("https://www.instagram.com/reel/lote/") == 1
+         and any("a mesma do lote" in x["texto"] for x in rw["registro"]))
+    pw = [v["prompt"] for v in g.videos[n_vid:] if v["nome"].startswith("take_") and "German" in v["prompt"]]
+    caso("⭐ os takes do monge: alemao e no masculino", pw and all("He looks at the camera" in x and "She " not in x for x in pw))
+    caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "cuca", "wendelin"})
     ig.encerrar()
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
