@@ -6,8 +6,9 @@ r"""INSTAGRAM MIDIA — baixar o Reel de origem, transcrever, montar o Reel 9:16
     baixar(url, pasta, cookies="")        yt-dlp -> pasta/fonte.mp4
     palavras(arquivo, idioma=None)        faster-whisper com tempo por palavra -> ([{"w","ini","fim"}], idioma)
     quadro(video, t, saida)               um quadro do video (o enquadramento de origem de cada take)
+    inicio_da_fala(palavras)              de onde o take vai (corta o silencio antes da primeira palavra)
     fim_da_fala(palavras, duracao)        onde aparar a cauda de um take (o Veo devolve 8 s mesmo com fala curta)
-    montar(clipes, saida)                 [(mp4, ate_s)] -> um mp4 1080x1920 30 fps, -14 LUFS
+    montar(clipes, saida)                 [(mp4, ate_s) | (mp4, de_s, ate_s)] -> um mp4 1080x1920 30 fps, -14 LUFS
     legenda_ass(palavras)                 palavras -> legenda .ass (2 a 3 palavras por vez, centro-baixo)
     queimar(video, ass, saida)            a legenda dentro da imagem
     queimar_estilo(video, palavras, saida, n, cta)   a legenda no estilo N do OW Agente (2 = PILULA)
@@ -16,6 +17,7 @@ import json, os, shutil, subprocess, sys
 
 W, H, FPS = 1080, 1920, 30
 CAUDA_S = 0.35
+RESPIRO_S = 0.15
 _SEM_JANELA = {"creationflags": 0x08000000} if os.name == "nt" else {}
 _modelo = {}
 
@@ -64,6 +66,13 @@ def fim_da_fala(pals, dur):
     return round(min(dur, max(1.0, pals[-1]["fim"] + CAUDA_S)), 2)
 
 
+def inicio_da_fala(pals):
+    """De onde o take vai: um respiro antes da primeira palavra. ⭐ O silencio de abertura so' existe para a primeira
+    consoante sair inteira no Veo; no Reel ele so' alonga (no run de 18/10, 9 takes = 64 s para 36 s de origem)."""
+    if not pals: return 0.0
+    return round(max(0.0, pals[0]["ini"] - RESPIRO_S), 2)
+
+
 def alinhar(fala, pals, ate, inicio=0.0):
     """As palavras do ROTEIRO com o tempo da fala medida pelo whisper no take.
 
@@ -94,8 +103,9 @@ def montar(clipes, saida):
     """[(mp4, ate_s)] -> um mp4 9:16 numa passada so' do ffmpeg (corte, escala, concat, loudnorm)."""
     if not clipes: raise ValueError("nenhum take para montar")
     cmd, filtros, rotulos = ["ffmpeg", "-y", "-v", "error"], [], ""
-    for i, (arq, ate) in enumerate(clipes):
-        cmd += ["-t", f"{ate:.2f}", "-i", arq]
+    for i, c in enumerate(clipes):
+        arq, de, ate = (c[0], 0.0, c[1]) if len(c) == 2 else c
+        cmd += ["-ss", f"{de:.2f}", "-t", f"{ate - de:.2f}", "-i", arq]
         filtros.append(f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},"
                        f"setsar=1,format=yuv420p[v{i}]")
         filtros.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo[a{i}]")
@@ -246,7 +256,9 @@ def _autoteste():
          and all(x["fim"] <= y["ini"] + 0.01 for x, y in zip(al, al[1:])))
     caso("alinhar: palavra maior fica mais tempo", al[1]["fim"] - al[1]["ini"] > al[2]["fim"] - al[2]["ini"])
     caso("alinhar: sem fala medida usa o take", alinhar("Oi", [], 4.0)[0]["ini"] == 0.5)
-    m = montar([(clipes[0], 3.0), (clipes[1], 2.5)], os.path.join(d, "sem_legenda.mp4"))
+    m = montar([(clipes[0], 3.0), (clipes[1], 0.5, 3.0)], os.path.join(d, "sem_legenda.mp4"))
+    caso("inicio_da_fala: um respiro antes da primeira palavra", inicio_da_fala([{"w": "Oi", "ini": 0.9, "fim": 1.2}]) == 0.75
+         and inicio_da_fala([{"w": "Oi", "ini": 0.05, "fim": 0.3}]) == 0.0 and inicio_da_fala([]) == 0.0)
     caso("montar: duracao = soma dos cortes", abs(duracao(m) - 5.5) < 0.2)
     info = json.loads(_rodar(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
                               "stream=width,height", "-of", "json", m]))["streams"][0]

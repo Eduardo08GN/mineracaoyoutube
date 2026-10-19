@@ -263,7 +263,7 @@ class Instagram:
              "voz": (voz or base.get("voz", "")).strip(), "quem": (quem or base.get("quem", "")).strip(),
              "cenas": [{"id": c[0], "nome": c[1], "cena": c[2], "estado": "pendente"} for c in base.get("cenas", [])],
              "usos": {}}
-        if not a["prefixo"]: a["prefixo"] = "The same person from the frame; keep the same person, clothes and setting."
+        if not a["prefixo"]: a["prefixo"] = "The same person from the frame, same face, hands, clothes and setting."
         if not a["voz"]: a["voz"] = "a natural, warm voice in {lingua}, spoken by the person in frame"
         with self._t: self._gravar(os.path.join(p, "avatar.json"), a)
         self._log(f"instagram: avatar {a['nome']} criado")
@@ -633,14 +633,17 @@ class Instagram:
             raise RuntimeError("faltam takes: rode a geração")
         lingua = _rot.IDIOMAS[r["idioma"]]["whisper"]
         self._log(f"instagram: montando {rid}")
-        # ⭐ o whisper mede onde a fala de cada take comeca e acaba; o texto da legenda vem do roteiro (grafia certa)
+        # ⭐ o whisper mede onde a fala de cada take comeca e acaba; o take vai de um respiro antes da primeira palavra a
+        #    um respiro depois da ultima. O texto da legenda vem do roteiro (grafia certa).
         clipes, legenda, inicio = [], [], 0.0
         for t in r["takes"]:
             pals, _ = self.midia.palavras(t["video"], lingua)
             ate = self.midia.fim_da_fala(pals, self.midia.duracao(t["video"]))
-            clipes.append((t["video"], ate))
-            legenda += self.midia.alinhar(t["fala"], pals, ate, inicio)
-            inicio += ate
+            de = min(self.midia.inicio_da_fala(pals), max(0.0, ate - 1.0))
+            clipes.append((t["video"], de, ate))
+            pals = [{**w, "ini": w["ini"] - de, "fim": w["fim"] - de} for w in pals]
+            legenda += self.midia.alinhar(t["fala"], pals, ate - de, inicio)
+            inicio += ate - de
         sem = self.midia.montar(clipes, os.path.join(p, "sem_legenda.mp4"))
         if r.get("legenda"):
             cta = r["cta"]["palavra"] if r["cta"]["tipo"] == "palavra" else ""
@@ -649,7 +652,7 @@ class Instagram:
             self.midia.queimar(sem, self.midia.legenda_ass(legenda), os.path.join(p, "final.mp4"))
         if r.get("legenda_post"):
             open(os.path.join(p, "legenda_post.txt"), "w", encoding="utf-8").write(r["legenda_post"] + "\n")
-        dur = round(sum(c[1] for c in clipes), 1)
+        dur = round(sum(c[2] - c[1] for c in clipes), 1)
         self._alterar_reel(rid, lambda x: x.update(duracao=dur))
         self._registrar(rid, f"montagem: {dur} s, 1080x1920, legenda queimada")
         self._avisar(f"Reel pronto ({dur} s).", "ok")
@@ -698,6 +701,7 @@ def _autoteste():
         baixados = []
         duracao = staticmethod(_midia.duracao)
         fim_da_fala = staticmethod(_midia.fim_da_fala)
+        inicio_da_fala = staticmethod(_midia.inicio_da_fala)
         montar = staticmethod(_midia.montar)
         legenda_ass = staticmethod(_midia.legenda_ass)
         queimar = staticmethod(_midia.queimar)
@@ -815,7 +819,7 @@ def _autoteste():
     caso("⭐ o take do livro pede a mudanca durante a fala", "in step with the speech" in vs[-1]["prompt"]
          and "in step with the speech" not in vs[0]["prompt"])
     caso("modelo gratis por padrao", all(v["modelo"] == "gratis" for v in vs))
-    caso("prompt do take no formato testado", vs[0]["prompt"].startswith("Interpolate naturally") and "Fala 1 da Tomiko" in vs[0]["prompt"])
+    caso("prompt do take: camera travada e a fala do roteiro", vs[0]["prompt"].startswith(_rot.CAMERA) and '"Fala 1 da Tomiko"' in vs[0]["prompt"])
     ass = open(os.path.join(ig._pasta_reel(r1["id"]), "legenda.ass"), encoding="utf-8").read()
     caso("⭐ a legenda queimada usa a fala do roteiro", "Fala 1 da" in ass and "Olá" not in ass)
     caso("legenda do post gravada", open(os.path.join(ig._pasta_reel(r1["id"]), "legenda_post.txt"), encoding="utf-8").read().startswith("Chá"))

@@ -25,6 +25,10 @@ IDIOMAS = {
 }
 # ⛔ palavras por take de 8 s: o limite de 24 do ow_agente e' medido em ingles; o portugues e' mais longo (~18)
 PALAVRAS_TAKE = {"pt": 18, "en": 24, "es": 20, "fr": 20, "de": 18}
+# ⭐ (18/10, auditoria do Veo) a FALA do take e' medida em tempo: ~5 s falados num take de 8 s, folga nas duas pontas.
+#    No run de 18/10 as falas de 18 palavras em pt deram 5,4-7,3 s: no limite, o final corta e o Reel incha.
+FALA_S = 5.0
+FALA_MAX_PALAVRAS = {"pt": 14, "en": 18, "es": 15, "fr": 15, "de": 13}
 MAX_S_TAKE = 8.0
 MIN_S_TAKE = 2.0
 # ⭐ fim de frase fecha o take so' a partir daqui: take curto custa uma geracao inteira de 8 s do mesmo jeito
@@ -39,12 +43,15 @@ FRACAS = {
     "de": {"der", "die", "das", "ein", "eine", "und", "zu", "mit", "für", "von", "in", "auf", "mein", "meine"},
 }
 
-RESPIRO_ANTES_DA_FALA = ("The first word begins about half a second in, not on the very first frame: the shot opens on "
-                         "a short beat of silence before the line starts, so the first consonant is fully heard.")
-FALA_UMA_VEZ = ("Say the dialogue exactly once. Do not repeat it, do not rephrase it, do not extend it, "
-                "and add no words beyond it.")
-PREFIXO_INTERPOLACAO = "Interpolate naturally between the two given frames."
-SEM_TEXTO_TELA = "No on-screen text, no captions, no subtitles."
+# ⭐ (18/10, auditoria: reports/Prompts Veo para takes interpolados.md) a ordem e' a da formula oficial do Veo 3.1:
+#    camera, sujeito, acao, audio. A camera travada abre o prompt (sem ela o Veo inventa movimento e corte).
+CAMERA = ("Single continuous shot, static locked-off camera holding the exact framing of the frame, "
+          "no zoom, no cuts.")
+# ⭐ uma acao concreta antes da primeira palavra: o silencio do comeco vira gesto, e a primeira consoante sai inteira
+ENTRADA_DA_FALA = "She looks at the camera and takes a small breath, then"
+# ⭐ o tempo que sobra depois da fala ganha uma acao silenciosa: tempo vazio e' o que o Veo enche repetindo a linha
+FALA_UMA_VEZ = "She says the line once, then stays silent, smiling softly at the camera, until the end of the shot."
+SEM_TEXTO_TELA = "Clean frame: no captions, no subtitles, no on-screen text."
 # ⛔ porte de MUDANCA_DURANTE_A_FALA (ow_agente pedido.py): com quadros diferentes o Veo segura o primeiro e muda no fim,
 #    depois da fala; a montagem apara a cauda e a mudanca (o livro aparecendo) seria cortada.
 MUDANCA_DURANTE_A_FALA = (
@@ -71,8 +78,7 @@ TOMIKO = {
         "lively attentive eyes, real wrinkles and sun spots. She wears a loose white cotton long-sleeve blouse, an "
         "indigo denim apron with a small white sashiko embroidery square on the chest, charcoal trousers and simple "
         "dark flat shoes."),
-    "prefixo": ("The same 75-year-old Japanese-Brazilian woman from the frame; keep the same person, clothes "
-                "and setting."),
+    "prefixo": "The same 75-year-old Japanese-Brazilian woman from the frame, same face, hands, clothes and setting.",
     "voz": ("the warm, slow, slightly raspy voice of a 75-year-old woman, {lingua} with a soft Japanese-Brazilian "
             "accent, spoken by the woman in frame"),
     "quem": ("a 75-year-old Japanese-Brazilian grandmother from Londrina who teaches herbs, teas and home "
@@ -145,7 +151,7 @@ def pedido_adaptacao(takes, idioma, avatar, cta):
 
     cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}"""
     info = IDIOMAS[idioma]
-    lim = PALAVRAS_TAKE.get(idioma, 18)
+    lim = FALA_MAX_PALAVRAS.get(idioma, 14)
     if cta.get("tipo") == "palavra":
         regra_cta = (f'The LAST take is the call to action: invite viewers to comment '
                      f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
@@ -154,7 +160,12 @@ def pedido_adaptacao(takes, idioma, avatar, cta):
         regra_cta = ("The LAST take is the call to action: a plain, calm line saying the complete material is at the "
                      "link in the profile. No hype.")
     if cta.get("livro"):
-        regra_cta += " In that last take she holds up her book toward the camera with both hands; say it in the movement."
+        # ⛔ o quadro final do CTA mostra o livro erguido: aqui NAO ha' volta a' pose (o texto nao contradiz o quadro)
+        regra_cta += (" In that last take her book lies on the table in front of her: its \"quadro\" names the book, and "
+                      "its \"movimento\" is the whole mechanism, with no return to the starting pose: \"As she speaks, "
+                      "she picks up the book from the table with both hands and raises it to chest height, cover "
+                      "toward the camera, holding it by the edges.\" then \"She holds it steady until the end of the "
+                      "shot.\"")
     linhas = "\n".join(f'{t["n"]}. ({t["fim"] - t["ini"]:.1f} s) {t["texto"]}' for t in takes)
     return f"""You adapt a short vertical video (Instagram Reel) for a new presenter. Return ONLY JSON.
 
@@ -166,14 +177,21 @@ Original takes (speech transcribed from the source video, any language):
 
 Write, for EACH original take, in the same order:
 - "fala": what the presenter says in {info["lingua"]}, keeping the meaning, the hook and the rhythm of the original,
-  in her own warm voice. At most {lim} words. Never end a take on a word that asks for continuation
-  (articles, prepositions, conjunctions). No dash characters of any kind inside the line. Numbers in words.
+  in her own warm voice. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
+  a word that asks for continuation (articles, prepositions, conjunctions). No dash characters of any kind inside the
+  line. Numbers in words. Prefer common, easy-to-pronounce words: avoid words with a repeated syllable and word
+  pairs where a vowel ending meets a vowel start (the voice merges them).
 - "quadro": one short English sentence naming the items of this exact step of the line that are in front of her
   (ingredients, bowl, blender, pan, the finished food), concretely. Only the items: never the camera, the framing,
   her face, hair or clothes (the shot itself is copied from the source video).
-- "movimento": one or two short English sentences describing ONLY her action in the shot, in positive phrasing
-  (what she does, never what she does not do): a small natural action with the items of the "quadro", looking
-  at the camera between gestures. She stays in the same spot and ends the shot in the pose she started.
+- "movimento": exactly two short English sentences, in positive phrasing (what she does, never what she does not
+  do). The shot starts and ends on the SAME frame, so the action must be reversible.
+  1st sentence starts with "As she speaks," and describes ONE slow gesture: name the hand (right hand, left hand
+  or both hands), the contact point and the item with the SAME noun used in the "quadro", limited to picking up,
+  lifting, holding toward the camera, pointing at or touching. Never pouring, cutting, slicing, sprinkling,
+  mixing, opening, peeling or anything that changes an item for good.
+  2nd sentence starts with "After the line," and puts the item back in the same spot with her hands resting
+  in the starting pose.
 If an original take is itself a call to action (comment, follow, share, link), rewrite it as a short closing
 line of the content instead: the call to action lives ONLY in the extra take below.
 Then add ONE extra take at the end for the call to action, with the same fields. {regra_cta}
@@ -218,15 +236,18 @@ def voz(avatar, idioma):
 
 
 def prompt_video(avatar, idioma, movimento, fala, muda=False):
-    """O prompt de um take (ficha da Tomiko): prefixo curto + movimento + fala. ⛔ Com a ancora no quadro, a roupa
-    e o cenario NAO sao descritos de novo: a prosa compete com a imagem e as vezes ganha."""
-    partes = [PREFIXO_INTERPOLACAO, avatar.get("prefixo") or TOMIKO["prefixo"], movimento.strip()]
+    """O prompt de um take: camera travada, quem (so' invariantes), a fala atribuida com o idioma e a voz, o gesto,
+    o silencio depois da fala e o audio. ⛔ Com a ancora no quadro, a roupa e o cenario NAO sao descritos de novo: a
+    prosa compete com a imagem e as vezes ganha. ⛔ "(no subtitles)" logo depois da fala: a legenda queimada e' o
+    defeito mais relatado do Veo com dialogo, e a restricao rende mais colada nela."""
+    partes = [CAMERA, avatar.get("prefixo") or TOMIKO["prefixo"]]
     if fala.strip():
-        partes += [f'Dialogue: "{fala.strip()}" Voice: {voz(avatar, idioma)}.', RESPIRO_ANTES_DA_FALA, FALA_UMA_VEZ]
+        partes += [f'{ENTRADA_DA_FALA} says in {IDIOMAS[idioma]["lingua"]}, in {voz(avatar, idioma)}: '
+                   f'"{fala.strip()}" (no subtitles)', movimento.strip(), FALA_UMA_VEZ]
         if muda: partes.append(MUDANCA_DURANTE_A_FALA)
     else:
-        partes.append("No speech.")
-    partes += ["Ambient room tone. No music.", SEM_TEXTO_TELA]
+        partes += [movimento.strip(), "She stays silent."]
+    partes += ["Audio: only her voice and quiet room tone, no music.", SEM_TEXTO_TELA]
     return " ".join(p for p in partes if p)
 
 
@@ -240,10 +261,12 @@ def prompt_cena(avatar, cena):
 def prompt_quadro(avatar, lugar, quadro):
     """O quadro de abertura de UM take. Refs: 1a = o quadro do video de origem naquele take, 2a = a foto do avatar.
     ⛔ O angulo, a distancia e a composicao vem SO' do video de origem (cada Reel tem os seus). O comodo entra so'
-    pelo TEXTO: a imagem dele como referencia domina o quadro e poe o avatar de corpo inteiro, longe da camera."""
+    pelo TEXTO: a imagem dele como referencia domina o quadro e poe o avatar de corpo inteiro, longe da camera.
+    ⭐ Maos e itens EM REPOUSO: o quadro do meio do trecho de origem pode pegar um gesto no ar, e o take comeca e
+    termina nesse quadro (com a jarra inclinada nas duas pontas, o gesto reversivel fica impossivel)."""
     return (f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
-            f"zoom, the same framing and crop, the same hand positions and the same kind of items in the same places "
-            f"of the frame. Replace the person with the person of the SECOND reference image (same face, hair and "
+            f"zoom, the same framing and crop, and the same kind of items in the same places of the frame, with her "
+            f"hands and the items at rest: nothing held in mid-air, nothing being poured. Replace the person with the person of the SECOND reference image (same face, hair and "
             f"clothes): {avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the "
             f"face, the hair, the headwear or the clothes. Change only the setting behind the items to this place: "
             f"{lugar.strip()} {quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
@@ -285,7 +308,10 @@ def _autoteste():
     av = {"quem": TOMIKO["quem"], "prefixo": TOMIKO["prefixo"], "voz": TOMIKO["voz"]}
     ped = pedido_adaptacao(tk, "pt", av, {"tipo": "palavra", "palavra": "Umeboshi", "livro": True})
     caso("pedido: palavra minuscula com virgula", '"umeboshi,"' in ped)
-    caso("pedido: livro no CTA", "holds up her book" in ped)
+    caso("pedido: livro no CTA, sem volta a' pose", "picks up the book from the table" in ped and "no return" in ped)
+    caso("⭐ pedido: fala medida em tempo (pt = 14 palavras, ~5 s)", "At most 14 words, speakable in about 5 seconds" in ped)
+    caso("⭐ pedido: movimento reversivel, com a mao e o mesmo substantivo do quadro",
+         '"As she speaks,"' in ped and '"After the line,"' in ped and "Never pouring" in ped and "SAME noun" in ped)
     caso("pedido: regra de cura", "Never promise to cure" in ped)
 
     resp = "aqui: " + json.dumps({"takes": [{"n": i, "fala": f"Fala {i} — com travessão", "movimento": "She smiles."}
@@ -298,13 +324,18 @@ def _autoteste():
     caso("⛔ ler_adaptacao: lixo = None", ler_adaptacao("sem json", 1) is None)
 
     p = prompt_video(av, "pt", "She lifts a jar of umeboshi.", "Essa conserva atravessa o inverno.")
-    caso("prompt_video: formato testado", p.startswith(PREFIXO_INTERPOLACAO) and 'Dialogue: "' in p
-         and "half a second" in p and "exactly once" in p and p.endswith(SEM_TEXTO_TELA))
+    caso("⭐ prompt_video: a camera travada abre o prompt", p.startswith(CAMERA))
+    caso("⭐ prompt_video: fala atribuida, com idioma, aspas e (no subtitles) colado nela",
+         'then says in Brazilian Portuguese, in the warm' in p and '"Essa conserva atravessa o inverno." (no subtitles)' in p)
+    caso("⭐ prompt_video: gesto depois da fala, silencio depois e texto limpo no fim",
+         p.index("She lifts") > p.index("(no subtitles)") and "stays silent" in p and p.endswith(SEM_TEXTO_TELA))
+    caso("prompt_video: o avatar so' por invariantes", "same face, hands" in p and "apron" not in p)
     caso("prompt_video: voz no idioma", "Brazilian Portuguese with a soft Japanese-Brazilian accent" in p)
     caso("⛔ prompt_video: sem 'no text, no logos' (apaga rotulos)", "no logos" not in p)
     caso("⭐ quadros diferentes: a mudanca acontece durante a fala", "in step with the speech" in prompt_video(av, "pt", "x", "y", muda=True)
          and "in step with the speech" not in p)
-    caso("prompt_video sem fala", "No speech." in prompt_video(av, "en", "She pours tea.", ""))
+    caso("prompt_video sem fala", "She stays silent." in prompt_video(av, "en", "She lifts the cup.", "")
+         and "says" not in prompt_video(av, "en", "She lifts the cup.", ""))
     caso("voz em ingles", "American English" in voz(av, "en"))
     pc = prompt_cena({"descricao": TOMIKO["descricao"]}, TOMIKO["cenas"][0][2])
     caso("prompt_cena: 9:16 + referencia + comodo", pc.startswith("Vertical 9:16") and "reference image" in pc
