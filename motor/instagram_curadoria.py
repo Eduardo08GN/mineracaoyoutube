@@ -94,13 +94,14 @@ the line and its place in the video. Typical fixes: a word the voice mispronounc
 action that did not happen or deformed the hands becomes a simpler, slower gesture with fewer items; a line that
 was cut or repeated becomes shorter.
 {_rot.regras_take(idioma, extras, avatar)}{regra_cta}
-Set "refazer_quadro" to true ONLY when the defect is in the opening frame itself (wrong or missing items, hands in
-mid-air, an item that should not be there); then "quadro" names the corrected items. Otherwise keep "quadro" as is.
+Set "refazer_quadro" to true ONLY when the defect is in the opening or the end frame itself (wrong or missing
+items, an item that should not be there, or an action that did not complete because the end frame does not show
+its result); then "quadro" and "quadro_fim" name the corrected items. Otherwise keep them as they are.
 
 {_rot.REGRAS_CONTEUDO}
 
 JSON format:
-{{"fala": "...", "quadro": "...", "movimento": "...", "refazer_quadro": false,
+{{"fala": "...", "quadro": "...", "quadro_fim": "...", "movimento": "...", "refazer_quadro": false,
   "motivo": "one short sentence in Brazilian Portuguese saying what you changed and why"}}"""
 
 
@@ -120,6 +121,7 @@ def ler_correcao(texto):
         campos[k] = v.strip()
     campos["fala"] = re.sub(r"\s*[—–]\s*|\s+-\s+", ", ", campos["fala"])          # ⛔ o Veo vocaliza o travessao
     campos["quadro"] = d["quadro"].strip() if isinstance(d.get("quadro"), str) else ""
+    campos["quadro_fim"] = d["quadro_fim"].strip() if isinstance(d.get("quadro_fim"), str) else ""
     campos["refazer_quadro"] = d.get("refazer_quadro") is True and bool(campos["quadro"])
     campos["motivo"] = str(d.get("motivo") or "").strip()
     return campos

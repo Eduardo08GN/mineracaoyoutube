@@ -292,17 +292,22 @@ def regras_take(idioma, extras="", avatar=None):
   of the original.{POPULAR.get(idioma, "")}
   Keep every ingredient, quantity, temperature and time said in the original line: to fit the time, cut filler
   words, never a recipe item.
-- "quadro": one short English sentence naming the items of this exact step of the line that are in front of her
-  (ingredients, bowl, blender, pan, the finished food), concretely. Only the items: never the camera, the framing,
-  her face, hair or clothes (the shot itself is copied from the source video).
+- "quadro": one short English sentence naming the items of this exact step and where they are at the START of
+  the step, in front of her (ingredients, bowl, blender, pan, the finished food), concretely. Only the items and
+  her hands: never the camera, the framing, her face, hair or clothes (the shot itself is copied from the source).
+- "quadro_fim": one short English sentence with the SAME items at the END of the step, after the action is done
+  (e.g. "the salt is inside the blender jar and the small dish is empty in her right hand"). If the step has no
+  physical action (she only talks or shows something), repeat the "quadro".
 - "movimento": exactly two short English sentences, in positive phrasing (what she does, never what she does not
-  do). The shot starts and ends on the SAME frame, so the action must be reversible.
-  1st sentence starts with "As she speaks," and describes ONE slow gesture: name the hand (right hand, left hand
-  or both hands), the contact point and the item with the SAME noun used in the "quadro", limited to picking up,
-  lifting, holding toward the camera, pointing at or touching. Never pouring, cutting, slicing, sprinkling,
-  mixing, opening, peeling or anything that changes an item for good.
-  2nd sentence starts with "After the line," and puts the item back in the same spot with her hands resting
-  in the starting pose.""", avatar) + (f"\n{extras.rstrip()}" if extras.strip() else "")
+  do). The original line says what is being done in the source video: she does THAT action for real and
+  completely, exactly as the source does it (if the source pours the salt into the blender, she pours it in;
+  never a half gesture that only lifts the item and puts it back).
+  1st sentence starts with "As she speaks," and describes the whole action from the "quadro" state to the
+  "quadro_fim" state: name the hand (right hand, left hand or both hands), the contact point, the item with the
+  SAME noun used in the "quadro", and what happens to it (it falls into, is poured into, is sprinkled over...).
+  One continuous, slow action.
+  2nd sentence starts with "By the last word," and states the "quadro_fim" result, with her looking at the
+  camera.""", avatar) + (f"\n{extras.rstrip()}" if extras.strip() else "")
 
 
 REGRAS_CONTEUDO = """Content rules (mandatory):
@@ -337,7 +342,8 @@ Also write "legenda_post": the Instagram post caption in {info["lingua"]} (2 to 
 line, ending with the same call to action).
 
 JSON format:
-{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "movimento": "..."}}, ...], "legenda_post": "..."}}"""
+{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "quadro_fim": "...", "movimento": "..."}}, ...],
+ "legenda_post": "..."}}"""
 
 
 def ler_adaptacao(texto, n_origem):
@@ -357,8 +363,10 @@ def ler_adaptacao(texto, n_origem):
         mov = t.get("movimento") if isinstance(t, dict) else None
         if not isinstance(fala, str) or not fala.strip() or not isinstance(mov, str) or not mov.strip(): return None
         fala = re.sub(r"\s*[—–]\s*|\s+-\s+", ", ", fala.strip())      # ⛔ o Veo vocaliza o travessao
-        quadro = t.get("quadro")
-        saida.append({"n": i, "fala": fala, "quadro": quadro.strip() if isinstance(quadro, str) else "",
+        quadro, quadro_fim = t.get("quadro"), t.get("quadro_fim")
+        quadro = quadro.strip() if isinstance(quadro, str) else ""
+        saida.append({"n": i, "fala": fala, "quadro": quadro,
+                      "quadro_fim": quadro_fim.strip() if isinstance(quadro_fim, str) and quadro_fim.strip() else quadro,
                       "movimento": mov.strip(), "cta": i == n_origem + 1})
     return {"takes": saida, "legenda_post": str(d.get("legenda_post") or "").strip()}
 
@@ -416,12 +424,27 @@ def prompt_quadro(avatar, lugar, quadro):
     ⭐ Maos e itens EM REPOUSO: o quadro do meio do trecho de origem pode pegar um gesto no ar, e o take comeca e
     termina nesse quadro (com a jarra inclinada nas duas pontas, o gesto reversivel fica impossivel)."""
     return genero(f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
-            f"zoom, the same framing and crop, and the same kind of items in the same places of the frame, with her "
-            f"hands and the items at rest: nothing held in mid-air, nothing being poured. Replace the person with the person of the SECOND reference image (same face, hair and "
+            f"zoom, the same framing and crop, and the same kind of items in the same places of the frame, as they are "
+            f"at the START of the step (nothing being poured yet). Replace the person with the person of the SECOND reference image (same face, hair and "
             f"clothes): {avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the "
             f"face, the hair, the headwear or the clothes. Change only the setting behind the items to this place: "
             f"{lugar.strip()} {quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
             f"No text, no captions, no logos, no watermark.", avatar)
+
+
+def prompt_quadro_fim(avatar, lugar, quadro_fim):
+    """O quadro FINAL de um take: o fim do mesmo passo no video de origem, com a mesma pessoa, lugar e luz do quadro
+    de abertura. Refs: 1a = o quadro do video de origem no FIM do trecho, 2a = o quadro de abertura ja' gerado,
+    3a = a foto do avatar. ⭐⭐ (19/10, ordem do Eduardo) com o mesmo quadro nas duas pontas o Veo nao completa a
+    acao (o sal nao cai no liquidificador): o take vai do quadro de abertura a este, e a acao acontece de verdade."""
+    return genero(f"Recreate the shot of the FIRST reference image, which is the END of the same step: the same camera "
+                  f"angle, distance, framing and crop. Everything else stays exactly as in the SECOND reference image (the "
+                  f"opening frame of this same shot): the same person, the same clothes, the same place and light, the same "
+                  f"items in the same places, except what the action changed: {quadro_fim.strip()} The person is the "
+                  f"person of the THIRD reference image (same face, hair and clothes): {avatar.get('descricao', '').strip()} "
+                  f"Nothing of the first reference's person stays: not the face, the hair, the headwear or the clothes. "
+                  f"Place: {lugar.strip()} Vertical 9:16 photo, smartphone UGC style. "
+                  f"No text, no captions, no logos, no watermark.", avatar)
 
 
 def proxima_cena(cenas, usos):
@@ -466,8 +489,17 @@ def _autoteste():
          and "everyday spoken German" in regras_take("de") and "demolhado" not in regras_take("de"))
     caso("⭐ pedido: ingrediente, quantidade, temperatura e tempo nunca saem da fala",
          "Keep every ingredient, quantity, temperature and time" in ped)
-    caso("⭐ pedido: movimento reversivel, com a mao e o mesmo substantivo do quadro",
-         '"As she speaks,"' in ped and '"After the line,"' in ped and "Never pouring" in ped and "SAME noun" in ped)
+    caso("⭐ pedido: a acao COMPLETA como no video de origem, do quadro ao quadro_fim, com a mao e o mesmo substantivo",
+         '"As she speaks,"' in ped and '"By the last word,"' in ped and "completely, exactly as the source" in ped
+         and "never a half gesture" in ped and '"quadro_fim"' in ped and "SAME noun" in ped and "Never pouring" not in ped)
+    lq = ler_adaptacao(json.dumps({"takes": [{"fala": "a", "quadro": "Q1", "quadro_fim": "Q2", "movimento": "m"},
+                                             {"fala": "b", "quadro": "Q3", "movimento": "m"}]}), 1)
+    caso("ler: quadro_fim lido; sem ele, vale o quadro (passo sem acao)",
+         lq["takes"][0]["quadro_fim"] == "Q2" and lq["takes"][1]["quadro_fim"] == "Q3")
+    pf = prompt_quadro_fim(WENDELIN, "garden", "the salt is inside the blender jar")
+    caso("⭐ quadro final: enquadramento do fim da origem, o resto do quadro de abertura, e o resultado da acao",
+         "END of the same step" in pf and "SECOND reference image (the" in pf and "the salt is inside the blender jar" in pf
+         and "THIRD reference" in pf and " she " not in pf)
     caso("pedido: regra de cura", "Never promise to cure" in ped)
 
     resp = "aqui: " + json.dumps({"takes": [{"n": i, "fala": f"Fala {i} — com travessão", "movimento": "She smiles."}

@@ -279,7 +279,7 @@ class Instagram:
         arq = os.path.join(p, nomes[qual]) if qual in nomes else ""
         # ⭐ as pecas do editor de curadoria: cada versao de take, a miniatura dela, os quadros de abertura e de origem
         for padrao, ext in ((r"take_\d{2}(_v\d+)?", "mp4"), (r"mini_\d{2}_v\d+", "jpg"), (r"quadro_\d{2}(_q\d+)?", "png"),
-                            (r"origem_\d{2}", "jpg"), (r"cta(_quadro_\d{2}_q\d+)?", "png")):
+                            (r"origem_\d{2}", "jpg"), (r"quadro_fim_\d{2}(_q\d+)?", "png"), (r"origem_fim_\d{2}", "jpg"), (r"cta(_quadro_\d{2}_q\d+)?", "png")):
             if re.fullmatch(padrao, qual): arq = os.path.join(p, f"{qual}.{ext}")
         if not arq or not os.path.isfile(arq): raise KeyError(qual)
         return arq
@@ -606,7 +606,8 @@ class Instagram:
 
     def _usar_versao(self, t, ver):
         t.update(video=ver["video"], v=ver["v"], fala=ver["fala"], movimento=ver["movimento"],
-                 quadro=ver.get("quadro", t.get("quadro", "")), quadro_png=ver.get("quadro_png", ""))
+                 quadro=ver.get("quadro", t.get("quadro", "")), quadro_png=ver.get("quadro_png", ""),
+                 quadro_fim=ver.get("quadro_fim", t.get("quadro_fim", "")))
 
     def escolher_versao(self, rid, n, v):
         """A versao `v` passa a ser a do Reel (a troca da escolha automatica, ou a escolha de um take que precisa de
@@ -729,6 +730,7 @@ class Instagram:
                                            "tentativa": tentativa, **corr})
                 prontos.append({**t, "fala": corr["fala"], "movimento": corr["movimento"],
                                 "quadro": corr["quadro"] or base.get("quadro") or t.get("quadro", ""),
+                                "quadro_fim": corr.get("quadro_fim") or base.get("quadro_fim") or t.get("quadro_fim", ""),
                                 "quadro_png": base.get("quadro_png") or t.get("quadro_png", ""),
                                 "_novo_quadro": corr["refazer_quadro"], "_motivo": corr["motivo"]})
                 self._alterar_reel(rid, lambda x, n=n, c=corr: self._take(x, n)["cur"].update(estado="refazendo", correcao=c))
@@ -855,7 +857,9 @@ class Instagram:
             pals = self._palavras(ver["video"], lingua)
             dur = self.midia.duracao(ver["video"])
             try:
-                visual = _qa.medir_video(ver["video"], dur, self.midia.fim_da_fala(pals, dur))
+                fim_ref = ver.get("fim_png") if ver.get("fim_png") and ver.get("fim_png") != ver.get("quadro_png") else None
+                visual = _qa.medir_video(ver["video"], dur, self.midia.fim_da_fala(pals, dur),
+                                         fim_ref if fim_ref and os.path.isfile(fim_ref) else None)
             except Exception as e:                                         # noqa: BLE001
                 visual, erro = None, str(e)[:120]
             else:
@@ -1169,16 +1173,37 @@ class Instagram:
         if not os.path.isfile(arq):
             o = origem[min(n, len(origem)) - 1]
             ref = os.path.join(p, f"origem_{n:02d}.jpg")
-            if not os.path.isfile(ref): self.midia.quadro(fonte, (o["ini"] + o["fim"]) / 2, ref)
+            if not os.path.isfile(ref): self.midia.quadro(fonte, o["ini"] + 0.15 * (o["fim"] - o["ini"]), ref)
             lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
             self._log(f"instagram: gerando o quadro do take {n} de {r['id']}")
             g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", "")), [ref, foto], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {n}")
         return arq
 
-    def _fim_take(self, r, a, t, inicio, g):
-        """O quadro final: o mesmo do inicio; no CTA com livro, o avatar segurando o livro NESSE quadro."""
-        if not (t["cta"] and r["cta"]["livro"]): return inicio
+    def _quadro_fim_take(self, r, a, t, inicio, g, novo=False):
+        """⭐⭐ (19/10, ordem do Eduardo) o quadro FINAL do take: o fim do mesmo passo no video de origem, com a pessoa, o
+        lugar e a luz do quadro de abertura. Com o mesmo quadro nas duas pontas o Veo nao completava a acao (a
+        Tomiko so' erguia o sal e devolvia). Passo sem acao (so' fala) ou sem video de origem: o proprio inicio."""
+        qi, qf = " ".join((t.get("quadro") or "").lower().split()), " ".join((t.get("quadro_fim") or "").lower().split())
+        pa, p = self._pasta_av(a["id"]), self._pasta_reel(r["id"])
+        foto, fonte, origem = self._achar(pa, "foto"), os.path.join(p, "fonte.mp4"), r.get("takes_origem") or []
+        if not qf or qf == qi or not (foto and origem and os.path.isfile(fonte)) or not inicio.startswith(p): return inicio
+        n = t["n"]
+        sufixo = os.path.splitext(os.path.basename(inicio))[0][len(f"quadro_{n:02d}"):]       # "" ou "_qK"
+        arq = os.path.join(p, f"quadro_fim_{n:02d}{sufixo}.png")
+        if novo or not os.path.isfile(arq):
+            o = origem[min(n, len(origem)) - 1]
+            ref = os.path.join(p, f"origem_fim_{n:02d}.jpg")
+            if not os.path.isfile(ref): self.midia.quadro(fonte, o["fim"] - 0.1 * (o["fim"] - o["ini"]), ref)
+            lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
+            self._log(f"instagram: gerando o quadro final do take {n} de {r['id']}")
+            g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t["quadro_fim"]), [ref, inicio, foto], arq, self._log)
+            if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro final do take {n}")
+        return arq
+
+    def _fim_take(self, r, a, t, inicio, g, novo=False):
+        """O quadro final: o fim do passo (_quadro_fim_take); no CTA com livro, o avatar segurando o livro."""
+        if not (t["cta"] and r["cta"]["livro"]): return self._quadro_fim_take(r, a, t, inicio, g, novo)
         p = self._pasta_reel(r["id"])
         padrao = os.path.join(p, f"quadro_{t['n']:02d}.png")
         arq = os.path.join(p, "cta.png" if inicio == padrao or not inicio.startswith(p) else
@@ -1206,7 +1231,7 @@ class Instagram:
         pedidos, meta = [], {}
         for t in alvos:
             inicio = self._quadro_take(r, a, t, g, novo=t.get("_novo_quadro", False))
-            fim = self._fim_take(r, a, t, inicio, g)
+            fim = self._fim_take(r, a, t, inicio, g, novo=t.get("_novo_quadro", False))
             acao = _rot.tipo_acao(t["movimento"])
             # ⭐ as licoes de prompt deste tipo de acao entram no prompt do Veo; a versao guarda todas as que valeram
             #    (palavra, gesto e prompt), para o painel medir o antes e o depois de cada uma
@@ -1219,7 +1244,8 @@ class Instagram:
                 nome = f"take_{t['n']:02d}_v{v}"
                 pedidos.append({"nome": nome, "prompt": prompt, "inicio": inicio, "fim": fim})
                 meta[nome] = {"n": t["n"], "v": v, "fala": t["fala"], "movimento": t["movimento"],
-                              "quadro": t.get("quadro", ""), "quadro_png": inicio, "prompt": prompt, "licoes": valeram}
+                              "quadro": t.get("quadro", ""), "quadro_fim": t.get("quadro_fim", ""), "quadro_png": inicio,
+                              "fim_png": fim, "prompt": prompt, "licoes": valeram}
         self._log(f"instagram: {len(pedidos)} take(s) de {rid} no gerador ({r['modelo']})")
         feitos = g.gerar_videos(pedidos, p, r["modelo"], self._log) or {}
         novas = {}
@@ -1399,7 +1425,8 @@ def _autoteste():
         n = len(re.findall(r"^\d+\. \(", pedido, flags=re.M))
         quadro = "Target language: American English." in pedido          # ⭐ o Reel em ingles traz os itens do quadro
         return json.dumps({"takes": [{"n": i, "fala": f"Fala {i} da Tomiko", "movimento": "She smiles at the camera.",
-                                      **({"quadro": f"A blender with soaked rice, step {i}."} if quadro else {})}
+                                      **({"quadro": f"A blender with soaked rice, step {i}.", "quadro_fim": f"Rice inside the blender, step {i}."}
+                                         if quadro else {})}
                                      for i in range(1, n + 2)], "legenda_post": "Chá de gengibre 🍵"})
 
     eventos = []
@@ -1669,20 +1696,29 @@ def _autoteste():
          and set(t1["versoes"][-1]["licoes"]) == {lpal["id"], lpro["id"]})
     caso("licoes: o painel mede o depois da licao", next(l for l in ig.licoes()["licoes"] if l["id"] == lpro["id"])["efeito"]["depois"]["n"] == 2
          and ig.licoes()["taxas"]["etiquetas"])
-    n_vid = len(g.videos)
+    n_vid, nq0 = len(g.videos), len(Midia.quadros)
     r2 = ig.criar_reel(aid, "en", url="https://www.instagram.com/reel/def/", legenda=2)
     caso("⭐ o video seguinte vai para o outro comodo", r2["cena"] == "varanda")
     n_img = len(g.imagens)
     ig.esperar(120)
     vs2 = g.videos[n_vid:]
-    caso("⭐ cada take abre no seu quadro", [os.path.basename(v["inicio"]) for v in vs2]
-         == [f"quadro_{i:02d}.png" for i in range(1, len(vs2) + 1)] and all(v["fim"] == v["inicio"] for v in vs2))
-    caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + len(vs2)
+    caso("⭐ cada take vai do SEU quadro de abertura ao SEU quadro final (a acao completa)",
+         [os.path.basename(v["inicio"]) for v in vs2] == [f"quadro_{i:02d}.png" for i in range(1, len(vs2) + 1)]
+         and [os.path.basename(v["fim"]) for v in vs2] == [f"quadro_fim_{i:02d}.png" for i in range(1, len(vs2) + 1)]
+         and all("in step with the speech" in v["prompt"] for v in vs2))
+    fim1 = g.imagens[n_img + 1]
+    caso("⭐ quadro final: o fim do trecho de origem, o quadro de abertura e a foto, com o resultado da acao",
+         [os.path.basename(x) for x in fim1[1]][:2] == ["origem_fim_01.jpg", "quadro_01.png"]
+         and os.path.basename(fim1[1][2]).startswith("foto.") and "END of the same step" in fim1[0]
+         and "Rice inside the blender, step 1." in fim1[0])
+    caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + 2 * len(vs2)
          and [os.path.basename(x) for x in g.imagens[n_img][1]][0] == "origem_01.jpg"
          and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]).startswith("foto.")
          and "bamboo bench" in g.imagens[n_img][0]
          and "same camera angle" in g.imagens[n_img][0] and "step 1." in g.imagens[n_img][0])
-    caso("o take do CTA usa o ultimo trecho da origem", Midia.quadros[len(vs2) - 1] == Midia.quadros[len(vs2) - 2])
+    qs = Midia.quadros[nq0:]
+    caso("o take do CTA usa o ultimo trecho da origem; o quadro final vem depois do inicial",
+         qs[2 * (len(vs2) - 1)] == qs[2 * (len(vs2) - 2)] and qs[1] > qs[0])
     caso("⭐ legenda estilo 2: cartoes por cima, sem .ass", ig.reel(r2["id"])["final"]
          and os.path.isdir(os.path.join(ig._pasta_reel(r2["id"]), "cartoes"))
          and not os.path.isfile(os.path.join(ig._pasta_reel(r2["id"]), "legenda.ass")))
@@ -1693,7 +1729,7 @@ def _autoteste():
          and "—" not in r2["takes"][0]["fala"])
     ig.rodar(r2["id"], "gerar"); ig.esperar(120)
     caso("⭐ refazer a geracao gera so' o take editado", len(g.videos) == n_antes + 1 and ig.reel(r2["id"])["final"])
-    caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + len(vs2))
+    caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + 2 * len(vs2))
     g.falhar = {"take_02_v1"}
     r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/", cta="palavra", palavra=" Eu  Quero ")
     caso("⭐ CTA de frase curta guardado em minusculas", r3["cta"]["palavra"] == "eu quero")

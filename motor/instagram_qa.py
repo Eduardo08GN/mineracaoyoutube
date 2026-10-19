@@ -29,6 +29,9 @@ LIMITES = {
     "camera_pct": 1.5,      # deslocamento da faixa de cima contra o 1o quadro, em % da largura
     "corte_pct": 7.0,       # diferenca media do quadro no ponto de corte contra a abertura (o salto no Reel)
     "fim_pct": 7.0,         # diferenca meio segundo antes do fim: o take nao voltou ao quadro (algo mudou de lugar)
+    # ⭐ (19/10) take com acao (quadro final diferente do de abertura): o fim e' comparado com o QUADRO FINAL, que e'
+    #    outra imagem gerada; folga maior que a do mesmo quadro, que o Veo reproduz quase igual
+    "acao_pct": 11.0,
     "fala_longa_s": _rot.FALA_S + 1.5,
     "folga_fim_s": 0.4,     # ultima palavra a menos disso do fim do video: o Veo provavelmente cortou a fala
     "parecida": 0.6,        # palavra trocada com essa semelhanca (letras) e' pronuncia, abaixo e' outra palavra
@@ -112,7 +115,7 @@ def _diferenca(a, b):
     return float(np.mean(np.abs(_pequeno(a) - _pequeno(b)))) / 255 * 100
 
 
-def medir_video(video, dur, corte_s=None):
+def medir_video(video, dur, corte_s=None, fim_ref=None):
     """{"camera_pct", "corte_pct", "fim_pct"} de uma versao. ⭐ Camera: correlacao de fase da faixa de cima de cada
     amostra contra a do 1o quadro (deslocamento em % da largura, so' com resposta confiavel). Deriva: o quadro no
     ponto de corte da montagem e o de meio segundo antes do fim, contra o 1o quadro."""
@@ -129,11 +132,16 @@ def medir_video(video, dur, corte_s=None):
         (dx, dy), resp = cv2.phaseCorrelate(b0, np.float32(g[:alt]), janela)
         if resp >= 0.3: cam = max(cam, float(np.hypot(dx, dy)) / w * 100)
     ref = fs[0][1]
+    acao = False
+    if fim_ref:
+        # ⭐ take com acao: o ponto de corte e o fim tem de chegar ao quadro final (a acao terminou), nao voltar ao inicio
+        img = cv2.imread(fim_ref, cv2.IMREAD_GRAYSCALE)
+        if img is not None: ref, acao = cv2.resize(img, (w, h), interpolation=cv2.INTER_AREA), True
     extras = _quadros(video, [x for x in (corte_s, max(0.0, dur - 0.5)) if x is not None])
     corte = _diferenca(ref, extras[0][1]) if corte_s is not None and extras else None
     fim = _diferenca(ref, extras[-1][1]) if extras else None
     return {"camera_pct": round(cam, 2), "corte_pct": None if corte is None else round(corte, 1),
-            "fim_pct": None if fim is None else round(fim, 1)}
+            "fim_pct": None if fim is None else round(fim, 1), "acao": acao}
 
 
 def _seg(s):
@@ -175,7 +183,13 @@ def avaliar(fala, palavras, dur, visual=None):
         med.update({k: v for k, v in visual.items() if v is not None})
         if visual.get("camera_pct", 0) > LIMITES["camera_pct"]:
             flag("camera", f"o fundo deslocou {visual['camera_pct']:.1f}% da largura: a câmera mexeu")
-        if (visual.get("corte_pct") or 0) > LIMITES["corte_pct"]:
+        if visual.get("acao"):
+            lim = LIMITES["acao_pct"]
+            if (visual.get("corte_pct") or 0) > lim:
+                flag("acao", f"no fim da fala o quadro está {visual['corte_pct']:.0f}% diferente do quadro final: a ação não terminou")
+            elif (visual.get("fim_pct") or 0) > lim:
+                flag("acao", f"o take não chega ao quadro final ({visual['fim_pct']:.0f}% diferente no fim)")
+        elif (visual.get("corte_pct") or 0) > LIMITES["corte_pct"]:
             flag("morph", f"no corte o quadro está {visual['corte_pct']:.0f}% diferente da abertura: algo mudou de lugar")
         elif (visual.get("fim_pct") or 0) > LIMITES["fim_pct"]:
             flag("morph", f"o take não volta ao quadro de abertura ({visual['fim_pct']:.0f}% diferente no fim)")
@@ -188,7 +202,7 @@ def abertas(qa):
 
 
 # ⭐ o peso de cada defeito na escolha automatica: errar a fala pesa mais que a fala longa
-PESO = {"fala": 5, "pronuncia": 4, "morph": 4, "camera": 3, "tempo": 1}
+PESO = {"fala": 5, "pronuncia": 4, "morph": 4, "acao": 4, "camera": 3, "tempo": 1}
 
 
 def passou(qa):
@@ -258,6 +272,10 @@ def _autoteste():
     caso("⭐ avaliar: camera e deriva no corte", [f["etiqueta"] for f in v["flags"]] == ["camera", "morph"]
          and "10% diferente" in v["flags"][1]["motivo"])
     caso("avaliar: deriva so' no fim", "não volta" in avaliar("", [], 8, {"camera_pct": 0, "corte_pct": 2, "fim_pct": 9})["flags"][0]["motivo"])
+    va = avaliar("", [], 8, {"camera_pct": 0, "corte_pct": 9.5, "fim_pct": 9, "acao": True})
+    vb = avaliar("", [], 8, {"camera_pct": 0, "corte_pct": 14, "fim_pct": 9, "acao": True})
+    caso("⭐ take com acao: o fim diferente da abertura nao e' morph; so' longe do quadro final vira 'acao'",
+         va["flags"] == [] and vb["flags"][0]["etiqueta"] == "acao" and "não terminou" in vb["flags"][0]["motivo"])
     a = avaliar(fala, ws(fala, ini=0.4, passo=0.75), 8.0)
     caso("⭐ fala longa nao e' grave; cortada no fim e' grave", a["flags"][0]["grave"] is True
          and avaliar(fala, ws(fala, ini=0.4, passo=0.62), 8.0)["flags"][0]["grave"] is False)
@@ -288,6 +306,12 @@ def _autoteste():
     caso("⭐ video com a camera andando: a faixa de cima acusa", mm["camera_pct"] > LIMITES["camera_pct"]
          and mm["fim_pct"] > mp["fim_pct"])
     caso("⛔ video que nao abre", _erro(lambda: medir_video(os.path.join(tmp, "nao.mp4"), 4.0)))
+    import cv2
+    fim_png = os.path.join(tmp, "fim.png")
+    cap = cv2.VideoCapture(mexe); cap.set(cv2.CAP_PROP_POS_MSEC, 3500); _ok, quadro_fim = cap.read(); cap.release()
+    cv2.imwrite(fim_png, quadro_fim)
+    ma = medir_video(mexe, 4.0, corte_s=3.4, fim_ref=fim_png)
+    caso("⭐ take com acao: o fim e' medido contra o quadro final esperado", ma["acao"] and ma["fim_pct"] < mm["fim_pct"])
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 
