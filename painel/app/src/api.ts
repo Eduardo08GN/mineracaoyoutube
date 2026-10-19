@@ -375,13 +375,25 @@ export interface ReelIG {
   id: string; avatar: string; criado: number; idioma: string; url: string; cena: string;
   cta: { tipo: "bio" | "palavra"; palavra: string; livro: boolean }; modelo: "gratis" | "pago"; legenda?: number;
   takes_origem: TakeOrigemIG[]; takes: TakeIG[]; legenda_post: string; registro: { t: number; texto: string }[];
-  publicado: string; idioma_origem?: string; duracao?: number;
+  publicado: string; idioma_origem?: string; duracao?: number; montado?: number;
   etapas: EtapaVideo[]; trabalhando: string; na_fila: string[]; final: boolean;
 }
+// o editor de curadoria (telas/EditorReel.tsx)
+export type EstadoCur = "" | "defeito" | "refazer" | "refazendo" | "escolher" | "aceito";
+export interface VersaoTake {
+  v: number; fala: string; movimento: string; quadro: string; origem: "roteiro" | "correcao" | "manual"; nota: string;
+  criado: number; prompt?: string; arquivo: string; existe: boolean; quadro_arquivo: string; mini: string;
+}
+export interface TakeEditor {
+  n: number; fala: string; quadro?: string; movimento: string; cta: boolean; v?: number;
+  corte?: [number, number]; no_reel?: [number, number]; versoes: VersaoTake[];
+  cur: { estado: EstadoCur; defeito?: string; etiquetas?: string[]; correcao?: { motivo?: string } };
+}
+export interface EditorIG { reel: ReelIG; takes: TakeEditor[]; etiquetas: { id: string; nome: string }[]; ocupado: boolean }
 export interface AjustesIG { backend: string; repo_dir: string; auto_subir: boolean; dias: number; cookies: string }
 export interface InstagramTudo {
   avatares: AvatarIG[]; reels: ReelIG[]; ajustes: AjustesIG; idiomas: Record<string, string>; legendas: Record<string, string>;
-  producao?: { agora: { tipo: "reel" | "cena" | "repo"; id: string; etapa: string } | null; fila: number };
+  producao?: { agora: { tipo: "reel" | "cena" | "repo" | "curadoria"; id: string; etapa: string } | null; fila: number };
   gerador: { ok: boolean; texto: string }; publicados: { rid: string; nome: string; data: string }[];
 }
 

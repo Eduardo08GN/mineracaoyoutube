@@ -12,6 +12,11 @@ universo-lar e cola o link de um Reel com o idioma de destino. O resto roda sozi
     montagem  apara a cauda de cada take, monta 1080x1920, -14 LUFS, e queima a legenda (whisper no idioma)
 e, se ligado, sobe o Reel para a branch `videos` do repositorio (motor/instagram_repo.py).
 
+Depois de pronto, o editor de curadoria (painel: telas/EditorReel.tsx) revisa take a take:
+    curadoria o defeito apontado vira ocorrencia (motor/instagram_curadoria.py), o Claude reescreve o take e o Veo
+              gera 2 versoes novas; a escolhida entra no Reel e a montagem roda de novo sozinha.
+⭐ Cada take guarda as suas versoes (take_NN_vK.mp4): nada e' sobrescrito.
+
 ⭐ Um comodo por video, em rodizio (o menos usado entre os aprovados). O angulo pode repetir no mesmo video.
 ⭐ Uma vez por dia a branch `videos` e' refeita so' com os Reels dos ultimos N dias (padrao 5).
 
@@ -26,13 +31,14 @@ for _p in (AQUI, os.path.join(RAIZ, "motor")):
 
 import config                                                               # noqa: E402
 import instagram_backend as _backend                                        # noqa: E402
+import instagram_curadoria as _cur                                          # noqa: E402
 import instagram_midia as _midia                                            # noqa: E402
 import instagram_repo as _repo                                              # noqa: E402
 import instagram_roteiro as _rot                                            # noqa: E402
 
 PASTA = os.path.join(config.DATA, "instagram")
 ETAPAS = ("fonte", "roteiro", "gerar", "montagem")
-NOMES = {"fonte": "Fonte", "roteiro": "Roteiro", "gerar": "Geração", "montagem": "Montagem"}
+NOMES = {"fonte": "Fonte", "roteiro": "Roteiro", "gerar": "Geração", "montagem": "Montagem", "curadoria": "Curadoria"}
 AJUSTES_PADRAO = {"backend": "", "repo_dir": "", "auto_subir": False, "dias": 5, "cookies": ""}
 EXT_IMAGEM = {"png", "jpg", "jpeg", "webp"}
 MAX_VIDEO_MB = 200
@@ -195,8 +201,8 @@ class Instagram:
     def _resumo(self, r):
         trab = self._trabalhando
         return {**r, "etapas": self.etapas(r),
-                "trabalhando": trab[2] if trab and trab[0] == "reel" and trab[1] == r["id"] else "",
-                "na_fila": [e for (t, i, e) in list(self._fila.queue) if t == "reel" and i == r["id"]],
+                "trabalhando": trab[2] if trab and trab[0] in ("reel", "curadoria") and trab[1] == r["id"] else "",
+                "na_fila": [e for (t, i, e) in list(self._fila.queue) if t in ("reel", "curadoria") and i == r["id"]],
                 "final": os.path.isfile(os.path.join(self._pasta_reel(r["id"]), "final.mp4"))}
 
     def tudo(self):
@@ -243,7 +249,10 @@ class Instagram:
         p = self._pasta_reel(rid)
         nomes = {"final": "final.mp4", "fonte": "fonte.mp4", "cta": "cta.png"}
         arq = os.path.join(p, nomes[qual]) if qual in nomes else ""
-        if re.fullmatch(r"take_\d{2}", qual): arq = os.path.join(p, f"{qual}.mp4")
+        # ⭐ as pecas do editor de curadoria: cada versao de take, a miniatura dela, os quadros de abertura e de origem
+        for padrao, ext in ((r"take_\d{2}(_v\d+)?", "mp4"), (r"mini_\d{2}_v\d+", "jpg"), (r"quadro_\d{2}(_q\d+)?", "png"),
+                            (r"origem_\d{2}", "jpg"), (r"cta(_quadro_\d{2}_q\d+)?", "png")):
+            if re.fullmatch(padrao, qual): arq = os.path.join(p, f"{qual}.{ext}")
         if not arq or not os.path.isfile(arq): raise KeyError(qual)
         return arq
 
@@ -428,6 +437,197 @@ class Instagram:
         self._mudou(rid)
         return self.reel(rid)
 
+    # ── editor de curadoria (telas/EditorReel.tsx): revisar take a take, refazer com o defeito apontado ──
+    def _take(self, r, n):
+        t = next((x for x in r["takes"] if x["n"] == int(n)), None)
+        if not t: raise KeyError(n)
+        return t
+
+    def _ocupado_reel(self, rid):
+        """Etapa do Reel na fila ou rodando que mexe nos takes (o roteiro troca todos; a geracao grava video neles)."""
+        itens = list(self._fila.queue) + ([self._trabalhando] if self._trabalhando else [])
+        return any(i[0] == "reel" and i[1] == rid and i[2] in ("roteiro", "gerar") for i in itens)
+
+    def _mini(self, rid, t, ver):
+        """A miniatura de uma versao (para a timeline e o seletor de versoes), tirada no meio da fala."""
+        arq = os.path.join(self._pasta_reel(rid), f"mini_{t['n']:02d}_v{ver['v']}.jpg")
+        if not os.path.isfile(arq) and os.path.isfile(ver["video"]):
+            de, ate = t.get("corte") or [0.5, 6.0]
+            try:
+                self.midia.quadro(ver["video"], (de + ate) / 2, arq)
+            except Exception:                                              # noqa: BLE001
+                return ""
+        return os.path.basename(arq)[:-4] if os.path.isfile(arq) else ""
+
+    def editor(self, rid):
+        """Tudo do editor de curadoria: o Reel, e por take as versoes (com miniatura), o corte e o estado da revisao."""
+        r = self._reel(rid)
+        if any(not t.get("versoes") and t.get("video") for t in r["takes"]):
+            r = self._alterar_reel(rid, lambda x: [self._migrar(t) for t in x["takes"]])
+        takes = []
+        for t in r["takes"]:
+            versoes = [{**{k: x for k, x in ver.items() if k not in ("video", "quadro_png")},
+                        "arquivo": os.path.basename(ver["video"])[:-4], "existe": os.path.isfile(ver["video"]),
+                        "quadro_arquivo": os.path.basename(ver.get("quadro_png") or "")[:-4],
+                        "mini": self._mini(rid, t, ver)} for ver in t.get("versoes", [])]
+            takes.append({**{k: x for k, x in t.items() if k not in ("versoes", "video", "quadro_png")},
+                          "versoes": versoes, "cur": t.get("cur") or {"estado": ""}})
+        return {"reel": self._resumo(r), "takes": takes, "etiquetas": [{"id": e, "nome": n} for e, n in _cur.ETIQUETAS],
+                "ocupado": self._ocupado_reel(rid)}
+
+    def anotar_take(self, rid, n, defeito="", etiquetas=()):
+        """O defeito apontado num take, ainda sem mandar refazer (o rascunho fica salvo)."""
+        etiquetas = [e for e in etiquetas if e in _cur.IDS_ETIQUETA]
+
+        def f(r):
+            cur = self._take(r, n).setdefault("cur", {"estado": ""})
+            if cur.get("estado") in ("refazer", "refazendo"): raise ValueError(f"o take {n} já está sendo refeito")
+            cur.update(defeito=(defeito or "").strip(), etiquetas=etiquetas)
+            if cur["defeito"] or etiquetas: cur["estado"] = "defeito"
+            elif cur.get("estado") == "defeito": cur["estado"] = ""
+        self._alterar_reel(rid, f)
+        self._mudou(rid)
+        return {"ok": True}
+
+    def aceitar_take(self, rid, n):
+        """O take como esta' fica. Se havia versoes novas para escolher, fica a ativa (e a ocorrencia registra isso)."""
+        oc = {}
+
+        def f(x):
+            t = self._take(x, n)
+            cur = t.setdefault("cur", {"estado": ""})
+            if cur.get("estado") in ("refazer", "refazendo"): raise ValueError(f"o take {n} está sendo refeito")
+            if cur.get("estado") == "escolher": oc.update(id=cur.get("ocorrencia", ""), v=t.get("v"))
+            cur.update(estado="aceito", defeito="", etiquetas=[])
+        self._alterar_reel(rid, f)
+        if oc.get("id"):
+            _cur.registrar(self.base, {"tipo": "escolha", "id": oc["id"], "reel": rid, "take": int(n), "v": oc["v"],
+                                       "resolveu": False})
+        self._mudou(rid)
+        return {"ok": True}
+
+    def escolher_versao(self, rid, n, v):
+        """A versao `v` passa a ser a do Reel. ⭐ A fala vai junto (a legenda queimada e' a da versao) e a montagem
+        roda de novo sozinha (so' ffmpeg)."""
+        info = {}
+
+        def f(r):
+            t = self._take(r, n)
+            ver = next((x for x in self._migrar(t) if x["v"] == int(v)), None)
+            if not ver or not os.path.isfile(ver["video"]): raise KeyError(v)
+            cur = t.setdefault("cur", {"estado": ""})
+            if cur.get("estado") in ("refazer", "refazendo"): raise ValueError(f"o take {n} está sendo refeito")
+            info.update(mudou=t.get("v") != ver["v"], origem=ver.get("origem", ""),
+                        ocorrencia=cur.get("ocorrencia", "") if cur.get("estado") == "escolher" else "")
+            t.update(video=ver["video"], v=ver["v"], fala=ver["fala"], movimento=ver["movimento"],
+                     quadro=ver.get("quadro", t.get("quadro", "")), quadro_png=ver.get("quadro_png", ""))
+            cur.update(estado="aceito", defeito="", etiquetas=[])
+        self._alterar_reel(rid, f)
+        if info["ocorrencia"]:
+            _cur.registrar(self.base, {"tipo": "escolha", "id": info["ocorrencia"], "reel": rid, "take": int(n), "v": int(v),
+                                       "resolveu": info["origem"] == "correcao"})
+        if info["mudou"]:
+            self._registrar(rid, f"curadoria: take {n} agora na versão {v}")
+            if not self._na_fila(("reel", rid, "montagem")): self._fila.put(("reel", rid, "montagem"))
+        self._mudou(rid)
+        return {"ok": True, "remontando": info["mudou"]}
+
+    def refazer_takes(self, rid, itens):
+        """Manda refazer takes no Veo: itens = [{"n", "fala"?, "movimento"?}]. Com o defeito apontado, o corretor
+        (Claude) reescreve o take; com fala/movimento escritos a mao, eles vao como estao. Cada take sai em 2 versoes.
+        ⭐ Grava a ocorrencia (a migalha do erro) antes de qualquer coisa."""
+        if not itens: raise ValueError("nenhum take para refazer")
+        if self._ocupado_reel(rid): raise ValueError("o Reel está no roteiro ou na geração agora: espere terminar")
+        r = self._reel(rid)
+        a = self._avatar(r["avatar"])
+        eventos, ns = [], []
+
+        def f(x):
+            for it in itens:
+                t = self._take(x, it["n"])
+                self._migrar(t)
+                cur = t.setdefault("cur", {"estado": ""})
+                if cur.get("estado") in ("refazer", "refazendo"): raise ValueError(f"o take {t['n']} já está sendo refeito")
+                manual = {k: it[k].strip() for k in ("fala", "movimento")
+                          if isinstance(it.get(k), str) and it[k].strip() and it[k].strip() != t[k]}
+                if not (cur.get("defeito") or cur.get("etiquetas") or manual):
+                    raise ValueError(f"aponte o defeito do take {t['n']} ou edite a fala ou o movimento")
+                ativa = next((v for v in t["versoes"] if v["v"] == t.get("v")), {})
+                oc = _cur.nova_id()
+                eventos.append({"tipo": "defeito", "id": oc, "reel": rid, "take": t["n"], "avatar": a["id"],
+                                "idioma": x["idioma"], "modelo": x["modelo"], "v": t.get("v"), "cta": t["cta"],
+                                "defeito": cur.get("defeito", ""), "etiquetas": cur.get("etiquetas", []),
+                                "fala": t["fala"], "quadro": t.get("quadro", ""), "movimento": t["movimento"],
+                                "prompt": ativa.get("prompt") or _rot.prompt_video(a, x["idioma"], t["movimento"], t["fala"]),
+                                "manual": manual})
+                cur.update(estado="refazer", ocorrencia=oc, manual=manual, correcao={})
+                ns.append(t["n"])
+        self._alterar_reel(rid, f)
+        for ev in eventos: _cur.registrar(self.base, ev)
+        if ("curadoria", rid, "curadoria") not in list(self._fila.queue): self._fila.put(("curadoria", rid, "curadoria"))
+        self._registrar(rid, f"curadoria: take(s) {', '.join(map(str, ns))} para refazer")
+        self._log(f"instagram: curadoria de {rid}, take(s) {', '.join(map(str, ns))} na fila")
+        self._mudou(rid)
+        return {"ok": True, "takes": ns}
+
+    def _etapa_curadoria(self, rid):
+        r = self._reel(rid)
+        a = self._avatar(r["avatar"])
+        alvos = [t for t in r["takes"] if (t.get("cur") or {}).get("estado") == "refazer"]
+        if not alvos: return
+        lingua = _rot.IDIOMAS[r["idioma"]]["whisper"]
+        prontos = []
+        for t in alvos:
+            cur = t["cur"]
+            # ⭐ edicao a mao vai direto ao Veo SO' sem defeito apontado; com defeito, o corretor recebe a edicao como a
+            #    intencao de quem revisa (o campo "movimento" chegou a receber a descricao do erro em portugues)
+            if cur.get("manual") and not (cur.get("defeito") or cur.get("etiquetas")):
+                corr = {"fala": cur["manual"].get("fala", t["fala"]), "movimento": cur["manual"].get("movimento", t["movimento"]),
+                        "quadro": t.get("quadro", ""), "refazer_quadro": False, "motivo": "editado à mão"}
+            else:
+                ouvido = ""
+                if t.get("video") and os.path.isfile(t["video"]):
+                    try:
+                        ouvido = " ".join(w["w"] for w in self.midia.palavras(t["video"], lingua)[0])
+                    except Exception:                                      # noqa: BLE001
+                        ouvido = ""
+                ativa = next((v for v in t.get("versoes", []) if v["v"] == t.get("v")), {})
+                prompt = ativa.get("prompt") or _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"])
+                pedido = _cur.pedido_correcao(a, r["idioma"], r["cta"], t, cur.get("defeito", ""), cur.get("etiquetas", []),
+                                              ouvido, prompt, cur.get("manual"))
+                self._log(f"instagram: o Claude está corrigindo o take {t['n']} de {rid}")
+                corr = None
+                for _ in range(2):                         # ⭐ uma segunda tentativa se vier fora do formato
+                    corr = _cur.ler_correcao(self._claude(pedido))
+                    if corr: break
+                if not corr: raise RuntimeError(f"a correção do take {t['n']} veio fora do formato")
+                corr["ouvido"] = ouvido
+            _cur.registrar(self.base, {"tipo": "correcao", "id": cur.get("ocorrencia", ""), "reel": rid, "take": t["n"], **corr})
+            prontos.append({**t, "fala": corr["fala"], "movimento": corr["movimento"], "quadro": corr["quadro"] or t.get("quadro", ""),
+                            "_novo_quadro": corr["refazer_quadro"], "_motivo": corr["motivo"]})
+            self._alterar_reel(rid, lambda x, n=t["n"], c=corr: self._take(x, n)["cur"].update(estado="refazendo", correcao=c))
+            self._mudou(rid)
+        novas = self._gerar_takes(rid, prontos, copias=2)
+        motivos = {t["n"]: t["_motivo"] for t in prontos}
+
+        def f(x):
+            for t in x["takes"]:
+                if t["n"] not in motivos: continue
+                vs = self._migrar(t)
+                for ver in novas.get(t["n"], []):
+                    vs.append({**ver, "origem": "correcao", "nota": motivos[t["n"]]})
+                t["cur"]["estado"] = "escolher" if novas.get(t["n"]) else "defeito"
+        self._alterar_reel(rid, f)
+        for t in prontos:
+            _cur.registrar(self.base, {"tipo": "versoes", "id": t["cur"].get("ocorrencia", ""), "reel": rid, "take": t["n"],
+                                       "versoes": [v["v"] for v in novas.get(t["n"], [])]})
+        falhou = [t["n"] for t in prontos if not novas.get(t["n"])]
+        feitos = sum(len(v) for v in novas.values())
+        self._registrar(rid, f"curadoria: {feitos} versão(ões) nova(s) para escolher" +
+                        (f"; take(s) {', '.join(map(str, falhou))} sem versão nova" if falhou else ""))
+        if feitos: self._avisar(f"Curadoria: {feitos} versão(ões) nova(s) para escolher.", "ok")
+        if falhou: raise RuntimeError(f"o gerador não entregou versão nova do(s) take(s) {', '.join(map(str, falhou))}")
+
     def abrir(self, rid):
         arq = self.arquivo_reel(rid, "final")
         os.startfile(arq)                                                   # noqa: S606
@@ -508,6 +708,7 @@ class Instagram:
             self._mudou(alvo)
             try:
                 if tipo == "reel": getattr(self, f"_etapa_{etapa}")(alvo)
+                elif tipo == "curadoria": self._etapa_curadoria(alvo)
                 elif tipo == "cena": self._etapa_cena(alvo, etapa)
                 elif tipo == "repo": self._etapa_repo()
             except Exception as e:                                         # noqa: BLE001
@@ -521,6 +722,13 @@ class Instagram:
                     with self._fila.mutex:
                         self._fila.queue = type(self._fila.queue)(x for x in self._fila.queue
                                                                   if not (x[0] == "reel" and x[1] == alvo))
+                if tipo == "curadoria":
+                    try:
+                        self._registrar(alvo, f"⚠ Curadoria: {msg}")
+                        # ⭐ os takes voltam a "com defeito", com o texto apontado: e' so' mandar de novo
+                        self._alterar_reel(alvo, lambda x: [t["cur"].update(estado="defeito") for t in x["takes"]
+                                                            if (t.get("cur") or {}).get("estado") in ("refazer", "refazendo")])
+                    except Exception: pass                                 # noqa: BLE001
                 if tipo == "repo":
                     for i in self._publicados():
                         try: self._alterar_reel(i["rid"], lambda x: x["publicado"] == "na fila" and x.update(publicado=""))
@@ -574,56 +782,108 @@ class Instagram:
             if arq == "final.mp4" or re.fullmatch(r"(quadro_\d{2}\.png|origem_\d{2}\.jpg)", arq): os.remove(os.path.join(p, arq))
         self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - 1} + CTA)")
 
+    # ── geracao dos takes (o roteiro e a curadoria usam o mesmo caminho) ──
+    @staticmethod
+    def _migrar(t):
+        """⭐ Take de antes das versoes (so' "video"): o video dele vira a v1. Devolve a lista de versoes."""
+        if not t.get("versoes"):
+            t["versoes"] = ([{"v": 1, "video": t["video"], "fala": t["fala"], "movimento": t["movimento"],
+                              "quadro": t.get("quadro", ""), "quadro_png": t.get("quadro_png", ""), "origem": "roteiro",
+                              "nota": "", "criado": 0}] if t.get("video") else [])
+            if t["versoes"]: t["v"] = 1
+        return t["versoes"]
+
+    def _quadro_take(self, r, a, t, g, novo=False):
+        """O quadro de abertura de um take: o do take (o escolhido), o padrao quadro_NN.png, ou um novo quadro_NN_qK.png
+        quando a curadoria pede (`novo`). ⭐ Cada take abre no SEU quadro, com o angulo e o zoom do video de origem
+        naquele trecho (o take do CTA usa o ultimo). O comodo entra so' pelo texto: a imagem dele como referencia
+        dominava o quadro e punha o avatar de corpo inteiro, longe da camera (18/10). Sem video de origem, vale a
+        imagem do comodo."""
+        pa, p = self._pasta_av(a["id"]), self._pasta_reel(r["id"])
+        comodo = os.path.join(pa, "cenas", f"{r['cena']}.png")
+        if not novo and t.get("quadro_png") and os.path.isfile(t["quadro_png"]): return t["quadro_png"]
+        foto, fonte, origem = self._achar(pa, "foto"), os.path.join(p, "fonte.mp4"), r.get("takes_origem") or []
+        if not (foto and origem and os.path.isfile(fonte)): return comodo
+        n = t["n"]
+        arq = os.path.join(p, f"quadro_{n:02d}.png")
+        if novo:
+            k = 2
+            while os.path.isfile(os.path.join(p, f"quadro_{n:02d}_q{k}.png")): k += 1
+            arq = os.path.join(p, f"quadro_{n:02d}_q{k}.png")
+        if not os.path.isfile(arq):
+            o = origem[min(n, len(origem)) - 1]
+            ref = os.path.join(p, f"origem_{n:02d}.jpg")
+            if not os.path.isfile(ref): self.midia.quadro(fonte, (o["ini"] + o["fim"]) / 2, ref)
+            lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
+            self._log(f"instagram: gerando o quadro do take {n} de {r['id']}")
+            g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", "")), [ref, foto], arq, self._log)
+            if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {n}")
+        return arq
+
+    def _fim_take(self, r, a, t, inicio, g):
+        """O quadro final: o mesmo do inicio; no CTA com livro, o avatar segurando o livro NESSE quadro."""
+        if not (t["cta"] and r["cta"]["livro"]): return inicio
+        p = self._pasta_reel(r["id"])
+        padrao = os.path.join(p, f"quadro_{t['n']:02d}.png")
+        arq = os.path.join(p, "cta.png" if inicio == padrao or not inicio.startswith(p) else
+                           f"cta_{os.path.splitext(os.path.basename(inicio))[0]}.png")
+        if not os.path.isfile(arq):
+            livro = self._achar(self._pasta_av(a["id"]), "livro")
+            if not livro: raise RuntimeError("a capa do livro sumiu: suba de novo")
+            self._log(f"instagram: gerando o quadro do livro de {r['id']}")
+            g.gerar_imagem(_rot.PROMPT_OBJETO, [inicio, livro], arq, self._log)
+            if not os.path.isfile(arq): raise RuntimeError("o gerador não gravou o quadro do livro")
+        return arq
+
+    def _gerar_takes(self, rid, alvos, copias=1):
+        """Gera `copias` versoes novas de cada take de `alvos` (dicts com fala/movimento/quadro ja' finais; "_novo_quadro"
+        pede um quadro de abertura novo). Devolve {n: [versao, ...]} so' com o que o gerador entregou.
+        ⭐ Nada e' sobrescrito: cada video novo vira take_NN_vK.mp4, e a versao guarda o prompt mandado ao Veo."""
+        r = self._reel(rid)
+        a = self._avatar(r["avatar"])
+        p = self._pasta_reel(rid)
+        if not os.path.isfile(os.path.join(self._pasta_av(a["id"]), "cenas", f"{r['cena']}.png")):
+            raise RuntimeError("a imagem do cômodo deste Reel sumiu: refaça o cômodo")
+        g = self._gerador()
+        usados = {t["n"]: max([v["v"] for v in self._migrar(dict(t))] + [0]) for t in r["takes"]}
+        pedidos, meta = [], {}
+        for t in alvos:
+            inicio = self._quadro_take(r, a, t, g, novo=t.get("_novo_quadro", False))
+            fim = self._fim_take(r, a, t, inicio, g)
+            prompt = _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"], muda=fim != inicio)
+            for i in range(copias):
+                v = usados[t["n"]] + 1 + i
+                nome = f"take_{t['n']:02d}_v{v}"
+                pedidos.append({"nome": nome, "prompt": prompt, "inicio": inicio, "fim": fim})
+                meta[nome] = {"n": t["n"], "v": v, "fala": t["fala"], "movimento": t["movimento"],
+                              "quadro": t.get("quadro", ""), "quadro_png": inicio, "prompt": prompt}
+        self._log(f"instagram: {len(pedidos)} take(s) de {rid} no gerador ({r['modelo']})")
+        feitos = g.gerar_videos(pedidos, p, r["modelo"], self._log) or {}
+        novas = {}
+        for nome, m in meta.items():
+            arq = feitos.get(nome)
+            if arq and os.path.isfile(arq):
+                novas.setdefault(m["n"], []).append({**{k: x for k, x in m.items() if k != "n"}, "video": arq,
+                                                     "criado": round(time.time(), 2)})
+        return novas
+
     def _etapa_gerar(self, rid):
         r = self._reel(rid)
         if not r.get("takes"): raise RuntimeError("faça o roteiro primeiro")
-        a = self._avatar(r["avatar"])
-        pa, p = self._pasta_av(a["id"]), self._pasta_reel(rid)
-        comodo = os.path.join(pa, "cenas", f"{r['cena']}.png")
-        if not os.path.isfile(comodo): raise RuntimeError("a imagem do cômodo deste Reel sumiu: refaça o cômodo")
-        g = self._gerador()
         faltam = [t for t in r["takes"] if not (t.get("video") and os.path.isfile(t["video"]))]
         if not faltam: return
-        # ⭐ cada take abre no SEU quadro, com o angulo e o zoom do video de origem naquele trecho (o take do CTA usa
-        #    o ultimo). O comodo entra so' pelo texto: a imagem dele como referencia dominava o quadro e punha o avatar
-        #    de corpo inteiro, longe da camera (18/10). Sem video de origem, vale a imagem do comodo.
-        foto, fonte, origem = self._achar(pa, "foto"), os.path.join(p, "fonte.mp4"), r.get("takes_origem") or []
-        lugar = next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")
-        inicios = {}
-        for t in faltam:
-            inicios[t["n"]] = comodo
-            if not (foto and origem and os.path.isfile(fonte)): continue
-            arq = os.path.join(p, f"quadro_{t['n']:02d}.png")
-            if not os.path.isfile(arq):
-                o = origem[min(t["n"], len(origem)) - 1]
-                ref = self.midia.quadro(fonte, (o["ini"] + o["fim"]) / 2, os.path.join(p, f"origem_{t['n']:02d}.jpg"))
-                self._log(f"instagram: gerando o quadro do take {t['n']} de {rid}")
-                g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", "")), [ref, foto], arq, self._log)
-                if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {t['n']}")
-            inicios[t["n"]] = arq
-        fins = dict(inicios)
-        cta = next((t for t in faltam if t["cta"]), None)
-        if cta and r["cta"]["livro"]:
-            fins[cta["n"]] = os.path.join(p, "cta.png")
-            if not os.path.isfile(fins[cta["n"]]):
-                livro = self._achar(pa, "livro")
-                if not livro: raise RuntimeError("a capa do livro sumiu: suba de novo")
-                self._log(f"instagram: gerando o quadro do livro de {rid}")
-                g.gerar_imagem(_rot.PROMPT_OBJETO, [inicios[cta["n"]], livro], fins[cta["n"]], self._log)
-                if not os.path.isfile(fins[cta["n"]]): raise RuntimeError("o gerador não gravou o quadro do livro")
-        pedidos = [{"nome": f"take_{t['n']:02d}", "inicio": inicios[t["n"]], "fim": fins[t["n"]],
-                    "prompt": _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"], muda=fins[t["n"]] != inicios[t["n"]])}
-                   for t in faltam]
-        self._log(f"instagram: {len(pedidos)} take(s) de {rid} no gerador ({r['modelo']})")
-        feitos = g.gerar_videos(pedidos, p, r["modelo"], self._log) or {}
+        novas = self._gerar_takes(rid, faltam)
 
         def f(x):
             for t in x["takes"]:
-                arq = feitos.get(f"take_{t['n']:02d}")
-                if arq and os.path.isfile(arq): t["video"] = arq
+                for ver in novas.get(t["n"], []):
+                    vs = self._migrar(t)
+                    # ⭐ take que ja' tinha versao e perdeu o video = editado a mao no cartao do Reel
+                    vs.append({**ver, "origem": "manual" if vs else "roteiro", "nota": ""})
+                    t.update(video=ver["video"], v=ver["v"], quadro_png=ver["quadro_png"])
         r = self._alterar_reel(rid, f)
         falta = [t["n"] for t in r["takes"] if not (t.get("video") and os.path.isfile(t["video"]))]
-        self._registrar(rid, f"geração: {len(pedidos) - len(falta)} de {len(pedidos)} take(s) prontos")
+        self._registrar(rid, f"geração: {len(faltam) - len(falta)} de {len(faltam)} take(s) prontos")
         if falta: raise RuntimeError(f"take(s) {', '.join(map(str, falta))} falharam: rode a geração de novo")
 
     def _etapa_montagem(self, rid):
@@ -635,12 +895,13 @@ class Instagram:
         self._log(f"instagram: montando {rid}")
         # ⭐ o whisper mede onde a fala de cada take comeca e acaba; o take vai de um respiro antes da primeira palavra a
         #    um respiro depois da ultima. O texto da legenda vem do roteiro (grafia certa).
-        clipes, legenda, inicio = [], [], 0.0
+        clipes, legenda, inicio, cortes = [], [], 0.0, {}
         for t in r["takes"]:
             pals, _ = self.midia.palavras(t["video"], lingua)
             ate = self.midia.fim_da_fala(pals, self.midia.duracao(t["video"]))
             de = min(self.midia.inicio_da_fala(pals), max(0.0, ate - 1.0))
             clipes.append((t["video"], de, ate))
+            cortes[t["n"]] = {"corte": [de, ate], "no_reel": [round(inicio, 2), round(inicio + ate - de, 2)]}
             pals = [{**w, "ini": w["ini"] - de, "fim": w["fim"] - de} for w in pals]
             legenda += self.midia.alinhar(t["fala"], pals, ate - de, inicio)
             inicio += ate - de
@@ -653,7 +914,9 @@ class Instagram:
         if r.get("legenda_post"):
             open(os.path.join(p, "legenda_post.txt"), "w", encoding="utf-8").write(r["legenda_post"] + "\n")
         dur = round(sum(c[2] - c[1] for c in clipes), 1)
-        self._alterar_reel(rid, lambda x: x.update(duracao=dur))
+        # ⭐ onde cada take entra no Reel: a timeline do editor de curadoria anda por aqui
+        self._alterar_reel(rid, lambda x: (x.update(duracao=dur, montado=round(time.time(), 2)),
+                                           [t.update(cortes[t["n"]]) for t in x["takes"] if t["n"] in cortes]))
         self._registrar(rid, f"montagem: {dur} s, 1080x1920, legenda queimada")
         self._avisar(f"Reel pronto ({dur} s).", "ok")
         if self.ajustes()["auto_subir"] and self.ajustes()["repo_dir"]: self.subir(rid)
@@ -732,6 +995,10 @@ def _autoteste():
 
     def claude(pedido, timeout=0):
         pedidos.append(pedido)
+        if pedido.startswith("You fix ONE take"):              # o corretor da curadoria
+            return json.dumps({"fala": "Fala corrigida da Tomiko", "quadro": "A teapot.", "motivo": "troquei a palavra",
+                               "movimento": "As she speaks, her right hand lifts the teapot. After the line, she sets it back.",
+                               "refazer_quadro": "QUADRO" in pedido})
         n = len(re.findall(r"^\d+\. \(", pedido, flags=re.M))
         quadro = "Target language: American English." in pedido          # ⭐ o Reel em ingles traz os itens do quadro
         return json.dumps({"takes": [{"n": i, "fala": f"Fala {i} da Tomiko", "movimento": "She smiles at the camera.",
@@ -823,6 +1090,72 @@ def _autoteste():
     ass = open(os.path.join(ig._pasta_reel(r1["id"]), "legenda.ass"), encoding="utf-8").read()
     caso("⭐ a legenda queimada usa a fala do roteiro", "Fala 1 da" in ass and "Olá" not in ass)
     caso("legenda do post gravada", open(os.path.join(ig._pasta_reel(r1["id"]), "legenda_post.txt"), encoding="utf-8").read().startswith("Chá"))
+
+    # ── editor de curadoria ──
+    rid1 = r1["id"]
+    ed = ig.editor(rid1)
+    t1 = ed["takes"][0]
+    caso("⭐ editor: cada take ja' tem a v1, com miniatura, e onde entra no Reel",
+         [len(t["versoes"]) for t in ed["takes"]] == [1] * len(ed["takes"]) and t1["versoes"][0]["mini"] == "mini_01_v1"
+         and t1["no_reel"][0] == 0 and ed["takes"][1]["no_reel"][0] == t1["no_reel"][1] and ed["reel"]["montado"])
+    caso("editor: as etiquetas de defeito vem do motor", any(e["id"] == "pronuncia" for e in ed["etiquetas"]))
+    caso("arquivos do editor: versao, miniatura e quadro", ig.arquivo_reel(rid1, "take_01_v1").endswith("take_01_v1.mp4")
+         and ig.arquivo_reel(rid1, "mini_01_v1").endswith(".jpg") and ig.arquivo_reel(rid1, "quadro_01").endswith(".png"))
+    caso("⛔ arquivo do editor fora do padrao", _erro(lambda: ig.arquivo_reel(rid1, "take_01_v1/../../x"), KeyError))
+    caso("⛔ refazer sem defeito nem edicao", _erro(lambda: ig.refazer_takes(rid1, [{"n": 2}])))
+    ig.anotar_take(rid1, 1, "  ela fala errado  ", ["pronuncia", "inventada"])
+    cur = ig.editor(rid1)["takes"][0]["cur"]
+    caso("anotar: o rascunho do defeito fica salvo", cur["estado"] == "defeito" and cur["defeito"] == "ela fala errado"
+         and cur["etiquetas"] == ["pronuncia"])
+    n_ped, n_vid = len(pedidos), len(g.videos)
+    ig.refazer_takes(rid1, [{"n": 1}])
+    caso("⛔ o mesmo take nao vai duas vezes", _erro(lambda: ig.refazer_takes(rid1, [{"n": 1}])))
+    ig.esperar(120)
+    ed = ig.editor(rid1)
+    t1 = ed["takes"][0]
+    novos = g.videos[n_vid:]
+    caso("⭐ refazer: o corretor recebe o defeito e o que foi ouvido", len(pedidos) == n_ped + 1
+         and '"ela fala errado"' in pedidos[-1] and "Pronúncia" in pedidos[-1] and "Olá, gente" in pedidos[-1])
+    caso("⭐ refazer: 2 versoes novas, com a fala corrigida, sem tocar na ativa", [v["nome"] for v in novos] == ["take_01_v2", "take_01_v3"]
+         and all('"Fala corrigida da Tomiko"' in v["prompt"] for v in novos) and t1["v"] == 1
+         and [v["origem"] for v in t1["versoes"]] == ["roteiro", "correcao", "correcao"]
+         and t1["versoes"][2]["nota"] == "troquei a palavra" and t1["cur"]["estado"] == "escolher")
+    caso("refazer: o Reel pronto continua la' ate' a escolha", ig.reel(rid1)["final"])
+    ig.escolher_versao(rid1, 1, 3)
+    ig.esperar(120)
+    r1 = ig.reel(rid1)
+    t1 = next(t for t in r1["takes"] if t["n"] == 1)
+    caso("⭐ escolher: a versao entra com a fala dela e a montagem roda sozinha", t1["v"] == 3 and t1["fala"] == "Fala corrigida da Tomiko"
+         and t1["video"].endswith("take_01_v3.mp4") and r1["final"]
+         and "Fala corrigida" in open(os.path.join(ig._pasta_reel(rid1), "legenda.ass"), encoding="utf-8").read())
+    oc = [e for e in _cur.ocorrencias(base) if e.get("reel") == rid1]
+    caso("⭐ ocorrencia: defeito, correcao, versoes e escolha, com o mesmo id", [e["tipo"] for e in oc] == ["defeito", "correcao", "versoes", "escolha"]
+         and len({e["id"] for e in oc}) == 1 and oc[0]["fala"] == "Fala 1 da Tomiko" and "Interpolate" not in oc[0]["prompt"]
+         and oc[2]["versoes"] == [2, 3] and oc[3]["resolveu"] is True and oc[1]["ouvido"] == "Olá, gente")
+    n_ped = len(pedidos)
+    ig.refazer_takes(rid1, [{"n": 2, "fala": "Uma fala nova escrita à mão", "movimento": ""}])
+    ig.esperar(120)
+    t2 = ig.editor(rid1)["takes"][1]
+    caso("⭐ editado a mao: vai como esta', sem passar pelo corretor", len(pedidos) == n_ped and t2["cur"]["estado"] == "escolher"
+         and all(v["fala"] == "Uma fala nova escrita à mão" for v in t2["versoes"][1:]) and t2["versoes"][1]["nota"] == "editado à mão")
+    ig.aceitar_take(rid1, 2)
+    caso("aceitar com versoes novas: fica a ativa e a ocorrencia diz que nao resolveu",
+         ig.editor(rid1)["takes"][1]["v"] == 1 and _cur.ocorrencias(base)[-1] == {**_cur.ocorrencias(base)[-1], "tipo": "escolha", "resolveu": False})
+    n_img = len(g.imagens)
+    ig.anotar_take(rid1, 2, "o QUADRO de abertura esta ruim", ["quadro"])
+    ig.refazer_takes(rid1, [{"n": 2}])
+    ig.esperar(120)
+    t2 = ig.editor(rid1)["takes"][1]
+    caso("⭐ quadro ruim: o corretor pede quadro novo e so' as versoes novas abrem nele", len(g.imagens) == n_img + 1
+         and "A teapot." in g.imagens[-1][0] and [v["quadro_arquivo"] for v in t2["versoes"]]
+         == ["quadro_02"] * 3 + ["quadro_02_q2"] * 2)
+    n_ped = len(pedidos)
+    ig.anotar_take(rid1, 1, "três mãos", ["maos"])
+    ig.refazer_takes(rid1, [{"n": 1, "movimento": "ela esta com tres maos"}])
+    ig.esperar(120)
+    caso("⭐ defeito + edicao a mao: passa pelo corretor, com a edicao so' como intencao", len(pedidos) == n_ped + 1
+         and 'by hand: "ela esta com tres maos"' in pedidos[-1]
+         and all(v["movimento"] != "ela esta com tres maos" for v in ig.editor(rid1)["takes"][0]["versoes"]))
     n_vid = len(g.videos)
     r2 = ig.criar_reel(aid, "en", url="https://www.instagram.com/reel/def/", legenda=2)
     caso("⭐ o video seguinte vai para o outro comodo", r2["cena"] == "varanda")
@@ -848,7 +1181,7 @@ def _autoteste():
     ig.rodar(r2["id"], "gerar"); ig.esperar(120)
     caso("⭐ refazer a geracao gera so' o take editado", len(g.videos) == n_antes + 1 and ig.reel(r2["id"])["final"])
     caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + len(vs2))
-    g.falhar = {"take_02"}
+    g.falhar = {"take_02_v1"}
     r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/", cta="palavra", palavra=" Eu  Quero ")
     caso("⭐ CTA de frase curta guardado em minusculas", r3["cta"]["palavra"] == "eu quero")
     ig.esperar(120)

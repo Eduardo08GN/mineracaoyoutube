@@ -9,7 +9,7 @@ r"""INSTAGRAM MIDIA — baixar o Reel de origem, transcrever, montar o Reel 9:16
     inicio_da_fala(palavras)              de onde o take vai (corta o silencio antes da primeira palavra)
     fim_da_fala(palavras, duracao)        onde aparar a cauda de um take (o Veo devolve 8 s mesmo com fala curta)
     montar(clipes, saida)                 [(mp4, ate_s) | (mp4, de_s, ate_s)] -> um mp4 1080x1920 30 fps, -14 LUFS
-    legenda_ass(palavras)                 palavras -> legenda .ass (2 a 3 palavras por vez, centro-baixo)
+    legenda_ass(palavras)                 palavras -> legenda .ass (2 a 3 palavras por vez, na base do Reel)
     queimar(video, ass, saida)            a legenda dentro da imagem
     queimar_estilo(video, palavras, saida, n, cta)   a legenda no estilo N do OW Agente (2 = PILULA)
 """
@@ -18,6 +18,10 @@ import json, os, shutil, subprocess, sys
 W, H, FPS = 1080, 1920, 30
 CAUDA_S = 0.35
 RESPIRO_S = 0.15
+# ⭐ (18/10, ordem do Eduardo) a legenda fica SEMPRE na posicao mais baixa do Reel: a base do cartao em 82% da altura.
+#    Mais baixo que isso ela entra embaixo da descricao, do @ e dos botoes que o Instagram poe por cima do video.
+#    A base (nao o centro) e' que fica fixa: cartao de 2 linhas cresce para cima, nunca para dentro da faixa do app.
+BASE_LEGENDA = 0.82
 _SEM_JANELA = {"creationflags": 0x08000000} if os.name == "nt" else {}
 _modelo = {}
 
@@ -135,12 +139,13 @@ def _blocos(pals, max_palavras=3, max_s=1.6):
 
 
 def legenda_ass(pals):
-    """Legenda .ass no estilo dos Reels: branca, contorno preto grosso, 2-3 palavras por vez, no centro-baixo."""
+    """Legenda .ass no estilo dos Reels: branca, contorno preto grosso, 2-3 palavras por vez, na base do Reel (BASE_LEGENDA)."""
     cab = (f"[Script Info]\nScriptType: v4.00+\nPlayResX: {W}\nPlayResY: {H}\nWrapStyle: 2\n\n"
            "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
            "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
            "Alignment, MarginL, MarginR, MarginV, Encoding\n"
-           "Style: R,Arial,82,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,7,2,2,90,90,560,1\n\n"
+           "Style: R,Arial,82,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,7,2,2,90,90,"
+           f"{round(H * (1 - BASE_LEGENDA))},1\n\n"
            "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     linhas, blocos = [], list(_blocos(pals))
     for i, b in enumerate(blocos):
@@ -165,7 +170,6 @@ def queimar(video, ass_texto, saida):
 
 # ── a legenda nos estilos do OW Agente (o mesmo pool numerado do /produzir: 1 CLASSICA, 2 PILULA...) ──
 OW_MOTOR = r"C:\Users\edlut\ow_agente\organic-wave-studio\motor"
-CY_LEGENDA = 0.60          # o centro do cartao: no peito, abaixo do rosto do close (onde a fonte poe a dela)
 
 
 def _ow_legendas():
@@ -217,7 +221,7 @@ def queimar_estilo(video, pals, saida, estilo, cta=""):
             x = min(max(int(W / 2 - w / 2), int(W * 0.02)), int(W * 0.98) - w)
             t0 = p["ini"] if j else b[0]["ini"]
             t1 = b[j + 1]["ini"] if j + 1 < len(b) else fim_bloco
-            if t1 > t0: fora.append((os.path.relpath(png, pasta), x, int(CY_LEGENDA * H - h / 2), t0, t1))
+            if t1 > t0: fora.append((os.path.relpath(png, pasta), x, int(BASE_LEGENDA * H - h), t0, t1))
     if not fora: return queimar(video, legenda_ass(pals), saida)
     cmd, filtros, cur = ["ffmpeg", "-y", "-v", "error", "-i", os.path.abspath(video)], [], "0:v"
     for i, (png, x, y, t0, t1) in enumerate(fora, 1):
@@ -273,6 +277,7 @@ def _autoteste():
     tempos = [l.split(",")[1:3] for l in ass.splitlines() if l.startswith("Dialogue")]
     caso("⛔ legenda: uma linha so' por vez", all(a[1] <= b[0] for a, b in zip(tempos, tempos[1:])))
     caso("⛔ legenda: chaves nao viram comando do ASS", "{x}" not in ass.split("[Events]")[1])
+    caso("⭐ legenda simples na base do Reel (82% da altura)", ",90,90,346,1" in ass)
     f = queimar(m, ass, os.path.join(d, "final.mp4"))
     caso("queimar: final gravado com audio", os.path.getsize(f) > 10_000 and abs(duracao(f) - 5.5) < 0.2)
     cta = [{"w": w, "ini": 2 + i * 0.4, "fim": 2 + i * 0.4 + 0.35} for i, w in enumerate("Comente eu quero, aqui".split())]
@@ -284,6 +289,10 @@ def _autoteste():
         f2 = queimar_estilo(m, pals[:5] + cta, os.path.join(d, "estilo", "final.mp4"), 2, "eu quero")
         caso("⭐ legenda estilo 2 (PILULA) queimada, com audio", abs(duracao(f2) - 5.5) < 0.2
              and len(os.listdir(os.path.join(d, "estilo", "cartoes"))) == 8)
+        filtro = open(os.path.join(d, "estilo", "cartoes.txt"), encoding="utf-8").read()
+        from PIL import Image
+        alt = Image.open(os.path.join(d, "estilo", "cartoes", "c000.png")).size[1]
+        caso("⭐ legenda estilo 2: a base do cartao em 82% da altura", f":{int(BASE_LEGENDA * H - alt)}:enable" in filtro)
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 

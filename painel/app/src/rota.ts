@@ -14,6 +14,7 @@ export type Rota =
   | { tela: "retratos" }
   | { tela: "producao" }
   | { tela: "instagram" }
+  | { tela: "curadoria"; id: string }
   | { tela: "video"; id: string };
 
 function ler(): Rota {
@@ -30,6 +31,7 @@ function ler(): Rota {
   if (partes[0] === "producao" && partes[1]) return { tela: "video", id: decodeURIComponent(partes[1]) };
   if (partes[0] === "producao") return { tela: "producao" };
   if (partes[0] === "ajustes") return { tela: "ajustes" };
+  if (partes[0] === "instagram" && partes[1] === "reel" && partes[2]) return { tela: "curadoria", id: decodeURIComponent(partes[2]) };
   if (partes[0] === "instagram") return { tela: "instagram" };
   if (partes[0] === "idioma" && CODIGOS.includes(partes[1] as CodIdioma)) return { tela: "idioma", cod: partes[1] as CodIdioma };
   return { tela: "painel" };
@@ -62,5 +64,6 @@ export const link = {
   video: (id: string) => `#/producao/${encodeURIComponent(id)}`,
   ajustes: "#/ajustes",
   instagram: "#/instagram",
+  curadoria: (id: string) => `#/instagram/reel/${encodeURIComponent(id)}`,
   idioma: (c: CodIdioma) => `#/idioma/${c}`,
 };

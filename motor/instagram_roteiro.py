@@ -146,37 +146,29 @@ def cortar(palavras, idioma="pt", max_s=MAX_S_TAKE, max_palavras=None):
     return takes
 
 
-def pedido_adaptacao(takes, idioma, avatar, cta):
-    """O pedido ao Claude: a fala de cada take no idioma de destino, na boca do avatar, + movimento + CTA.
-
-    cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}"""
-    info = IDIOMAS[idioma]
-    lim = FALA_MAX_PALAVRAS.get(idioma, 14)
+def regra_cta(cta):
+    """A regra do take do CTA (o mesmo texto no roteiro e no corretor da curadoria)."""
     if cta.get("tipo") == "palavra":
-        regra_cta = (f'The LAST take is the call to action: invite viewers to comment '
-                     f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
-                     f'receive the full material. Write it exactly like that inside the line.')
+        regra = (f'The LAST take is the call to action: invite viewers to comment '
+                 f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
+                 f'receive the full material. Write it exactly like that inside the line.')
     else:
-        regra_cta = ("The LAST take is the call to action: a plain, calm line saying the complete material is at the "
-                     "link in the profile. No hype.")
+        regra = ("The LAST take is the call to action: a plain, calm line saying the complete material is at the "
+                 "link in the profile. No hype.")
     if cta.get("livro"):
         # ⛔ o quadro final do CTA mostra o livro erguido: aqui NAO ha' volta a' pose (o texto nao contradiz o quadro)
-        regra_cta += (" In that last take her book lies on the table in front of her: its \"quadro\" names the book, and "
-                      "its \"movimento\" is the whole mechanism, with no return to the starting pose: \"As she speaks, "
-                      "she picks up the book from the table with both hands and raises it to chest height, cover "
-                      "toward the camera, holding it by the edges.\" then \"She holds it steady until the end of the "
-                      "shot.\"")
-    linhas = "\n".join(f'{t["n"]}. ({t["fim"] - t["ini"]:.1f} s) {t["texto"]}' for t in takes)
-    return f"""You adapt a short vertical video (Instagram Reel) for a new presenter. Return ONLY JSON.
+        regra += (" In that last take her book lies on the table in front of her: its \"quadro\" names the book, and "
+                  "its \"movimento\" is the whole mechanism, with no return to the starting pose: \"As she speaks, "
+                  "she picks up the book from the table with both hands and raises it to chest height, cover "
+                  "toward the camera, holding it by the edges.\" then \"She holds it steady until the end of the "
+                  "shot.\"")
+    return regra
 
-The presenter: {avatar.get("quem") or avatar.get("descricao", "")}
-Target language: {info["lingua"]}.
 
-Original takes (speech transcribed from the source video, any language):
-{linhas}
-
-Write, for EACH original take, in the same order:
-- "fala": what the presenter says in {info["lingua"]}, keeping the meaning, the hook and the rhythm of the original,
+def regras_take(idioma):
+    """As regras de "fala", "quadro" e "movimento" de um take: as mesmas no roteiro e no corretor da curadoria."""
+    lingua, lim = IDIOMAS[idioma]["lingua"], FALA_MAX_PALAVRAS.get(idioma, 14)
+    return f"""- "fala": what the presenter says in {lingua}, keeping the meaning, the hook and the rhythm of the original,
   in her own warm voice. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
   a word that asks for continuation (articles, prepositions, conjunctions). No dash characters of any kind inside the
   line. Numbers in words. Prefer common, easy-to-pronounce words: avoid words with a repeated syllable and word
@@ -191,15 +183,36 @@ Write, for EACH original take, in the same order:
   lifting, holding toward the camera, pointing at or touching. Never pouring, cutting, slicing, sprinkling,
   mixing, opening, peeling or anything that changes an item for good.
   2nd sentence starts with "After the line," and puts the item back in the same spot with her hands resting
-  in the starting pose.
-If an original take is itself a call to action (comment, follow, share, link), rewrite it as a short closing
-line of the content instead: the call to action lives ONLY in the extra take below.
-Then add ONE extra take at the end for the call to action, with the same fields. {regra_cta}
+  in the starting pose."""
 
-Content rules (mandatory):
+
+REGRAS_CONTEUDO = """Content rules (mandatory):
 - Wellness and tradition language: "strengthen", "balance", "well-being". Never promise to cure, treat or heal
   a disease; never attack doctors or medicine; no invented numbers, testimonials or scarcity.
-- Present recipes and habits as cooking and tradition, not as remedies.
+- Present recipes and habits as cooking and tradition, not as remedies."""
+
+
+def pedido_adaptacao(takes, idioma, avatar, cta):
+    """O pedido ao Claude: a fala de cada take no idioma de destino, na boca do avatar, + movimento + CTA.
+
+    cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}"""
+    info = IDIOMAS[idioma]
+    linhas = "\n".join(f'{t["n"]}. ({t["fim"] - t["ini"]:.1f} s) {t["texto"]}' for t in takes)
+    return f"""You adapt a short vertical video (Instagram Reel) for a new presenter. Return ONLY JSON.
+
+The presenter: {avatar.get("quem") or avatar.get("descricao", "")}
+Target language: {info["lingua"]}.
+
+Original takes (speech transcribed from the source video, any language):
+{linhas}
+
+Write, for EACH original take, in the same order:
+{regras_take(idioma)}
+If an original take is itself a call to action (comment, follow, share, link), rewrite it as a short closing
+line of the content instead: the call to action lives ONLY in the extra take below.
+Then add ONE extra take at the end for the call to action, with the same fields. {regra_cta(cta)}
+
+{REGRAS_CONTEUDO}
 
 Also write "legenda_post": the Instagram post caption in {info["lingua"]} (2 to 4 short lines, one emoji at most per
 line, ending with the same call to action).

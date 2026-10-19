@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  BookOpen, Check, ChevronDown, ChevronRight, Clipboard, ExternalLink, FolderGit2, ImagePlus, Play, Plus,
+  BookOpen, Check, ChevronDown, Clapperboard, ChevronRight, Clipboard, ExternalLink, FolderGit2, ImagePlus, Play, Plus,
   RefreshCw, Sparkles, Trash2, Upload, X,
 } from "lucide-react";
 import {
@@ -9,6 +9,7 @@ import {
 import type { MIN } from "../estado";
 import { Girando, useAcao } from "../componentes/base";
 import { Atividade } from "./Painel";
+import { link } from "../rota";
 
 type Avisar = (t: string, tom?: "ok" | "erro") => void;
 
@@ -385,11 +386,12 @@ function CartaoCena({ a, c, avisar, recarregar }: { a: AvatarIG; c: CenaIG; avis
 
 function ProducaoIG({ dados, m }: { dados: InstagramTudo; m: MIN }) {
   const agora = dados.producao?.agora ?? null;
-  const reel = agora?.tipo === "reel" ? dados.reels.find((r) => r.id === agora.id) : undefined;
+  const reel = agora?.tipo === "reel" || agora?.tipo === "curadoria" ? dados.reels.find((r) => r.id === agora.id) : undefined;
   const nomeCena = (r: ReelIG) =>
     dados.avatares.find((a) => a.id === r.avatar)?.cenas.find((c) => c.id === r.cena)?.nome ?? r.cena;
   const titulo = !agora ? "Parado" : agora.tipo === "reel" ? `Reel em ${agora.etapa.toLowerCase()}` :
-    agora.tipo === "cena" ? "Gerando um cômodo" : "Subindo para o repositório";
+    agora.tipo === "cena" ? "Gerando um cômodo" : agora.tipo === "curadoria" ? "Curadoria: refazendo takes" :
+    "Subindo para o repositório";
   const detalhe = reel ? `${dados.idiomas[reel.idioma] ?? reel.idioma} · ${nomeCena(reel)} · ${reel.id}` :
     agora?.tipo === "cena" ? agora.id : dados.producao?.fila ? `${dados.producao.fila} na fila` :
     "Nada rodando. Produza um Reel embaixo quando quiser.";
@@ -533,7 +535,7 @@ function CartaoReel({ r, a, idiomas, temRepo, avisar, recarregar }: {
         {r.final ? <video src={urlReel(r.id, "final", r.duracao ?? 0)} controls preload="metadata" playsInline />
           : cena?.tem ? <img src={urlImg(a.id, `cena-${cena.id}`, cena.v)} alt="" />
           : <span className="ig-cena-vazia" />}
-        {ocupado && <span className="ig-reel-girando"><Girando />{r.trabalhando ? r.etapas.find((e) => e.id === r.trabalhando)?.nome : "na fila"}</span>}
+        {ocupado && <span className="ig-reel-girando"><Girando />{r.trabalhando ? r.etapas.find((e) => e.id === r.trabalhando)?.nome ?? r.trabalhando : "na fila"}</span>}
       </div>
       <div className="ig-reel-corpo">
         <span className="trilha" aria-label="Etapas do Reel">
@@ -558,6 +560,9 @@ function CartaoReel({ r, a, idiomas, temRepo, avisar, recarregar }: {
             <button className="btn btn-sm btn-primary" onClick={() => post("rodar", { etapa: pendente.id })} disabled={!!rodando}>
               <Play size={13} fill="currentColor" aria-hidden />Continuar de {pendente.nome}
             </button>
+          )}
+          {r.takes.some((t) => t.video) && (
+            <a className="btn btn-sm btn-ghost" href={link.curadoria(r.id)}><Clapperboard size={13} aria-hidden />Curadoria</a>
           )}
           {r.final && <button className="btn btn-sm btn-quiet" onClick={() => post("abrir", {})}><ExternalLink size={13} aria-hidden />Abrir</button>}
           {r.final && temRepo && (

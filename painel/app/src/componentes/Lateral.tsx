@@ -46,7 +46,7 @@ export function Lateral({ rota, estado, conectado }: Props) {
         <a className="nav-i" href={link.producao} aria-current={atual(["producao", "video"])}>
           <Clapperboard size={18} aria-hidden /><span>Produção</span>
         </a>
-        <a className="nav-i" href={link.instagram} aria-current={atual(["instagram"])}>
+        <a className="nav-i" href={link.instagram} aria-current={atual(["instagram", "curadoria"])}>
           <Smartphone size={18} aria-hidden /><span>Instagram</span>
         </a>
         <a className="nav-i" href={link.retratos} aria-current={atual(["retratos"])}>

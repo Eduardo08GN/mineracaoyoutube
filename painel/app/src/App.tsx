@@ -16,6 +16,7 @@ import { Retratos } from "./telas/Retratos";
 import { Producao } from "./telas/Producao";
 import { VideoProjeto } from "./telas/Video";
 import { Instagram } from "./telas/Instagram";
+import { EditorReel } from "./telas/EditorReel";
 
 export function App() {
   const m = useMinerador();
@@ -38,6 +39,7 @@ export function App() {
   else if (rota.tela === "producao") tela = <Producao m={m} />;
   else if (rota.tela === "video") tela = <VideoProjeto m={m} id={rota.id} />;
   else if (rota.tela === "instagram") tela = <Instagram m={m} />;
+  else if (rota.tela === "curadoria") tela = <EditorReel m={m} id={rota.id} />;
   else tela = <Painel m={m} />;
 
   return (

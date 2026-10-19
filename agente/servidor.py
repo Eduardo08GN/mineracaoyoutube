@@ -138,6 +138,19 @@ class Take(BaseModel):
     movimento: Optional[str] = None
 
 
+class Anotacao(BaseModel):
+    defeito: str = ""
+    etiquetas: List[str] = []
+
+
+class Versao(BaseModel):
+    v: int
+
+
+class Refazer(BaseModel):
+    takes: List[Take]
+
+
 class Ajustes(BaseModel):
     rpm: Optional[float] = None
     rpms: Optional[dict] = None
@@ -415,6 +428,27 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def ig_rodar(rid: str, c: Etapa):
         return _ig().rodar(rid, c.etapa)
 
+    # o editor de curadoria (telas/EditorReel.tsx)
+    @app.get("/api/instagram/reels/{rid}/editor")
+    def ig_editor(rid: str):
+        return _ig().editor(rid)
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/anotar")
+    def ig_anotar(rid: str, n: int, c: Anotacao):
+        return _ig().anotar_take(rid, n, c.defeito, c.etiquetas)
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/aceitar")
+    def ig_aceitar(rid: str, n: int):
+        return _ig().aceitar_take(rid, n)
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/versao")
+    def ig_versao(rid: str, n: int, c: Versao):
+        return _ig().escolher_versao(rid, n, c.v)
+
+    @app.post("/api/instagram/reels/{rid}/refazer")
+    def ig_refazer(rid: str, c: Refazer):
+        return _ig().refazer_takes(rid, [t.model_dump() if hasattr(t, "model_dump") else t.dict() for t in c.takes])
+
     @app.post("/api/instagram/reels/{rid}/take")
     def ig_take(rid: str, c: Take):
         return _ig().editar_take(rid, c.n, c.fala, c.movimento)
@@ -614,6 +648,11 @@ def _autoteste():
          c.get("/api/instagram/reels/..%2F..%2Fdata/arquivo/final", headers=h).status_code == 404)
     caso("⛔ Instagram: Reel sem avatar = 404", c.post("/api/instagram/reels", headers=h,
                                                        json={"avatar": "nao-existe", "idioma": "pt"}).status_code == 404)
+    caso("⛔ curadoria: editor de Reel que nao existe = 404",
+         c.get("/api/instagram/reels/nao-existe/editor", headers=h).status_code == 404
+         and c.post("/api/instagram/reels/nao-existe/takes/1/versao", headers=h, json={"v": 2}).status_code == 404)
+    caso("⛔ curadoria: refazer sem takes = 400", c.post("/api/instagram/reels/nao-existe/refazer", headers=h,
+                                                        json={"takes": []}).status_code == 400)
     try:
         with c.websocket_connect("/api/eventos?t=errada") as ws:
             ws.receive_json()
