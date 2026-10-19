@@ -236,7 +236,7 @@ class Instagram:
         avs = []
         for aid in sorted(os.listdir(os.path.join(self.base, "avatares"))):
             a = self._ler(os.path.join(self.base, "avatares", aid, "avatar.json"))
-            if a: avs.append(self._info_avatar(a))
+            if a and not a.get("arquivado"): avs.append(self._info_avatar(a))
         reels = []
         for rid in os.listdir(os.path.join(self.base, "reels")):
             r = self._ler(os.path.join(self.base, "reels", rid, "reel.json"))
@@ -326,6 +326,8 @@ class Instagram:
             if "idioma" in campos:
                 if campos["idioma"] not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
                 a["idioma"] = campos["idioma"]
+            # ⭐ (19/10) arquivado: sai das sub-abas e do lote; a pasta, os comodos e os Reels ficam guardados
+            if "arquivado" in campos: a["arquivado"] = bool(campos["arquivado"])
         a = self._alterar_avatar(aid, f)
         self._mudou(aid)
         return self._info_avatar(a)
@@ -1791,7 +1793,11 @@ def _autoteste():
          and any("a mesma do lote" in x["texto"] for x in rw["registro"]))
     pw = [v["prompt"] for v in g.videos[n_vid:] if v["nome"].startswith("take_") and "German" in v["prompt"]]
     caso("⭐ os takes do monge: alemao e no masculino", pw and all("He looks at the camera" in x and "She " not in x for x in pw))
-    caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "cuca", "wendelin"})
+    caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "beppe", "cuca", "wendelin"})
+    ig.editar_avatar(w["id"], {"arquivado": True})
+    caso("⭐ avatar arquivado sai das sub-abas, e os arquivos e Reels dele ficam",
+         all(a["id"] != w["id"] for a in ig.tudo()["avatares"]) and os.path.isdir(ig._pasta_av(w["id"]))
+         and ig.reel(rw["id"])["final"])
     ig.encerrar()
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok

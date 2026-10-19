@@ -177,7 +177,45 @@ WENDELIN = {
     "idioma": "de", "cta": "Buch", "genero": "m",
 }
 
-PERSONAS = {"tomiko": TOMIKO, "cuca": CUCA, "wendelin": WENDELIN}
+# ⭐⭐ (19/10, ordem do Eduardo) a segunda conta em pt-BR, no nicho de horta e plantio (substitui o espanhol e o
+#    alemao). Colono italiano da serra capixaba: longe do gaucho que domina o nicho (Bento Silveira).
+BEPPE = {
+    "nome": "Nonno Beppe",
+    "descricao": (
+        "Nonno Beppe (Giuseppe Bortolini), a 72-year-old Italian-Brazilian farmer, grandson of immigrants from Veneto, "
+        "from Venda Nova do Imigrante in the mountains of Espírito Santo, Brazil, stocky and strong, sun-tanned weathered "
+        "face, thick white moustache, bushy grey eyebrows, cheerful twinkling eyes, large rough hands with soil in the "
+        "creases. He wears a flat grey wool cap, a light blue button-up cotton shirt with the sleeves rolled up, brown "
+        "suspenders, dark work trousers and worn leather boots."),
+    "prefixo": ("The same 72-year-old Italian-Brazilian farmer from the frame, same face, moustache, cap, hands, clothes "
+                "and setting."),
+    "voz": ("the warm, slightly raspy, cheerful voice of a 72-year-old man, {lingua} with a soft Italian accent from "
+            "the Italian colony of Espírito Santo, spoken by the man in frame"),
+    "quem": ("a 72-year-old Italian-Brazilian farmer (colono) from Venda Nova do Imigrante, Espírito Santo, who teaches "
+             "vegetable gardening, saved seeds, natural compost and the preserves of the harvest; cheerful, proud of "
+             "his garden, practical, and lets slip an Italian word now and then ('mangia', 'bello', 'porca miséria')"),
+    "cenas": [
+        ("horta", "Horta em fileiras", "His vegetable garden in neat straight rows: staked tomatoes, lettuce, cabbage and "
+         "herbs, a wooden fence, the green mountains of Espírito Santo behind, soft morning light."),
+        ("parreiral", "Parreiral", "A grape pergola heavy with green and purple grapes over a stone path, old wooden "
+         "posts, dappled sunlight."),
+        ("adega", "Adega", "A small cool cellar with straw-covered wine demijohns, wooden barrels, shelves of preserves "
+         "in glass jars, braids of garlic hanging, warm dim light."),
+        ("cozinha", "Cozinha com fogão a lenha", "A farmhouse kitchen with a wood-fired stove, a copper polenta pot, a "
+         "long wooden table with a red checkered cloth, braids of onions hanging by the window."),
+        ("galpao", "Galpão de ferramentas", "A wooden tool shed with hoes, rakes and a wheelbarrow, saved seeds in "
+         "labeled glass jars and paper envelopes on a workbench."),
+        ("sementeira", "Sementeira", "A seedling nursery: trays of young seedlings on wooden benches under a shade "
+         "cloth, a metal watering can, potting soil."),
+        ("varanda", "Varanda da casa", "The covered veranda of an old colonial farmhouse with a wooden bench, a basket "
+         "of fresh vegetables and red geraniums in pots."),
+        ("pomar", "Pomar", "A small orchard with lemon, orange and fig trees, hens pecking around, a wooden crate of "
+         "picked fruit."),
+    ],
+    "idioma": "pt", "cta": "livro", "genero": "m",
+}
+
+PERSONAS = {"tomiko": TOMIKO, "beppe": BEPPE, "cuca": CUCA, "wendelin": WENDELIN}
 
 
 def genero(texto, avatar):
@@ -186,7 +224,7 @@ def genero(texto, avatar):
     idioma do Reel ("her" e' palavra em alemao: "komm her")."""
     if not avatar or avatar.get("genero") != "m": return texto
     for a, b in ((r"\bof her\b", "of him"), (r"\bto her\b", "to him"), (r"\bShe\b", "He"), (r"\bshe\b", "he"),
-                 (r"\bHer\b", "His"), (r"\bher\b", "his"), (r"\bwoman\b", "man"), (r"\bgrandmother\b", "monk")):
+                 (r"\bHer\b", "His"), (r"\bher\b", "his"), (r"\bwoman\b", "man"), (r"\bgrandmother\b", "old man")):
         texto = re.sub(a, b, texto)
     return texto
 
@@ -533,9 +571,10 @@ def _autoteste():
                                                      "sets it back.") == "levantar"
          and tipo_acao("She sprinkles a pinch of salt and presses the lid.") == "despejar" and tipo_acao("She smiles.") == "")
     caso("voz em ingles", "American English" in voz(av, "en"))
-    caso("⭐ personas: Tomiko (pt), Cuca (es) e Wendelin (de), cada uma com 8 comodos, CTA e genero",
+    caso("⭐ personas: Tomiko e Beppe (pt), Cuca (es) e Wendelin (de), cada uma com 8 comodos, CTA e genero",
          {k: (p["idioma"], p["cta"], p["genero"], len(p["cenas"])) for k, p in PERSONAS.items()}
-         == {"tomiko": ("pt", "livro", "f", 8), "cuca": ("es", "libro", "f", 8), "wendelin": ("de", "Buch", "m", 8)}
+         == {"tomiko": ("pt", "livro", "f", 8), "beppe": ("pt", "livro", "m", 8), "cuca": ("es", "libro", "f", 8),
+             "wendelin": ("de", "Buch", "m", 8)}
          and all(len({c[0] for c in p["cenas"]}) == 8 for p in PERSONAS.values()))
     pw = prompt_video(WENDELIN, "de", "As she speaks, her right hand lifts the jar.", "Komm her, ich zeige es dir.")
     caso("⭐ genero: o monge vira 'he/his' no texto nosso, e a fala em alemao fica intacta",
@@ -545,6 +584,10 @@ def _autoteste():
          '"As he speaks,"' in regras_take("de", avatar=WENDELIN) and '"As she speaks,"' in regras_take("pt", avatar=TOMIKO)
          and regras_take("pt") == regras_take("pt", avatar=TOMIKO))
     pd = pedido_adaptacao(tk, "de", WENDELIN, {"tipo": "palavra", "palavra": "Buch"})
+    pb = pedido_adaptacao(tk, "pt", BEPPE, {"tipo": "palavra", "palavra": "livro"})
+    caso("⭐ Beppe: pt popular, no masculino ('the way a Brazilian old man talks') e o colono como apresentador",
+         "everyday spoken Brazilian Portuguese" in pb and "Brazilian old man" in pb and "grandmother" not in pb
+         and '"As he speaks,"' in pb and "Italian-Brazilian farmer" in pb and '"livro,"' in pb)
     caso("⭐ pedido em alemao: popular, sem promessa de cura e com o CTA na lingua", "everyday spoken German" in pd
          and '"heilt"' in pd and '"buch,"' in pd)
     caso("pedido em espanhol mexicano", "Mexican Spanish" in pedido_adaptacao(tk, "es", CUCA, {}) and '"licuadora"' in pedido_adaptacao(tk, "es", CUCA, {}))

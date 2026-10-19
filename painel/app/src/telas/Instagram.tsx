@@ -455,7 +455,7 @@ function NovoLote({ avatares, idiomas, legendas, avisar, recarregar }: {
   const [legenda, setLegenda] = useState(2);
   const { rodando, rodar } = useAcao(avisar);
   const input = useRef<HTMLInputElement>(null);
-  const marcado = (a: AvatarIG) => marcados[a.id] ?? true;
+  const marcado = (a: AvatarIG) => marcados[a.id] ?? false;   // ⭐ o video-fonte e' de um nicho: escolha os avatares dele
   const palavra = (a: AvatarIG) => palavras[a.id] ?? a.cta ?? "";
   const escolhidos = prontos.filter(marcado);
 
@@ -471,7 +471,7 @@ function NovoLote({ avatares, idiomas, legendas, avisar, recarregar }: {
 
   return (
     <section className="ig-secao">
-      <div className="ig-secao-topo"><h2>Novo lote</h2><span className="meta">um vídeo-fonte vira um Reel por avatar</span></div>
+      <div className="ig-secao-topo"><h2>Novo lote</h2><span className="meta">marque os avatares do nicho do vídeo: cada um sai num Reel</span></div>
       <div className="panel ig-form ig-novo-reel">
         <div className="ig-fonte">
           <label className="campo-grupo">
