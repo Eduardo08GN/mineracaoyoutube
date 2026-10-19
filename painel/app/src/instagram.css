@@ -172,3 +172,66 @@ button.ig-cena-vazia:disabled { cursor: default; }
 .ed-mao[open] { padding-bottom: 12px; display: grid; gap: 10px; }
 .ed-mao summary { padding: 10px 0; cursor: pointer; }
 .ed-mao-aviso { color: var(--ow-warn); margin: 0; }
+
+/* o painel Licoes (telas/Licoes.tsx) */
+.lc-lead { margin: -4px 0 0; max-width: 78ch; }
+.lc-vazio { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; color: var(--ow-text-3); }
+.lc-vazio p { margin: 0; }
+.lc-grupo { display: grid; gap: 10px; }
+.lc-licao { display: grid; gap: 8px; padding: 14px 16px; }
+.lc-proposta { border-color: rgba(244, 185, 66, .45); border-style: dashed; }
+.lc-ativa { border-color: var(--ow-accent); }
+.lc-aposentada, .lc-recusada { opacity: .7; }
+.lc-topo { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.lc-tipo-palavra { color: var(--ow-warn); background: var(--ow-warn-soft); }
+.lc-tipo-gesto { color: var(--ow-accent); background: var(--ow-accent-soft); }
+.lc-tipo-prompt { color: var(--ow-text-2); background: rgba(143, 169, 166, .14); }
+.lc-chip { height: 22px; display: inline-flex; align-items: center; padding: 0 8px; border: 1px solid var(--ow-line-strong);
+  border-radius: var(--ow-radius-pill); font: 400 11px/1 var(--ow-font-mono); color: var(--ow-text-2); }
+.lc-n { margin-left: auto; }
+.lc-texto { margin: 0; font: 500 14px/1.45 var(--ow-font-body); color: var(--ow-text); }
+.lc-regra { margin: 0; font: 400 13px/1.45 var(--ow-font-body); color: var(--ow-text-2); }
+.lc-regra s { color: var(--ow-danger); }
+.lc-regra b { color: var(--ow-accent); font-weight: 600; }
+.lc-ingles { font-family: var(--ow-font-mono); font-size: 12px; }
+.lc-efeito { margin: 0; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; font: 400 13px/1.4 var(--ow-font-body); color: var(--ow-text-2); }
+.lc-efeito b { color: var(--ow-text); font-family: var(--ow-font-mono); }
+.lc-efeito small { color: var(--ow-text-3); font-size: 12px; }
+.lc-melhor b:last-of-type { color: var(--ow-accent); }
+.lc-pior b:last-of-type { color: var(--ow-danger); }
+.lc-form { display: grid; gap: 10px; }
+.lc-linha { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.lc-antigas summary { cursor: pointer; padding: 6px 0; }
+.lc-antigas[open] summary { margin-bottom: 8px; }
+.lc-taxas { display: grid; gap: 10px; padding: 14px 16px; }
+.lc-tabela-rolo { overflow-x: auto; }
+.lc-tabela { border-collapse: separate; border-spacing: 2px; font: 400 12px/1 var(--ow-font-mono); }
+.lc-tabela th { text-align: left; font-weight: 500; color: var(--ow-text-3); padding: 6px 10px 6px 0; white-space: nowrap; }
+.lc-tabela thead th { text-align: center; padding: 0 0 4px; }
+.lc-tabela tbody th { font-family: var(--ow-font-body); font-size: 13px; color: var(--ow-text-2); }
+.lc-tabela td { min-width: 52px; height: 30px; text-align: center; border-radius: 4px; color: var(--ow-text); background: var(--ow-bg-deep); }
+.lc-total th, .lc-total td { color: var(--ow-text-3); background: transparent; }
+
+/* o QA automatico no editor (telas/EditorReel.tsx) */
+.ed-alerta-qa { position: absolute; top: 6px; right: 6px; display: inline-flex; align-items: center; gap: 3px; padding: 2px 6px;
+  border-radius: var(--ow-radius-pill); background: rgba(0, 0, 0, .72); color: var(--ow-warn); font: 600 11px/1.2 var(--ow-font-mono); }
+.ed-qa { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid rgba(244, 185, 66, .4); border-radius: var(--ow-radius); background: var(--ow-warn-soft); }
+.ed-qa-ok { border-color: var(--ow-line); background: transparent; }
+.ed-qa-topo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ed-qa-topo .label { color: var(--ow-warn); }
+.ed-qa-ok .ed-qa-topo .label { color: var(--ow-text-3); }
+.ed-qa ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.ed-qa li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font: 400 13px/1.4 var(--ow-font-body); color: var(--ow-text); }
+.ed-qa li b { color: var(--ow-warn); font-weight: 600; }
+.ed-qa li .ed-qa-botoes { margin-left: auto; display: flex; gap: 4px; }
+.ed-qa li.ed-qa-feita { color: var(--ow-text-3); }
+.ed-qa li.ed-qa-feita b { color: var(--ow-text-3); }
+.ed-qa-medidas { margin: 0; font: 400 11.5px/1.4 var(--ow-font-mono); color: var(--ow-text-3); overflow-wrap: anywhere; }
+.ed-etiqueta-sugerida { border-style: dashed; border-color: var(--ow-warn); color: var(--ow-warn); }
+
+/* a curadoria automatica: corrigido sozinho / precisa de voce */
+.ed-corrigido .ed-faixa { background: var(--ow-accent); }
+.ed-precisa .ed-faixa { background: var(--ow-warn); }
+.ed-tag-corrigido { color: var(--ow-accent); background: var(--ow-accent-soft); }
+.ed-tag-precisa { color: var(--ow-warn); background: var(--ow-warn-soft); }
+.ed-aviso-voce { color: var(--ow-warn); background: var(--ow-warn-soft); }

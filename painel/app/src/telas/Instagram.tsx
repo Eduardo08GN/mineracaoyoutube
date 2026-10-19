@@ -9,6 +9,7 @@ import {
 import type { MIN } from "../estado";
 import { Girando, useAcao } from "../componentes/base";
 import { Atividade } from "./Painel";
+import { LicoesIG } from "./Licoes";
 import { link } from "../rota";
 
 type Avisar = (t: string, tom?: "ok" | "erro") => void;
@@ -124,6 +125,8 @@ export function Instagram({ m }: { m: MIN }) {
           </section>
         </>
       )}
+
+      <LicoesIG m={m} avatares={dados.avatares} idiomas={dados.idiomas} />
 
       <AjustesIgTela aj={dados.ajustes} publicados={dados.publicados} avisar={m.avisar} recarregar={recarregar} />
     </div>
@@ -386,11 +389,13 @@ function CartaoCena({ a, c, avisar, recarregar }: { a: AvatarIG; c: CenaIG; avis
 
 function ProducaoIG({ dados, m }: { dados: InstagramTudo; m: MIN }) {
   const agora = dados.producao?.agora ?? null;
-  const reel = agora?.tipo === "reel" || agora?.tipo === "curadoria" ? dados.reels.find((r) => r.id === agora.id) : undefined;
+  const reel = agora?.tipo === "reel" || agora?.tipo === "curadoria" || agora?.tipo === "qa"
+    ? dados.reels.find((r) => r.id === agora.id) : undefined;
   const nomeCena = (r: ReelIG) =>
     dados.avatares.find((a) => a.id === r.avatar)?.cenas.find((c) => c.id === r.cena)?.nome ?? r.cena;
   const titulo = !agora ? "Parado" : agora.tipo === "reel" ? `Reel em ${agora.etapa.toLowerCase()}` :
     agora.tipo === "cena" ? "Gerando um cômodo" : agora.tipo === "curadoria" ? "Curadoria: refazendo takes" :
+    agora.tipo === "qa" ? "QA: checando os takes" : agora.tipo === "licoes" ? "Destilando lições da curadoria" :
     "Subindo para o repositório";
   const detalhe = reel ? `${dados.idiomas[reel.idioma] ?? reel.idioma} · ${nomeCena(reel)} · ${reel.id}` :
     agora?.tipo === "cena" ? agora.id : dados.producao?.fila ? `${dados.producao.fila} na fila` :

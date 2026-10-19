@@ -165,8 +165,9 @@ def regra_cta(cta):
     return regra
 
 
-def regras_take(idioma):
-    """As regras de "fala", "quadro" e "movimento" de um take: as mesmas no roteiro e no corretor da curadoria."""
+def regras_take(idioma, extras=""):
+    """As regras de "fala", "quadro" e "movimento" de um take: as mesmas no roteiro e no corretor da curadoria.
+    `extras` = as licoes ativas (motor/instagram_licoes.py: regras_texto), acrescentadas no fim."""
     lingua, lim = IDIOMAS[idioma]["lingua"], FALA_MAX_PALAVRAS.get(idioma, 14)
     return f"""- "fala": what the presenter says in {lingua}, keeping the meaning, the hook and the rhythm of the original,
   in her own warm voice. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
@@ -183,7 +184,7 @@ def regras_take(idioma):
   lifting, holding toward the camera, pointing at or touching. Never pouring, cutting, slicing, sprinkling,
   mixing, opening, peeling or anything that changes an item for good.
   2nd sentence starts with "After the line," and puts the item back in the same spot with her hands resting
-  in the starting pose."""
+  in the starting pose.""" + (f"\n{extras.rstrip()}" if extras.strip() else "")
 
 
 REGRAS_CONTEUDO = """Content rules (mandatory):
@@ -192,7 +193,7 @@ REGRAS_CONTEUDO = """Content rules (mandatory):
 - Present recipes and habits as cooking and tradition, not as remedies."""
 
 
-def pedido_adaptacao(takes, idioma, avatar, cta):
+def pedido_adaptacao(takes, idioma, avatar, cta, extras=""):
     """O pedido ao Claude: a fala de cada take no idioma de destino, na boca do avatar, + movimento + CTA.
 
     cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}"""
@@ -207,7 +208,7 @@ Original takes (speech transcribed from the source video, any language):
 {linhas}
 
 Write, for EACH original take, in the same order:
-{regras_take(idioma)}
+{regras_take(idioma, extras)}
 If an original take is itself a call to action (comment, follow, share, link), rewrite it as a short closing
 line of the content instead: the call to action lives ONLY in the extra take below.
 Then add ONE extra take at the end for the call to action, with the same fields. {regra_cta(cta)}
@@ -244,13 +245,31 @@ def ler_adaptacao(texto, n_origem):
     return {"takes": saida, "legenda_post": str(d.get("legenda_post") or "").strip()}
 
 
+# ⭐ o tipo de acao do take (escopo das licoes de gesto): o verbo da 1a frase do "movimento"
+ACOES = {
+    "pegar": r"\b(pick|picks|picking|grab|grabs|take|takes)\b",
+    "levantar": r"\b(lift|lifts|raise|raises|hold|holds|show|shows|turn|turns)\b",
+    "apontar": r"\b(point|points|gesture|gestures|open|opens|bring|brings)\b",
+    "tocar": r"\b(touch|touches|rest|rests|lay|lays|tap|taps)\b",
+    "despejar": r"\b(pour|pours|sprinkle|sprinkles|scatter|scatters|spoon|spoons|slide|slides|dust|dusts)\b",
+}
+
+
+def tipo_acao(movimento):
+    """O tipo de acao do take ("pegar", "levantar"...) ou "" (sem verbo conhecido)."""
+    frase = re.split(r"(?<=[.!?])\s", (movimento or "").strip().lower())[0]
+    achados = [(m.start(), a) for a, rx in ACOES.items() for m in [re.search(rx, frase)] if m]
+    return min(achados)[1] if achados else ""
+
+
 def voz(avatar, idioma):
     return (avatar.get("voz") or TOMIKO["voz"]).replace("{lingua}", IDIOMAS[idioma]["lingua"])
 
 
-def prompt_video(avatar, idioma, movimento, fala, muda=False):
+def prompt_video(avatar, idioma, movimento, fala, muda=False, extras=()):
     """O prompt de um take: camera travada, quem (so' invariantes), a fala atribuida com o idioma e a voz, o gesto,
-    o silencio depois da fala e o audio. ⛔ Com a ancora no quadro, a roupa e o cenario NAO sao descritos de novo: a
+    o silencio depois da fala e o audio. `extras` = frases das licoes ativas do tipo "prompt" (no maximo 3), antes
+    do audio. ⛔ Com a ancora no quadro, a roupa e o cenario NAO sao descritos de novo: a
     prosa compete com a imagem e as vezes ganha. ⛔ "(no subtitles)" logo depois da fala: a legenda queimada e' o
     defeito mais relatado do Veo com dialogo, e a restricao rende mais colada nela."""
     partes = [CAMERA, avatar.get("prefixo") or TOMIKO["prefixo"]]
@@ -260,6 +279,7 @@ def prompt_video(avatar, idioma, movimento, fala, muda=False):
         if muda: partes.append(MUDANCA_DURANTE_A_FALA)
     else:
         partes += [movimento.strip(), "She stays silent."]
+    partes += [e.strip() for e in extras if e.strip()]
     partes += ["Audio: only her voice and quiet room tone, no music.", SEM_TEXTO_TELA]
     return " ".join(p for p in partes if p)
 
@@ -349,6 +369,14 @@ def _autoteste():
          and "in step with the speech" not in p)
     caso("prompt_video sem fala", "She stays silent." in prompt_video(av, "en", "She lifts the cup.", "")
          and "says" not in prompt_video(av, "en", "She lifts the cup.", ""))
+    pe = prompt_video(av, "pt", "She lifts a jar.", "Fala.", extras=["Her hands stay with five fingers.", " "])
+    caso("⭐ prompt_video: licoes do tipo prompt antes do audio",
+         pe.index("Her hands stay with five fingers.") < pe.index("Audio:") and "  " not in pe)
+    caso("⭐ regras_take: licoes no fim; sem licao, o texto de sempre", regras_take("pt", "- LICAO X").endswith("- LICAO X")
+         and regras_take("pt", "  ") == regras_take("pt") and "LICAO X" in pedido_adaptacao(tk, "pt", av, {}, "- LICAO X"))
+    caso("tipo_acao: o verbo da 1a frase", tipo_acao("As she speaks, both hands lift the loaf. After the line, she "
+                                                     "sets it back.") == "levantar"
+         and tipo_acao("She sprinkles a pinch of salt and presses the lid.") == "despejar" and tipo_acao("She smiles.") == "")
     caso("voz em ingles", "American English" in voz(av, "en"))
     pc = prompt_cena({"descricao": TOMIKO["descricao"]}, TOMIKO["cenas"][0][2])
     caso("prompt_cena: 9:16 + referencia + comodo", pc.startswith("Vertical 9:16") and "reference image" in pc

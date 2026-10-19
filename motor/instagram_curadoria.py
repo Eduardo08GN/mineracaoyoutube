@@ -24,6 +24,7 @@ ETIQUETAS = [
     ("fala", "Fala errada"), ("pronuncia", "Pronúncia"), ("acao", "Ação não aconteceu"),
     ("maos", "Mãos ou objeto deformado"), ("rosto", "Rosto mudou"), ("texto", "Legenda ou texto na tela"),
     ("camera", "Câmera mexeu"), ("morph", "Morph ou corte estranho"), ("quadro", "Quadro de abertura ruim"),
+    ("tempo", "Fala longa ou cortada"),
 ]
 IDS_ETIQUETA = {e for e, _ in ETIQUETAS}
 _trava = threading.Lock()
@@ -61,11 +62,11 @@ def ocorrencias(base):
     return saida
 
 
-def pedido_correcao(avatar, idioma, cta, take, defeito, etiquetas, ouvido, prompt, edicao=None):
+def pedido_correcao(avatar, idioma, cta, take, defeito, etiquetas, ouvido, prompt, edicao=None, extras=""):
     """O pedido ao Claude para refazer UM take. `take` = {"fala", "quadro", "movimento", "cta"}.
     `edicao` = {"fala"?, "movimento"?} escritos a mao no editor: entram como a intencao de quem revisa, nunca como
     texto final. ⛔ (18/10) o campo "movimento" recebia a descricao do ERRO em portugues ("ela esta' com tres
-    maos"): mandado direto, isso virava o prompt do Veo."""
+    maos"): mandado direto, isso virava o prompt do Veo. `extras` = as licoes ativas (as mesmas do roteiro)."""
     rotulos = dict(ETIQUETAS)
     marcas = ", ".join(rotulos[e] for e in etiquetas if e in rotulos) or "nenhuma"
     regra_cta = f"\nThis take is the call to action. {_rot.regra_cta(cta)}" if take.get("cta") else ""
@@ -92,7 +93,7 @@ Rewrite the take to remove the reported defect with the smallest change that can
 the line and its place in the video. Typical fixes: a word the voice mispronounces becomes a common synonym; an
 action that did not happen or deformed the hands becomes a simpler, slower gesture with fewer items; a line that
 was cut or repeated becomes shorter.
-{_rot.regras_take(idioma)}{regra_cta}
+{_rot.regras_take(idioma, extras)}{regra_cta}
 Set "refazer_quadro" to true ONLY when the defect is in the opening frame itself (wrong or missing items, hands in
 mid-air, an item that should not be there); then "quadro" names the corrected items. Otherwise keep "quadro" as is.
 
@@ -154,6 +155,8 @@ def _autoteste():
          'rewrote the movimento by hand: "ela esta com tres maos"' in pm and "not text to copy" in pm)
     pc = pedido_correcao(_rot.TOMIKO, "pt", {"tipo": "palavra", "palavra": "eu quero"}, {**take, "cta": True}, "x", [], "", "P")
     caso("pedido: o take do CTA leva a regra do CTA", '"eu quero,"' in pc)
+    caso("⭐ pedido: as licoes ativas entram nas regras", "- LICAO Y" in pedido_correcao(_rot.TOMIKO, "pt", {}, take, "x", [], "",
+                                                                                     "P", extras="- LICAO Y"))
     r = ler_correcao('ok {"fala": "Sai um pão macio — leve", "quadro": "Q", "movimento": "M", "refazer_quadro": true,'
                      ' "motivo": "troquei fofinho"}')
     caso("ler: campos e travessao trocado", r and r["fala"] == "Sai um pão macio, leve" and r["refazer_quadro"] and r["motivo"])

@@ -379,21 +379,47 @@ export interface ReelIG {
   etapas: EtapaVideo[]; trabalhando: string; na_fila: string[]; final: boolean;
 }
 // o editor de curadoria (telas/EditorReel.tsx)
-export type EstadoCur = "" | "defeito" | "refazer" | "refazendo" | "escolher" | "aceito";
+export type EstadoCur = "" | "defeito" | "refazer" | "refazendo" | "escolher" | "aceito" | "corrigido" | "precisa";
+// o QA automatico de uma versao (motor/instagram_qa.py): a flag sugere, a pessoa confirma ou dispensa
+export interface FlagQA { etiqueta: string; motivo: string; estado: "" | "confirmada" | "dispensada" }
+export interface QAVersao {
+  flags: FlagQA[]; t: number; erro?: string;
+  medidas: { ouvido?: string; fala_s?: number; camera_pct?: number; corte_pct?: number; fim_pct?: number };
+}
 export interface VersaoTake {
   v: number; fala: string; movimento: string; quadro: string; origem: "roteiro" | "correcao" | "manual"; nota: string;
   criado: number; prompt?: string; arquivo: string; existe: boolean; quadro_arquivo: string; mini: string;
+  qa?: QAVersao; licoes?: string[];
 }
 export interface TakeEditor {
   n: number; fala: string; quadro?: string; movimento: string; cta: boolean; v?: number;
   corte?: [number, number]; no_reel?: [number, number]; versoes: VersaoTake[];
-  cur: { estado: EstadoCur; defeito?: string; etiquetas?: string[]; correcao?: { motivo?: string } };
+  cur: {
+    estado: EstadoCur; defeito?: string; etiquetas?: string[]; correcao?: { motivo?: string };
+    auto?: { v: number; motivo: string }; motivo?: string; erro?: string; tentativa?: number;
+  };
 }
-export interface EditorIG { reel: ReelIG; takes: TakeEditor[]; etiquetas: { id: string; nome: string }[]; ocupado: boolean }
+export interface EditorIG {
+  reel: ReelIG; takes: TakeEditor[]; etiquetas: { id: string; nome: string }[]; ocupado: boolean; sem_qa: number; checando: boolean;
+}
+// as licoes da curadoria (motor/instagram_licoes.py)
+export type TipoLicao = "palavra" | "gesto" | "prompt";
+export type EstadoLicao = "proposta" | "ativa" | "aposentada" | "recusada";
+export interface EfeitoLicao { antes: { n: number; taxa: number | null }; depois: { n: number; taxa: number | null } }
+export interface Licao {
+  id: string; tipo: TipoLicao; texto: string; regra: string; palavra?: string; trocar?: string;
+  escopo: { avatar: string; idioma: string; acao: string }; etiquetas: string[]; evidencias: string[]; n: number;
+  estado: EstadoLicao; criada: number; ativada: number; aposentada: number; efeito: EfeitoLicao | null;
+}
+export interface LicoesIG {
+  licoes: Licao[]; pendentes: number; destilado: number; destilando: boolean; acoes: string[];
+  tipos: { id: TipoLicao; nome: string }[]; etiquetas: { id: string; nome: string }[];
+  taxas: { semanas: string[]; versoes: number[]; etiquetas: { id: string; nome: string; total: number; taxas: (number | null)[] }[] };
+}
 export interface AjustesIG { backend: string; repo_dir: string; auto_subir: boolean; dias: number; cookies: string }
 export interface InstagramTudo {
   avatares: AvatarIG[]; reels: ReelIG[]; ajustes: AjustesIG; idiomas: Record<string, string>; legendas: Record<string, string>;
-  producao?: { agora: { tipo: "reel" | "cena" | "repo" | "curadoria"; id: string; etapa: string } | null; fila: number };
+  producao?: { agora: { tipo: "reel" | "cena" | "repo" | "curadoria" | "qa" | "licoes"; id: string; etapa: string } | null; fila: number };
   gerador: { ok: boolean; texto: string }; publicados: { rid: string; nome: string; data: string }[];
 }
 

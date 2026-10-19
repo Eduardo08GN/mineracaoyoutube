@@ -151,6 +151,17 @@ class Refazer(BaseModel):
     takes: List[Take]
 
 
+class RevisaoQA(BaseModel):
+    v: int
+    etiqueta: str
+    acao: str
+
+
+class AcaoLicao(BaseModel):
+    acao: str
+    campos: Optional[dict] = None
+
+
 class Ajustes(BaseModel):
     rpm: Optional[float] = None
     rpms: Optional[dict] = None
@@ -449,6 +460,27 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def ig_refazer(rid: str, c: Refazer):
         return _ig().refazer_takes(rid, [t.model_dump() if hasattr(t, "model_dump") else t.dict() for t in c.takes])
 
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/qa")
+    def ig_qa_take(rid: str, n: int, c: RevisaoQA):
+        return _ig().qa_take(rid, n, c.v, c.etiqueta, c.acao)
+
+    @app.post("/api/instagram/reels/{rid}/qa")
+    def ig_checar(rid: str):
+        return _ig().checar_reel(rid)
+
+    # as licoes da curadoria (motor/instagram_licoes.py): o Claude propoe, a pessoa aprova
+    @app.get("/api/instagram/licoes")
+    def ig_licoes():
+        return _ig().licoes()
+
+    @app.post("/api/instagram/licoes/destilar")
+    def ig_destilar():
+        return _ig().destilar()
+
+    @app.post("/api/instagram/licoes/{lid}")
+    def ig_licao(lid: str, c: AcaoLicao):
+        return _ig().licao(lid, c.acao, c.campos)
+
     @app.post("/api/instagram/reels/{rid}/take")
     def ig_take(rid: str, c: Take):
         return _ig().editar_take(rid, c.n, c.fala, c.movimento)
@@ -653,6 +685,13 @@ def _autoteste():
          and c.post("/api/instagram/reels/nao-existe/takes/1/versao", headers=h, json={"v": 2}).status_code == 404)
     caso("⛔ curadoria: refazer sem takes = 400", c.post("/api/instagram/reels/nao-existe/refazer", headers=h,
                                                         json={"takes": []}).status_code == 400)
+    caso("⛔ QA: Reel que nao existe = 404", c.post("/api/instagram/reels/nao-existe/takes/1/qa", headers=h,
+                                                   json={"v": 1, "etiqueta": "fala", "acao": "dispensar"}).status_code == 404
+         and c.post("/api/instagram/reels/nao-existe/qa", headers=h).status_code == 404)
+    li = c.get("/api/instagram/licoes", headers=h).json()
+    caso("licoes respondem", isinstance(li.get("licoes"), list) and "taxas" in li and "pendentes" in li)
+    caso("⛔ licoes: licao que nao existe = 404", c.post("/api/instagram/licoes/l-nada", headers=h,
+                                                        json={"acao": "aprovar"}).status_code == 404)
     try:
         with c.websocket_connect("/api/eventos?t=errada") as ws:
             ws.receive_json()

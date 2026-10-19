@@ -1,23 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, Check, ExternalLink, Film, RefreshCw, Sparkles, Wand2 } from "lucide-react";
-import { comSenha, enviar, obter, type EditorIG, type EstadoCur, type TakeEditor, type VersaoTake } from "../api";
+import { ArrowLeft, Check, CircleAlert, ExternalLink, Film, RefreshCw, ScanSearch, Sparkles, TriangleAlert, X } from "lucide-react";
+import { comSenha, enviar, obter, type EditorIG, type EstadoCur, type FlagQA, type TakeEditor, type VersaoTake } from "../api";
 import type { MIN } from "../estado";
 import { link } from "../rota";
 import { Girando, useAcao } from "../componentes/base";
 
 // O editor de curadoria de um Reel pronto: a timeline por take, o inspetor do take e as versoes de cada um.
-// O defeito apontado vira ocorrencia no servidor (motor/instagram_curadoria.py); "Refazer x2" manda o take para o
-// corretor (Claude) e para o Veo, e a versao escolhida entra no Reel com a montagem refeita sozinha.
+// ⭐ (18/10, Eduardo) "voce so' aponta o erro e o resto e' automatico": salvar o defeito (etiqueta ou texto) manda o take
+// para o corretor (Claude) e para o Veo alguns segundos depois; o QA escolhe a melhor das 2 versoes, ela entra no Reel e
+// a montagem roda de novo. A outra versao fica no inspetor para trocar. So' o take que reprova duas vezes pede a pessoa.
+// ⭐ Cada versao chega com o QA automatico (motor/instagram_qa.py): as flags aparecem com ⚠ na timeline e no inspetor,
+// pre-marcam a etiqueta do defeito, e a pessoa confirma (vira defeito) ou dispensa.
 
 const urlArq = (rid: string, qual: string, v: string | number = "") =>
   comSenha(`/api/instagram/reels/${encodeURIComponent(rid)}/arquivo/${encodeURIComponent(qual)}`, v);
 
 const ROTULO_ESTADO: Record<EstadoCur, string> = {
-  "": "sem revisão", defeito: "com defeito", refazer: "na fila", refazendo: "refazendo", escolher: "escolha a versão", aceito: "aceito",
+  "": "sem revisão", defeito: "refaz em instantes", refazer: "refazendo…", refazendo: "refazendo…", escolher: "escolha a versão",
+  aceito: "aceito", corrigido: "corrigido", precisa: "precisa de você",
 };
 const ROTULO_ORIGEM: Record<VersaoTake["origem"], string> = { roteiro: "roteiro", correcao: "correção", manual: "editado" };
 const seg = (s: number) => `${s.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} s`;
 const ocupadoTake = (t: TakeEditor) => t.cur.estado === "refazer" || t.cur.estado === "refazendo";
+const versaoAtiva = (t: TakeEditor) => t.versoes.find((v) => v.v === t.v) ?? t.versoes[t.versoes.length - 1];
+const abertas = (v?: VersaoTake): FlagQA[] => (v?.qa?.flags ?? []).filter((f) => !f.estado);
+const pct = (x?: number) => (x == null ? "—" : `${x.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%`);
 const digitando = (e: KeyboardEvent) => {
   const el = e.target as HTMLElement | null;
   return !!el && (el.tagName === "TEXTAREA" || el.tagName === "INPUT" || el.tagName === "SELECT" || el.isContentEditable);
@@ -46,8 +53,7 @@ export function EditorReel({ m, id }: { m: MIN; id: string }) {
   const r = dados?.reel;
   const total = r?.duracao || takes.reduce((s, t) => s + (t.no_reel ? t.no_reel[1] - t.no_reel[0] : 0), 0) || 1;
   const remontando = !!r && (r.trabalhando === "montagem" || r.na_fila.includes("montagem"));
-  const marcados = takes.filter((t) => t.cur.estado === "defeito");
-  const aEscolher = takes.filter((t) => t.cur.estado === "escolher").length;
+  const precisam = takes.filter((t) => t.cur.estado === "precisa" || t.cur.estado === "escolher").length;
   const refazendo = takes.filter(ocupadoTake).length;
 
   const irPara = useCallback((n: number) => {
@@ -71,8 +77,6 @@ export function EditorReel({ m, id }: { m: MIN; id: string }) {
     await enviar(`/api/instagram/reels/${encodeURIComponent(id)}/${caminho}`, corpo);
     await recarregar();
   }, ok);
-  const refazerMarcados = () => post("refazer", { takes: marcados.map((t) => ({ n: t.n })) },
-    `${marcados.length} take(s) mandados para refazer: o Claude corrige e o Veo gera 2 versões de cada.`);
 
   // atalhos: ←/→ troca de take; espaco toca/pausa (fora dos campos de texto)
   useEffect(() => {
@@ -115,14 +119,16 @@ export function EditorReel({ m, id }: { m: MIN; id: string }) {
         <div className="tela-acoes ed-acoes">
           {remontando && <span className="tag tag-run"><span className="dot" aria-hidden />remontando</span>}
           {refazendo > 0 && <span className="tag tag-run"><span className="dot" aria-hidden />{refazendo} refazendo</span>}
-          {aEscolher > 0 && <span className="tag tag-voce">{aEscolher} para escolher</span>}
+          {precisam > 0 && <span className="tag tag-voce">{precisam} precisa(m) de você</span>}
+          {(dados.checando || r.trabalhando === "qa") && <span className="tag tag-run"><span className="dot" aria-hidden />checando</span>}
+          {dados.sem_qa > 0 && !dados.checando && (
+            <button className="btn btn-sm btn-quiet" onClick={() => post("qa", {}, "QA na fila: o whisper e a imagem de cada versão são checados.")}
+                    disabled={!!rodando || dados.ocupado} title="Roda o QA automático nas versões que ainda não passaram por ele">
+              <ScanSearch size={14} aria-hidden />Checar {dados.sem_qa} versão(ões)</button>
+          )}
           <button className="btn btn-sm btn-quiet" onClick={() => post("rodar", { etapa: "montagem" }, "Montagem na fila.")}
                   disabled={!!rodando || remontando}><Film size={14} aria-hidden />Remontar</button>
           {r.final && <button className="btn btn-sm btn-quiet" onClick={() => post("abrir", {})}><ExternalLink size={14} aria-hidden />Abrir</button>}
-          <button className="btn btn-sm btn-primary" onClick={refazerMarcados} disabled={!!rodando || !marcados.length || dados.ocupado}
-                  title={marcados.length ? "Manda todos os takes com defeito apontado" : "Aponte o defeito de algum take primeiro"}>
-            {rodando === "refazer" ? <Girando /> : <Wand2 size={14} aria-hidden />}Refazer marcados ({marcados.length})
-          </button>
         </div>
       </div>
 
@@ -140,7 +146,7 @@ export function EditorReel({ m, id }: { m: MIN; id: string }) {
       </div>
 
       <Timeline rid={r.id} takes={takes} sel={take.n} total={total} tempo={tempo} irPara={irPara} />
-      <p className="meta ed-dica">← → troca de take · espaço toca/pausa · a versão escolhida entra no Reel e a montagem roda sozinha</p>
+      <p className="meta ed-dica">← → troca de take · espaço toca/pausa · aponte o erro: o take é refeito, o QA escolhe a versão e o Reel é remontado sozinho</p>
     </div>
   );
 }
@@ -153,12 +159,18 @@ function Timeline({ rid, takes, sel, total, tempo, irPara }: {
       <div className="ed-trilha">
         {takes.map((t) => {
           const dur = t.no_reel ? t.no_reel[1] - t.no_reel[0] : total / takes.length;
-          const ativa = t.versoes.find((v) => v.v === t.v) ?? t.versoes[t.versoes.length - 1];
+          const ativa = versaoAtiva(t);
+          const alertas = t.cur.estado === "" || t.cur.estado === "defeito" ? abertas(ativa) : [];
           return (
             <button key={t.n} className={`ed-bloco ed-${t.cur.estado || "neutro"}${t.n === sel ? " ed-sel" : ""}`}
                     style={{ flexGrow: dur, flexBasis: 0 }} onClick={() => irPara(t.n)}
-                    title={`Take ${t.n}: ${ROTULO_ESTADO[t.cur.estado]}`}>
+                    title={`Take ${t.n}: ${ROTULO_ESTADO[t.cur.estado]}${alertas.map((f) => `\n⚠ ${f.motivo}`).join("")}`}>
               {ativa?.mini ? <img src={urlArq(rid, ativa.mini, ativa.v)} alt="" /> : <span className="ed-bloco-vazio" />}
+              {alertas.length > 0 && (
+                <span className="ed-alerta-qa" aria-label={`${alertas.length} alerta(s) do QA`}>
+                  <TriangleAlert size={11} aria-hidden />{alertas.length}
+                </span>
+              )}
               <span className="ed-bloco-rot">
                 <b>{t.n}</b>{t.cta && <i>CTA</i>}<span>{seg(dur)}</span>
                 {t.versoes.length > 1 && <span className="ed-nver">v{t.v ?? 1}/{t.versoes.length}</span>}
@@ -177,8 +189,9 @@ function Timeline({ rid, takes, sel, total, tempo, irPara }: {
 function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
   rid: string; t: TakeEditor; etiquetas: EditorIG["etiquetas"]; ocupado: boolean; m: MIN; recarregar: () => Promise<void>;
 }) {
-  const ativa = t.versoes.find((v) => v.v === t.v) ?? t.versoes[t.versoes.length - 1];
-  const novas = t.cur.estado === "escolher" ? t.versoes.filter((v) => v.v > (ativa?.v ?? 0)) : [];
+  const ativa = versaoAtiva(t);
+  const precisa = t.cur.estado === "escolher" || t.cur.estado === "precisa";
+  const novas = precisa ? t.versoes.filter((v) => v.v > (ativa?.v ?? 0)) : [];
   const [vista, setVista] = useState<number>(novas[0]?.v ?? ativa?.v ?? 1);
   const [defeito, setDefeito] = useState(t.cur.defeito ?? "");
   const [marcas, setMarcas] = useState<string[]>(t.cur.etiquetas ?? []);
@@ -203,6 +216,8 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
     await recarregar();
   });
   const alternar = (e: string) => {
+    const sug = sugeridas.find((f) => f.etiqueta === e);
+    if (sug && ativa && !marcas.includes(e)) { void revisarQA(ativa.v, sug, "confirmar"); return; }
     const lista = marcas.includes(e) ? marcas.filter((x) => x !== e) : [...marcas, e];
     setMarcas(lista);
     void anotar(defeito, lista);
@@ -211,10 +226,20 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
     if (temDefeito) await enviar(`${base}/takes/${t.n}/anotar`, { defeito, etiquetas: marcas });
     await enviar(`${base}/refazer`, { takes: [{ n: t.n, ...(editado ? { fala: fala.trim(), movimento: mov.trim() } : {}) }] });
     await recarregar();
-  }, editado && !temDefeito ? "Take na fila com a sua edição: o Veo gera 2 versões." :
-     "Take na fila: o Claude corrige e o Veo gera 2 versões.");
+  }, temDefeito ? "Take na fila: o Claude usa a sua edição como intenção e o QA escolhe a melhor versão." :
+     "Take na fila com a sua edição: o Veo gera 2 versões e o QA escolhe a melhor.");
   const aceitar = () => rodar("aceitar", async () => {
     await enviar(`${base}/takes/${t.n}/aceitar`, {});
+    await recarregar();
+  });
+  // ⭐ a flag do QA: confirmar poe a etiqueta e o motivo no defeito (como o servidor faz); dispensar so' apaga a flag
+  const sugeridas = preso || !(t.cur.estado === "" || t.cur.estado === "defeito") ? [] : abertas(ativa);
+  const revisarQA = (v: number, f: FlagQA, acao: "confirmar" | "dispensar") => rodar(`qa-${f.etiqueta}`, async () => {
+    await enviar(`${base}/takes/${t.n}/qa`, { v, etiqueta: f.etiqueta, acao });
+    if (acao === "confirmar") {
+      setMarcas((x) => (x.includes(f.etiqueta) ? x : [...x, f.etiqueta]));
+      setDefeito((x) => (x.includes(f.motivo) ? x : `${x.trim() ? `${x.trim()}; ` : ""}(QA) ${f.motivo}`));
+    }
     await recarregar();
   });
   const escolher = (v: number) => rodar("versao", async () => {
@@ -233,14 +258,29 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
         {t.no_reel && <span className="meta">no Reel {seg(t.no_reel[0])} → {seg(t.no_reel[1])}</span>}
       </div>
 
-      {t.cur.estado === "escolher" && (
+      {t.cur.estado === "corrigido" && (
         <p className="ed-aviso"><Sparkles size={14} aria-hidden />
-          {novas.length} versão(ões) nova(s){t.cur.correcao?.motivo ? `: ${t.cur.correcao.motivo}` : ""}. Assista e escolha, ou aceite a atual.
+          Corrigido sozinho: v{t.cur.auto?.v}, {t.cur.auto?.motivo}.{t.cur.correcao?.motivo ? ` ${t.cur.correcao.motivo}.` : ""} As outras
+          versões ficam aqui se quiser trocar.
+        </p>
+      )}
+      {precisa && (
+        <p className="ed-aviso ed-aviso-voce"><CircleAlert size={14} aria-hidden />
+          {t.cur.estado === "precisa" ? `Precisa de você: ${t.cur.motivo ?? "o QA reprovou as versões novas"}. ` : ""}
+          Assista as versões novas e use uma, mantenha a atual, ou descreva melhor o erro para refazer.
+        </p>
+      )}
+      {t.cur.estado === "defeito" && (
+        <p className="ed-aviso"><RefreshCw size={14} aria-hidden />
+          {t.cur.erro ? `A última tentativa falhou: ${t.cur.erro}. Salve o defeito de novo para tentar outra vez.` :
+            "Defeito salvo: o take vai para refazer em instantes (se apontar outros takes agora, vão juntos)."}
         </p>
       )}
       {ocupadoTake(t) && (
         <p className="ed-aviso"><Girando />
-          {t.cur.estado === "refazer" ? "Na fila da curadoria." : "O Claude corrigiu o take e o Veo está gerando 2 versões."}
+          {t.cur.estado === "refazer" ? "Refazendo… na fila da curadoria." :
+            (t.cur.tentativa ?? 1) > 1 ? "Refazendo… o QA reprovou a 1ª rodada; nova tentativa com o motivo." :
+            "Refazendo… o Claude corrigiu o take e o Veo está gerando 2 versões."}
         </p>
       )}
 
@@ -273,12 +313,19 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
         </div>
 
         <div className="ed-campos">
+          {versao && <CaixaQA v={versao} ativa={versao.v === ativa?.v} etiquetas={etiquetas} preso={preso}
+                              rodando={rodando} revisar={revisarQA} />}
           <div className="campo-grupo">
             <span className="label">O que está errado neste take</span>
             <div className="ed-etiquetas">
               {etiquetas.map((e) => (
-                <button key={e.id} className={`ed-etiqueta${marcas.includes(e.id) ? " ed-etiqueta-on" : ""}`}
-                        aria-pressed={marcas.includes(e.id)} onClick={() => alternar(e.id)} disabled={preso}>{e.nome}</button>
+                <button key={e.id} aria-pressed={marcas.includes(e.id)} onClick={() => alternar(e.id)} disabled={preso}
+                        className={`ed-etiqueta${marcas.includes(e.id) ? " ed-etiqueta-on" :
+                          sugeridas.some((f) => f.etiqueta === e.id) ? " ed-etiqueta-sugerida" : ""}`}
+                        title={sugeridas.find((f) => f.etiqueta === e.id)?.motivo ?? ""}>
+                  {!marcas.includes(e.id) && sugeridas.some((f) => f.etiqueta === e.id) && <TriangleAlert size={12} aria-hidden />}
+                  {e.nome}
+                </button>
               ))}
             </div>
             <textarea className="campo" rows={3} value={defeito} disabled={preso}
@@ -302,20 +349,23 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
               <textarea className="campo" rows={3} value={mov} disabled={preso} onChange={(e) => setMov(e.target.value)} />
             </label>
             {t.quadro && <p className="meta">Quadro: {t.quadro}</p>}
+            {editado && (
+              <div className="ig-linha-botoes">
+                <button className="btn btn-sm btn-primary" onClick={refazer} disabled={!!rodando || preso}>
+                  {rodando === "refazer" ? <Girando /> : <RefreshCw size={14} aria-hidden />}Refazer com a minha edição
+                </button>
+                <button className="btn btn-sm btn-quiet" onClick={() => { setFala(t.fala); setMov(t.movimento); }}>Desfazer edição</button>
+              </div>
+            )}
           </details>
           <div className="ig-linha-botoes">
-            <button className="btn btn-sm btn-primary" onClick={refazer} disabled={!!rodando || preso || (!temDefeito && !editado)}
-                    title={!temDefeito && !editado ? "Aponte o defeito ou edite a fala ou o movimento" : ""}>
-              {rodando === "refazer" ? <Girando /> : <RefreshCw size={14} aria-hidden />}Refazer ×2
-            </button>
             <button className="btn btn-sm btn-ghost" onClick={aceitar} disabled={!!rodando || preso || t.cur.estado === "aceito"}>
-              <Check size={14} aria-hidden />{t.cur.estado === "escolher" ? "Manter a atual" : "Aceitar take"}
+              <Check size={14} aria-hidden />{precisa ? "Manter a atual" : "Aceitar take"}
             </button>
-            {editado && <button className="btn btn-sm btn-quiet" onClick={() => { setFala(t.fala); setMov(t.movimento); }}>Desfazer edição</button>}
           </div>
           <p className="meta">
-            {editado && !temDefeito ? "Sem defeito apontado, a sua edição vai direto para o Veo, como está escrita." :
-              "Com o defeito apontado, o Claude reescreve o take e o Veo gera 2 versões. Tudo fica registrado para a ferramenta aprender."}
+            Aponte o erro (etiqueta ou texto) e pronto: o Claude reescreve o take, o Veo gera 2 versões, o QA escolhe a melhor e o
+            Reel é remontado. Tudo fica registrado para a ferramenta aprender.
           </p>
         </div>
       </div>
@@ -323,3 +373,47 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
   );
 }
 
+
+// o QA da versao vista: as flags (com confirmar/dispensar) e as medidas
+function CaixaQA({ v, ativa, etiquetas, preso, rodando, revisar }: {
+  v: VersaoTake; ativa: boolean; etiquetas: EditorIG["etiquetas"]; preso: boolean; rodando: string;
+  revisar: (v: number, f: FlagQA, acao: "confirmar" | "dispensar") => Promise<boolean>;
+}) {
+  const qa = v.qa;
+  if (!qa) return <p className="meta">QA: esta versão ainda não foi checada.</p>;
+  const nome = (id: string) => etiquetas.find((e) => e.id === id)?.nome ?? id;
+  const md = qa.medidas;
+  const n = abertas(v).length;
+  return (
+    <div className={`ed-qa${n ? "" : " ed-qa-ok"}`}>
+      <div className="ed-qa-topo">
+        {n ? <TriangleAlert size={14} aria-hidden /> : <Check size={14} aria-hidden />}
+        <span className="label">{n ? `QA: ${n} alerta(s) na v${v.v}` : `QA da v${v.v}: nada a apontar`}</span>
+      </div>
+      {qa.flags.length > 0 && (
+        <ul>
+          {qa.flags.map((f) => (
+            <li key={f.etiqueta} className={f.estado ? "ed-qa-feita" : ""}>
+              <span><b>{nome(f.etiqueta)}</b>: {f.motivo}{f.estado && ` · ${f.estado}`}</span>
+              {!f.estado && (
+                <span className="ed-qa-botoes">
+                  {ativa && (
+                    <button className="btn btn-sm btn-ghost" onClick={() => void revisar(v.v, f, "confirmar")} disabled={!!rodando || preso}
+                            title="Vira defeito do take (etiqueta + motivo): o take é refeito sozinho">
+                      {rodando === `qa-${f.etiqueta}` ? <Girando /> : <Check size={13} aria-hidden />}Confirmar</button>
+                  )}
+                  <button className="btn btn-sm btn-quiet" onClick={() => void revisar(v.v, f, "dispensar")} disabled={!!rodando}
+                          title="O QA errou: a flag some (fica registrado para calibrar)"><X size={13} aria-hidden />Dispensar</button>
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="ed-qa-medidas">
+        fala {md.fala_s != null ? seg(md.fala_s) : "—"} · câmera {pct(md.camera_pct)} · corte {pct(md.corte_pct)} · fim {pct(md.fim_pct)}
+        {md.ouvido ? ` · ouvido: “${md.ouvido}”` : ""}{qa.erro ? ` · ${qa.erro}` : ""}
+      </p>
+    </div>
+  );
+}
