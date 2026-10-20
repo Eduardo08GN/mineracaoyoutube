@@ -1099,8 +1099,10 @@ class Instagram:
         self._alterar_reel(rid, lambda x: x.update(takes=lido["takes"], legenda_post=lido["legenda_post"]))
         p = self._pasta_reel(rid)
         for arq in os.listdir(p):                  # ⛔ quadro velho seria de outra fala: roteiro novo = quadros novos
-            if arq == "final.mp4" or re.fullmatch(r"(quadro_\d{2}\.png|origem_\d{2}\.jpg)", arq): os.remove(os.path.join(p, arq))
-        self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - 1} + CTA)")
+            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?\.png|origem_(fim_)?\d{2}\.jpg)", arq):
+                os.remove(os.path.join(p, arq))
+        n_cta = sum(1 for t in lido["takes"] if t["cta"])
+        self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - n_cta} + {n_cta} de CTA)")
         if trocas: self._registrar(rid, "lições no roteiro: " + "; ".join(trocas))
 
     # ── geracao dos takes (o roteiro e a curadoria usam o mesmo caminho) ──

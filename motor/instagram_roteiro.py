@@ -300,12 +300,12 @@ def cortar(palavras, idioma="pt", max_s=MAX_S_TAKE, max_palavras=None):
 def regra_cta(cta, avatar=None):
     """A regra do take do CTA (o mesmo texto no roteiro e no corretor da curadoria)."""
     if cta.get("tipo") == "palavra":
-        regra = (f'The LAST take is the call to action: invite viewers to comment '
+        regra = (f'The call to action invites viewers to comment '
                  f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
                  f'receive the full material. Write it exactly like that inside the line.')
     else:
-        regra = ("The LAST take is the call to action: a plain, calm line saying the complete material is at the "
-                 "link in the profile. No hype.")
+        regra = ("The call to action is a plain, calm line saying the complete material is at the link in the "
+                 "profile. No hype.")
     if cta.get("livro"):
         # ⛔ o quadro final do CTA mostra o livro erguido: aqui NAO ha' volta a' pose (o texto nao contradiz o quadro)
         regra += (" In that last take her book lies on the table in front of her: its \"quadro\" names the book, and "
@@ -335,8 +335,11 @@ def regras_take(idioma, extras="", avatar=None):
     """As regras de "fala", "quadro" e "movimento" de um take: as mesmas no roteiro e no corretor da curadoria.
     `extras` = as licoes ativas (motor/instagram_licoes.py: regras_texto), acrescentadas no fim."""
     lingua, lim = IDIOMAS[idioma]["lingua"], FALA_MAX_PALAVRAS.get(idioma, 14)
-    return genero(f"""- "fala": what the presenter says in {lingua}, keeping the meaning, the hook and the rhythm of the original,
-  in her own warm voice. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
+    return genero(f"""- "fala": what the presenter says in {lingua}: what the ORIGINAL line says, sentence by sentence and in the
+  same order, with the same facts, claims, hook and rhythm. Only the wording changes, never the content: do not add
+  any idea, benefit, sentence or persona color that the original line does not have (no "tradition", "grandma",
+  "family", "balance", "strengthen" unless the original says it), and do not soften, swap or drop a claim of the
+  original. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
   a word that asks for continuation (articles, prepositions, conjunctions). No dash characters of any kind inside the
   line. Numbers in words. Prefer common, easy-to-pronounce words: avoid words with a repeated syllable and word
   pairs where a vowel ending meets a vowel start (the voice merges them).
@@ -344,7 +347,9 @@ def regras_take(idioma, extras="", avatar=None):
   and in the kitchen: never formal, technical, literary or rare words, even when they are the literal translation
   of the original.{POPULAR.get(idioma, "")}
   Keep every ingredient, quantity, temperature and time said in the original line: to fit the time, cut filler
-  words, never a recipe item.
+  words, never a recipe item. Convert units to the ones used in the target country (400 Fahrenheit is "two
+  hundred degrees" Celsius in Brazil, Mexico and Germany). Never promise something "free" unless the material
+  below is free.
 - "quadro": one short English sentence naming the items of this exact step and where they are at the START of
   the step, in front of her (ingredients, bowl, blender, pan, the finished food), concretely. Only the items and
   her hands: never the camera, the framing, her face, hair or clothes (the shot itself is copied from the source).
@@ -369,7 +374,7 @@ def regras_take(idioma, extras="", avatar=None):
 REGRAS_CONTEUDO = """Content rules (mandatory):
 - Wellness and tradition language: "strengthen", "balance", "well-being". Never promise to cure, treat or heal
   a disease; never attack doctors or medicine; no invented numbers, testimonials or scarcity.
-- Present recipes and habits as cooking and tradition, not as remedies."""
+- Keep the original's own claims as the original says them (that is not a cure promise); add nothing of your own."""
 
 
 def pedido_adaptacao(takes, idioma, avatar, cta, extras=""):
@@ -388,9 +393,12 @@ Original takes (speech transcribed from the source video, any language):
 
 Write, for EACH original take, in the same order:
 {regras_take(idioma, extras, avatar)}
-If an original take is itself a call to action (comment, follow, share, link), rewrite it as a short closing
-line of the content instead: the call to action lives ONLY in the extra take below.
-Then add ONE extra take at the end for the call to action, with the same fields. {regra_cta(cta, avatar)}
+Mark each take with "cta": false, except the call to action.
+If original takes are the call to action (comment a word, get a guide or recipes by DM, follow first), they stay
+the call to action of this video, translated just as faithfully, with only two swaps: the word to comment becomes
+the word below, and what is sent becomes the material below. Mark those takes "cta": true and do NOT add any take.
+Only when no original take is a call to action, add ONE extra take at the end for it, with "cta": true and the
+same fields. {regra_cta(cta, avatar)}
 
 {REGRAS_CONTEUDO}
 
@@ -398,12 +406,14 @@ Also write "legenda_post": the Instagram post caption in {info["lingua"]} (2 to 
 line, ending with the same call to action).
 
 JSON format:
-{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "quadro_fim": "...", "movimento": "..."}}, ...],
+{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "quadro_fim": "...", "movimento": "...", "cta": false}}, ...],
  "legenda_post": "..."}}"""
 
 
 def ler_adaptacao(texto, n_origem):
     """A resposta do Claude -> {"takes": [{"n", "fala", "quadro", "movimento", "cta"}], "legenda_post"} ou None.
+    ⭐ (20/10) o CTA da fonte vira o nosso CTA, traduzido: entao vem 1 take por take de origem (os do CTA marcados
+    "cta") ou, sem CTA na fonte, 1 a mais no fim. Sem nenhum marcado, o ultimo e' o CTA.
     ⛔ Fora do formato (sem JSON, takes faltando, campo vazio) = None: quem chama tenta de novo."""
     m = re.search(r"\{.*\}", texto or "", flags=re.S)
     if not m: return None
@@ -412,9 +422,10 @@ def ler_adaptacao(texto, n_origem):
     except ValueError:
         return None
     takes = d.get("takes")
-    if not isinstance(takes, list) or len(takes) < n_origem + 1: return None
+    if not isinstance(takes, list) or len(takes) < n_origem: return None
+    takes = takes[:n_origem + 1]
     saida = []
-    for i, t in enumerate(takes[:n_origem + 1], 1):
+    for i, t in enumerate(takes, 1):
         fala = t.get("fala") if isinstance(t, dict) else None
         mov = t.get("movimento") if isinstance(t, dict) else None
         if not isinstance(fala, str) or not fala.strip() or not isinstance(mov, str) or not mov.strip(): return None
@@ -423,7 +434,8 @@ def ler_adaptacao(texto, n_origem):
         quadro = quadro.strip() if isinstance(quadro, str) else ""
         saida.append({"n": i, "fala": fala, "quadro": quadro,
                       "quadro_fim": quadro_fim.strip() if isinstance(quadro_fim, str) and quadro_fim.strip() else quadro,
-                      "movimento": mov.strip(), "cta": i == n_origem + 1})
+                      "movimento": mov.strip(), "cta": t.get("cta") is True or i == n_origem + 1})
+    if not any(t["cta"] for t in saida): saida[-1]["cta"] = True
     return {"takes": saida, "legenda_post": str(d.get("legenda_post") or "").strip()}
 
 
@@ -535,8 +547,14 @@ def _autoteste():
     caso("⭐ no limite, o corte recua para o fim da frase", all(x["texto"].endswith(".") for x in tk[:-1]))
     curtas = [{"w": w, "ini": i * 0.4, "fim": i * 0.4 + 0.35} for i, w in enumerate("Uma frase. Outra frase. Mais uma.".split())]
     caso("⭐ frases curtas se juntam num take so'", len(cortar(curtas, "pt")) == 1)
-    caso("pedido: CTA da origem vira fechamento", "the call to action lives ONLY in the extra take" in
-         pedido_adaptacao(curtas and [{"n": 1, "ini": 0, "fim": 3, "texto": "x"}], "pt", {}, {"tipo": "bio"}))
+    ped = pedido_adaptacao([{"n": 1, "ini": 0, "fim": 3, "texto": "x"}], "pt", {}, {"tipo": "bio"})
+    caso("⭐ pedido: a fala e' a do original (nada acrescentado) e o CTA da fonte vira o nosso, sem take a mais",
+         "sentence by sentence" in ped and "do NOT add any take" in ped and "Only the wording changes" in ped)
+    d3 = [{"fala": f"f{i}", "quadro": "q", "movimento": "m", "cta": i >= 2} for i in (1, 2, 3)]
+    l3 = ler_adaptacao(json.dumps({"takes": d3}), 3)
+    caso("⭐ ler_adaptacao: CTA da fonte = os takes marcados, sem take a mais", [t["cta"] for t in l3["takes"]] == [False, True, True])
+    l4 = ler_adaptacao(json.dumps({"takes": [{**x, "cta": False} for x in d3]}), 3)
+    caso("ler_adaptacao: nenhum marcado, o ultimo e' o CTA", [t["cta"] for t in l4["takes"]] == [False, False, True])
     caso("todas as palavras entram", sum(len(x["texto"].split()) for x in tk) == len(frase))
 
     av = {"quem": TOMIKO["quem"], "prefixo": TOMIKO["prefixo"], "voz": TOMIKO["voz"]}
