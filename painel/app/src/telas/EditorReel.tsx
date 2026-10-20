@@ -226,8 +226,8 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
     if (temDefeito) await enviar(`${base}/takes/${t.n}/anotar`, { defeito, etiquetas: marcas });
     await enviar(`${base}/refazer`, { takes: [{ n: t.n, ...(editado ? { fala: fala.trim(), movimento: mov.trim() } : {}) }] });
     await recarregar();
-  }, temDefeito ? "Take na fila: o Claude usa a sua edição como intenção e o QA escolhe a melhor versão." :
-     "Take na fila com a sua edição: o Veo gera 2 versões e o QA escolhe a melhor.");
+  }, temDefeito ? "Take na fila: o Claude usa a sua edição como intenção e o Veo gera 4 versões para você escolher." :
+     "Take na fila com a sua edição: o Veo gera 4 versões para você escolher.");
   const aceitar = () => rodar("aceitar", async () => {
     await enviar(`${base}/takes/${t.n}/aceitar`, {});
     await recarregar();
@@ -267,7 +267,8 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
       {precisa && (
         <p className="ed-aviso ed-aviso-voce"><CircleAlert size={14} aria-hidden />
           {t.cur.estado === "precisa" ? `Precisa de você: ${t.cur.motivo ?? "o QA reprovou as versões novas"}. ` : ""}
-          Assista as versões novas e use uma, mantenha a atual, ou descreva melhor o erro para refazer.
+          Assista as {novas.length} versões novas e use a melhor, mantenha a atual, ou descreva melhor o erro para refazer.
+          {t.cur.sugerida ? ` O QA sugere a v${t.cur.sugerida.v} (${t.cur.sugerida.motivo}).` : ""}
         </p>
       )}
       {t.cur.estado === "defeito" && (
@@ -279,8 +280,7 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
       {ocupadoTake(t) && (
         <p className="ed-aviso"><Girando />
           {t.cur.estado === "refazer" ? "Refazendo… na fila da curadoria." :
-            (t.cur.tentativa ?? 1) > 1 ? "Refazendo… o QA reprovou a 1ª rodada; nova tentativa com o motivo." :
-            "Refazendo… o Claude corrigiu o take e o Veo está gerando 2 versões."}
+            "Refazendo… o Claude corrigiu o take e o Veo está gerando 4 versões para você escolher."}
         </p>
       )}
 
@@ -297,7 +297,7 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
                       className={`ed-ver${v.v === vista ? " ed-ver-vista" : ""}${v.v === ativa?.v ? " ed-ver-ativa" : ""}${novas.some((x) => x.v === v.v) ? " ed-ver-nova" : ""}`}>
                 {v.mini ? <img src={urlArq(rid, v.mini, v.v)} alt="" /> : <span className="ed-bloco-vazio" />}
                 <span>v{v.v}</span>
-                <small>{v.v === ativa?.v ? "no Reel" : ROTULO_ORIGEM[v.origem]}</small>
+                <small>{v.v === ativa?.v ? "no Reel" : precisa && v.v === t.cur.sugerida?.v ? "QA sugere" : ROTULO_ORIGEM[v.origem]}</small>
               </button>
             ))}
           </div>
@@ -364,7 +364,7 @@ function Inspetor({ rid, t, etiquetas, ocupado, m, recarregar }: {
             </button>
           </div>
           <p className="meta">
-            Aponte o erro (etiqueta ou texto) e pronto: o Claude reescreve o take, o Veo gera 2 versões, o QA escolhe a melhor e o
+            Aponte o erro (etiqueta ou texto) e pronto: o Claude reescreve o take, o Veo gera 4 versões, você escolhe a melhor e o
             Reel é remontado. Tudo fica registrado para a ferramenta aprender.
           </p>
         </div>

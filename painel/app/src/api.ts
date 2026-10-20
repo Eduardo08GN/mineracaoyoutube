@@ -397,7 +397,7 @@ export interface TakeEditor {
   corte?: [number, number]; no_reel?: [number, number]; versoes: VersaoTake[];
   cur: {
     estado: EstadoCur; defeito?: string; etiquetas?: string[]; correcao?: { motivo?: string };
-    auto?: { v: number; motivo: string }; motivo?: string; erro?: string; tentativa?: number;
+    auto?: { v: number; motivo: string }; sugerida?: { v: number; motivo: string }; motivo?: string; erro?: string; tentativa?: number;
   };
 }
 export interface EditorIG {

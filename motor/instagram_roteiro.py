@@ -354,7 +354,10 @@ def regras_take(idioma, extras="", avatar=None):
 - "movimento": exactly two short English sentences, in positive phrasing (what she does, never what she does not
   do). The original line says what is being done in the source video: she does THAT action for real and
   completely, exactly as the source does it (if the source pours the salt into the blender, she pours it in;
-  never a half gesture that only lifts the item and puts it back).
+  never a half gesture that only lifts the item and puts it back). When she cuts, copy the source cut: which hand
+  holds the item and how, the knife direction (across the carrot into round slices, or along it into sticks) and
+  that each stroke of the knife makes exactly one piece, the pieces piling up one by one (nothing appears, splits
+  or multiplies on its own).
   1st sentence starts with "As she speaks," and describes the whole action from the "quadro" state to the
   "quadro_fim" state: name the hand (right hand, left hand or both hands), the contact point, the item with the
   SAME noun used in the "quadro", and what happens to it (it falls into, is poured into, is sprinkled over...).
@@ -478,7 +481,10 @@ def prompt_quadro(avatar, lugar, quadro):
     termina nesse quadro (com a jarra inclinada nas duas pontas, o gesto reversivel fica impossivel)."""
     return genero(f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
             f"zoom, the same framing and crop, and the same kind of items in the same places of the frame, as they are "
-            f"at the START of the step (nothing being poured yet). Replace the person with the person of the SECOND reference image (same face, hair and "
+            f"at the START of the step (nothing being poured yet). Each item and tool keeps the SAME orientation and "
+            f"direction as in the FIRST reference (a carrot lying left to right stays left to right, the knife blade "
+            f"crosses it at the same angle, a jar handle points the same side), and whatever is already cut or done "
+            f"there stays done. Replace the person with the person of the SECOND reference image (same face, hair and "
             f"clothes): {avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the "
             f"face, the hair, the headwear or the clothes. Keep the kind of place and setting of the FIRST reference "
             f"image (what is around and behind the items: a kitchen stays a kitchen, a garden bed stays a garden bed, a "
