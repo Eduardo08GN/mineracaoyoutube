@@ -86,7 +86,25 @@ def _conectar(diz=print):
         s = fh.FlowSession(flow_ivone.PROJETO, user_path=f"/u/{flow_ivone.CONTA}/", auth_index=flow_ivone.CONTA)
         s.bootstrap(cdp)
         _sessao, _cdp = s, cdp
+        _recaptcha_pronto()
     return _sessao
+
+
+def _recaptcha_pronto(espera=45):
+    """⛔ (20/10) logo depois de reconectar, a geracao caia em "grecaptcha.enterprise.execute is not a function": o
+    bootstrap recarrega a pagina e o Flow ainda nao tinha o reCAPTCHA (nem a copia que o flow_http guarda em __ow_re).
+    Espera um dos dois existir antes de mandar qualquer coisa."""
+    fim = time.time() + espera
+    while time.time() < fim:
+        try:
+            if _cdp.evaluate("typeof window.__ow_re === 'function' || (typeof grecaptcha !== 'undefined' && "
+                             "!!grecaptcha.enterprise && typeof grecaptcha.enterprise.execute === 'function')",
+                             await_promise=False):
+                return True
+        except Exception:                                                   # noqa: BLE001
+            pass
+        time.sleep(2)
+    return False
 
 
 def _reconectar(diz):
@@ -161,7 +179,7 @@ def gerar_videos(pedidos, pasta, modelo, diz):
             c = p[k]
             if c not in quadros:
                 quadros[c] = _upload(c, diz)
-    ops = {}
+    ops, lancou = {}, time.time()
     for p in pedidos:
         qi, qf = quadros[p["inicio"]], quadros[p["fim"]]
         saldo = fh.creditos(s)
@@ -175,7 +193,22 @@ def gerar_videos(pedidos, pasta, modelo, diz):
             raise SystemExit(f"a geração cobrou {saldo - rest} créditos: parei (só grátis)")
         ops[p["nome"]] = op_id
         diz(f"  {p['nome']} lançado")
-    feitos, falta = flow_ivone.esperar_e_baixar(s, ops, pasta, prazo=1200)
+    # ⛔ (20/10) um tropeco na ESPERA fazia a segunda chance relancar todos os takes (e cair no reCAPTCHA): agora
+    #    reconecta e segue esperando os MESMOS takes ja' lancados
+    feitos, falta = {}, dict(ops)
+    for tentativa in range(3):
+        try:
+            f, falta = flow_ivone.esperar_e_baixar(_conectar(), falta, pasta, prazo=1200)
+            feitos.update(f)
+            break
+        except Exception as e:                                              # noqa: BLE001
+            if tentativa == 2 or not _tropeco_recaptcha(e): raise
+            diz(f"  a espera tropeçou ({str(e)[:80]}): reconectando e seguindo com os mesmos {len(falta)} take(s)")
+            _reconectar(diz)
+            novo = lambda n: (os.path.isfile(os.path.join(pasta, n + ".mp4"))           # noqa: E731
+                              and os.path.getmtime(os.path.join(pasta, n + ".mp4")) >= lancou)
+            falta = {n: op for n, op in falta.items() if not novo(n)}
+            feitos.update({n: os.path.join(pasta, n + ".mp4") for n in ops if n not in falta})
     resultado = {}
     for nome in ops:
         cam = feitos.get(nome)

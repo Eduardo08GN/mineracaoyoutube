@@ -109,10 +109,29 @@ class Instagram:
     def _avisar(self, texto, tom=""):
         if self.n: self.n.avisar(texto, tom)
 
-    def _claude(self, pedido, timeout=600):
+    def _claude(self, pedido, timeout=600, pastas=()):
         if self._chamar: return self._chamar(pedido, timeout=timeout)
         import persona as _persona
-        return _persona.chamar_claude(pedido, timeout=timeout)
+        return _persona.chamar_claude(pedido, timeout=timeout, pastas=pastas)
+
+    def _quadros_origem(self, r, ns=None):
+        """{n: (origem_NN.jpg, origem_fim_NN.jpg)}: o inicio (15%) e o fim (90%) de cada trecho do video de origem,
+        os mesmos que os quadros do take usam. Sem a fonte, {}."""
+        p, origem = self._pasta_reel(r["id"]), r.get("takes_origem") or []
+        fonte = os.path.join(p, "fonte.mp4")
+        if not (origem and os.path.isfile(fonte)): return {}
+        saida = {}
+        for o in origem:
+            n = o["n"]
+            if ns is not None and n not in ns: continue
+            ini, fim = os.path.join(p, f"origem_{n:02d}.jpg"), os.path.join(p, f"origem_fim_{n:02d}.jpg")
+            try:
+                if not os.path.isfile(ini): self.midia.quadro(fonte, o["ini"] + 0.15 * (o["fim"] - o["ini"]), ini)
+                if not os.path.isfile(fim): self.midia.quadro(fonte, o["fim"] - 0.1 * (o["fim"] - o["ini"]), fim)
+            except Exception:                                              # noqa: BLE001
+                continue
+            if os.path.isfile(ini) and os.path.isfile(fim): saida[n] = (ini, fim)
+        return saida
 
     def _gerador(self):
         return self._backend_fixo or _backend.carregar(self.ajustes()["backend"])
@@ -699,12 +718,14 @@ class Instagram:
                 ouvido = ""
         alvo = {**t, **{k: base[k] for k in ("fala", "movimento", "quadro") if base.get(k)}}
         prompt = base.get("prompt") or _rot.prompt_video(a, r["idioma"], alvo["movimento"], alvo["fala"])
+        quadros = self._quadros_origem(r, {t["n"]})
         pedido = _cur.pedido_correcao(a, r["idioma"], r["cta"], alvo, cur.get("defeito", ""), cur.get("etiquetas", []),
-                                      ouvido, prompt, cur.get("manual"), _lic.regras_texto(lics, a["id"], r["idioma"]))
+                                      ouvido, prompt, cur.get("manual"), _lic.regras_texto(lics, a["id"], r["idioma"]),
+                                      quadros)
         self._log(f"instagram: o Claude está corrigindo o take {t['n']} de {r['id']}")
         corr = None
         for _ in range(2):                         # ⭐ uma segunda tentativa se vier fora do formato
-            corr = _cur.ler_correcao(self._claude(pedido))
+            corr = _cur.ler_correcao(self._claude(pedido, pastas=(self._pasta_reel(r["id"]),) if quadros else ()))
             if corr: break
         if not corr: raise RuntimeError(f"a correção do take {t['n']} veio fora do formato")
         corr["ouvido"] = ouvido
@@ -1083,11 +1104,17 @@ class Instagram:
         if not r.get("takes_origem"): raise RuntimeError("leia a fonte primeiro")
         a = self._avatar(r["avatar"])
         lics = self._licoes()
-        pedido = _rot.pedido_adaptacao(r["takes_origem"], r["idioma"], a, r["cta"], _lic.regras_texto(lics, a["id"], r["idioma"]))
+        p = self._pasta_reel(rid)
+        for arq in os.listdir(p):                  # ⛔ quadro velho seria de outra fala: roteiro novo = quadros novos
+            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?\.png|origem_(fim_)?\d{2}\.jpg)", arq):
+                os.remove(os.path.join(p, arq))
+        quadros = self._quadros_origem(r)
+        pedido = _rot.pedido_adaptacao(r["takes_origem"], r["idioma"], a, r["cta"], _lic.regras_texto(lics, a["id"], r["idioma"]),
+                                       quadros)
         self._log(f"instagram: o Claude está adaptando {rid}")
         lido = None
         for _ in range(2):                         # ⭐ uma segunda tentativa se vier fora do formato
-            lido = _rot.ler_adaptacao(self._claude(pedido), len(r["takes_origem"]))
+            lido = _rot.ler_adaptacao(self._claude(pedido, pastas=(p,) if quadros else ()), len(r["takes_origem"]))
             if lido: break
         if not lido: raise RuntimeError("a adaptação veio fora do formato")
         # ⭐ o lint das licoes de palavra aprovadas: deterministico, nao depende do Claude ter obedecido a regra
@@ -1097,10 +1124,6 @@ class Instagram:
             t["fala"], tr = _lic.lint_fala(t["fala"], palavras)
             trocas += [f"take {t['n']}: {x['de']} → {x['para'] or 'sai'}" for x in tr]
         self._alterar_reel(rid, lambda x: x.update(takes=lido["takes"], legenda_post=lido["legenda_post"]))
-        p = self._pasta_reel(rid)
-        for arq in os.listdir(p):                  # ⛔ quadro velho seria de outra fala: roteiro novo = quadros novos
-            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?\.png|origem_(fim_)?\d{2}\.jpg)", arq):
-                os.remove(os.path.join(p, arq))
         n_cta = sum(1 for t in lido["takes"] if t["cta"])
         self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - n_cta} + {n_cta} de CTA)")
         if trocas: self._registrar(rid, "lições no roteiro: " + "; ".join(trocas))
@@ -1761,7 +1784,7 @@ def _autoteste():
          Midia.baixados.count("https://www.instagram.com/reel/lote/") == 1
          and any("a mesma do lote" in x["texto"] for x in rw["registro"]))
     pw = [v["prompt"] for v in g.videos[n_vid:] if v["nome"].startswith("take_") and "German" in v["prompt"]]
-    caso("⭐ os takes do monge: alemao e no masculino", pw and all("He looks at the camera" in x and "She " not in x for x in pw))
+    caso("⭐ os takes do monge: alemao e no masculino", pw and all("he stays silent, looking at the camera" in x and "She " not in x for x in pw))
     caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "beppe", "cuca", "wendelin"})
     ig.editar_avatar(w["id"], {"arquivado": True})
     caso("⭐ avatar arquivado sai das sub-abas, e os arquivos e Reels dele ficam",

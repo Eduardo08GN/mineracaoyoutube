@@ -62,7 +62,7 @@ def ocorrencias(base):
     return saida
 
 
-def pedido_correcao(avatar, idioma, cta, take, defeito, etiquetas, ouvido, prompt, edicao=None, extras=""):
+def pedido_correcao(avatar, idioma, cta, take, defeito, etiquetas, ouvido, prompt, edicao=None, extras="", quadros=None):
     """O pedido ao Claude para refazer UM take. `take` = {"fala", "quadro", "movimento", "cta"}.
     `edicao` = {"fala"?, "movimento"?} escritos a mao no editor: entram como a intencao de quem revisa, nunca como
     texto final. ⛔ (18/10) o campo "movimento" recebia a descricao do ERRO em portugues ("ela esta' com tres
@@ -87,6 +87,7 @@ The take as it was generated:
 - movimento: {take.get("movimento", "")}
 - the full prompt sent to Veo: {prompt}
 
+{_rot.texto_quadros(quadros)}
 The reviewer watched it and reported (in Portuguese) — tags: {marcas}; note: "{defeito.strip()}"{mao}
 
 Rewrite the take to remove the reported defect with the smallest change that can work, keeping the meaning of

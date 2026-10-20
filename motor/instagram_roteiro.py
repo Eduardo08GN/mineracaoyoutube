@@ -48,7 +48,10 @@ FRACAS = {
 CAMERA = ("Single continuous shot, static locked-off camera holding the exact framing of the frame, "
           "no zoom, no cuts.")
 # ⭐ uma acao concreta antes da primeira palavra: o silencio do comeco vira gesto, e a primeira consoante sai inteira
-ENTRADA_DA_FALA = "She looks at the camera and takes a small breath, then"
+ENTRADA_DA_FALA = "For the first second she stays silent, looking at the camera, then"
+# ⭐ (20/10, Eduardo: "os objetos estao mudando pra outros como magica na mao dela"; o copo virou amassador)
+OBJETOS_FIXOS = ("Every object keeps its identity from the first to the last frame: nothing turns into another object, "
+                 "appears from nowhere or disappears.")
 # ⭐ o tempo que sobra depois da fala ganha uma acao silenciosa: tempo vazio e' o que o Veo enche repetindo a linha
 FALA_UMA_VEZ = "She says the line once, then stays silent, smiling softly at the camera, until the end of the shot."
 SEM_TEXTO_TELA = "Clean frame: no captions, no subtitles, no on-screen text."
@@ -101,7 +104,7 @@ TOMIKO = {
         ("engawa", "Corredor externo", "A narrow covered wooden veranda along the side of the farmhouse, potted plants "
          "on a low wooden stand, green garden visible, late afternoon light."),
     ],
-    "idioma": "pt", "cta": "livro", "genero": "f",
+    "idioma": "pt", "cta": "eu quero", "genero": "f",
     "mundo": ("her small farm (chácara) near Londrina, Paraná, Brazil: rustic dark wood, ceramic fermentation jars, "
               "potted herbs, red earth, warm natural light"),
 }
@@ -302,7 +305,8 @@ def regra_cta(cta, avatar=None):
     if cta.get("tipo") == "palavra":
         regra = (f'The call to action invites viewers to comment '
                  f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
-                 f'receive the full material. Write it exactly like that inside the line.')
+                 f'receive the full material. Write it exactly like that inside the line. Do not say where or how '
+                 f'it is sent (no DM, direct, inbox).')
     else:
         regra = ("The call to action is a plain, calm line saying the complete material is at the link in the "
                  "profile. No hype.")
@@ -351,7 +355,11 @@ def regras_take(idioma, extras="", avatar=None):
   hundred degrees" Celsius in Brazil, Mexico and Germany). Never promise something "free" unless the material
   below is free.
 - "quadro": one short English sentence naming the items of this exact step and where they are at the START of
-  the step, in front of her (ingredients, bowl, blender, pan, the finished food), concretely. Only the items and
+  the step, in front of her (ingredients, bowl, blender, pan, the finished food), concretely. Every item and tool
+  she uses in the step is named here for what it really is in the source (a drinking glass used to smash potatoes
+  is "a drinking glass", never "a masher"), and the SAME noun is used in "quadro_fim" and "movimento": nothing
+  turns into another item, appears or disappears. Never add an item the source does not show (no phone, no
+  screen). Only the items and
   her hands: never the camera, the framing, her face, hair or clothes (the shot itself is copied from the source).
 - "quadro_fim": one short English sentence with the SAME items at the END of the step, after the action is done
   (e.g. "the salt is inside the blender jar and the small dish is empty in her right hand"). If the step has no
@@ -377,10 +385,24 @@ REGRAS_CONTEUDO = """Content rules (mandatory):
 - Keep the original's own claims as the original says them (that is not a cure promise); add nothing of your own."""
 
 
-def pedido_adaptacao(takes, idioma, avatar, cta, extras=""):
+def texto_quadros(quadros):
+    """⭐⭐ (20/10) o Claude so' via a TRANSCRICAO e adivinhava os objetos (um celular no "me segue", um amassador no
+    lugar do copo): agora ele le os quadros do video de origem (o inicio e o fim de cada take) antes de escrever.
+    quadros = {n: (inicio.jpg, fim.jpg)}"""
+    if not quadros: return ""
+    linhas = "\n".join(f"- take {n}: start {a} ; end {b}" for n, (a, b) in sorted(quadros.items()))
+    return f"""
+Frames of the source video (open each one with the Read tool BEFORE writing; they are the truth about what is on
+screen in each take: the items, the tools, the hands, the action from start to end):
+{linhas}
+"quadro", "quadro_fim" and "movimento" describe what these frames show, never what the speech suggests.
+"""
+
+
+def pedido_adaptacao(takes, idioma, avatar, cta, extras="", quadros=None):
     """O pedido ao Claude: a fala de cada take no idioma de destino, na boca do avatar, + movimento + CTA.
 
-    cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}"""
+    cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}; quadros = {n: (inicio, fim)}"""
     info = IDIOMAS[idioma]
     linhas = "\n".join(f'{t["n"]}. ({t["fim"] - t["ini"]:.1f} s) {t["texto"]}' for t in takes)
     return f"""You adapt a short vertical video (Instagram Reel) for a new presenter. Return ONLY JSON.
@@ -390,7 +412,7 @@ Target language: {info["lingua"]}.
 
 Original takes (speech transcribed from the source video, any language):
 {linhas}
-
+{texto_quadros(quadros)}
 Write, for EACH original take, in the same order:
 {regras_take(idioma, extras, avatar)}
 Mark each take with "cta": false, except the call to action.
@@ -469,7 +491,8 @@ def prompt_video(avatar, idioma, movimento, fala, muda=False, extras=()):
     partes = [CAMERA, avatar.get("prefixo") or TOMIKO["prefixo"]]
     if fala.strip():
         partes += [genero(f'{ENTRADA_DA_FALA} says in {IDIOMAS[idioma]["lingua"]}, in {voz(avatar, idioma)}: ', avatar)
-                   + f'"{fala.strip()}" (no subtitles)', genero(movimento.strip(), avatar), genero(FALA_UMA_VEZ, avatar)]
+                   + f'"{fala.strip()}" (no subtitles)', genero(movimento.strip(), avatar), OBJETOS_FIXOS,
+                   genero(FALA_UMA_VEZ, avatar)]
         if muda: partes.append(MUDANCA_DURANTE_A_FALA)
     else:
         partes += [genero(movimento.strip(), avatar), genero("She stays silent.", avatar)]
@@ -492,7 +515,8 @@ def prompt_quadro(avatar, lugar, quadro):
     ⭐ Maos e itens EM REPOUSO: o quadro do meio do trecho de origem pode pegar um gesto no ar, e o take comeca e
     termina nesse quadro (com a jarra inclinada nas duas pontas, o gesto reversivel fica impossivel)."""
     return genero(f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
-            f"zoom, the same framing and crop, and the same kind of items in the same places of the frame, as they are "
+            f"zoom, the same framing and crop, the person at the SAME size in the frame (a close-up of head, chest and "
+            f"hands stays a close-up: never a full-body or wide shot), and the same kind of items in the same places of the frame, as they are "
             f"at the START of the step (nothing being poured yet). Each item and tool keeps the SAME orientation and "
             f"direction as in the FIRST reference (a carrot lying left to right stays left to right, the knife blade "
             f"crosses it at the same angle, a jar handle points the same side), and whatever is already cut or done "
@@ -620,12 +644,12 @@ def _autoteste():
     caso("voz em ingles", "American English" in voz(av, "en"))
     caso("⭐ personas: Tomiko e Beppe (pt), Cuca (es) e Wendelin (de), cada uma com 8 comodos, CTA e genero",
          {k: (p["idioma"], p["cta"], p["genero"], len(p["cenas"])) for k, p in PERSONAS.items()}
-         == {"tomiko": ("pt", "livro", "f", 8), "beppe": ("pt", "livro", "m", 8), "cuca": ("es", "libro", "f", 8),
+         == {"tomiko": ("pt", "eu quero", "f", 8), "beppe": ("pt", "livro", "m", 8), "cuca": ("es", "libro", "f", 8),
              "wendelin": ("de", "Buch", "m", 8)}
          and all(len({c[0] for c in p["cenas"]}) == 8 for p in PERSONAS.values()))
     pw = prompt_video(WENDELIN, "de", "As she speaks, her right hand lifts the jar.", "Komm her, ich zeige es dir.")
     caso("⭐ genero: o monge vira 'he/his' no texto nosso, e a fala em alemao fica intacta",
-         "He looks at the camera" in pw and "As he speaks, his right hand" in pw and '"Komm her, ich zeige es dir."' in pw
+         "he stays silent, looking at the camera" in pw and "As he speaks, his right hand" in pw and '"Komm her, ich zeige es dir."' in pw
          and "only his voice" in pw and "She " not in pw)
     caso("genero: as regras do take do monge no masculino; as da Tomiko como estavam",
          '"As he speaks,"' in regras_take("de", avatar=WENDELIN) and '"As she speaks,"' in regras_take("pt", avatar=TOMIKO)
