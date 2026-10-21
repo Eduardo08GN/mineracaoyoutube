@@ -56,6 +56,18 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 31 | Mixagem sem hierarquia | Camadas com nível alvo (música -20 LUFS, efeitos conforme o original), música abaixando sob os efeitos, `alimiter` e `loudnorm` em duas passadas (-14 LUFS, -1,5 dBTP). |
 | 32 | Entreguei sem conferir o áudio | Conferência antes de entregar: espectrograma por capítulo, picos, LUFS e etiquetas do classificador no vídeo novo comparadas às do original. |
 
+## 6. Erros da rodada de áudio (21/10/2026)
+
+| # | O que aconteceu | Regra |
+|---|---|---|
+| 33 | Caminho `/content/au` passado pelo Git Bash virou `C:/Program Files/Git/content/au` | Rodar com `MSYS_NO_PATHCONV=1` (ou pelo PowerShell) sempre que passar caminho da VM como argumento. |
+| 34 | Com o painel do terminal aberto, o texto das células ia para o terminal (célula do vigia rodou vazia) | Fechar o terminal antes de qualquer operação em célula; focar o `textarea` do editor antes de digitar. |
+| 35 | Clique forçado na célula vazia acertou o link "gere código com IA" e abriu o aviso de privacidade da IA do Colab | Clicar no canto da célula e focar o `textarea`. Aviso de termos/privacidade: recusar ("Cancelar"), nunca aceitar em nome do usuário. |
+| 36 | O "desconectado" era o aviso travando a tela: a VM seguia ligada (e cobrando) | Conferir pelo terminal (`hostname`) antes de concluir que a VM caiu. |
+| 37 | No Colab, `uv pip install` ignora o venv ativo e instala no Python do sistema | Sempre `uv pip install --python /caminho/do/venv/bin/python`. |
+| 38 | `torchaudio.save` (2.9) exige `torchcodec` e falhou depois de gerar | Gravar com `soundfile`. |
+| 39 | Pacote de música ficou na VM sem ser baixado | Cada etapa empacota e é baixada assim que termina; só então desligar. |
+
 ## 5. Ordem de produção de cada vídeo
 
 1. Leitura óptica a 10 fps + leitura do áudio (classificador + espectrograma) → ficha técnica e mapa de som.
