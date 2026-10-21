@@ -1,0 +1,20 @@
+{
+ "duracao": 457.5,
+ "musica": [],
+ "efeitos": [
+  {
+   "id": "s03",
+   "s": 60,
+   "e": 93,
+   "lufs": -21,
+   "prompt": "strong steady coastal wind on an empty beach, low rumble of distant surf, gusts"
+  },
+  {
+   "id": "s14",
+   "s": 313,
+   "e": 318,
+   "lufs": -20,
+   "prompt": "deep muffled underwater rumble, camera submerged, low pressure hum, bubbles"
+  }
+ ]
+}

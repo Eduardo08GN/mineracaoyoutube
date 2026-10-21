@@ -1,0 +1,167 @@
+{
+ "duracao": 457.5,
+ "silencio": [
+  [
+   434.5,
+   437.0
+  ]
+ ],
+ "musica": [
+  {
+   "id": "m01",
+   "s": 0,
+   "e": 7,
+   "lufs": -24,
+   "caption": "calm ambient electronic score, soft warm synth pads, airy and slow, gentle, peaceful sunny day, instrumental, no vocals"
+  },
+  {
+   "id": "m02",
+   "s": 56,
+   "e": 93,
+   "lufs": -33,
+   "caption": "minimal dark ambient drone, low synth pulse, uneasy and sparse, cinematic documentary, instrumental, no vocals"
+  },
+  {
+   "id": "m03",
+   "s": 93,
+   "e": 122,
+   "lufs": -21,
+   "caption": "spacious ambient new age music, singing bowl, shimmering synth pads, sense of wonder, slow, instrumental, no vocals"
+  },
+  {
+   "id": "m04",
+   "s": 122,
+   "e": 153,
+   "lufs": -34,
+   "caption": "tense cinematic underscore, deep low percussion pulse, dark drone, instrumental, no vocals"
+  },
+  {
+   "id": "m05",
+   "s": 153,
+   "e": 209,
+   "lufs": -20,
+   "caption": "hypnotic ambient electronic music, steady pulse, arpeggiated synth, slowly building energy, instrumental, no vocals"
+  },
+  {
+   "id": "m06",
+   "s": 209,
+   "e": 263,
+   "lufs": -21,
+   "caption": "curious light ambient electronic music, plucked synth, airy pads, gentle groove, instrumental, no vocals"
+  },
+  {
+   "id": "m07",
+   "s": 263,
+   "e": 293,
+   "lufs": -20,
+   "caption": "playful dreamy ambient music, marimba and glockenspiel, floating weightless feeling, soft pads, instrumental, no vocals"
+  },
+  {
+   "id": "m08",
+   "s": 293,
+   "e": 318,
+   "lufs": -27,
+   "caption": "dramatic rising tension, swelling strings and deep drums, building to a climax, cinematic, instrumental, no vocals"
+  },
+  {
+   "id": "m09",
+   "s": 318,
+   "e": 376,
+   "lufs": -19,
+   "caption": "epic cosmic electronic soundtrack, pulsing synth bass, wide shimmering pads, slow and grand, instrumental, no vocals"
+  },
+  {
+   "id": "m10",
+   "s": 376,
+   "e": 405,
+   "lufs": -21,
+   "caption": "dark throbbing electronic score, ominous synth bass, cinematic, slow, instrumental, no vocals"
+  },
+  {
+   "id": "m11",
+   "s": 405,
+   "e": 435,
+   "lufs": -20,
+   "caption": "melancholic sparse synth and soft piano, lonely, space, slow, emotional, instrumental, no vocals"
+  },
+  {
+   "id": "m12",
+   "s": 437,
+   "e": 457.5,
+   "lufs": -30,
+   "caption": "soft electric piano, gentle and reflective, minimal, calm ending, instrumental, no vocals"
+  }
+ ],
+ "efeitos": [
+  {
+   "id": "s01",
+   "s": 4,
+   "e": 44,
+   "lufs": -17,
+   "prompt": "busy tropical beach ambience, gentle ocean waves breaking on sand, distant crowd chatter and children playing, a few seagulls"
+  },
+  {
+   "id": "s02",
+   "s": 40,
+   "e": 56,
+   "lufs": -18,
+   "prompt": "seawater rushing quickly up a sandy beach, rising water sloshing, people shouting in the distance"
+  },
+  {
+   "id": "s03",
+   "s": 60,
+   "e": 93,
+   "lufs": -21,
+   "prompt": "strong steady coastal wind on an empty beach, low rumble of distant surf, gusts"
+  },
+  {
+   "id": "s04",
+   "s": 122,
+   "e": 152,
+   "lufs": -11,
+   "prompt": "violent earthquake, deep heavy rumble, ground cracking, brick house collapsing, debris and rubble falling"
+  },
+  {
+   "id": "s09",
+   "s": 222,
+   "e": 238,
+   "lufs": -29,
+   "prompt": "objects and people sliding and tumbling across pavement, scraping, crowd yelling, gusty wind"
+  },
+  {
+   "id": "s10",
+   "s": 240,
+   "e": 263,
+   "lufs": -28,
+   "prompt": "fountain water spraying very high and splashing, water droplets raining down on pavement"
+  },
+  {
+   "id": "s11",
+   "s": 263,
+   "e": 293,
+   "lufs": -32,
+   "prompt": "eerie soft wind, objects drifting in the air, soft whooshes, distant surprised screams"
+  },
+  {
+   "id": "s12",
+   "s": 299,
+   "e": 314,
+   "lufs": -13,
+   "prompt": "massive tsunami wave approaching, enormous roaring water getting louder, deep rumble, spray"
+  },
+  {
+   "id": "s14",
+   "s": 313,
+   "e": 318,
+   "lufs": -20,
+   "prompt": "deep muffled underwater rumble, camera submerged, low pressure hum, bubbles"
+  },
+  {
+   "id": "s13",
+   "s": 378,
+   "e": 399,
+   "lufs": -15,
+   "prompt": "deep tectonic rumble, lava bubbling and hissing, rock tearing apart, low booms"
+  }
+ ]
+}

@@ -93,9 +93,9 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 53 | Na G4 (HalfFloat), os capítulos da costa saíam pretos com o painel visível (orla, cidade até paredão); praia, Oregon e espaço normais | Algum pixel NaN/Inf da cena: o desfoque em mipmap do bloom espalha o NaN pela tela toda. Achado com stills de chaves `--props='{"dbg":"semBloom"}'`, `semAO`, `semFonte`, `fb8`. Regra: **passe de saneamento (NaN → 0, `clamp` 0..32) antes do bloom**. Antes do render longo, testar stills de cada mundo **na G4**, não só no PC. |
 | 54 | Pacote em uma célula de 154 KB travou o navegador; em pedaços, a célula rodou duas vezes e duplicou o pedaço | `g4.py enviar_grande`: pedaços de 45 mil caracteres, cada um num arquivo próprio aberto com `'w'`. O editor do Colab reindenta laço colado: reconstruir numa linha só. |
 | 55 | Dia e noite fora do ritmo do original | Ciclo tirado da luminância medida do original a 10 fps (`ciclo_original.json`), não de fórmula. |
+| 56 | Cor diferente do original mesmo com cena parecida | LUT 3D de transferência de cor (MKL) dos nossos quadros para os do original, por mundo, com painel e legenda mascarados (`stack/lut_mkl.py`). |
 | 57 | Gotas dos jatos andavam para trás a 7x a velocidade: fase `fract(t / vida)` com a vida mudando a cada quadro (gravidade caindo) | Fase integrada na CPU (`faseJato`: soma de dt/vida), passada como uniforme. Nunca dividir o tempo absoluto por um período que varia. |
 | 58 | Paredão de água passava da borda de cima e, claro demais, parecia céu | Crista no terço de cima com céu acima dela; corpo verde-azulado escuro com estrias, crista branca. Conferir com quadro do original lado a lado. |
-| 56 | Cor diferente do original mesmo com cena parecida | LUT 3D de transferência de cor (MKL) dos nossos quadros para os do original, por mundo, com painel e legenda mascarados (`stack/lut_mkl.py`). |
 
 ## 5. Ordem de produção de cada vídeo
 
