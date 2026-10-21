@@ -97,6 +97,21 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 57 | Gotas dos jatos andavam para trás a 7x a velocidade: fase `fract(t / vida)` com a vida mudando a cada quadro (gravidade caindo) | Fase integrada na CPU (`faseJato`: soma de dt/vida), passada como uniforme. Nunca dividir o tempo absoluto por um período que varia. |
 | 58 | Paredão de água passava da borda de cima e, claro demais, parecia céu | Crista no terço de cima com céu acima dela; corpo verde-azulado escuro com estrias, crista branca. Conferir com quadro do original lado a lado. |
 
+## 9. Erros da produção do vídeo 2 na pipeline nova (21/10/2026)
+
+| # | O que aconteceu | Regra |
+|---|---|---|
+| 59 | O terminal da VM congelou (painel em branco) e os comandos via `term.py` não rodavam, sem erro | `g4.py rodar "<cmd>"` dispara o comando destacado por célula e `g4.py ler <arquivo>` lê a saída; usar quando o terminal falhar. |
+| 60 | A célula do `rodar` executou duas vezes e subiram **dois renders** na mesma pasta, um apagando os quadros do outro | Todo job longo disparado por célula vai com `flock -n /content/<nome>.lock`. Conferir no status se o marcador de início apareceu uma vez só. |
+| 61 | `pkill -f render_seq.sh` dentro de um `bash -c` matou o próprio comando (a linha dele contém o texto) | Para limpar, `pkill -f remotion; pkill -f chrome` e conferir com `ps` depois; nunca o nome do script dentro do mesmo comando. |
+| 62 | Depois de reiniciar o Dolphin, a conta Google do perfil apareceu desconectada | Login é do Eduardo (nunca digitar senha); pedir e seguir com o que não depende da G4. |
+| 63 | Chama em billboard estreita e alta virava "cone de trânsito" de longe, e com força > 1 ficava creme depois do AgX | Língua larga na base e fina no topo, balanço crescendo com a altura, duas camadas de ruído, bordas macias, cor ≤ 1; tufo de 3 línguas baixas por foco; coluna grande em aditivo. |
+| 64 | Luz pontual entre as palmas lavava os braços de branco | Mangas em material sem luz (`meshBasicMaterial` preto), como no original. |
+| 65 | LUT de um vídeo aplicada em outro (copiada junto com o projeto) | `luts.json` começa vazio em cada vídeo; gerar com `lut_mkl.py` a partir de stills **da G4** do próprio vídeo. |
+| 66 | Os braços sumiram na água no render completo, mas apareciam em stills e em sequências curtas | Na mesma aba, de mãos baixas (maos4) para braços erguidos (água) o React reaproveitava os objetos do outro modo. Componente que troca de forma por modo leva `key` do modo (força remontar). Testar **sequência que atravessa a troca**, não só still. |
+| 67 | O render das 20:08 saiu de código velho: uma célula antiga reexecutou sozinha (o Colab avisava "atualizado remotamente ou em outra guia") | Limpar as células antes de cada disparo longo; tudo em uma cadeia só, sem usar o Colab em paralelo. |
+| 68 | O download de 300 MB falhava quando eu lia o status por célula ao mesmo tempo (e o `timeout 590` matava antes do fim) | Download sozinho, sem timeout curto, sem outra célula em paralelo. |
+
 ## 5. Ordem de produção de cada vídeo
 
 1. Leitura óptica a 10 fps + leitura do áudio (classificador + espectrograma) → ficha técnica e mapa de som.
