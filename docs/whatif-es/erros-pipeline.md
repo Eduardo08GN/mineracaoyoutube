@@ -68,9 +68,24 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 38 | `torchaudio.save` (2.9) exige `torchcodec` e falhou depois de gerar | Gravar com `soundfile`. |
 | 39 | Pacote de música ficou na VM sem ser baixado | Cada etapa empacota e é baixada assim que termina; só então desligar. |
 
+## 7. Erros da madrugada de 21/10/2026 (vídeos 2, 3 e 4 e o flicker do vídeo 1)
+
+| # | O que aconteceu | Regra |
+|---|---|---|
+| 40 | Flicker: em quadros soltos o céu saía preto, as mangas sumiam e os bonecos ficavam brancos (o Eduardo viu no vídeo 1) | Acontece com várias abas do Chrome disputando a GPU, sobretudo nos primeiros quadros de uma aba nova. Render em quadros JPEG com **32 Chromes de 1 aba** (`--concurrency=1`), detector de glitch (área grande que difere dos dois vizinhos, que são parecidos entre si) e re-render de cada suspeito **com 3 quadros de aquecimento antes**, ficando com a versão mais coerente (`vm_comum/render_seq.sh` + `reparar.py`). Depois, varrer o mp4 final com `glitch.py`. |
+| 41 | Re-renderizar o quadro suspeito sozinho (`remotion still`) piorou: o quadro isolado é justamente o "primeiro quadro de aba nova" | Reparo sempre com aquecimento (`--frames=k-3..k`), nunca quadro isolado. |
+| 42 | Detector com limiar baixo marcou perna andando, fogo e partícula como glitch (700+ suspeitos) | Limiar por área (>150 px em 192×108) e painel e legenda mascarados. Movimento legítimo vem em sequência de quadros; glitch é quadro isolado. |
+| 43 | Download trouxe o arquivo errado (o vídeo 2 no lugar do vídeo 1): o texto novo caiu na célula do download anterior e o Colab baixou o velho primeiro | `g4.py baixar` limpa as células antes. Conferir o nº de quadros do arquivo baixado (`ffprobe -count_packets`). |
+| 44 | Remotion bundle não segue symlink em `public/` (textura "Could not load") | Copiar as texturas (`cp`), nunca `ln -s`. `node_modules` em symlink funciona. |
+| 45 | `ligar` travou: a célula antiga do `unassign` ficou na fila e a VM não reconectava sozinha | `g4.py ligar` limpa as células e clica no botão de conectar antes de mandar o vigia. |
+| 46 | `freezeframes` do ffmpeg pede duas entradas | `-filter_complex "[0:v]split[a][b];[a][b]freezeframes=first=N:last=N:replace=N-1"` para trocar um quadro com glitch pelo anterior. |
+| 47 | Planeta "sem oceanos" continuava com cara de mar: o halo azul da atmosfera e o fresnel pintavam o fundo cinza de azul | Ao secar, tirar o azul do fresnel e do halo junto com a cor da água. |
+
 ## 5. Ordem de produção de cada vídeo
 
 1. Leitura óptica a 10 fps + leitura do áudio (classificador + espectrograma) → ficha técnica e mapa de som.
 2. Cenas testadas no PC com quadros soltos em meia resolução.
-3. G4: vigia → pacote → disparo pelo terminal → render em partes + áudio em paralelo → recompressão → download → desligar (conferido).
-4. Conferência de imagem e áudio contra o original antes de entregar.
+3. G4: vigia → pacote → disparo pelo terminal → render em quadros (32 Chromes de 1 aba) + reparo de glitch + áudio em paralelo → encode → download (conferir nº de quadros) → desligar (conferido).
+4. Conferência de imagem (folha de contato + `glitch.py`) e de áudio contra o original antes de entregar.
+
+Scripts em `D:\whatif_es`: `analisar.py` (folhas a 10 fps, OCR das legendas, mapa de som), `g4.py`/`term.py` (G4), `vm_comum/render_seq.sh` + `reparar.py` (render sem flicker), `glitch.py` (varredura do mp4 final), `<video>/audio/mixar.py` (mixagem).
