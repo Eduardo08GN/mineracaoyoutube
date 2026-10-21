@@ -1,0 +1,28 @@
+{
+ "musica": {
+  "so_original": 14,
+  "so_produzido": 52,
+  "ambos": 121
+ },
+ "agua": {
+  "so_original": 39,
+  "so_produzido": 12,
+  "ambos": 29
+ },
+ "fogo/estrondo": {
+  "so_original": 8,
+  "so_produzido": 15,
+  "ambos": 1
+ },
+ "veiculo/vento": {
+  "so_original": 51,
+  "so_produzido": 35,
+  "ambos": 60
+ },
+ "gente": {
+  "so_original": 26,
+  "so_produzido": 0,
+  "ambos": 1
+ },
+ "correlacao_volume": 0.5750024132017716
+}
