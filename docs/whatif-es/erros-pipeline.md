@@ -83,6 +83,20 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 48 | Câmera a 190 m (Miami): em quadros alternados a areia sob o mar aparecia em dente de serra (briga de profundidade com near 0,5) | `near = max(0,5, altura_da_câmera / 40)` em toda cena de costa. |
 | 49 | Vapor sobre o mar sumiu: sprites com `renderOrder` negativo são desenhados antes do mar transparente, que pinta por cima | Sprites sobre água com `renderOrder` maior que o do mar e base acima da linha d'água (senão o quadrado é cortado em diagonal). Textura de nuvem macia (`cloud.png`), nunca manchas que encostam na borda do canvas. |
 
+## 8. Erros da refação do vídeo 1 com o look cinematográfico (21/10/2026)
+
+| # | O que aconteceu | Regra |
+|---|---|---|
+| 50 | Com o `EffectComposer` do `@react-three/postprocessing`, o primeiro quadro de cada aba (e todo still) saía preto | Ele só fica pronto alguns ciclos depois de montar. Usar compositor próprio, montado de forma síncrona (`look/Look.tsx`). |
+| 51 | Shaders próprios ficaram lavados e o paredão sumiu depois do compositor | Eles escreviam cor já em sRGB; pelo compositor o buffer é linear. Terminar cada shader próprio com `pow(rgb, 2.2)`. |
+| 52 | No PC (Chrome com SwiftShader), buffer HalfFloat saía preto | Detectar WebGL por software (`WEBGL_debug_renderer_info`) e usar buffer de 8 bits e sem AO só nesse caso. |
+| 53 | Na G4 (HalfFloat), os capítulos da costa saíam pretos com o painel visível (orla, cidade até paredão); praia, Oregon e espaço normais | Algum pixel NaN/Inf da cena: o desfoque em mipmap do bloom espalha o NaN pela tela toda. Achado com stills de chaves `--props='{"dbg":"semBloom"}'`, `semAO`, `semFonte`, `fb8`. Regra: **passe de saneamento (NaN → 0, `clamp` 0..32) antes do bloom**. Antes do render longo, testar stills de cada mundo **na G4**, não só no PC. |
+| 54 | Pacote em uma célula de 154 KB travou o navegador; em pedaços, a célula rodou duas vezes e duplicou o pedaço | `g4.py enviar_grande`: pedaços de 45 mil caracteres, cada um num arquivo próprio aberto com `'w'`. O editor do Colab reindenta laço colado: reconstruir numa linha só. |
+| 55 | Dia e noite fora do ritmo do original | Ciclo tirado da luminância medida do original a 10 fps (`ciclo_original.json`), não de fórmula. |
+| 57 | Gotas dos jatos andavam para trás a 7x a velocidade: fase `fract(t / vida)` com a vida mudando a cada quadro (gravidade caindo) | Fase integrada na CPU (`faseJato`: soma de dt/vida), passada como uniforme. Nunca dividir o tempo absoluto por um período que varia. |
+| 58 | Paredão de água passava da borda de cima e, claro demais, parecia céu | Crista no terço de cima com céu acima dela; corpo verde-azulado escuro com estrias, crista branca. Conferir com quadro do original lado a lado. |
+| 56 | Cor diferente do original mesmo com cena parecida | LUT 3D de transferência de cor (MKL) dos nossos quadros para os do original, por mundo, com painel e legenda mascarados (`stack/lut_mkl.py`). |
+
 ## 5. Ordem de produção de cada vídeo
 
 1. Leitura óptica a 10 fps + leitura do áudio (classificador + espectrograma) → ficha técnica e mapa de som.
