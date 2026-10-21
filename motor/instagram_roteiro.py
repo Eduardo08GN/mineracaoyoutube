@@ -105,6 +105,7 @@ TOMIKO = {
          "on a low wooden stand, green garden visible, late afternoon light."),
     ],
     "idioma": "pt", "cta": "eu quero", "genero": "f",
+    "cta_fala": "Escreva eu quero, aqui embaixo e te mando o guia completo.",
     "mundo": ("her small farm (chácara) near Londrina, Paraná, Brazil: rustic dark wood, ceramic fermentation jars, "
               "potted herbs, red earth, warm natural light"),
 }
@@ -300,9 +301,22 @@ def cortar(palavras, idioma="pt", max_s=MAX_S_TAKE, max_palavras=None):
     return takes
 
 
+def cta_fala(avatar, cta=None):
+    """A frase FIXA do take do CTA do avatar (ficha ou avatar), ou "" quando o Claude escreve. ⛔ So' vale quando a
+    palavra do CTA do Reel esta' nela (um Reel com "umeboshi" nao pode pedir "eu quero")."""
+    if not avatar: return ""
+    fixa = (avatar.get("cta_fala") or PERSONAS.get(avatar.get("persona", ""), {}).get("cta_fala") or "").strip()
+    palavra = ((cta or {}).get("palavra") or "").strip().lower()
+    if fixa and cta is not None and (cta.get("tipo") != "palavra" or (palavra and palavra not in fixa.lower())): return ""
+    return fixa
+
+
 def regra_cta(cta, avatar=None):
     """A regra do take do CTA (o mesmo texto no roteiro e no corretor da curadoria)."""
-    if cta.get("tipo") == "palavra":
+    fixa = cta_fala(avatar, cta)
+    if fixa:
+        regra = f'The call to action take says exactly this line, word for word, in "fala": "{fixa}"'
+    elif cta.get("tipo") == "palavra":
         regra = (f'The call to action invites viewers to comment '
                  f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
                  f'receive the full material. Write it exactly like that inside the line. Do not say where or how '
@@ -342,7 +356,8 @@ def regras_take(idioma, extras="", avatar=None):
     return genero(f"""- "fala": what the presenter says in {lingua}: what the ORIGINAL line says, sentence by sentence and in the
   same order, with the same facts, claims, hook and rhythm. Only the wording changes, never the content: do not add
   any idea, benefit, sentence or persona color that the original line does not have (no "tradition", "grandma",
-  "family", "balance", "strengthen" unless the original says it), and do not soften, swap or drop a claim of the
+  "family", "balance", "strengthen" unless the original says it; the only exception is the closing lines described
+  below), and do not soften, swap or drop a claim of the
   original. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
   a word that asks for continuation (articles, prepositions, conjunctions). No dash characters of any kind inside the
   line. Numbers in words. Prefer common, easy-to-pronounce words: avoid words with a repeated syllable and word
@@ -416,11 +431,12 @@ Original takes (speech transcribed from the source video, any language):
 Write, for EACH original take, in the same order:
 {regras_take(idioma, extras, avatar)}
 Mark each take with "cta": false, except the call to action.
-If original takes are the call to action (comment a word, get a guide or recipes by DM, follow first), they stay
-the call to action of this video, translated just as faithfully, with only two swaps: the word to comment becomes
-the word below, and what is sent becomes the material below. Mark those takes "cta": true and do NOT add any take.
-Only when no original take is a call to action, add ONE extra take at the end for it, with "cta": true and the
-same fields. {regra_cta(cta, avatar)}
+The only light adaptation is at the end: if original takes are themselves a call to action (comment a word, get a
+guide by DM, follow first), rewrite each of them as a short warm closing line of the presenter, in her persona and
+in the same spirit as the original (who she is, her tradition, the care in her cooking; e.g. "Essas são as
+tradições que eu passo de geração em geração, com muito carinho."), with no call to action in them ("cta": false).
+Then add ONE extra take at the end for the call to action, with "cta": true and the same fields.
+{regra_cta(cta, avatar)}
 
 {REGRAS_CONTEUDO}
 
@@ -573,7 +589,14 @@ def _autoteste():
     caso("⭐ frases curtas se juntam num take so'", len(cortar(curtas, "pt")) == 1)
     ped = pedido_adaptacao([{"n": 1, "ini": 0, "fim": 3, "texto": "x"}], "pt", {}, {"tipo": "bio"})
     caso("⭐ pedido: a fala e' a do original (nada acrescentado) e o CTA da fonte vira o nosso, sem take a mais",
-         "sentence by sentence" in ped and "do NOT add any take" in ped and "Only the wording changes" in ped)
+         "sentence by sentence" in ped and "warm closing line" in ped and "add ONE extra take" in ped
+         and "Only the wording changes" in ped)
+    caso("⭐ CTA fixo da Tomiko: a frase vai na regra, palavra por palavra",
+         cta_fala({"persona": "tomiko"}) == "Escreva eu quero, aqui embaixo e te mando o guia completo."
+         and "Escreva eu quero, aqui embaixo e te mando o guia completo." in regra_cta({"tipo": "palavra", "palavra": "eu quero"},
+                                                                                     {"persona": "tomiko"})
+         and cta_fala({"persona": "tomiko"}, {"tipo": "palavra", "palavra": "umeboshi"}) == ""
+         and cta_fala({"persona": "beppe"}) == "")
     d3 = [{"fala": f"f{i}", "quadro": "q", "movimento": "m", "cta": i >= 2} for i in (1, 2, 3)]
     l3 = ler_adaptacao(json.dumps({"takes": d3}), 3)
     caso("⭐ ler_adaptacao: CTA da fonte = os takes marcados, sem take a mais", [t["cta"] for t in l3["takes"]] == [False, True, True])

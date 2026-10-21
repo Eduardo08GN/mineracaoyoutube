@@ -342,7 +342,7 @@ class Instagram:
 
     def editar_avatar(self, aid, campos):
         def f(a):
-            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta", "mundo"):
+            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta", "mundo", "cta_fala"):
                 if k in campos: a[k] = str(campos[k]).strip()
             if "persona" in campos:
                 if campos["persona"] and campos["persona"] not in _rot.PERSONAS: raise ValueError("ficha de avatar desconhecida")
@@ -1119,8 +1119,10 @@ class Instagram:
         if not lido: raise RuntimeError("a adaptação veio fora do formato")
         # ⭐ o lint das licoes de palavra aprovadas: deterministico, nao depende do Claude ter obedecido a regra
         palavras, trocas = _lic.relevantes(lics, a["id"], r["idioma"], "palavra"), []
+        fixa = _rot.cta_fala(a, r["cta"])
         for t in lido["takes"]:
             t["video"] = ""
+            if fixa and t["cta"]: t["fala"] = fixa
             t["fala"], tr = _lic.lint_fala(t["fala"], palavras)
             trocas += [f"take {t['n']}: {x['de']} → {x['para'] or 'sai'}" for x in tr]
         self._alterar_reel(rid, lambda x: x.update(takes=lido["takes"], legenda_post=lido["legenda_post"]))
@@ -1729,7 +1731,9 @@ def _autoteste():
     caso("⭐ CTA de frase curta guardado em minusculas", r3["cta"]["palavra"] == "eu quero")
     ig.esperar(120)
     r3 = ig.reel(r3["id"])
-    caso("roteiro: o CTA de frase vai inteiro no pedido", '"eu quero,"' in pedidos[-1])
+    caso("⭐ roteiro: a frase fixa do CTA da Tomiko vai no pedido e no take do CTA",
+         "Escreva eu quero, aqui embaixo e te mando o guia completo." in pedidos[-1]
+         and r3["takes"][-1]["cta"] and r3["takes"][-1]["fala"] == "Escreva eu quero, aqui embaixo e te mando o guia completo.")
     caso("⭐ licao de palavra no roteiro: na regra e no lint", 'Never use the word "Tomiko"' in pedidos[-1]
          and all("Tomiko" not in t["fala"] for t in r3["takes"]) and "Fala 1 da Tomi" in r3["takes"][0]["fala"]
          and any("lições no roteiro" in x["texto"] for x in r3["registro"]))
