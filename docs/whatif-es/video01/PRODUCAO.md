@@ -16,7 +16,7 @@ Tudo aqui foi executado e conferido em 20–21/10/2026. Os erros que custaram te
 1. [Visão geral](#1-visão-geral)
 2. [Mapa de pastas](#2-mapa-de-pastas)
 3. [Etapa 1 — Leitura do original](#3-etapa-1--leitura-do-original)
-4. [Etapa 2 — Versão em espanhol (texto, painel, física)](#4-etapa-2--versão-em-espanhol-texto-painel-física)
+4. [Etapa 2 — Versão em espanhol (texto, painel, física, adaptação cultural, take inédito)](#4-etapa-2--versão-em-espanhol-texto-painel-física-adaptação-cultural-take-inédito)
 5. [Etapa 3 — A cena 3D](#5-etapa-3--a-cena-3d)
 6. [Etapa 4 — Look cinematográfico](#6-etapa-4--look-cinematográfico)
 7. [Etapa 5 — Teste local](#7-etapa-5--teste-local)
@@ -39,10 +39,15 @@ O canal reproduz, em espanhol e com o máximo de fidelidade, cada vídeo do What
 mesmo painel e mesma trilha sonora em espírito. Nada é copiado: a cena é refeita em 3D próprio, a música e os efeitos são gerados,
 os textos são reescritos em espanhol com unidades métricas.
 
+Duas coisas são **de propósito diferentes do original** (regras do canal desde 21/10/2026, seções 4.2 e 4.3):
+- **adaptação cultural**: lugares e referências dos EUA viram lugares e referências do mundo hispânico;
+- **take inédito de 30 s**: uma cena nova, no meio ou perto do fim, com um fato curioso e contraintuitivo sobre o tema e o porquê.
+
 ```mermaid
 flowchart LR
   A[Original no YouTube] --> B[Leitura óptica 10 fps<br/>OCR do painel e das legendas<br/>mapa de som PANNs]
-  B --> C[Ficha técnica + roteiro.ts<br/>legendas.json + fisica.ts]
+  B --> X[Adaptação cultural<br/>+ take inédito de 30 s]
+  X --> C[Ficha técnica + roteiro.ts<br/>legendas.json + fisica.ts]
   C --> D[Cena 3D R3F + Remotion<br/>mundos costa / oregon / espaço]
   D --> E[Look: AO, bloom, AgX,<br/>LUT do original, vinheta]
   E --> F[Stills locais<br/>meia resolução]
@@ -131,7 +136,9 @@ Quadros do original e nossos nos mesmos instantes, por mundo (costa, oregon, esp
 
 ---
 
-## 4. Etapa 2 — Versão em espanhol (texto, painel, física)
+## 4. Etapa 2 — Versão em espanhol (texto, painel, física, adaptação cultural, take inédito)
+
+### 4.1 Texto, painel e física
 
 - **Título:** "¿Qué pasaría si la Tierra girara cada vez más rápido y no pudiera parar?" Descrição com capítulos e fontes em
   `titulo_e_descricao.txt` (cópia em [`titulo_e_descricao.txt`](titulo_e_descricao.txt)).
@@ -154,6 +161,94 @@ Quadros do original e nossos nos mesmos instantes, por mundo (costa, oregon, esp
   - `faseJato(t, v, gMin, vidaMax)`: fase das gotas dos jatos, **integrada** (seção 5.6).
 - Telas finais (7:15 em diante): corte seco para fundo `#0b0d12`, textos no **alto** (o terço de baixo fica livre para os cards do YouTube):
   "Empezaste con un día de 24 horas." → "¿Algo de esto es real?" com o parágrafo do que é real e do que não é → "Ahora mira qué pasaría si te volvieras más pesado." + "SUSCRÍBETE…".
+
+
+### 4.2 Adaptação cultural (regra do canal, vale para todos os vídeos)
+
+O original é feito para o público dos EUA; o nosso fala espanhol (México, Colômbia, Argentina, Espanha, Peru, Venezuela, Chile…).
+Toda referência geográfica ou cultural americana vira uma do mundo hispânico, de forma **direta e reconhecível** para quem assiste.
+É uma adaptação **pequena**: troca lugar, nome, landmark, placa, comparação e unidade. **Não** muda a história, os tempos, a câmera
+nem a física.
+
+**Como fazer (na ficha técnica, antes do roteiro):**
+1. **Inventário**: listar todo elemento que aponta para os EUA — cidade e local no painel e nas legendas, landmark (Haystack Rock,
+   píer de Santa Monica), unidade (lb, mph, °F, pés), comparação (aviões, esportes, marcas), objeto típico (ônibus escolar amarelo,
+   placa de carro, bandeira, hidrante), texto em cena, fatos da descrição.
+2. **Escolher o substituto** com estes critérios, nesta ordem:
+   - **a física continua valendo**: mesma faixa de latitude (o peso e a inclinação dependem dela), mesmo tipo de lugar (costa, montanha,
+     deserto, cidade grande), mesmo clima se o vídeo depender dele;
+   - **reconhecível de imediato** pelo público hispânico (landmark com foto famosa, cidade grande, praia conhecida);
+   - **alternar Espanha e América Latina** ao longo do canal (a América Latina é a maior parte do público; o México é o maior país);
+     num mesmo vídeo, de preferência mais de um país;
+   - dá para modelar em low-poly barato (silhueta marcante vale mais que detalhe).
+3. **Reconferir os números**: latitude nova em `cap.lat` (peso e inclinação se recalculam sozinhos em `fisica.ts`), dimensões e altura
+   do landmark, distâncias; fonte de cada número nova na descrição.
+   No **hemisfério sul**, "para o equador" é para o **norte** e o sol do meio-dia fica ao norte: virar a orientação da cena.
+4. **Ajustar o mundo 3D**: silhueta do landmark, placas em espanhol ("SALVAVIDAS", "PLAYA", "PELIGRO"), placas de carro, bandeira,
+   comércio de praia típico (chiringuito na Espanha, puesto de cocos ou de micheladas na América Latina), arquitetura local.
+5. **Texto**: espanhol neutro (tú, nunca vosotros; sem gíria regional), números no padrão do canal (milhar com ponto: 1.670 km/h).
+6. **Título, descrição e capítulos** citam os lugares novos (ajuda a busca local: "Ciudad de México", "Madrid", "Chile"…).
+
+**Exemplo — vídeo 1 (proposta; a versão entregue ainda usa as referências americanas):**
+
+| No original (EUA) | Por que está no vídeo | Substituto | Física |
+|---|---|---|---|
+| "The equator" (cidade de praia genérica) | onde o efeito é máximo | **EL ECUADOR · ATACAMES, ECUADOR** (praia equatorial, 0,9° N): o equador no Equador | lat ≈ 0, igual |
+| Cidade costeira vista de drone (2:33) | dias passando em segundos | **ACAPULCO, MÉXICO** (16,9° N): orla de prédios altos, reconhecível | lat 16,9: o peso muda 1–2 kg, num trecho em que ninguém flutua ainda |
+| Cannon Beach, Oregon + Haystack Rock (45,9° N) | latitude alta: o Pacífico recua | **SAN JUAN DE GAZTELUGATXE, ESPAÑA** (43,4° N): ilhota rochosa com a escadaria, silhueta famosa. Alternativa no sul: **Península Valdés, Argentina** (42,8° S) | lat ~43–46: o mar recua igual |
+| Santa Monica, píer com roda-gigante (34° N) | latitude média: o chão "inclina" | **VIÑA DEL MAR, CHILE** (33,0° S), Muelle Vergara | lat ≈ 33: inclinação praticamente igual (no hemisfério sul inclina para o norte) |
+| "Haystack Rock mide 72 m" (descrição) | fato do lugar | dados da ilhota de Gaztelugatxe (conferir em fonte oficial antes de publicar) | — |
+| "YOU WEIGH 171 LB", mph | unidade | kg e km/h (já feito) | — |
+
+Com isso o vídeo 1 passa por Equador, México, Espanha e Chile sem mudar uma linha da história.
+
+### 4.3 Take inédito de 30 s (regra do canal, vale para todos os vídeos)
+
+Todo vídeo ganha **mais 30 s (900 quadros) de uma cena que não existe no original**, com um fato **curioso e contraintuitivo** sobre o
+tema, **explicando o porquê** (física, química ou biologia). É o que o nosso vídeo tem a mais que o original: algo que agrega e que o
+espectador não esperava.
+
+**Onde entra:** na porção do meio ou mais para o final, entre dois capítulos, num ponto em que a história permite uma pausa.
+Nunca no primeiro minuto (o gancho é o do original) e nunca depois das telas finais.
+
+**Critérios do fato** (todos):
+- ligado diretamente ao tema do vídeo;
+- **não óbvio**: a maioria apostaria no contrário ou nunca pensou nisso;
+- **verdadeiro e verificável** em pelo menos 2 fontes confiáveis (NASA, NOAA, USGS, institutos geográficos, artigo revisado, livro-texto);
+  as fontes vão na descrição;
+- o **porquê** cabe em 3–4 frases curtas;
+- **mostrável**: a cena demonstra o fato (comparação visual, escala, corte, gráfico simples em cena), não é só texto sobre fundo.
+
+**Estrutura dos 30 s:**
+- 0–3 s: entra com a mesma fusão de 0,6 s dos outros capítulos; a primeira legenda afirma o fato surpreendente;
+- 3–22 s: a demonstração visual, com 2–3 legendas explicando o porquê (uma a cada 5–7 s, no mesmo estilo das legendas do vídeo);
+- 22–30 s: o número que fecha o fato (no painel ou num rótulo em cena) e a volta para o fio do vídeo.
+- Painel: fica **congelado** no valor do momento da inserção (a história pausa e retoma de onde parou).
+- Som: cue de música própria no `mapa.json` e efeitos se a cena pedir.
+
+**Implementação na pipeline:**
+- `roteiro.ts`: capítulo novo `{id: 'inedito', …, inedito: true}`; capítulos seguintes deslocados em +30 s; `DURACAO` + 30.
+- Uma função só, `tOrig(t)`, converte o tempo do nosso vídeo no tempo do original: igual antes da inserção, **parado** durante ela,
+  `t − 30` depois. Física (`diaMin`), ciclo dia/noite, `faseJato`, legendas e mapa de som do original passam por `tOrig`; assim
+  `legendas.json`, `ciclo_original.json` e `mapa.json` continuam no tempo do original e nada precisa ser recalculado à mão.
+- Auditoria: para comparar com o original, recortar os 30 s do nosso vídeo (ou inserir 30 s parados no original) antes de `medir.py`
+  e `comparativo.sh`.
+- Descrição: capítulo próprio na lista de capítulos e as fontes do fato.
+
+**Exemplo — vídeo 1 (proposta): "El punto más lejano del centro de la Tierra no es el Everest".**
+- **Onde:** logo depois do capítulo `achata` (a Terra achatando), em 5:47: o take mostra que **hoje** ela já é achatada pelo giro.
+- **Fato:** a rotação já achata a Terra: o raio no equador (6.378,1 km) é ~21 km maior que no polo (6.356,8 km). Por isso o cume mais
+  distante do centro da Terra é o do **Chimborazo, no Equador** (6.263 m de altitude, ~6.384 km do centro), cerca de 2 km mais longe
+  que o do Everest (8.849 m de altitude, ~6.382 km do centro). E no equador você já pesa ~0,5% menos que num polo
+  (g ≈ 9,780 contra 9,832 m/s²: giro + forma). Números a reconferir nas fontes antes de publicar.
+- **Por que é contraintuitivo:** todo mundo aprende que o Everest é o ponto mais alto; poucos sabem que, medido a partir do centro da
+  Terra, ele perde para um vulcão andino, e que a causa é a mesma do vídeo: o giro.
+- **Cena:** a Terra do espaço com o achatamento exagerado e as duas medidas (raio equatorial × polar); corte para um perfil da Terra com
+  as linhas do centro até o Everest e até o Chimborazo; fecha no Chimborazo nevado.
+- **Legendas (rascunho):** "Hoy la Tierra ya está achatada por su giro." → "El ecuador está 21 km más lejos del centro que los polos." →
+  "Por eso la cima más lejana del centro de la Tierra no es el Everest…" → "…es el Chimborazo, en Ecuador: unos 2 km más lejos." →
+  "Y en el ecuador ya pesas medio por ciento menos que en un polo."
+- Bônus: o fato também cumpre a adaptação cultural (Equador).
 
 ---
 
@@ -496,6 +591,8 @@ Tabelas completas na [seção 17](#17-auditoria-do-vídeo-entregue).
 8. Verificação completa (seção 10), incluindo **folha de contato lado a lado com o original** — é ela que pega erro de conteúdo.
 9. G4 desligada e conferida ao fim de cada sessão.
 10. Repo público: nada de e-mail, senha, cookie, token ou ID de perfil em commit.
+11. **Adaptação cultural**: nenhuma referência dos EUA chega ao vídeo; o substituto hispânico mantém a física (latitude, tipo de lugar).
+12. **Take inédito de 30 s** em todo vídeo, no meio ou perto do fim: fato contraintuitivo, com o porquê, verificado em 2 fontes e mostrado em cena.
 
 ---
 
@@ -519,6 +616,8 @@ Canal monetizado: só entram modelos e assets com uso comercial liberado.
 
 - [ ] Baixar o original (`ref/v.mp4` + legendas) e rodar `analisar.py`; OCR do painel (`ocr_hud.py`) se houver contador.
 - [ ] Escrever `FICHA.md` (capítulos, câmera, objetos, ações, painel, som) lendo as folhas a 10 fps.
+- [ ] **Adaptação cultural** (seção 4.2): inventário das referências dos EUA → tabela de substitutos com latitude e fonte dos números.
+- [ ] **Take inédito** (seção 4.3): escolher o fato (2 fontes), o ponto de inserção, a cena e as legendas; `tOrig` no roteiro.
 - [ ] `roteiro.ts` com os tempos do original e `entrada` de cada capítulo; `legendas.json`; `fisica.ts` se houver números.
 - [ ] Copiar a pasta `v2` deste vídeo como base (look, compositor, scripts de VM, mixagem) e trocar os mundos.
 - [ ] `ciclo_original.json` se houver dia/noite; conferir a conversão luminância → sol contra o original.
@@ -527,7 +626,7 @@ Canal monetizado: só entram modelos e assets com uso comercial liberado.
 - [ ] Áudio: `mapa.json` → música e efeitos na G4 (baixar cada pacote assim que sair).
 - [ ] Baixar e conferir quadros → **desligar a G4** → `mixar.py`.
 - [ ] Verificação da seção 10 inteira, folha de contato lado a lado incluída.
-- [ ] Entrega com título e descrição; versão anterior com prefixo `_antigo_`.
+- [ ] Entrega com título e descrição (lugares novos, capítulo do take inédito e fontes do fato); versão anterior com prefixo `_antigo_`.
 - [ ] Erros novos em `erros-pipeline.md`; memória do canal atualizada.
 
 ---
@@ -540,7 +639,10 @@ Canal monetizado: só entram modelos e assets com uso comercial liberado.
   (ex.: `mix(−0,35, 0,9, smoothstep(0,08, 0,5, d))`) para todo o trecho 153–293 s e tirar o fixo da cidade; vale também para fonte
   (4:04 é pôr do sol no original, no nosso está noite).
 - Objetos flutuantes do paredão (quiosque, carros) são caixas lisas; o original tem a mesma ideia com mais detalhe.
-- Vídeos 2–4 ainda estão na pipeline antiga; aplicar este documento a eles.
+- **Adaptação cultural e take inédito**: a versão entregue foi feita antes dessas regras, então ainda usa Cannon Beach/Oregon e
+  Santa Monica e não tem o take inédito. Plano pronto nas seções 4.2 (Atacames, Acapulco, Gaztelugatxe, Viña del Mar) e 4.3
+  (Chimborazo × Everest, depois do capítulo `achata`); o vídeo passa a ter 8:07,5 (14.625 quadros).
+- Vídeos 2–4 ainda estão na pipeline antiga; aplicar este documento a eles, incluindo as duas regras novas.
 
 ---
 

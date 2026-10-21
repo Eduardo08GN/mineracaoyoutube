@@ -100,6 +100,8 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 ## 5. Ordem de produção de cada vídeo
 
 1. Leitura óptica a 10 fps + leitura do áudio (classificador + espectrograma) → ficha técnica e mapa de som.
+   Na ficha: **adaptação cultural** (referências dos EUA → mundo hispânico, mantendo a latitude) e o **take inédito de 30 s**
+   (fato contraintuitivo com o porquê, no meio ou perto do fim). Detalhes em `video01/PRODUCAO.md`, seções 4.2 e 4.3.
 2. Cenas testadas no PC com quadros soltos em meia resolução.
 3. G4: vigia → pacote → disparo pelo terminal → render em quadros (32 Chromes de 1 aba) + reparo de glitch + áudio em paralelo → encode → download (conferir nº de quadros) → desligar (conferido).
 4. Conferência de imagem (folha de contato + `glitch.py`) e de áudio contra o original antes de entregar.
