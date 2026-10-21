@@ -80,6 +80,8 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 45 | `ligar` travou: a célula antiga do `unassign` ficou na fila e a VM não reconectava sozinha | `g4.py ligar` limpa as células e clica no botão de conectar antes de mandar o vigia. |
 | 46 | `freezeframes` do ffmpeg pede duas entradas | `-filter_complex "[0:v]split[a][b];[a][b]freezeframes=first=N:last=N:replace=N-1"` para trocar um quadro com glitch pelo anterior. |
 | 47 | Planeta "sem oceanos" continuava com cara de mar: o halo azul da atmosfera e o fresnel pintavam o fundo cinza de azul | Ao secar, tirar o azul do fresnel e do halo junto com a cor da água. |
+| 48 | Câmera a 190 m (Miami): em quadros alternados a areia sob o mar aparecia em dente de serra (briga de profundidade com near 0,5) | `near = max(0,5, altura_da_câmera / 40)` em toda cena de costa. |
+| 49 | Vapor sobre o mar sumiu: sprites com `renderOrder` negativo são desenhados antes do mar transparente, que pinta por cima | Sprites sobre água com `renderOrder` maior que o do mar e base acima da linha d'água (senão o quadrado é cortado em diagonal). Textura de nuvem macia (`cloud.png`), nunca manchas que encostam na borda do canvas. |
 
 ## 5. Ordem de produção de cada vídeo
 
