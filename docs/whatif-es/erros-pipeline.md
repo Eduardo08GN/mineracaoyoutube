@@ -111,6 +111,7 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 66 | Os braços sumiram na água no render completo, mas apareciam em stills e em sequências curtas | Na mesma aba, de mãos baixas (maos4) para braços erguidos (água) o React reaproveitava os objetos do outro modo. Componente que troca de forma por modo leva `key` do modo (força remontar). Testar **sequência que atravessa a troca**, não só still. |
 | 67 | O render das 20:08 saiu de código velho: uma célula antiga reexecutou sozinha (o Colab avisava "atualizado remotamente ou em outra guia") | Limpar as células antes de cada disparo longo; tudo em uma cadeia só, sem usar o Colab em paralelo. |
 | 68 | O download de 300 MB falhava quando eu lia o status por célula ao mesmo tempo (e o `timeout 590` matava antes do fim) | Download sozinho, sem timeout curto, sem outra célula em paralelo. |
+| 69 | Na vista aérea apareceu um disco bege pálido sobre o mar | Era a bola de fogo: o atlas dela é RGB sem alfa e o cinza da borda do quadro, somado em aditivo, virava disco. Flipbook aditivo corta a luminância baixa (`smoothstep(0.06, 0.3, lum)`). Isolar com as flags `semRaios`/`semNevoa` antes de culpar o pós. |
 
 ## 5. Ordem de produção de cada vídeo
 

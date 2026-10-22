@@ -1,4 +1,4 @@
-# Stack de qualidade do What If ES (atualizada em 21/10/2026)
+# Stack de qualidade do What If ES (atualizada em 22/10/2026)
 
 Esta é a stack que substitui o visual "de cartão" dos vídeos 1 e 2 (fogo em cartão, fumaça em bolha, céu e água de desenho,
 bonecos de bloco, cenas paradas). Decisão do Eduardo em 21/10/2026: **atualizar a stack atual** (three.js + React Three Fiber +
@@ -23,6 +23,8 @@ O código dos módulos fica em [`stack/`](stack/) (cópia) e no projeto vivo em 
 | Bonecos de bloco, "boneco caído" | caixas e cápsulas | **humanos com rig** (65 ossos) e 43 animações; roupa de banho, pele, cabelo e altura variados por pessoa | `pessoas.tsx` → `Multidao3D` |
 | "Todos correm" sem ninguém correndo | — | **fuga em fórmula fechada** (reage, levanta, acelera até o sprint) com o passo casado com a distância | `pessoas.tsx` → `estadoPessoa` |
 | Cenas paradas | — | **mapa de ações** do original executado no mesmo segundo (regra 4.4 do PRODUCAO.md) | `acoes.ts` por vídeo |
+| Fundo "colado" no primeiro plano, sem profundidade | nada | **névoa de perspectiva aérea** pela profundidade (o longe some na cor do horizonte) | `look/Look.tsx` → `NevoaEffect` |
+| Contraluz sem volume | nada | **god rays** (raios de sol saindo do disco do sol atrás de fumaça, palmeiras e prédios) | `look/Look.tsx` → `GodRaysEffect` |
 
 ## 2. Assets (todos com uso comercial liberado)
 
@@ -70,6 +72,21 @@ Observações de licença:
 - Passando `env={hdr}`, o mar reflete o céu real (Fresnel, `R.y = |R.y|` para não refletir o chão do panorama) e usa tons
   teal naturais; sem `env`, continua como antes (vídeos antigos não mudam).
 
+### `look/Look.tsx` — atmosfera (padrão da pipeline desde 22/10/2026)
+Vem dos shader packs de Minecraft (Complementary/BSL): o que dá cara de "filmado" é **névoa de distância + raios de sol**.
+Os dois entram em **toda cena externa com sol**; o perfil do mundo liga e dosa:
+
+- `nevoa: {cor, densidade, max}` → `NevoaEffect` (`Effect` com `EffectAttribute.DEPTH`): profundidade linear
+  `d = near·far / (far − z·(far − near))`, mistura `f = (1 − e^(−densidade·d))·max` para a `cor` do horizonte. O céu
+  (profundidade 1) fica intacto. Praia: `#c9d5de`, 0,0012/m, teto 0,6; aérea 0,0009 e 0,7; Panamá 0,001 e 0,65.
+- `raios: forca` → `GodRaysEffect` (postprocessing) em `EffectPass` próprio, blend SCREEN, 60 amostras, densidade 0,96,
+  decaimento 0,92, exposição 0,55, meia resolução. A fonte é um **disco de sol** (esfera de 40 m, sem escrever profundidade)
+  que o `Look` cria e reposiciona a cada quadro em `câmera + sol·2500`; some quando o sol está abaixo do horizonte.
+  O `Look` recebe `sol` (o mesmo vetor da luz da cena: `solDoHDRI` no mundo fotográfico). Praia 0,35; aérea 0,25; Panamá 0,3.
+- Ordem: AO → saneamento → **névoa → raios** → bloom/AgX/LUT/saturação/vinheta (os dois antes do tone mapping, em HDR).
+- Flags de teste (`--props='{"dbg":"semNevoa"}'`, `semRaios`) para isolar cada um num still.
+- Espaço sideral e interiores: sem `nevoa`/`raios` no perfil.
+
 ### `vfx.tsx` — `Flipbook`
 - Motor de partículas **sem estado**: `InstancedBufferGeometry` com atributos por partícula (base, nascimento, fim, escala,
   semente, fase, deslocamento, vida). Idade = `fract((t − t0)/vida + fase)` → tudo é função do tempo; qualquer quadro sai igual
@@ -79,6 +96,8 @@ Observações de licença:
   a fumaça usa a luminância do atlas (luz embutida) × `cor` × `luz` da cena.
 - `porEmissor` partículas com fases espalhadas por foco: o foco queima sem parar e sem piscar. `t1` apaga o foco.
 - Atlas registrados em `ATLAS` (chamaPequena, chama, chamaOca, nuvem1, nuvem2, fiapo, explosao, bola).
+- Atlas **sem alfa** (a bola de fogo é RGB): o aditivo corta a luminância abaixo de ~0,06–0,3 (`smoothstep`); sem isso o
+  cinza escuro da borda do quadro somava luz e virava um **disco pálido** na vista aérea.
 - Hooks: listas de emissores memorizadas **no topo** do componente da cena (nunca `useMemo` dentro de condicional nem depois de
   `return` antecipado).
 
@@ -124,6 +143,8 @@ Observações de licença:
 - Ajustado depois do primeiro still: fumaça mais clara (estava preta), bola de fogo menos aditiva (lavava a tela), areia de chão.
 - Feito: **mapa de ações → `acoes.ts`** (figurantes, toalha, focos, copas, gaivotas), câmera com os sentidos do original,
   roupas por região. Stills locais: os 8 eventos conferidos aparecem no quadro e no segundo do original.
+- Feito (22/10): **névoa de perspectiva aérea + god rays** como padrão (seção 3, `look/Look.tsx`); disco pálido da bola de fogo
+  corrigido.
 - Pendente: stills na G4 (look HDR), render completo, lado a lado novo com o original.
 
 ## 6. Próximos passos da stack (ainda gratuitos)

@@ -60,7 +60,9 @@ void main(){
     gl_FragColor = vec4(col, c.a * vA * uForca);
   } else {
     // fogo: aditivo, a cor do atlas (laranja/amarelo) com a forca pedida
-    gl_FragColor = vec4(c.rgb * uCor * uForca * vA * c.a, 1.0);
+    // atlas sem alfa (bola de fogo e RGB): o cinza escuro da borda do quadro somava luz e virava um disco palido
+    float lum = max(c.r, max(c.g, c.b));
+    gl_FragColor = vec4(c.rgb * smoothstep(0.06, 0.3, lum) * uCor * uForca * vA * c.a, 1.0);
   }
   gl_FragColor.rgb = pow(max(gl_FragColor.rgb, vec3(0.0)), vec3(2.2));
 }`;

@@ -400,6 +400,8 @@ desenho automático do R3F). Ordem dos passes:
 1. `RenderPass(scene, camera)`
 2. `N8AOPostPass` (só nos perfis com `ao`; raio 3, falloff 1,2, intensidade 1,6, meia resolução, qualidade Medium)
 3. **Saneamento** (`ShaderPass`): NaN → preto, `clamp(0, 32)` — **obrigatório antes do bloom** (erro 53)
+3a. **Névoa de perspectiva aérea** (`NevoaEffect`, pela profundidade) — se o perfil tiver `nevoa`
+3b. **God rays** (`GodRaysEffect` a partir de um disco de sol posto na direção da luz) — se o perfil tiver `raios`
 4. `EffectPass` com: `BloomEffect` (mipmapBlur, limiar `perfil.limiar ?? 0.9`, suavização 0,2, raio 0,72) → `ToneMappingEffect` AgX →
    `LUT3DEffect` (LUT do original) → `HueSaturationEffect` → `BrightnessContrastEffect` (contraste 0,04) → `VignetteEffect` (offset 0,32)
 
@@ -614,6 +616,8 @@ Tabelas completas na [seção 17](#17-auditoria-do-vídeo-entregue).
 11. **Adaptação cultural**: nenhuma referência dos EUA chega ao vídeo; o substituto hispânico mantém a física (latitude, tipo de lugar).
 12. **Take inédito de 30 s** em todo vídeo, no meio ou perto do fim: fato contraintuitivo, com o porquê, verificado em 2 fontes e mostrado em cena.
 13. **Ação em cena** (seção 4.4): mapa de ações do original executado no mesmo segundo; legenda = ação; nunca mais de ~4 s sem acontecimento; movimento por capítulo ≥ 70% do original.
+14. **Atmosfera**: toda cena externa com sol leva névoa de perspectiva aérea + god rays (perfil `nevoa`/`raios` no `Look`,
+    ver STACK.md seção 3). Espaço e interiores ficam sem.
 
 ---
 
