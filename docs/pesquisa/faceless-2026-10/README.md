@@ -35,54 +35,54 @@ Ressalvas:
 
 | Formato | Canal (criado) | Tração |
 |---|---|---|
-| Stickman explicando história | **Ink Explainer** (abr/2026) | 15,4 M views num vídeo, só 18 vídeos |
-| "Quanto tempo você duraria em cada era pré-histórica" | **Fossil** (mar/2026) | 11,9 M views, só 14 vídeos |
-| Reconstrução 3D de acidente real | **Reconstructed** (3/out/2026) | 3,3 M views em 19 dias de canal |
-| "What if" 3D de catástrofe | **Tracer Project** (5/out/2026) | 3,3 M views com 2.370 inscritos |
-| "What if" 3D | **The Last Day** (jul/2026) | 1,75 M ("e se a Lua caísse na Terra") |
-| Simulação de física / satisfatório | **Satisfying 2D Sims** (jul), **Automa** (nov/2025) | ~290 mil e ~235 mil views/dia |
-| Sobrevivência stickman "Dia 1 → Dia 30" | **Nobody Gets In** (1/out/2026) | 1,4 M num vídeo |
-| Documentário de natureza feito com IA | **GaiaDocs**, **Nature's Tether** | 2,4 M e 5,6 M |
-| Histórias 2D de aldeia feitas com IA (hindi/urdu/bengali) | StoryNook, Dharmik Film, Gomu Toons, ToonZik… | 2–8 M por vídeo — o maior bloco em volume |
-| Drama narrado (Reddit/novela) | **DramaMuse** (ago/2026) | ~370 mil views/dia |
-| Bíblia animada | **Bible Battle Arena** (ago), **Sabiduría 2** (espanhol) | 4,3 M e 1 M |
+| Stickman explicando história | [**Ink Explainer**](https://www.youtube.com/channel/UCpgrEMx8diLrw7YNQ6r3uUw) (abr/2026) | 15,4 M views num vídeo, só 18 vídeos |
+| "Quanto tempo você duraria em cada era pré-histórica" | [**Fossil**](https://www.youtube.com/channel/UCOf0CzjuS5rjLju4muJi7Gg) (mar/2026) | 11,9 M views, só 14 vídeos |
+| Reconstrução 3D de acidente real | [**Reconstructed**](https://www.youtube.com/channel/UCdZhRs4wM7SgVXoP9WSW2yA) (3/out/2026) | 3,3 M views em 19 dias de canal |
+| "What if" 3D de catástrofe | [**Tracer Project**](https://www.youtube.com/channel/UC0Lr__HsSMj0_h0jNqKvKBA) (5/out/2026) | 3,3 M views com 2.370 inscritos |
+| "What if" 3D | [**The Last Day**](https://www.youtube.com/channel/UCN6XxorahzAiDNyRnI1of2g) (jul/2026) | 1,75 M ("e se a Lua caísse na Terra") |
+| Simulação de física / satisfatório | [**Satisfying 2D Sims**](https://www.youtube.com/channel/UC2KI15ET6DGIw01qpPzAyjg) (jul), [**Automa**](https://www.youtube.com/channel/UCUPGu1WpDCjJTdswDHGv3jw) (nov/2025) | ~290 mil e ~235 mil views/dia |
+| Sobrevivência stickman "Dia 1 → Dia 30" | [**Nobody Gets In**](https://www.youtube.com/channel/UCZDmrAO-bnBxU4_LiH40CjA) (1/out/2026) | 1,4 M num vídeo |
+| Documentário de natureza feito com IA | [**GaiaDocs**](https://www.youtube.com/channel/UCe9imMhDp6Kn3dn75mzUUZw), [**Nature's Tether**](https://www.youtube.com/channel/UCpw_I21AoF3N6Dqm3LLY9bw) | 2,4 M e 5,6 M |
+| Histórias 2D de aldeia feitas com IA (hindi/urdu/bengali) | StoryNook, [Dharmik Film](https://www.youtube.com/channel/UCe5DOpVj69Xqh-gUAd6DxPg), [Gomu Toons](https://www.youtube.com/channel/UCDmdlBZwQ0ad8aqDYQBes0w), ToonZik… | 2–8 M por vídeo — o maior bloco em volume |
+| Drama narrado (Reddit/novela) | [**DramaMuse**](https://www.youtube.com/channel/UCMJu0JryoBwrKqROnZ2BK1w) (ago/2026) | ~370 mil views/dia |
+| Bíblia animada | [**Bible Battle Arena**](https://www.youtube.com/channel/UCuFT2hq7gbGtyDcmiXJoFOA) (ago), [**Sabiduría 2**](https://www.youtube.com/channel/UC0_IZXGSaQ4KJ3U-Caq7uKA) (espanhol) | 4,3 M e 1 M |
 
-Shorts dominam os maiores números absolutos (ex.: AuraShorts, ~13,9 M views/dia), quase todos com vídeo gerado por IA.
+Shorts dominam os maiores números absolutos (ex.: [AuraShorts](https://www.youtube.com/channel/UCUnbOxUiYjzRQpwMV6SAZLg), ~13,9 M views/dia), quase todos com vídeo gerado por IA.
 
 ### Melhores por nicho (canais novos com vídeo longo; views/dia desde a criação)
 
 | Nicho | Canais | Destaques |
 |---|---|---|
-| POV animado | 24 | yuva explainop (1,1 M/dia), ToonVersMagic, Nobody Gets In |
-| Compilação / satisfatório | 7 | Infinite Movies YT, Automa, Miniature Dollverse (6,8 M num vídeo) |
-| What if / simulação | 8 | Satisfying 2D Sims, Tracer Project, The Last Day |
-| Reddit / narração | 4 | DramaMuse, Titan Entertainment (7,3 M), Aveline Drama |
-| 2D / stickman | 13 | HINDI Story bubbles, Gomu Toons, ToonZik Bangla |
-| Histórias com IA | 15 | StoryNook cartoon, Hungry Tales, Dharmik Film (8,3 M) |
-| Ciência e espaço | 14 | Reconstructed, Miralex (pt), Mr. Earth |
-| História animada | 19 | Ambrose Discovery, Ink Explainer, AniHis Hindi |
-| Crime real | 20 | Red File (15,5 M), Discovery Investigación (es), Testimonios (es) |
-| Doc cinematográfico com IA | 17 | VMR786, GaiaDocs, Jayansh Insight |
-| Natureza / animais | 7 | Steel Pulse Films, Nature's Tether, Animal Nature Matrix |
-| Mapas e dados | 7 | Geo Map Animations, Data Penguin, ADM Football |
-| Finanças / negócios | 18 | The Story Cafe, Ani Explainer Hindi, Money Bureau |
-| Bíblia / religião | 12 | Sabiduría 2 (es), Bible Battle Arena, Biblia al Detalle (es) |
-| Sono / relaxamento | 21 | Murph, The Unseen Earth, Sleep On Physics |
-| Mistério | 13 | Chilling Scares Compilations, FreeStream Movies |
-| Comparação de escala | 7 | Underwater Earth 4K, PawFlow, BeyondTheGreen |
-| Terror animado | 8 | Kalbela Animation, Kesari Hindi Tales |
-| Motivação / filosofia | 7 | El Café Estoico (es), El Dragón Estoico (es), Stoic Quiet |
+| POV animado | 24 | [yuva explainop](https://www.youtube.com/channel/UC3E1Of0wmOBRjhWMyRmrNKQ) (1,1 M/dia), [ToonVersMagic](https://www.youtube.com/channel/UCD-jCubygJ6N4Wadmc-aeAQ), [Nobody Gets In](https://www.youtube.com/channel/UCZDmrAO-bnBxU4_LiH40CjA) |
+| Compilação / satisfatório | 7 | [Infinite Movies YT](https://www.youtube.com/channel/UCiTQSHXweqBHy7bwh1oG0sA), [Automa](https://www.youtube.com/channel/UCUPGu1WpDCjJTdswDHGv3jw), [Miniature Dollverse](https://www.youtube.com/channel/UCd3pbZwxfCevQc51O1GAXug) (6,8 M num vídeo) |
+| What if / simulação | 8 | [Satisfying 2D Sims](https://www.youtube.com/channel/UC2KI15ET6DGIw01qpPzAyjg), [Tracer Project](https://www.youtube.com/channel/UC0Lr__HsSMj0_h0jNqKvKBA), [The Last Day](https://www.youtube.com/channel/UCN6XxorahzAiDNyRnI1of2g) |
+| Reddit / narração | 4 | [DramaMuse](https://www.youtube.com/channel/UCMJu0JryoBwrKqROnZ2BK1w), [Titan Entertainment](https://www.youtube.com/channel/UCdRPsZ7XmMy7BvIpASPE5Nw) (7,3 M), [Aveline Drama](https://www.youtube.com/channel/UCjT1Io9biZDYNeuX-guHRiw) |
+| 2D / stickman | 13 | [HINDI Story bubbles](https://www.youtube.com/channel/UC5Pd_6Ovyz68-PrAAe9UwyQ), [Gomu Toons](https://www.youtube.com/channel/UCDmdlBZwQ0ad8aqDYQBes0w), [ToonZik Bangla](https://www.youtube.com/channel/UCnRH4PColWCHJA7i_oEpAFg) |
+| Histórias com IA | 15 | [StoryNook cartoon](https://www.youtube.com/channel/UC6aGDzd5ph2eYEroEJ2TO7A), [Hungry Tales](https://www.youtube.com/channel/UCLdTmTG2FgSRzoLMWaRDbHQ), [Dharmik Film](https://www.youtube.com/channel/UCe5DOpVj69Xqh-gUAd6DxPg) (8,3 M) |
+| Ciência e espaço | 14 | [Reconstructed](https://www.youtube.com/channel/UCdZhRs4wM7SgVXoP9WSW2yA), [Miralex](https://www.youtube.com/channel/UCww4N8x1zKCAj_ChXaldaTA) (pt), [Mr. Earth](https://www.youtube.com/channel/UCDm69yrM5Ma9_NXLw1_yoFQ) |
+| História animada | 19 | [Ambrose Discovery](https://www.youtube.com/channel/UCAVxoa11gRHcit9_onvTkMQ), [Ink Explainer](https://www.youtube.com/channel/UCpgrEMx8diLrw7YNQ6r3uUw), [AniHis Hindi](https://www.youtube.com/channel/UCvxKQMAJiWb3YUIKMVf44kQ) |
+| Crime real | 20 | [Red File](https://www.youtube.com/channel/UCNpjH9MosivtBOa45Hbu39g) (15,5 M), [Discovery Investigación](https://www.youtube.com/channel/UCdZ6YGjlUuNPTBJqKgvbaqA) (es), [Testimonios](https://www.youtube.com/channel/UC4OtMvUugZmqI4LxIwZTHfA) (es) |
+| Doc cinematográfico com IA | 17 | [VMR786](https://www.youtube.com/channel/UC8x_RtU11tdCxtC-588H8LA), [GaiaDocs](https://www.youtube.com/channel/UCe9imMhDp6Kn3dn75mzUUZw), [Jayansh Insight](https://www.youtube.com/channel/UCqXVm5DgKJ56G69e-YwEx2g) |
+| Natureza / animais | 7 | [Steel Pulse Films](https://www.youtube.com/channel/UC8RoaTWP4J8H1_NDRjeOd9g), [Nature's Tether](https://www.youtube.com/channel/UCpw_I21AoF3N6Dqm3LLY9bw), [Animal Nature Matrix](https://www.youtube.com/channel/UCCTbP1lddK5jaesyEvTRbRQ) |
+| Mapas e dados | 7 | [Geo Map Animations](https://www.youtube.com/channel/UCz6KO_6H1WU2GGB9JX39QGw), [Data Penguin](https://www.youtube.com/channel/UCv09moG9-_c1DafpwBHLV3Q), [ADM Football](https://www.youtube.com/channel/UC7CoZCFpZLUKyaAIkBf5_FA) |
+| Finanças / negócios | 18 | [The Story Cafe](https://www.youtube.com/channel/UC1OQ3JjZU7vkzBmHw2dLF5A), [Ani Explainer Hindi](https://www.youtube.com/channel/UCFGjZVRPYVGfJzdOSrUzrdQ), [Money Bureau](https://www.youtube.com/channel/UCKVtBpONPhVWez_0X-yVCOw) |
+| Bíblia / religião | 12 | [Sabiduría 2](https://www.youtube.com/channel/UC0_IZXGSaQ4KJ3U-Caq7uKA) (es), [Bible Battle Arena](https://www.youtube.com/channel/UCuFT2hq7gbGtyDcmiXJoFOA), [Biblia al Detalle](https://www.youtube.com/channel/UC6FKrzOiMJfAaWIOI6PfsSw) (es) |
+| Sono / relaxamento | 21 | [Murph](https://www.youtube.com/channel/UCdPsd7GBKrHAYn0p-ojZ8Mw), [The Unseen Earth](https://www.youtube.com/channel/UC3BTP2FmssM9YAt2QIe6u4A), [Sleep On Physics](https://www.youtube.com/channel/UCuKoEFuLJL1Q8HUqXC70RjQ) |
+| Mistério | 13 | [Chilling Scares Compilations](https://www.youtube.com/channel/UCgT7YSxevs9LFP9YkpUiZjQ), [FreeStream Movies](https://www.youtube.com/channel/UCV8sMLn3QmOhc3Y1PACHIoA) |
+| Comparação de escala | 7 | [Underwater Earth 4K](https://www.youtube.com/channel/UCiK9ODIN1_AEte6eV7m7jZA), [PawFlow](https://www.youtube.com/channel/UCzPrKzDmLXrjznx5Nu_xT5Q), [BeyondTheGreen](https://www.youtube.com/channel/UCKjRbFbTtetc-bQ5sztC4aA) |
+| Terror animado | 8 | [Kalbela Animation](https://www.youtube.com/channel/UC_tJHstGmcTOFetctjygmHQ), [Kesari Hindi Tales](https://www.youtube.com/channel/UCu-HUbxLoAgjlMWab1gmhuQ) |
+| Motivação / filosofia | 7 | [El Café Estoico](https://www.youtube.com/channel/UC2v6b0LIbK3ZimTLraZcYLw) (es), [El Dragón Estoico](https://www.youtube.com/channel/UCFenPxdAZK4xiPaua1BLqVA) (es), [Stoic Quiet](https://www.youtube.com/channel/UCwAHJVo8UiYz1zXM4qABAqg) |
 
 ## 3. Os mais próximos do nosso formato (3D / what if / escala / espaço)
 
 | Canal | Por que |
 |---|---|
-| **Tracer Project** (5/out/2026) | O mais parecido e o mais novo: "What if Apophis hit Earth?" em 3D, 3,3 M views, 2.370 inscritos |
-| **The Last Day** (jul/2026) | "E se a Lua caísse na Terra?", 1,75 M — catástrofe "what if" em 3D |
-| **Universe Dimensions** (2024) | "TON 618 a diferentes distâncias", 8 M — escala cósmica em 3D |
-| **Astrum Earth**, **Mr. Earth** | "E se os humanos sumissem", "Um buraco negro engoliria o universo?" |
-| **ABISMO** (abr/2026, **espanhol**) | "¿Cuánto se tarda en cruzar UN AÑO LUZ?" — 2,6 M num vídeo, 4,6 M em 90 dias, 46 mil inscritos. O concorrente direto mais próximo **em espanhol** e o único desse tipo encontrado |
-| **Minute Zero**, **What If Sim** | As referências que modelamos |
+| [**Tracer Project**](https://www.youtube.com/channel/UC0Lr__HsSMj0_h0jNqKvKBA) (5/out/2026) | O mais parecido e o mais novo: "What if Apophis hit Earth?" em 3D, 3,3 M views, 2.370 inscritos |
+| [**The Last Day**](https://www.youtube.com/channel/UCN6XxorahzAiDNyRnI1of2g) (jul/2026) | "E se a Lua caísse na Terra?", 1,75 M — catástrofe "what if" em 3D |
+| [**Universe Dimensions**](https://www.youtube.com/channel/UC5kNK793CSXYHEpG-BAqWfQ) (2024) | "TON 618 a diferentes distâncias", 8 M — escala cósmica em 3D |
+| [**[Astrum](https://www.youtube.com/channel/UC-9b7aDP6ZN0coj9-xFnrtw) Earth**](https://www.youtube.com/channel/UCWBtLCE-BnzZx3DneqDiXWQ), [**Mr. Earth**](https://www.youtube.com/channel/UCDm69yrM5Ma9_NXLw1_yoFQ) | "E se os humanos sumissem", "Um buraco negro engoliria o universo?" |
+| [**ABISMO**](https://www.youtube.com/channel/UC5q902RpdLkzhzmm8kGvQXg) (abr/2026, **espanhol**) | "¿Cuánto se tarda en cruzar UN AÑO LUZ?" — 2,6 M num vídeo, 4,6 M em 90 dias, 46 mil inscritos. O concorrente direto mais próximo **em espanhol** e o único desse tipo encontrado |
+| [**Minute Zero**](https://www.youtube.com/channel/UC6AYjWAC_CPRepkeDrFPeFA), [**What If Sim**](https://www.youtube.com/@WhatIfSim3D) | As referências que modelamos |
 
 ## 4. Onde há abismo (demanda em inglês × oferta em espanhol)
 
