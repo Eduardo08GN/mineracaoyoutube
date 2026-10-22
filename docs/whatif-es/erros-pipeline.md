@@ -118,6 +118,7 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 73 | O zip juntado na VM tinha o tamanho certo e depois apareceu com **0 bytes** (`BadZipFile`) | O Colab reexecutou a célula do `cat p00 p01 > final && rm p*`; na segunda vez os pedaços já não existiam e o `>` zerou o arquivo. Junção idempotente: só se o primeiro pedaço existir, em `.tmp` e depois `mv`. Conferir sempre o **md5** na VM. |
 | 74 | Faixa vermelho-viva no horizonte (colinas e prédios distantes) só com a névoa ligada | `THREE.Color` tem `toJSON()`: no `JSON.stringify` a cor vira número hex **antes** do replacer, e o arredondamento a 2 algarismos (para não recriar o compositor) transformava `0x7a6970` em `0x7a1200`. O replacer lê o valor original no objeto pai (`this[k]`). |
 | 75 | Por 1 quadro, um rosto semitransparente enchia a tela (17,1 e 17,3 s) | Cópia "fantasma" de pedestre passando **através** da câmera. Nenhum objeto animado pode cruzar o olho: `visivel` só com z < −1,2. O `glitch.py` acha isso (pico isolado de diferença entre quadros). |
+| 76 | Na saída do take (vídeo 6, quadro 8247) o globo do capítulo anterior aparecia por 1 quadro | Ponto flutuante: 8247/30 − 30 = 244,8999…, e a busca do capítulo (`to >= s && to < e`) caía no capítulo anterior. `capDe` soma 1e-6 antes de comparar. Toda comparação de tempo com limite de capítulo leva essa tolerância; o `glitch.py` acha (pico isolado enorme). |
 
 ## 5. Ordem de produção de cada vídeo
 

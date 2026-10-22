@@ -1,0 +1,684 @@
+{
+ "duracao": 412.0,
+ "insercao": {
+  "t": 244.9,
+  "dur": 30
+ },
+ "silencio": [
+  [
+   97.8,
+   97.86
+  ],
+  [
+   383.3,
+   383.4
+  ],
+  [
+   390.1,
+   391.2
+  ]
+ ],
+ "nota": "Tempos do ORIGINAL; camadas com tempo=video (take) no tempo do video. Original (412 s, mono, -18,2 LUFS integrado): ambiente e efeitos na frente, musica ambiente (singing bowl, didgeridoo, guitarra, gongos) so nos trechos calmos, SEM narracao (o 'Speech' do PANNs em 0-52 e 162-166 e burburinho de multidao/praia). LUFS por capitulo no original: cold open -16, praia -14, mar recua -19, Cannon Beach -14, Times Square -15 (ronco de agua a -11 dB RMS em 86-97,4 e corte seco), espaco -26, Golden Gate -19, Santa Monica dia -25, noite -22, espaco -26, Sol para -22, Sol volta -20, espaco -23, nascer no oeste -20, onda -15 (rugido a -11 dB RMS em 370-383, queda no corte 383), fade 389-390 e silencio ate ~391,8, telas finais com piano eletrico -26. vezes = o mesmo som (variantes em rodizio) em cada segundo da lista; alinhar = pico|ataque cai no segundo; dur = duracao gerada; fi/fo = fades; extra = cauda apos e. silencio: cortes 97,8 e 383,3 (1-2 quadros) e o preto antes das telas finais.",
+ "musica": [
+  {
+   "id": "m01",
+   "s": 0,
+   "e": 4.1,
+   "lufs": -24,
+   "caption": "mysterious soft ambient synth pads, gentle dawn shimmer, a quiet hint that something is strange, slow, instrumental, no vocals",
+   "fi": 0.3,
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "m02",
+   "s": 4.1,
+   "e": 29.9,
+   "lufs": -26,
+   "caption": "calm sunny tropical ambient, soft marimba and warm pads, relaxed beach day, gentle and bright, slow tempo, instrumental, no vocals",
+   "fi": 0.05
+  },
+  {
+   "id": "m03",
+   "s": 29.9,
+   "e": 60.9,
+   "lufs": -24,
+   "caption": "uneasy minimal ambient, slow pulsing low synth, sparse singing bowl tones, growing unease, something is wrong, instrumental, no vocals"
+  },
+  {
+   "id": "m04",
+   "s": 60.9,
+   "e": 74.9,
+   "lufs": -23,
+   "caption": "tense coastal ambient, low string drone and slow heartbeat pulse, storm brewing at sea, ominous and rising, instrumental, no vocals"
+  },
+  {
+   "id": "m05",
+   "s": 74.9,
+   "e": 97.8,
+   "lufs": -22,
+   "caption": "cinematic tension build, driving low percussion pulse, rising ominous synth and string layers, building to a massive climax, instrumental, no vocals",
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "m06",
+   "s": 97.8,
+   "e": 103.9,
+   "lufs": -24,
+   "caption": "muffled dark underwater drone, slow deep swells, eerie and awed, very slow, instrumental, no vocals",
+   "fi": 0.2
+  },
+  {
+   "id": "m07",
+   "s": 103.9,
+   "e": 132.9,
+   "lufs": -24,
+   "caption": "vast slow space ambient, deep warm drones, soft singing bowls and distant plucked strings, majestic and calm, instrumental, no vocals"
+  },
+  {
+   "id": "m08",
+   "s": 132.9,
+   "e": 159.9,
+   "lufs": -25,
+   "caption": "quiet tense ambient, slow low pulse and airy pads, a world slowly draining, restrained and curious, instrumental, no vocals"
+  },
+  {
+   "id": "m09",
+   "s": 159.9,
+   "e": 188.9,
+   "lufs": -25,
+   "caption": "warm hazy endless afternoon ambient, soft guitar harmonics and slow pads, time standing still, dreamy and slightly uneasy, instrumental, no vocals"
+  },
+  {
+   "id": "m10",
+   "s": 188.9,
+   "e": 217.9,
+   "lufs": -24,
+   "caption": "cold dark night ambient, deep gongs and frozen glassy tones, long lonely night, slow and chilling, instrumental, no vocals"
+  },
+  {
+   "id": "m11",
+   "s": 217.9,
+   "e": 244.9,
+   "lufs": -26,
+   "caption": "sparse lonely space ambient, slow deep drone and soft chimes, one side burning and one side frozen, vast and quiet, instrumental, no vocals"
+  },
+  {
+   "id": "mtake",
+   "s": 244.9,
+   "e": 274.9,
+   "lufs": -23,
+   "caption": "curious gentle ambient, warm felt piano and celesta, soft slow pulse like ocean tides, intimate wonder, light and thoughtful, instrumental, no vocals",
+   "tempo": "video"
+  },
+  {
+   "id": "m12",
+   "s": 244.9,
+   "e": 271.7,
+   "lufs": -24,
+   "caption": "suspended ethereal ambient, long held shimmering pads and a high sustained tone, time frozen, the sun standing still, awe, instrumental, no vocals"
+  },
+  {
+   "id": "m13",
+   "s": 271.7,
+   "e": 300.9,
+   "lufs": -23,
+   "caption": "strange reversed ambient, backwards swelling pads and slow descending tones, uncanny and beautiful, golden sunset glow, instrumental, no vocals"
+  },
+  {
+   "id": "m14",
+   "s": 300.9,
+   "e": 329.9,
+   "lufs": -24,
+   "caption": "deep slow space ambient, a heavy stillness slowly turning into reversed motion, low pulse starting again, mysterious, instrumental, no vocals"
+  },
+  {
+   "id": "m15",
+   "s": 329.9,
+   "e": 357.0,
+   "lufs": -22,
+   "caption": "wondrous sunrise score, warm swelling strings and shimmering bells, awe and amazement, gently rising, hopeful and strange, instrumental, no vocals"
+  },
+  {
+   "id": "m16",
+   "s": 357.0,
+   "e": 383.3,
+   "lufs": -21,
+   "caption": "epic cinematic climax, pounding low drums and huge rising brass and string swells, overwhelming and enormous, instrumental, no vocals",
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "m17",
+   "s": 383.4,
+   "e": 390.1,
+   "lufs": -24,
+   "caption": "muffled deep underwater drone, slow dark swells, calm after the impact, awed, instrumental, no vocals",
+   "fi": 0.1,
+   "fo": 0.8,
+   "extra": 0
+  },
+  {
+   "id": "m18",
+   "s": 391.2,
+   "e": 412.0,
+   "lufs": -25,
+   "caption": "warm gentle ambient electric piano, soft sparse phrases, calm and reflective, tender ending, instrumental, no vocals",
+   "fi": 0.8,
+   "fo": 1.5,
+   "extra": 0
+  }
+ ],
+ "efeitos": [
+  {
+   "id": "s01",
+   "s": 0,
+   "e": 4.1,
+   "lufs": -21,
+   "prompt": "seaside city boulevard at dawn, light traffic passing, pedestrians chatting and walking, distant seagulls",
+   "fi": 0.3,
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "s02",
+   "s": 1.2,
+   "e": 3.4,
+   "lufs": -21,
+   "prompt": "a single car passing by on a city avenue, short doppler whoosh",
+   "dur": 3,
+   "variantes": 2,
+   "vezes": [
+    1.2,
+    3.1
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s03",
+   "s": 4.1,
+   "e": 29.9,
+   "lufs": -21,
+   "prompt": "a fountain splashing in a plaza, steady water jet falling into a basin",
+   "fi": 0.05
+  },
+  {
+   "id": "s04",
+   "s": 4.1,
+   "e": 29.9,
+   "lufs": -19,
+   "prompt": "ocean waves breaking on a sandy beach, steady surf, light sea breeze",
+   "fi": 0.05
+  },
+  {
+   "id": "s05",
+   "s": 4.1,
+   "e": 29.9,
+   "lufs": -25,
+   "prompt": "busy beach promenade crowd chatter sped up like a time-lapse, fast murmuring voices and footsteps",
+   "fi": 0.05
+  },
+  {
+   "id": "s06",
+   "s": 6.1,
+   "e": 21.1,
+   "lufs": -27,
+   "prompt": "a short burst of night crickets chirping",
+   "dur": 1.5,
+   "variantes": 2,
+   "vezes": [
+    6.1,
+    9.9,
+    14.1,
+    19.4,
+    20.2
+   ],
+   "alinhar": "ataque",
+   "fo": 0.4
+  },
+  {
+   "id": "s07",
+   "s": 5.0,
+   "e": 149.0,
+   "lufs": -24,
+   "prompt": "a few seagulls calling over the beach",
+   "dur": 3,
+   "variantes": 3,
+   "vezes": [
+    5.0,
+    12.5,
+    22.8,
+    33.5,
+    39.0,
+    44.5,
+    141.5,
+    149.0
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s08",
+   "s": 29.9,
+   "e": 46.0,
+   "lufs": -18,
+   "prompt": "ocean waves breaking close on the sand, heavy surf",
+   "fo": 5.0
+  },
+  {
+   "id": "s09",
+   "s": 36.0,
+   "e": 52.0,
+   "lufs": -22,
+   "prompt": "sea water draining away over wet sand, gurgling trickles and hissing foam, the surf retreating far away",
+   "fi": 1.5
+  },
+  {
+   "id": "s10",
+   "s": 29.9,
+   "e": 48.0,
+   "lufs": -25,
+   "prompt": "beach crowd sped up like a time-lapse, distant voices and children playing",
+   "fo": 3.0
+  },
+  {
+   "id": "s11",
+   "s": 47.0,
+   "e": 60.9,
+   "lufs": -25,
+   "prompt": "dry warm wind over a dried sea bed, wooden boats creaking, faint distant gulls",
+   "fi": 2.0
+  },
+  {
+   "id": "s12",
+   "s": 60.9,
+   "e": 74.9,
+   "lufs": -19,
+   "prompt": "windy rocky coast, strong surf hitting rocks below a stone stairway, sea wind"
+  },
+  {
+   "id": "s13",
+   "s": 62.0,
+   "e": 66.0,
+   "lufs": -23,
+   "prompt": "a small chapel bell rung three times by hand outdoors, windy sea coast",
+   "dur": 4,
+   "vezes": [
+    62.0
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s14",
+   "s": 64.0,
+   "e": 74.3,
+   "lufs": -17,
+   "prompt": "sea water surging and rising over rocks, foamy flooding rush coming closer",
+   "fi": 1.5
+  },
+  {
+   "id": "s15",
+   "s": 70.0,
+   "e": 74.9,
+   "lufs": -19,
+   "prompt": "deep distant roar building out at sea, a huge wave forming on the horizon",
+   "fi": 2.0
+  },
+  {
+   "id": "s16",
+   "s": 74.9,
+   "e": 92.0,
+   "lufs": -21,
+   "prompt": "busy city avenue, crowd chatter in Spanish, traffic, buses and scooters passing",
+   "fo": 3.0
+  },
+  {
+   "id": "s17",
+   "s": 76.2,
+   "e": 85.5,
+   "lufs": -22,
+   "prompt": "a short car horn honk in city traffic",
+   "dur": 2,
+   "variantes": 3,
+   "vezes": [
+    76.2,
+    77.4,
+    78.6,
+    85.5
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s18",
+   "s": 84.0,
+   "e": 97.8,
+   "lufs": -15,
+   "prompt": "deep distant roar growing louder and louder, an enormous torrent approaching, ground rumbling",
+   "fi": 4.0,
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "s19",
+   "s": 96.3,
+   "e": 97.8,
+   "lufs": -11,
+   "prompt": "massive wall of water crashing between buildings, huge wave impact boom with roaring spray",
+   "alinhar": "ataque",
+   "fi": 0.02,
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "s20",
+   "s": 97.8,
+   "e": 103.9,
+   "lufs": -18,
+   "prompt": "deep underwater rumble, muffled rushing water overhead, low churning current",
+   "fi": 0.05
+  },
+  {
+   "id": "s21",
+   "s": 98.2,
+   "e": 103.9,
+   "lufs": -27,
+   "prompt": "muffled city street under water, pedestrian crossing signal beeping, distant traffic",
+   "fi": 0.5
+  },
+  {
+   "id": "s22",
+   "s": 103.9,
+   "e": 132.9,
+   "lufs": -30,
+   "prompt": "deep soft space ambience, low airy hum, very quiet",
+   "fi": 1.0
+  },
+  {
+   "id": "s23",
+   "s": 110.0,
+   "e": 128.0,
+   "lufs": -27,
+   "prompt": "slow deep grinding rumble of land rising from the sea, distant tectonic groan",
+   "fi": 3.0
+  },
+  {
+   "id": "s24",
+   "s": 132.9,
+   "e": 159.9,
+   "lufs": -22,
+   "prompt": "traffic crossing a large bridge high above, distant cars hum, wind at a concrete lookout"
+  },
+  {
+   "id": "s25",
+   "s": 133.0,
+   "e": 153.0,
+   "lufs": -24,
+   "prompt": "water draining out of a canal, receding current, mud bubbling and sucking",
+   "fi": 2.0
+  },
+  {
+   "id": "s26",
+   "s": 136.0,
+   "e": 140.0,
+   "lufs": -22,
+   "prompt": "a big ship horn blowing far away in a harbor",
+   "dur": 4,
+   "vezes": [
+    136.0
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s27",
+   "s": 159.9,
+   "e": 188.9,
+   "lufs": -27,
+   "prompt": "calm tropical bay in the afternoon, gentle distant waves, palm fronds rustling, faint children playing"
+  },
+  {
+   "id": "s28",
+   "s": 170.0,
+   "e": 188.9,
+   "lufs": -29,
+   "prompt": "hot still afternoon, cicadas buzzing",
+   "fi": 3.0
+  },
+  {
+   "id": "s29",
+   "s": 188.9,
+   "e": 197.5,
+   "lufs": -29,
+   "prompt": "warm night crickets chirping on a beach",
+   "fo": 3.0
+  },
+  {
+   "id": "s30",
+   "s": 188.9,
+   "e": 217.9,
+   "lufs": -24,
+   "prompt": "cold night wind blowing over an empty beach, distant soft waves, lonely",
+   "fi": 1.0
+  },
+  {
+   "id": "s31",
+   "s": 196.0,
+   "e": 217.9,
+   "lufs": -23,
+   "prompt": "ice crystals forming and crackling, frost creeping, ice creaking and groaning in the cold",
+   "fi": 3.0
+  },
+  {
+   "id": "s32",
+   "s": 217.9,
+   "e": 244.9,
+   "lufs": -30,
+   "prompt": "deep soft space ambience, low airy hum, very quiet",
+   "fi": 1.0
+  },
+  {
+   "id": "s33",
+   "s": 244.9,
+   "e": 257.5,
+   "lufs": -27,
+   "prompt": "deep slow space hum with a gentle breathing swell like a slow ocean tide",
+   "tempo": "video",
+   "fi": 1.0,
+   "fo": 1.5
+  },
+  {
+   "id": "s51",
+   "s": 251.4,
+   "e": 255.4,
+   "lufs": -25,
+   "prompt": "a soft electronic laser ping with a faint delayed echo",
+   "dur": 2,
+   "variantes": 2,
+   "vezes": [
+    251.4,
+    255.4
+   ],
+   "alinhar": "ataque",
+   "tempo": "video"
+  },
+  {
+   "id": "s52",
+   "s": 256.9,
+   "e": 262.9,
+   "lufs": -27,
+   "prompt": "a fine precise clock ticking softly, quiet and steady",
+   "tempo": "video",
+   "fi": 0.8,
+   "fo": 0.8
+  },
+  {
+   "id": "s34",
+   "s": 262.4,
+   "e": 274.9,
+   "lufs": -28,
+   "prompt": "calm underwater ambience, soft bubbles, gentle current, tiny clicks",
+   "tempo": "video",
+   "fi": 1.5,
+   "fo": 1.0,
+   "extra": 0
+  },
+  {
+   "id": "s53",
+   "s": 264.5,
+   "e": 268.5,
+   "lufs": -26,
+   "prompt": "rapid soft glassy ticks speeding up, delicate counting clicks",
+   "tempo": "video",
+   "fi": 0.2,
+   "fo": 0.4
+  },
+  {
+   "id": "s35",
+   "s": 244.9,
+   "e": 271.7,
+   "lufs": -25,
+   "prompt": "hot dry wind over a vast dried sea floor, empty and silent"
+  },
+  {
+   "id": "s36",
+   "s": 257.5,
+   "e": 262.5,
+   "lufs": -21,
+   "prompt": "soft deep shimmering swell, a suspended ethereal tone that rings and hangs",
+   "dur": 5,
+   "vezes": [
+    257.8
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s37",
+   "s": 271.7,
+   "e": 300.9,
+   "lufs": -25,
+   "prompt": "hot dry wind over an empty dried sea bed, faint distant gusts"
+  },
+  {
+   "id": "s38",
+   "s": 285.8,
+   "e": 314.0,
+   "lufs": -22,
+   "prompt": "reversed whoosh, a sucking reverse swell",
+   "dur": 2.5,
+   "vezes": [
+    285.8,
+    312.5
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s39",
+   "s": 295.5,
+   "e": 300.9,
+   "lufs": -22,
+   "prompt": "warm glowing swelling shimmer, golden light humming",
+   "fi": 2.0
+  },
+  {
+   "id": "s40",
+   "s": 300.9,
+   "e": 329.9,
+   "lufs": -30,
+   "prompt": "deep soft space ambience, low airy hum, very quiet",
+   "fi": 1.0
+  },
+  {
+   "id": "s41",
+   "s": 312.0,
+   "e": 329.9,
+   "lufs": -24,
+   "prompt": "deep slow rumble of a huge mass starting to turn, low groan slowly speeding up",
+   "fi": 2.0
+  },
+  {
+   "id": "s42",
+   "s": 329.9,
+   "e": 345.0,
+   "lufs": -24,
+   "prompt": "seaside city boulevard at night, light traffic, a bus passing, distant voices, crickets",
+   "fo": 3.0
+  },
+  {
+   "id": "s43",
+   "s": 342.0,
+   "e": 357.0,
+   "lufs": -23,
+   "prompt": "early morning city waking up, birds chirping, traffic increasing, people chatting",
+   "fi": 3.0
+  },
+  {
+   "id": "s44",
+   "s": 333.5,
+   "e": 341.0,
+   "lufs": -22,
+   "prompt": "a city bus passing by on an avenue",
+   "dur": 4,
+   "variantes": 2,
+   "vezes": [
+    333.5,
+    339.0
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s45",
+   "s": 345.0,
+   "e": 356.5,
+   "lufs": -23,
+   "prompt": "rising bright warm swell, sunrise shimmer slowly growing",
+   "fi": 3.0
+  },
+  {
+   "id": "s46",
+   "s": 357.0,
+   "e": 366.0,
+   "lufs": -25,
+   "prompt": "hot dry wind over a dried sea bed, eerie calm",
+   "fo": 2.0
+  },
+  {
+   "id": "s47",
+   "s": 364.0,
+   "e": 372.0,
+   "lufs": -18,
+   "prompt": "distant deep rumble, faraway ocean roar slowly approaching",
+   "fi": 3.0,
+   "fo": 1.5
+  },
+  {
+   "id": "s48",
+   "s": 370.0,
+   "e": 383.3,
+   "lufs": -13,
+   "prompt": "giant tsunami wave roaring closer, enormous rushing wall of water, thundering surf",
+   "fi": 2.0,
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "s49",
+   "s": 380.8,
+   "e": 383.3,
+   "lufs": -12,
+   "prompt": "massive water impact crash and roaring spray hiss",
+   "alinhar": "ataque",
+   "fi": 0.02,
+   "fo": 0.05,
+   "extra": 0
+  },
+  {
+   "id": "s50",
+   "s": 383.4,
+   "e": 389.9,
+   "lufs": -18,
+   "prompt": "deep underwater rumble, muffled rushing water overhead, low churning current",
+   "fi": 0.05,
+   "fo": 0.9,
+   "extra": 0
+  }
+ ]
+}

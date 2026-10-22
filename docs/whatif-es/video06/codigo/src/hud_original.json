@@ -1,0 +1,1869 @@
+[
+ {
+  "t": 0.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (cold open)"
+ },
+ {
+  "t": 2.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (cold open)"
+ },
+ {
+  "t": 4.0,
+  "dia": "24 h 00 m",
+  "dia_min": 1440,
+  "mph": 1037,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 6.0,
+  "dia": "24 h 00 m",
+  "dia_min": 1440,
+  "mph": 1037,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 8.0,
+  "dia": "24 h 00 m",
+  "dia_min": 1440,
+  "mph": 1037,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 10.0,
+  "dia": "24 h 00 m",
+  "dia_min": 1440,
+  "mph": 1037,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 12.0,
+  "dia": "24 h 08 m",
+  "dia_min": 1448,
+  "mph": 1031,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 14.0,
+  "dia": "24 h 21 m",
+  "dia_min": 1461,
+  "mph": 1022,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 16.0,
+  "dia": "24 h 34 m",
+  "dia_min": 1474,
+  "mph": 1013,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 18.0,
+  "dia": "24 h 47 m",
+  "dia_min": 1487,
+  "mph": 1005,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 20.0,
+  "dia": "25 h 00 m",
+  "dia_min": 1500,
+  "mph": 996,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 22.0,
+  "dia": "25 h 13 m",
+  "dia_min": 1513,
+  "mph": 987,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 24.0,
+  "dia": "25 h 26 m",
+  "dia_min": 1526,
+  "mph": 978,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 26.0,
+  "dia": "25 h 40 m",
+  "dia_min": 1540,
+  "mph": 970,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 28.0,
+  "dia": "25 h 53 m",
+  "dia_min": 1553,
+  "mph": 961,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 30.0,
+  "dia": "26 h 14 m",
+  "dia_min": 1574,
+  "mph": 949,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 32.0,
+  "dia": "26 h 28 m",
+  "dia_min": 1588,
+  "mph": 941,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 34.0,
+  "dia": "26 h 42 m",
+  "dia_min": 1602,
+  "mph": 932,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 36.0,
+  "dia": "26 h 56 m",
+  "dia_min": 1616,
+  "mph": 924,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 38.0,
+  "dia": "27 h 10 m",
+  "dia_min": 1630,
+  "mph": 916,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 40.0,
+  "dia": "27 h 25 m",
+  "dia_min": 1645,
+  "mph": 908,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 42.0,
+  "dia": "27 h 39 m",
+  "dia_min": 1659,
+  "mph": 900,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 44.0,
+  "dia": "27 h 54 m",
+  "dia_min": 1674,
+  "mph": 893,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 46.0,
+  "dia": "28 h 08 m",
+  "dia_min": 1688,
+  "mph": 885,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 48.0,
+  "dia": "28 h 23 m",
+  "dia_min": 1703,
+  "mph": 877,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 50.0,
+  "dia": "28 h 38 m",
+  "dia_min": 1718,
+  "mph": 870,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 52.0,
+  "dia": "28 h 53 m",
+  "dia_min": 1733,
+  "mph": 862,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 54.0,
+  "dia": "29 h 09 m",
+  "dia_min": 1749,
+  "mph": 854,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 56.0,
+  "dia": "29 h 24 m",
+  "dia_min": 1764,
+  "mph": 847,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 58.0,
+  "dia": "29 h 39 m",
+  "dia_min": 1779,
+  "mph": 840,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 60.0,
+  "dia": "30 h 03 m",
+  "dia_min": 1803,
+  "mph": 829,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 62.0,
+  "dia": "30 h 22 m",
+  "dia_min": 1822,
+  "mph": 820,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 64.0,
+  "dia": "30 h 41 m",
+  "dia_min": 1841,
+  "mph": 812,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 66.0,
+  "dia": "31 h 01 m",
+  "dia_min": 1861,
+  "mph": 803,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 68.0,
+  "dia": "31 h 20 m",
+  "dia_min": 1880,
+  "mph": 795,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 70.0,
+  "dia": "31 h 40 m",
+  "dia_min": 1900,
+  "mph": 787,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 72.0,
+  "dia": "32 h 00 m",
+  "dia_min": 1920,
+  "mph": 778,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 74.0,
+  "dia": "32 h 30 m",
+  "dia_min": 1950,
+  "mph": 766,
+  "sentido": "normal",
+  "local": "CANNON BEACH, OREGON",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN SOUND"
+ },
+ {
+  "t": 76.0,
+  "dia": "32 h 54 m",
+  "dia_min": 1974,
+  "mph": 757,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 78.0,
+  "dia": "33 h 17 m",
+  "dia_min": 1997,
+  "mph": 748,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 80.0,
+  "dia": "33 h 41 m",
+  "dia_min": 2021,
+  "mph": 740,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 82.0,
+  "dia": "34 h 05 m",
+  "dia_min": 2045,
+  "mph": 731,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 84.0,
+  "dia": "34 h 29 m",
+  "dia_min": 2069,
+  "mph": 722,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 86.0,
+  "dia": "34 h 54 m",
+  "dia_min": 2094,
+  "mph": 714,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 88.0,
+  "dia": "35 h 19 m",
+  "dia_min": 2119,
+  "mph": 706,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 90.0,
+  "dia": "35 h 44 m",
+  "dia_min": 2144,
+  "mph": 697,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 92.0,
+  "dia": "36 h 10 m",
+  "dia_min": 2170,
+  "mph": 689,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 94.0,
+  "dia": "36 h 36 m",
+  "dia_min": 2196,
+  "mph": 681,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 96.0,
+  "dia": "37 h 02 m",
+  "dia_min": 2222,
+  "mph": 673,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 98.0,
+  "dia": "37 h 28 m",
+  "dia_min": 2248,
+  "mph": 665,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 100.0,
+  "dia": "37 h 55 m",
+  "dia_min": 2275,
+  "mph": 657,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 102.0,
+  "dia": "38 h 22 m",
+  "dia_min": 2302,
+  "mph": 650,
+  "sentido": "normal",
+  "local": "NEW YORK",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 104.0,
+  "dia": "39 h 57 m",
+  "dia_min": 2397,
+  "mph": 624,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 106.0,
+  "dia": "41 h 57 m",
+  "dia_min": 2517,
+  "mph": 595,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN AN AIRLINER"
+ },
+ {
+  "t": 108.0,
+  "dia": "44 h 02 m",
+  "dia_min": 2642,
+  "mph": 566,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 110.0,
+  "dia": "46 h 14 m",
+  "dia_min": 2774,
+  "mph": 540,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 112.0,
+  "dia": "48 h 32 m",
+  "dia_min": 2912,
+  "mph": 514,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 114.0,
+  "dia": "50 h 57 m",
+  "dia_min": 3057,
+  "mph": 490,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 116.0,
+  "dia": "53 h 30 m",
+  "dia_min": 3210,
+  "mph": 467,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 118.0,
+  "dia": "56 h 10 m",
+  "dia_min": 3370,
+  "mph": 445,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 120.0,
+  "dia": "58 h 58 m",
+  "dia_min": 3538,
+  "mph": 424,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 122.0,
+  "dia": "61 h 55 m",
+  "dia_min": 3715,
+  "mph": 404,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 124.0,
+  "dia": "65 h 01 m",
+  "dia_min": 3901,
+  "mph": 385,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 126.0,
+  "dia": "68 h 15 m",
+  "dia_min": 4095,
+  "mph": 366,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 128.0,
+  "dia": "71 h 40 m",
+  "dia_min": 4300,
+  "mph": 349,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 130.0,
+  "dia": "3.1 days",
+  "dia_min": 4464,
+  "mph": 333,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 132.0,
+  "dia": "3.4 days",
+  "dia_min": 4896,
+  "mph": 310,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 134.0,
+  "dia": "3.5 days",
+  "dia_min": 5040,
+  "mph": 301,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 136.0,
+  "dia": "3.6 days",
+  "dia_min": 5184,
+  "mph": 293,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 138.0,
+  "dia": "3.7 days",
+  "dia_min": 5328,
+  "mph": 284,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 140.0,
+  "dia": "3.8 days",
+  "dia_min": 5472,
+  "mph": 276,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 142.0,
+  "dia": "3.9 days",
+  "dia_min": 5616,
+  "mph": 268,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 144.0,
+  "dia": "4.0 days",
+  "dia_min": 5760,
+  "mph": 261,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 146.0,
+  "dia": "4.1 days",
+  "dia_min": 5904,
+  "mph": 253,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 148.0,
+  "dia": "4.3 days",
+  "dia_min": 6192,
+  "mph": 246,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 150.0,
+  "dia": "4.4 days",
+  "dia_min": 6336,
+  "mph": 239,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 152.0,
+  "dia": "4.5 days",
+  "dia_min": 6480,
+  "mph": 232,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 154.0,
+  "dia": "4.6 days",
+  "dia_min": 6624,
+  "mph": 225,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 156.0,
+  "dia": "4.8 days",
+  "dia_min": 6912,
+  "mph": 219,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 158.0,
+  "dia": "4.9 days",
+  "dia_min": 7056,
+  "mph": 213,
+  "sentido": "normal",
+  "local": "SAN FRANCISCO",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BULLET TRAIN"
+ },
+ {
+  "t": 160.0,
+  "dia": "5.3 days",
+  "dia_min": 7632,
+  "mph": 199,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 162.0,
+  "dia": "5.7 days",
+  "dia_min": 8208,
+  "mph": 185,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 164.0,
+  "dia": "6.1 days",
+  "dia_min": 8784,
+  "mph": 173,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 166.0,
+  "dia": "6.5 days",
+  "dia_min": 9360,
+  "mph": 161,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 168.0,
+  "dia": "7.0 days",
+  "dia_min": 10080,
+  "mph": 150,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 170.0,
+  "dia": "7.5 days",
+  "dia_min": 10800,
+  "mph": 140,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 172.0,
+  "dia": "8.1 days",
+  "dia_min": 11664,
+  "mph": 131,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 174.0,
+  "dia": "8.7 days",
+  "dia_min": 12528,
+  "mph": 122,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 176.0,
+  "dia": "9.3 days",
+  "dia_min": 13392,
+  "mph": 113,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 178.0,
+  "dia": "10 days",
+  "dia_min": 14400,
+  "mph": 106,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 180.0,
+  "dia": "11 days",
+  "dia_min": 15840,
+  "mph": 99,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 182.0,
+  "dia": "12 days",
+  "dia_min": 17280,
+  "mph": 92,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 184.0,
+  "dia": "12 days",
+  "dia_min": 17280,
+  "mph": 86,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 186.0,
+  "dia": "13 days",
+  "dia_min": 18720,
+  "mph": 80,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 188.0,
+  "dia": "15 days",
+  "dia_min": 21600,
+  "mph": 72,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A CAR ON THE HIGHWAY"
+ },
+ {
+  "t": 190.0,
+  "dia": "17 days",
+  "dia_min": 24480,
+  "mph": 65,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 192.0,
+  "dia": "19 days",
+  "dia_min": 27360,
+  "mph": 58,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 194.0,
+  "dia": "21 days",
+  "dia_min": 30240,
+  "mph": 53,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 196.0,
+  "dia": "23 days",
+  "dia_min": 33120,
+  "mph": 48,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 198.0,
+  "dia": "26 days",
+  "dia_min": 37440,
+  "mph": 43,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 200.0,
+  "dia": "29 days",
+  "dia_min": 41760,
+  "mph": 39,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 202.0,
+  "dia": "32 days",
+  "dia_min": 46080,
+  "mph": 35,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 204.0,
+  "dia": "36 days",
+  "dia_min": 51840,
+  "mph": 32,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 206.0,
+  "dia": "40 days",
+  "dia_min": 57600,
+  "mph": 28,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 208.0,
+  "dia": "45 days",
+  "dia_min": 64800,
+  "mph": 26,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 210.0,
+  "dia": "51 days",
+  "dia_min": 73440,
+  "mph": 23,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 212.0,
+  "dia": "57 days",
+  "dia_min": 82080,
+  "mph": 21,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 214.0,
+  "dia": "2 months",
+  "dia_min": 87660,
+  "mph": 19,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 216.0,
+  "dia": "2 months",
+  "dia_min": 87660,
+  "mph": 17,
+  "sentido": "normal",
+  "local": "SANTA MONICA",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 218.0,
+  "dia": "3 months",
+  "dia_min": 131490,
+  "mph": 15,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 220.0,
+  "dia": "3 months",
+  "dia_min": 131490,
+  "mph": 14,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 222.0,
+  "dia": "3 months",
+  "dia_min": 131490,
+  "mph": 13,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 224.0,
+  "dia": "4 months",
+  "dia_min": 175320,
+  "mph": 12,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN A BICYCLE"
+ },
+ {
+  "t": 226.0,
+  "dia": "4 months",
+  "dia_min": 175320,
+  "mph": 11,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 228.0,
+  "dia": "4 months",
+  "dia_min": 175320,
+  "mph": 11,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 230.0,
+  "dia": "5 months",
+  "dia_min": 219150,
+  "mph": 10,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 232.0,
+  "dia": "5 months",
+  "dia_min": 219150,
+  "mph": 9.4,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 234.0,
+  "dia": "6 months",
+  "dia_min": 262980,
+  "mph": 8.9,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 236.0,
+  "dia": "6 months",
+  "dia_min": 262980,
+  "mph": 8.3,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 238.0,
+  "dia": "7 months",
+  "dia_min": 306810,
+  "mph": 7.8,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 240.0,
+  "dia": "8 months",
+  "dia_min": 350640,
+  "mph": 7.3,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 242.0,
+  "dia": "9 months",
+  "dia_min": 394470,
+  "mph": 6.8,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 244.0,
+  "dia": "10 months",
+  "dia_min": 438300,
+  "mph": 6.2,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 246.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 5.8,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 248.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 5.5,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 250.0,
+  "dia": "1.2 years",
+  "dia_min": 631152,
+  "mph": 5.2,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 252.0,
+  "dia": "1.3 years",
+  "dia_min": 683748,
+  "mph": 4.9,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 254.0,
+  "dia": "1.5 years",
+  "dia_min": 788940,
+  "mph": 4.7,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 256.0,
+  "dia": "1.8 years",
+  "dia_min": 946728,
+  "mph": 4.4,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE EQUATOR MOVES FASTER THAN WALKING PACE"
+ },
+ {
+  "t": 258.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 4.2,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 260.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 3.9,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 262.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 3.7,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 264.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 3.5,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 266.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 3.3,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 268.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 3.1,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 270.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 3.0,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 272.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 2.8,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 274.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 2.7,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 276.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 2.6,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 278.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 2.4,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 280.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 2.2,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 282.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 1.9,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 284.0,
+  "dia": "FOREVER",
+  "dia_min": null,
+  "mph": 1.7,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 286.0,
+  "dia": "2.0 years",
+  "dia_min": 1051920,
+  "mph": 1.4,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN HAS STOPPED IN THE SKY"
+ },
+ {
+  "t": 288.0,
+  "dia": "1.6 years",
+  "dia_min": 841536,
+  "mph": 1.1,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 290.0,
+  "dia": "1.4 years",
+  "dia_min": 736344,
+  "mph": 0.8,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 292.0,
+  "dia": "1.3 years",
+  "dia_min": 683748,
+  "mph": 0.6,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 294.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.4,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 296.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.2,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 298.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.1,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 300.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.0,
+  "sentido": "normal",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 302.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.0,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 304.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.0,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 306.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.0,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 308.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.0,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 310.0,
+  "dia": "1 year",
+  "dia_min": 525960,
+  "mph": 0.0,
+  "sentido": "normal",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 312.0,
+  "dia": "10 months",
+  "dia_min": 438300,
+  "mph": 0.6,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 314.0,
+  "dia": "5 months",
+  "dia_min": 219150,
+  "mph": 4.0,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 316.0,
+  "dia": "3 months",
+  "dia_min": 131490,
+  "mph": 9.6,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 318.0,
+  "dia": "53 days",
+  "dia_min": 76320,
+  "mph": 17,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 320.0,
+  "dia": "37 days",
+  "dia_min": 53280,
+  "mph": 25,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 322.0,
+  "dia": "29 days",
+  "dia_min": 41760,
+  "mph": 33,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 324.0,
+  "dia": "24 days",
+  "dia_min": 34560,
+  "mph": 40,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 326.0,
+  "dia": "21 days",
+  "dia_min": 30240,
+  "mph": 47,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 328.0,
+  "dia": "19 days",
+  "dia_min": 27360,
+  "mph": 51,
+  "sentido": "para tras",
+  "local": "EARTH",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 330.0,
+  "dia": "18 days",
+  "dia_min": 25920,
+  "mph": 54,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 332.0,
+  "dia": "14 days",
+  "dia_min": 20160,
+  "mph": 69,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 334.0,
+  "dia": "11 days",
+  "dia_min": 15840,
+  "mph": 95,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 336.0,
+  "dia": "7.8 days",
+  "dia_min": 11232,
+  "mph": 129,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 338.0,
+  "dia": "6.0 days",
+  "dia_min": 8640,
+  "mph": 171,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 340.0,
+  "dia": "4.7 days",
+  "dia_min": 6768,
+  "mph": 217,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 342.0,
+  "dia": "3.8 days",
+  "dia_min": 5472,
+  "mph": 266,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 344.0,
+  "dia": "3.2 days",
+  "dia_min": 4608,
+  "mph": 316,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 346.0,
+  "dia": "67 h 33 m",
+  "dia_min": 4053,
+  "mph": 365,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 348.0,
+  "dia": "60 h 08 m",
+  "dia_min": 3608,
+  "mph": 410,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 350.0,
+  "dia": "54 h 49 m",
+  "dia_min": 3289,
+  "mph": 450,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 352.0,
+  "dia": "51 h 08 m",
+  "dia_min": 3068,
+  "mph": 483,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 354.0,
+  "dia": "48 h 48 m",
+  "dia_min": 2928,
+  "mph": 506,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 356.0,
+  "dia": "47 h 36 m",
+  "dia_min": 2856,
+  "mph": 519,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 358.0,
+  "dia": "47 h 02 m",
+  "dia_min": 2822,
+  "mph": 525,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 360.0,
+  "dia": "45 h 40 m",
+  "dia_min": 2740,
+  "mph": 541,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 362.0,
+  "dia": "43 h 45 m",
+  "dia_min": 2625,
+  "mph": 564,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 364.0,
+  "dia": "41 h 31 m",
+  "dia_min": 2491,
+  "mph": 595,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 366.0,
+  "dia": "39 h 09 m",
+  "dia_min": 2349,
+  "mph": 631,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 368.0,
+  "dia": "36 h 48 m",
+  "dia_min": 2208,
+  "mph": 672,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 370.0,
+  "dia": "34 h 34 m",
+  "dia_min": 2074,
+  "mph": 715,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 372.0,
+  "dia": "32 h 32 m",
+  "dia_min": 1952,
+  "mph": 760,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 374.0,
+  "dia": "30 h 41 m",
+  "dia_min": 1841,
+  "mph": 806,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 376.0,
+  "dia": "29 h 04 m",
+  "dia_min": 1744,
+  "mph": 851,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 378.0,
+  "dia": "27 h 41 m",
+  "dia_min": 1661,
+  "mph": 894,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 380.0,
+  "dia": "26 h 31 m",
+  "dia_min": 1591,
+  "mph": 933,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 382.0,
+  "dia": "25 h 34 m",
+  "dia_min": 1534,
+  "mph": 968,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 384.0,
+  "dia": "24 h 49 m",
+  "dia_min": 1489,
+  "mph": 997,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 386.0,
+  "dia": "24 h 17 m",
+  "dia_min": 1457,
+  "mph": 1019,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 388.0,
+  "dia": "23 h 58 m",
+  "dia_min": 1438,
+  "mph": 1033,
+  "sentido": "para tras",
+  "local": "THE EQUATOR",
+  "comparacao": "THE SUN RISES IN THE WEST"
+ },
+ {
+  "t": 390.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 392.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 394.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 396.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 398.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 400.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 402.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 404.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 406.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 408.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ },
+ {
+  "t": 410.0,
+  "dia": null,
+  "dia_min": null,
+  "mph": null,
+  "sentido": null,
+  "local": null,
+  "comparacao": null,
+  "nota": "sem HUD (telas finais)"
+ }
+]
