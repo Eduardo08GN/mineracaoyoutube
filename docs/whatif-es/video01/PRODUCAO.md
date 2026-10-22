@@ -252,6 +252,26 @@ Nunca no primeiro minuto (o gancho é o do original) e nunca depois das telas fi
 
 ---
 
+### 4.4 Ação em cena (regra do canal, vale para todos os vídeos)
+
+O original é uma sequência de **acontecimentos**, não uma câmera parada sobre um cenário com legenda. Na auditoria do vídeo 2 o
+movimento médio do original foi 0,83 contra 0,30 do nosso: quase três vezes mais coisa acontecendo. Regras:
+
+1. **Mapa de ações antes de qualquer cena.** Na leitura a 10 fps, listar **cada acontecimento visível** do original com segundo de
+   início e fim, quem/o quê e onde no quadro, incluindo os movimentos de câmera (pan, chicote, inclinação). Ex.:
+   `{t0: 4.0, t1: 10.0, quem: "pessoa de camisa branca", acao: "caminha em direção à câmera", onde: "direita"}`,
+   `{t0: 50, acao: "a toalha pega fogo", onde: "embaixo à esquerda"}`, `{t0: 68, t1: 72, acao: "grupo corre pela beira d'água para a direita"}`.
+   Tudo o que acontece no original acontece no nosso, no mesmo segundo (±0,5 s).
+2. **Legenda = ação.** Toda legenda que descreve algo ("Todos corren", "Las palmeras arden", "El muelle está en llamas") tem a ação
+   acontecendo, visível e em destaque no quadro, naquele momento. É proibido descrever sem mostrar.
+3. **Densidade mínima.** Nenhum trecho de mais de ~4 s sem algo novo na tela (gente entrando/saindo do quadro, objeto pegando fogo,
+   onda, pássaros, destroços, mudança de câmera). Onde o original pausa, no mínimo a câmera se move.
+4. **No código.** Um arquivo de eventos por vídeo (`acoes.ts`) que a cena lê: pessoas com animação de verdade (andar, correr, cair,
+   fugir — fuga pré-calculada com semente), objetos com estados (intacto → queimando → carbonizado → voando).
+5. **Conferência automática antes do render.** (a) movimento por capítulo (fluxo óptico do `medir.py`) ≥ 70% do original;
+   (b) para cada item do mapa, still nosso e do original no mesmo segundo, lado a lado; (c) detector de "trecho morto"
+   (mais de 4 s com variação entre quadros quase nula).
+
 ## 5. Etapa 3 — A cena 3D
 
 ### 5.1 Stack (versões travadas no `package.json` + lock)
@@ -593,6 +613,7 @@ Tabelas completas na [seção 17](#17-auditoria-do-vídeo-entregue).
 10. Repo público: nada de e-mail, senha, cookie, token ou ID de perfil em commit.
 11. **Adaptação cultural**: nenhuma referência dos EUA chega ao vídeo; o substituto hispânico mantém a física (latitude, tipo de lugar).
 12. **Take inédito de 30 s** em todo vídeo, no meio ou perto do fim: fato contraintuitivo, com o porquê, verificado em 2 fontes e mostrado em cena.
+13. **Ação em cena** (seção 4.4): mapa de ações do original executado no mesmo segundo; legenda = ação; nunca mais de ~4 s sem acontecimento; movimento por capítulo ≥ 70% do original.
 
 ---
 
@@ -617,6 +638,7 @@ Canal monetizado: só entram modelos e assets com uso comercial liberado.
 - [ ] Baixar o original (`ref/v.mp4` + legendas) e rodar `analisar.py`; OCR do painel (`ocr_hud.py`) se houver contador.
 - [ ] Escrever `FICHA.md` (capítulos, câmera, objetos, ações, painel, som) lendo as folhas a 10 fps.
 - [ ] **Adaptação cultural** (seção 4.2): inventário das referências dos EUA → tabela de substitutos com latitude e fonte dos números.
+- [ ] **Mapa de ações** (seção 4.4): todo acontecimento visível do original com segundo, quem, o quê e onde; vira `acoes.ts`.
 - [ ] **Take inédito** (seção 4.3): escolher o fato (2 fontes), o ponto de inserção, a cena e as legendas; `tOrig` no roteiro.
 - [ ] `roteiro.ts` com os tempos do original e `entrada` de cada capítulo; `legendas.json`; `fisica.ts` se houver números.
 - [ ] Copiar a pasta `v2` deste vídeo como base (look, compositor, scripts de VM, mixagem) e trocar os mundos.
