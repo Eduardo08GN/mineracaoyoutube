@@ -114,6 +114,7 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 69 | Na vista aérea apareceu um disco bege pálido sobre o mar | Era a bola de fogo: o atlas dela é RGB sem alfa e o cinza da borda do quadro, somado em aditivo, virava disco. Flipbook aditivo corta a luminância baixa (`smoothstep(0.06, 0.3, lum)`). Isolar com as flags `semRaios`/`semNevoa` antes de culpar o pós. |
 | 70 | O upload travou 28 min com "No file chosen": o `subir` entregou o arquivo ao widget de upload **antigo**, que ficou na saída da célula que o `limpar` mantém | `colab.subir` reconhece o widget novo pelo **id do input** (`files-<aleatório>`) que não existia antes do Ctrl+Enter — o Colab reaproveita iframes, então comparar frames não serve — e confere `files.length` antes de esperar; cada upload na rodada tem `timeout` e a rodada para se faltar o `SUBIU`. |
 | 71 | Parar a tarefa em segundo plano (TaskStop) deixou o `bash` da rodada órfão no Windows; o laço de `ler` dele continuava apagando as células da rodada nova | Depois de parar uma rodada, procurar e matar `rodada|g4.py|colab.subir` nos processos (PowerShell `Get-CimInstance Win32_Process`) antes de começar outra. |
+| 72 | O zip de assets (60 MB) nunca subia pelo widget, sem erro claro na rodada | O Playwright conectado por CDP a um navegador remoto (Dolphin) **não transfere arquivo > 50 MB** (`set_input_files`: "Cannot transfer files larger than 50Mb"). `colab.subir_grande` corta em pedaços de 45 MB, sobe um por um e junta com `cat` na VM (`JUNTOU_OK`). |
 
 ## 5. Ordem de produção de cada vídeo
 
