@@ -93,6 +93,21 @@ Observações de licença:
   estava sentado/deitado, acelerando até o sprint — tudo em fórmula fechada.
 - Quem está a menos de 8 m da câmera some (nada de boneco gigante no primeiro plano).
 
+### `acoes.ts` — o mapa de ações virando encenação (por vídeo)
+- Origem: `mapa_acoes.json` (agente lendo o original a 10 fps: 214 eventos no vídeo 2, com segundo, quem, o quê, onde no quadro e
+  movimentos de câmera). Também revelou que a nossa câmera girava **ao contrário** do original em 5 trechos (corrigido).
+- **Figurantes** com pontos `[segundo, lateral, frente]` **relativos à câmera** num segundo de referência (`relMundo(ref, …)`),
+  então caem exatamente onde o original mostra (ex.: camisa laranja passando a 1,5 m entre as mãos, 25,4–26,8 s).
+  `estadoFigurante`: anda/corre entre os pontos com o clipe pela velocidade (Walk < 1,9 m/s < Jog < 3,6 m/s < Sprint) e o passo
+  pela distância; `levanta`: deitado até o segundo X e levanta em 0,7 s (a queda tocada ao contrário); `carbonizado` /
+  `carbonizado_deitado`: corpo preto parado com focos de fogo.
+- **Roupa por região do corpo** (shader, na pose de bind em T de 1,8 m): camisa de manga curta (torso |x|<0,24, 0,98–1,47 m;
+  manga até |x|<0,5), calça (até 0,1 m) ou short (até 0,52 m); sem camisa = roupa de banho recolorida. Cores do original por
+  figurante (camisa vermelha/calça marrom etc.).
+- **Objetos**: toalha aos pés pega fogo em 48,2 s (baixo-direita) e carboniza, fumaça pulsando até 63 s; primeiros focos na areia
+  (67,4) e na base do muelle (68); copas da frente explodem juntas em 75,4 s; gaivotas 10,5–14 s.
+- Conferência: stills nos segundos de cada evento, lado a lado com o original (no vídeo 2: 8 de 8 eventos no quadro e no tempo).
+
 ## 4. Pipeline: o que mudou
 
 - **Upload para a G4**: o canal por células (base64 em pedaços de 15 mil caracteres) só serve para código. Assets com URL pública
@@ -107,8 +122,8 @@ Observações de licença:
 - Feito e conferido em stills locais: céu fotográfico, areia PBR, mar com reflexo, flipbooks de fogo (chamas no chão e no muelle
   com cara de fogo de verdade), vapor do Panamá, pessoas com rig.
 - Ajustado depois do primeiro still: fumaça mais clara (estava preta), bola de fogo menos aditiva (lavava a tela), areia de chão.
-- Em andamento: **mapa de ações do original** (agente lendo os quadros a 10 fps) → `acoes.ts` para encenar quem corre, cai,
-  pega fogo etc. dentro do quadro e no segundo certo (no still de 1:20 a fuga existia, mas fora do enquadramento).
+- Feito: **mapa de ações → `acoes.ts`** (figurantes, toalha, focos, copas, gaivotas), câmera com os sentidos do original,
+  roupas por região. Stills locais: os 8 eventos conferidos aparecem no quadro e no segundo do original.
 - Pendente: stills na G4 (look HDR), render completo, lado a lado novo com o original.
 
 ## 6. Próximos passos da stack (ainda gratuitos)
