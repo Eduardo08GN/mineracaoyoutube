@@ -498,13 +498,21 @@ def voz(avatar, idioma):
     return (avatar.get("voz") or TOMIKO["voz"]).replace("{lingua}", IDIOMAS[idioma]["lingua"])
 
 
-def prompt_video(avatar, idioma, movimento, fala, muda=False, extras=()):
+def camera_prompt(camera=""):
+    """⭐ (22/10, Eduardo) a camera do take: travada (o padrao de antes) ou o movimento lido na fonte (leitura optica,
+    motor/instagram_qa.py: camera_da_fonte), suave e continuo, sem corte."""
+    if not (camera or "").strip(): return CAMERA
+    return (f"Single continuous shot, no cuts. The camera moves exactly like the source shot: {camera.strip()}; smooth "
+            f"and continuous from the first to the last frame, starting from the exact framing of the first frame.")
+
+
+def prompt_video(avatar, idioma, movimento, fala, muda=False, extras=(), camera=""):
     """O prompt de um take: camera travada, quem (so' invariantes), a fala atribuida com o idioma e a voz, o gesto,
     o silencio depois da fala e o audio. `extras` = frases das licoes ativas do tipo "prompt" (no maximo 3), antes
     do audio. ⛔ Com a ancora no quadro, a roupa e o cenario NAO sao descritos de novo: a
     prosa compete com a imagem e as vezes ganha. ⛔ "(no subtitles)" logo depois da fala: a legenda queimada e' o
     defeito mais relatado do Veo com dialogo, e a restricao rende mais colada nela."""
-    partes = [CAMERA, avatar.get("prefixo") or TOMIKO["prefixo"]]
+    partes = [camera_prompt(camera), avatar.get("prefixo") or TOMIKO["prefixo"]]
     if fala.strip():
         partes += [genero(f'{ENTRADA_DA_FALA} says in {IDIOMAS[idioma]["lingua"]}, in {voz(avatar, idioma)}: ', avatar)
                    + f'"{fala.strip()}" (no subtitles)', genero(movimento.strip(), avatar), OBJETOS_FIXOS,
@@ -524,7 +532,7 @@ def prompt_cena(avatar, cena):
             f"No text, no captions, no logos, no watermark.")
 
 
-def prompt_quadro(avatar, lugar, quadro):
+def prompt_quadro(avatar, lugar, quadro, novo_lugar=False):
     """O quadro de abertura de UM take. Refs: 1a = o quadro do video de origem naquele take, 2a = a foto do avatar.
     ⛔ O angulo, a distancia e a composicao vem SO' do video de origem (cada Reel tem os seus). O comodo entra so'
     pelo TEXTO: a imagem dele como referencia domina o quadro e poe o avatar de corpo inteiro, longe da camera.
@@ -533,24 +541,53 @@ def prompt_quadro(avatar, lugar, quadro):
     return genero(f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
             f"zoom, the same framing and crop, the person at the SAME size in the frame (a close-up of head, chest and "
             f"hands stays a close-up: never a full-body or wide shot), and the same kind of items in the same places of the frame, as they are "
+            f"at the START of the step. ⭐ The framing comes ONLY from the FIRST reference, never from the SECOND: an "
+            f"overhead close-up of a bowl stays an overhead close-up of the bowl with only her hands in it; a tight "
+            f"close-up of the face and the food stays that tight; her face or body is cut or out of the frame exactly "
+            f"as in the FIRST reference. Items "
             f"at the START of the step (nothing being poured yet). Each item and tool keeps the SAME orientation and "
             f"direction as in the FIRST reference (a carrot lying left to right stays left to right, the knife blade "
             f"crosses it at the same angle, a jar handle points the same side), and whatever is already cut or done "
             f"there stays done. Replace the person with the person of the SECOND reference image (same face, hair and "
             f"clothes): {avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the "
-            f"face, the hair, the headwear or the clothes. Keep the kind of place and setting of the FIRST reference "
-            f"image (what is around and behind the items: a kitchen stays a kitchen, a garden bed stays a garden bed, a "
-            f"chicken coop stays a chicken coop), restyled as part of {lugar.strip()} {quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
+            f"face, the hair, the headwear or the clothes. "
+            + (f"The scene takes place in this setting (it replaces what is around and behind the items in the FIRST "
+               f"reference, keeping its camera angle, framing and items): {lugar.strip()} " if novo_lugar else
+               f"Keep the kind of place and setting of the FIRST reference "
+               f"image (what is around and behind the items: a kitchen stays a kitchen, a garden bed stays a garden bed, a "
+               f"chicken coop stays a chicken coop), restyled as part of {lugar.strip()} ")
+            + f"{quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
             f"No text, no captions, no logos, no watermark.", avatar)
 
 
-def prompt_quadro_fim(avatar, lugar, quadro_fim):
+def prompt_reenquadrar(avatar, quadro=""):
+    """⭐⭐ (22/10, Eduardo: "respeite mais os angulos e o enquadramento do video original") a 2a passada do quadro de
+    abertura. Refs: 1a = o quadro da fonte, 2a = o quadro ja' gerado (a Tomiko no lugar dela). ⛔ Com a foto do avatar
+    como referencia, o gerador puxa a composicao do retrato (plano medio) e ignora o close da fonte; reenquadrar uma
+    imagem que ja' tem a pessoa e o lugar certos e' o que ele faz bem (o quadro final ja' acertava assim)."""
+    return genero(f"Reframe the SECOND image so its framing matches the FIRST image exactly: the same camera angle "
+                  f"(eye level, overhead or low), the same distance and zoom, the same crop. The framing comes ONLY from "
+                  f"the FIRST image, even when it is much closer than the SECOND: an overhead close-up of a bowl becomes "
+                  f"an overhead close-up of the bowl with only her hands; a tight close-up of the face and the food held "
+                  f"near the lens stays that tight; her face or body is cut or out of the frame exactly as in the FIRST "
+                  f"image, and wherever the FIRST image shows the face, her face stays fully visible (the food is held "
+                  f"where the FIRST image holds it, never covering her face). Everything else comes from the SECOND "
+                  f"image: the same woman, her face, hair, blouse and apron, the same place and light, the same items. "
+                  f"{quadro.strip()} Nothing of the FIRST image's person stays. Vertical 9:16 photo, smartphone UGC "
+                  f"style. No text, no captions, no logos, no watermark.", avatar)
+
+
+def prompt_quadro_fim(avatar, lugar, quadro_fim, camera=""):
     """O quadro FINAL de um take: o fim do mesmo passo no video de origem, com a mesma pessoa, lugar e luz do quadro
     de abertura. Refs: 1a = o quadro do video de origem no FIM do trecho, 2a = o quadro de abertura ja' gerado,
     3a = a foto do avatar. ⭐⭐ (19/10, ordem do Eduardo) com o mesmo quadro nas duas pontas o Veo nao completa a
     acao (o sal nao cai no liquidificador): o take vai do quadro de abertura a este, e a acao acontece de verdade."""
     return genero(f"Recreate the shot of the FIRST reference image, which is the END of the same step: the same camera "
-                  f"angle, distance, framing and crop. Everything else stays exactly as in the SECOND reference image (the "
+                  f"angle, distance, framing and crop. "
+                  + (f"The camera MOVED during this step ({camera.strip()}): the framing comes ONLY from the FIRST "
+                     f"reference, even when it is much closer, wider or shifted than the SECOND and her face or body "
+                     f"leaves the frame (a close-up of the hands stays a close-up of the hands). " if (camera or "").strip() else "")
+                  + f"Everything else stays exactly as in the SECOND reference image (the "
                   f"opening frame of this same shot): the same person, the same clothes, the same place and light, the same "
                   f"items in the same places, except what the action changed: {quadro_fim.strip()} The person is the "
                   f"person of the THIRD reference image (same face, hair and clothes): {avatar.get('descricao', '').strip()} "

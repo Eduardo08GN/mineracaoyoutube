@@ -147,6 +147,8 @@ class NovoReel(BaseModel):
     livro: bool = False
     modelo: str = "gratis"
     legenda: int = 0
+    camera: str = "fonte"
+    ambiente: str = ""
 
 
 class Take(BaseModel):
@@ -447,7 +449,7 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     @app.post("/api/instagram/reels")
     def ig_novo_reel(c: NovoReel):
         return _ig().criar_reel(c.avatar, c.idioma, c.url, c.video, c.ext, c.cta, c.palavra, c.livro, c.modelo,
-                                 c.legenda)
+                                 c.legenda, camera=c.camera, ambiente=c.ambiente)
 
     @app.get("/api/instagram/reels/{rid}")
     def ig_reel(rid: str):

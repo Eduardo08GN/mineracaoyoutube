@@ -37,7 +37,12 @@ LIMITES = {
     "parecida": 0.6,        # palavra trocada com essa semelhanca (letras) e' pronuncia, abaixo e' outra palavra
 }
 FAIXA_CIMA = 0.22           # ⭐ a faixa de cima do quadro e' parede e prateleira: so' a camera mexe ali
-AMOSTRAS = 17
+FPS_LEITURA = 10            # ⭐ (22/10, Eduardo) a leitura optica a 10 quadros por segundo (antes: 17 amostras por take)
+# ⭐ (22/10, Eduardo: "respeite os angulos, o enquadramento e os movimentos de camera do video original") o que a
+#    leitura optica da fonte chama de movimento: zoom e pan/tilt acumulados no trecho, e o balanco da mao
+CAMERA_FONTE = {"zoom_pct": 5.0, "pan_pct": 4.0, "tremor_pct": 0.35}
+RAPIDO_PCT_S = 12.0         # zoom/pan acima disso por segundo e' "rapido" (o zoom de edicao do plano medio ao close)
+CORTE_CENA_PCT = 12.0       # dois quadros seguidos (0,1 s) mais diferentes que isso = corte de cena, nao camera
 
 
 def _norm(w):
@@ -104,6 +109,97 @@ def _quadros(video, tempos):
     return saida
 
 
+def _ler_fps(video, ini=0.0, fim=None, fps=FPS_LEITURA):
+    """[(t, cinza)] a `fps` quadros por segundo entre ini e fim, lendo o video em sequencia (sem um seek por quadro)."""
+    import cv2
+    cap = cv2.VideoCapture(video)
+    if not cap.isOpened(): raise RuntimeError("não consegui abrir o vídeo para a leitura óptica")
+    saida, prox, passo = [], max(0.0, ini), 1.0 / fps
+    try:
+        if ini > 0: cap.set(cv2.CAP_PROP_POS_MSEC, ini * 1000)
+        while True:
+            ok, f = cap.read()
+            if not ok: break
+            t = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            if fim is not None and t > fim: break
+            if t + 1e-3 >= prox:
+                saida.append((round(t, 3), _cinza(f)))
+                prox += passo
+    finally:
+        cap.release()
+    return saida
+
+
+def fim_do_plano(video, ini, fim):
+    """⭐ (22/10) o ultimo instante do MESMO plano que comeca em `ini`: o tempo logo antes do primeiro corte de cena
+    entre ini e fim (leitura optica a FPS_LEITURA), ou `fim` sem corte. ⛔ O quadro final tirado depois de um corte
+    (o forno, outro plano) fazia o Veo fundir as duas cenas no fim do take."""
+    fs = _ler_fps(video, ini, fim)
+    for (ta, a), (_tb, b) in zip(fs, fs[1:]):
+        if _diferenca(a, b) > CORTE_CENA_PCT: return max(ini, ta - 0.05)
+    return fim
+
+
+def camera_da_fonte(video, ini=0.0, fim=None):
+    """⭐ A camera de um trecho do video de origem, pela leitura optica a FPS_LEITURA: entre cada par de quadros, os
+    pontos rastreados (Lucas-Kanade) dao uma similaridade (RANSAC: o fundo vence a mao que mexe); acumulados, dao o
+    zoom (% de crescimento da imagem), o pan e o tilt (% da largura/altura que o conteudo andou) e o tremor (o
+    balanco de camera na mao). -> {"zoom_pct", "pan_pct", "tilt_pct", "tremor_pct", "texto"}"""
+    import cv2, numpy as np
+    fs = _ler_fps(video, ini, fim)
+    vazio = {"zoom_pct": 0.0, "pan_pct": 0.0, "tilt_pct": 0.0, "tremor_pct": 0.0, "texto": ""}
+    if len(fs) < 3: return vazio
+    h0, w0 = fs[0][1].shape
+    esc = 360.0 / max(h0, w0)
+    pq = [cv2.resize(g, (max(1, int(w0 * esc)), max(1, int(h0 * esc))), interpolation=cv2.INTER_AREA) for _, g in fs]
+    h, w = pq[0].shape
+    escala, dx, dy, passos, cortes = 1.0, 0.0, 0.0, [], 0
+    for a, b in zip(pq, pq[1:]):
+        if _diferenca(a, b) > CORTE_CENA_PCT:      # ⛔ corte de cena no meio do trecho: nao e' a camera andando
+            cortes += 1
+            continue
+        pts = cv2.goodFeaturesToTrack(a, 300, 0.01, 6)
+        if pts is None or len(pts) < 8: continue
+        p2, st, _err = cv2.calcOpticalFlowPyrLK(a, b, pts, None)
+        bons = st.reshape(-1) == 1
+        if bons.sum() < 8: continue
+        m, _inl = cv2.estimateAffinePartial2D(pts[bons], p2[bons], method=cv2.RANSAC, ransacReprojThreshold=2.0)
+        if m is None: continue
+        s = float(np.hypot(m[0, 0], m[1, 0]))
+        # translacao do centro do quadro (a de m e' em torno da origem: com zoom, o canto anda sem a camera andar)
+        cx, cy = w / 2, h / 2
+        tx = float(m[0, 0] * cx + m[0, 1] * cy + m[0, 2] - cx)
+        ty = float(m[1, 0] * cx + m[1, 1] * cy + m[1, 2] - cy)
+        escala *= s; dx += tx; dy += ty
+        passos.append((tx / w * 100, ty / h * 100))
+    if not passos: return vazio
+    arr = np.array(passos)
+    tremor = float(np.mean(np.abs(arr - np.mean(arr, axis=0)))) if len(arr) > 2 else 0.0
+    med = {"zoom_pct": round((escala - 1) * 100, 1), "pan_pct": round(dx / w * 100, 1), "tilt_pct": round(dy / h * 100, 1),
+           "tremor_pct": round(tremor, 2), "cortes": cortes, "dur_s": round(len(fs) / FPS_LEITURA, 1)}
+    # ⛔ trecho picado (2+ cortes de cena) mistura planos diferentes: nao ha um movimento so' para copiar
+    return {**med, "texto": "" if cortes >= 2 else texto_camera(med)}
+
+
+def texto_camera(m):
+    """A camera medida em palavras para o prompt do Veo ("" = travada). O conteudo andar para a esquerda e' a camera
+    indo para a direita; a imagem crescer e' a camera chegando perto."""
+    lim, partes, dur = CAMERA_FONTE, [], max(0.5, m.get("dur_s") or 5.0)
+    ritmo = lambda pct: "quick" if abs(pct) / dur >= RAPIDO_PCT_S else "slow, steady"           # noqa: E731
+    z = m.get("zoom_pct", 0)
+    if z >= lim["zoom_pct"]:
+        partes.append(f"a {ritmo(z)} push-in (the frame tightens about {abs(z):.0f}% by the end)")
+    elif z <= -lim["zoom_pct"]:
+        partes.append(f"a {ritmo(z)} pull-back (the frame widens about {abs(z):.0f}% by the end)")
+    if abs(m.get("pan_pct", 0)) >= lim["pan_pct"]:
+        partes.append(f"a {ritmo(m['pan_pct'])} pan to the {'right' if m['pan_pct'] < 0 else 'left'}")
+    if abs(m.get("tilt_pct", 0)) >= lim["pan_pct"]:
+        partes.append(f"a {ritmo(m['tilt_pct'])} tilt {'down' if m['tilt_pct'] < 0 else 'up'}")
+    if m.get("tremor_pct", 0) >= lim["tremor_pct"]:
+        partes.append("a subtle, natural handheld sway, like a phone held in the hand")
+    return ", ".join(partes)
+
+
 def _pequeno(g):
     import cv2, numpy as np
     return cv2.GaussianBlur(cv2.resize(g, (90, 160), interpolation=cv2.INTER_AREA), (5, 5), 0).astype(np.float32)
@@ -120,8 +216,7 @@ def medir_video(video, dur, corte_s=None, fim_ref=None):
     amostra contra a do 1o quadro (deslocamento em % da largura, so' com resposta confiavel). Deriva: o quadro no
     ponto de corte da montagem e o de meio segundo antes do fim, contra o 1o quadro."""
     import cv2, numpy as np
-    tempos = [dur * i / (AMOSTRAS - 1) for i in range(AMOSTRAS - 1)]          # ⛔ o ultimo quadro do Veo vem borrado
-    fs = _quadros(video, tempos)
+    fs = _ler_fps(video, 0.0, max(0.0, dur - 0.2))                           # ⛔ o ultimo quadro do Veo vem borrado
     if len(fs) < 3: raise RuntimeError("vídeo curto demais para o QA")
     h, w = fs[0][1].shape
     alt = max(16, int(h * FAIXA_CIMA))
@@ -148,8 +243,9 @@ def _seg(s):
     return f"{s:.1f}".replace(".", ",") + " s"
 
 
-def avaliar(fala, palavras, dur, visual=None):
-    """As flags de uma versao. `palavras` = o que o whisper ouviu no video (com tempo); `visual` = medir_video(...)."""
+def avaliar(fala, palavras, dur, visual=None, camera_livre=False):
+    """As flags de uma versao. `palavras` = o que o whisper ouviu no video (com tempo); `visual` = medir_video(...).
+    `camera_livre`: o take copia um movimento de camera da fonte, entao a camera andar nao e' defeito."""
     flags, med = [], {}
 
     def flag(etiqueta, motivo, grave=True):
@@ -181,7 +277,7 @@ def avaliar(fala, palavras, dur, visual=None):
                 flag("tempo", "a fala vai até o fim do take: pode ter sido cortada")
     if visual:
         med.update({k: v for k, v in visual.items() if v is not None})
-        if visual.get("camera_pct", 0) > LIMITES["camera_pct"]:
+        if not camera_livre and visual.get("camera_pct", 0) > LIMITES["camera_pct"]:
             flag("camera", f"o fundo deslocou {visual['camera_pct']:.1f}% da largura: a câmera mexeu")
         if visual.get("acao"):
             lim = LIMITES["acao_pct"]
@@ -312,6 +408,26 @@ def _autoteste():
     cv2.imwrite(fim_png, quadro_fim)
     ma = medir_video(mexe, 4.0, corte_s=3.4, fim_ref=fim_png)
     caso("⭐ take com acao: o fim e' medido contra o quadro final esperado", ma["acao"] and ma["fim_pct"] < mm["fim_pct"])
+    lido = _ler_fps(parado, 0.0, 3.0)
+    caso("⭐ leitura optica a 10 fps", 29 <= len(lido) <= 31 and abs((lido[1][0] - lido[0][0]) - 0.1) < 0.03)
+    zoom = os.path.join(tmp, "zoom.mp4")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", base, "-vf",
+                    "trim=0:0.04,loop=200:1:0,setpts=N/24/TB,zoompan=z='1+on*0.003':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+                    ":d=1:s=360x640:fps=24",
+                    "-t", "4", "-c:v", "libx264", "-pix_fmt", "yuv420p", zoom], check=True)
+    cp, cm, cz = camera_da_fonte(parado), camera_da_fonte(mexe), camera_da_fonte(zoom)
+    caso("⭐ camera da fonte: parada = travada (sem texto)", cp["texto"] == "" and abs(cp["zoom_pct"]) < 2)
+    corte = os.path.join(tmp, "corte.mp4")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", parado, "-f", "lavfi", "-i", "color=c=red:s=360x640:d=2:r=24",
+                    "-filter_complex", "[0:v]trim=0:2,setpts=PTS-STARTPTS[a];[1:v]format=yuv420p[b];[a][b]concat=n=2:v=1[v]",
+                    "-map", "[v]", "-c:v", "libx264", "-pix_fmt", "yuv420p", corte], check=True)
+    fp = fim_do_plano(corte, 0.3, 3.8)
+    caso("⭐ fim do plano: o quadro final para antes do corte de cena", 1.7 <= fp <= 2.0 and fim_do_plano(parado, 0.3, 3.8) == 3.8)
+    caso("⭐ camera da fonte: o conteudo andando para a esquerda = pan para a direita", "pan to the right" in cm["texto"])
+    caso("⭐ camera da fonte: a imagem crescendo = push-in", cz["zoom_pct"] > 10 and "push-in" in cz["texto"])
+    caso("camera livre: o take que copia o movimento nao leva a flag de camera",
+         not any(f["etiqueta"] == "camera" for f in avaliar(fala, ws(fala), 8.0, {"camera_pct": 9.0}, camera_livre=True)["flags"])
+         and any(f["etiqueta"] == "camera" for f in avaliar(fala, ws(fala), 8.0, {"camera_pct": 9.0})["flags"]))
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 

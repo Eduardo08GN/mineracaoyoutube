@@ -444,9 +444,13 @@ class Instagram:
 
     # ── reels ──
     def criar_reel(self, avatar, idioma, url="", video="", ext="mp4", cta="bio", palavra="", livro=False,
-                   modelo="gratis", legenda=0, lote=""):
+                   modelo="gratis", legenda=0, lote="", camera="fonte", ambiente=""):
+        """⭐ (22/10, Eduardo) `camera`: "fonte" copia os movimentos de camera da fonte (leitura optica), "fixa" deixa a
+        camera travada como antes. `ambiente`: o lugar de todos os takes (ex.: a mesa da varanda), no lugar do da fonte."""
         a = self._avatar(_valida(avatar))
         if idioma not in _rot.IDIOMAS: raise ValueError("idioma desconhecido")
+        if camera not in ("fonte", "fixa"): raise ValueError("câmera desconhecida")
+        ambiente = " ".join((ambiente or "").split())[:400]
         if modelo not in ("gratis", "pago"): raise ValueError("modelo desconhecido")
         if cta not in ("bio", "palavra"): raise ValueError("CTA desconhecido")
         palavra = " ".join((palavra or "").split())
@@ -471,7 +475,7 @@ class Instagram:
         r = {"id": rid, "avatar": a["id"], "criado": time.time(), "idioma": idioma, "url": url, "cena": cid,
              "cta": {"tipo": cta, "palavra": _slug(palavra).replace("-", " ") if cta == "palavra" else "", "livro": bool(livro)},
              "modelo": modelo, "legenda": legenda, "takes_origem": [], "takes": [], "legenda_post": "", "registro": [],
-             "publicado": "", "lote": lote}
+             "publicado": "", "lote": lote, "camera": camera, "ambiente": ambiente}
         with self._t: self._gravar(os.path.join(p, "reel.json"), r)
         self._alterar_avatar(a["id"], lambda x: x.setdefault("usos", {}).setdefault(cid, []).append(time.time()))
         nome_cena = next(c["nome"] for c in a["cenas"] if c["id"] == cid)
@@ -846,7 +850,8 @@ class Instagram:
                 visual, erro = None, str(e)[:120]
             else:
                 erro = ""
-            res = _qa.avaliar(ver.get("fala", t.get("fala", "")), pals, dur, visual)
+            res = _qa.avaliar(ver.get("fala", t.get("fala", "")), pals, dur, visual,
+                              camera_livre=bool(self._camera_take(r, t)))
             if erro: res["erro"] = f"sem a parte visual: {erro}"
         except Exception as e:                                             # noqa: BLE001
             res = {"flags": [], "medidas": {}, "erro": str(e)[:200] or e.__class__.__name__}
@@ -1106,7 +1111,7 @@ class Instagram:
         lics = self._licoes()
         p = self._pasta_reel(rid)
         for arq in os.listdir(p):                  # ⛔ quadro velho seria de outra fala: roteiro novo = quadros novos
-            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?\.png|origem_(fim_)?\d{2}\.jpg)", arq):
+            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?(_base)?\.png|origem_(fim_)?\d{2}\.jpg)", arq):
                 os.remove(os.path.join(p, arq))
         quadros = self._quadros_origem(r)
         pedido = _rot.pedido_adaptacao(r["takes_origem"], r["idioma"], a, r["cta"], _lic.regras_texto(lics, a["id"], r["idioma"]),
@@ -1141,6 +1146,28 @@ class Instagram:
             if t["versoes"]: t["v"] = 1
         return t["versoes"]
 
+    def _camera_take(self, r, t):
+        """O movimento de camera do take, em texto ("" = travada): o lido na fonte pela leitura optica, se o Reel copia
+        a camera da fonte. O take do CTA (sem trecho na fonte) fica travado. ⭐ A leitura fica guardada no takes_origem."""
+        if r.get("camera", "fixa") != "fonte": return ""
+        origem = r.get("takes_origem") or []
+        if not 1 <= t["n"] <= len(origem): return ""
+        o = origem[t["n"] - 1]
+        if "camera" not in o:
+            fonte = os.path.join(self._pasta_reel(r["id"]), "fonte.mp4")
+            try:
+                cam = _qa.camera_da_fonte(fonte, o["ini"], o["fim"]) if os.path.isfile(fonte) else {"texto": ""}
+            except Exception as e:                                         # noqa: BLE001
+                cam = {"texto": "", "erro": str(e)[:120]}
+            o["camera"] = cam
+            self._alterar_reel(r["id"], lambda x, n=t["n"], c=cam: x["takes_origem"][n - 1].update(camera=c))
+        return o["camera"].get("texto", "")
+
+    def _lugar(self, r, a):
+        """O lugar dos quadros: o ambiente do Reel (troca o da fonte) ou o mundo do avatar (o da fonte, restilizado)."""
+        if r.get("ambiente"): return r["ambiente"], True
+        return _rot.mundo(a, next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")), False
+
     def _quadro_take(self, r, a, t, g, novo=False):
         """O quadro de abertura de um take: o do take (o escolhido), o padrao quadro_NN.png, ou um novo quadro_NN_qK.png
         quando a curadoria pede (`novo`). ⭐ Cada take abre no SEU quadro, com o angulo e o zoom do video de origem
@@ -1162,10 +1189,19 @@ class Instagram:
             o = origem[min(n, len(origem)) - 1]
             ref = os.path.join(p, f"origem_{n:02d}.jpg")
             if not os.path.isfile(ref): self.midia.quadro(fonte, o["ini"] + 0.15 * (o["fim"] - o["ini"]), ref)
-            lugar = _rot.mundo(a, next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), ""))
+            lugar, novo_lugar = self._lugar(r, a)
             self._log(f"instagram: gerando o quadro do take {n} de {r['id']}")
-            g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", "")), [ref, foto], arq, self._log)
+            g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", ""), novo_lugar), [ref, foto], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {n}")
+            # ⭐⭐ (22/10) 2a passada: reenquadra pela fonte (o close continua close, o "de cima" continua de cima)
+            base = arq[:-4] + "_base.png"
+            os.replace(arq, base)
+            self._log(f"instagram: reenquadrando o quadro do take {n} pela fonte")
+            try:
+                g.gerar_imagem(_rot.prompt_reenquadrar(a, t.get("quadro", "")), [ref, base], arq, self._log)
+            except Exception as e:                                         # noqa: BLE001
+                self._log(f"  ⚠ o reenquadramento do take {n} falhou ({str(e)[:80]}): fica o quadro da 1a passada")
+            if not os.path.isfile(arq): shutil.copyfile(base, arq)
         return arq
 
     def _quadro_fim_take(self, r, a, t, inicio, g, novo=False):
@@ -1175,17 +1211,26 @@ class Instagram:
         qi, qf = " ".join((t.get("quadro") or "").lower().split()), " ".join((t.get("quadro_fim") or "").lower().split())
         pa, p = self._pasta_av(a["id"]), self._pasta_reel(r["id"])
         foto, fonte, origem = self._achar(pa, "foto"), os.path.join(p, "fonte.mp4"), r.get("takes_origem") or []
-        if not qf or qf == qi or not (foto and origem and os.path.isfile(fonte)) or not inicio.startswith(p): return inicio
+        anda = bool(self._camera_take(r, t))
+        if (not anda and (not qf or qf == qi)) or not (foto and origem and os.path.isfile(fonte)) or not inicio.startswith(p):
+            return inicio
         n = t["n"]
         sufixo = os.path.splitext(os.path.basename(inicio))[0][len(f"quadro_{n:02d}"):]       # "" ou "_qK"
         arq = os.path.join(p, f"quadro_fim_{n:02d}{sufixo}.png")
         if novo or not os.path.isfile(arq):
             o = origem[min(n, len(origem)) - 1]
             ref = os.path.join(p, f"origem_fim_{n:02d}.jpg")
-            if not os.path.isfile(ref): self.midia.quadro(fonte, o["fim"] - 0.1 * (o["fim"] - o["ini"]), ref)
-            lugar = _rot.mundo(a, next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), ""))
+            if not os.path.isfile(ref):
+                ini_t, fim_t = o["ini"] + 0.15 * (o["fim"] - o["ini"]), o["fim"] - 0.1 * (o["fim"] - o["ini"])
+                try:                               # ⭐ o fim do MESMO plano do quadro de abertura (sem atravessar corte)
+                    fim_t = _qa.fim_do_plano(fonte, ini_t, fim_t)
+                except Exception:                                          # noqa: BLE001
+                    pass
+                self.midia.quadro(fonte, fim_t, ref)
+            lugar, _novo = self._lugar(r, a)
             self._log(f"instagram: gerando o quadro final do take {n} de {r['id']}")
-            g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t["quadro_fim"]), [ref, inicio, foto], arq, self._log)
+            g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t.get("quadro_fim") or t.get("quadro", ""), self._camera_take(r, t)),
+                           [ref, inicio, foto], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro final do take {n}")
         return arq
 
@@ -1224,7 +1269,8 @@ class Instagram:
             # ⭐ as licoes de prompt deste tipo de acao entram no prompt do Veo; a versao guarda todas as que valeram
             #    (palavra, gesto e prompt), para o painel medir o antes e o depois de cada uma
             prompt = _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"], muda=fim != inicio,
-                                       extras=_lic.frases_prompt(lics, a["id"], r["idioma"], acao))
+                                       extras=_lic.frases_prompt(lics, a["id"], r["idioma"], acao),
+                                       camera=self._camera_take(r, t))
             valeram = [l["id"] for l in _lic.relevantes(lics, a["id"], r["idioma"], acao=acao)
                        if l["tipo"] != "prompt" or l["regra"] in prompt]
             for i in range(copias):
@@ -1493,7 +1539,8 @@ def _autoteste():
     caso("⭐ o lugar vem do video-fonte, no mundo do avatar (texto); o comodo nunca e' referencia do quadro",
          all("garden bed stays a garden bed" in i[0] and "chácara" in i[0] and "dark wood cabinets" not in i[0]
              and not any(x.endswith(".png") and "cenas" in x for x in i[1])
-             for i in g.imagens[n0:] if "SECOND reference image for the object" not in i[0])
+             for i in g.imagens[n0:] if "SECOND reference image for the object" not in i[0]
+             and "Reframe the SECOND image" not in i[0])
          and [os.path.basename(v["inicio"]) for v in vs] == [f"quadro_{i:02d}.png" for i in range(1, len(vs) + 1)])
     caso("⭐ o CTA termina no quadro do livro", vs[-1]["fim"].endswith("cta.png") and vs[0]["fim"] == vs[0]["inicio"])
     caso("o quadro do livro parte do quadro do take do CTA, com a capa", g.imagens[-1][1][0] == vs[-1]["inicio"]
@@ -1650,7 +1697,7 @@ def _autoteste():
     ig.anotar_take(rid1, 2, "o QUADRO de abertura esta ruim", ["quadro"])
     ig.esperar(120)
     t2 = ig.editor(rid1)["takes"][1]
-    caso("⭐ quadro ruim: o corretor pede quadro novo e so' as versoes novas abrem nele", len(g.imagens) == n_img + 1
+    caso("⭐ quadro ruim: o corretor pede quadro novo (e o reenquadra) e so' as versoes novas abrem nele", len(g.imagens) == n_img + 2
          and "A teapot." in g.imagens[-1][0] and [v["quadro_arquivo"] for v in t2["versoes"][-4:]] == ["quadro_02_q2"] * 4
          and "quadro_02_q2" not in [v["quadro_arquivo"] for v in t2["versoes"][:-4]])
     n_ped = len(pedidos)
@@ -1702,12 +1749,15 @@ def _autoteste():
          [os.path.basename(v["inicio"]) for v in vs2] == [f"quadro_{i:02d}.png" for i in range(1, len(vs2) + 1)]
          and [os.path.basename(v["fim"]) for v in vs2] == [f"quadro_fim_{i:02d}.png" for i in range(1, len(vs2) + 1)]
          and all("in step with the speech" in v["prompt"] for v in vs2))
-    fim1 = g.imagens[n_img + 1]
+    fim1 = g.imagens[n_img + 2]
+    reen = g.imagens[n_img + 1]
+    caso("⭐ 2a passada: o quadro e' reenquadrado pela fonte (quadro da fonte + o da 1a passada)",
+         [os.path.basename(x) for x in reen[1]] == ["origem_01.jpg", "quadro_01_base.png"] and "Reframe the SECOND image" in reen[0])
     caso("⭐ quadro final: o fim do trecho de origem, o quadro de abertura e a foto, com o resultado da acao",
          [os.path.basename(x) for x in fim1[1]][:2] == ["origem_fim_01.jpg", "quadro_01.png"]
          and os.path.basename(fim1[1][2]).startswith("foto.") and "END of the same step" in fim1[0]
          and "Rice inside the blender, step 1." in fim1[0])
-    caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + 2 * len(vs2)
+    caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + 3 * len(vs2)
          and [os.path.basename(x) for x in g.imagens[n_img][1]][0] == "origem_01.jpg"
          and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]).startswith("foto.")
          and "Londrina" in g.imagens[n_img][0] and "bamboo bench" not in g.imagens[n_img][0]
@@ -1725,7 +1775,7 @@ def _autoteste():
          and "—" not in r2["takes"][0]["fala"])
     ig.rodar(r2["id"], "gerar"); ig.esperar(120)
     caso("⭐ refazer a geracao gera so' o take editado", len(g.videos) == n_antes + 1 and ig.reel(r2["id"])["final"])
-    caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + 2 * len(vs2))
+    caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + 3 * len(vs2))
     g.falhar = {"take_02_v1"}
     r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/", cta="palavra", palavra=" Eu  Quero ")
     caso("⭐ CTA de frase curta guardado em minusculas", r3["cta"]["palavra"] == "eu quero")
