@@ -618,6 +618,7 @@ Tabelas completas na [seção 17](#17-auditoria-do-vídeo-entregue).
 13. **Ação em cena** (seção 4.4): mapa de ações do original executado no mesmo segundo; legenda = ação; nunca mais de ~4 s sem acontecimento; movimento por capítulo ≥ 70% do original.
 14. **Atmosfera**: toda cena externa com sol leva névoa de perspectiva aérea + god rays (perfil `nevoa`/`raios` no `Look`,
     ver STACK.md seção 3). Espaço e interiores ficam sem.
+15. **Batedor** ([BATEDOR.md](../BATEDOR.md)): depois do mapa de ações e antes de modelar, inventário dos elementos fracos/inéditos e varredura de GitHub/npm/fórum three.js por libs e assets grátis, comerciais e determinísticos; registro em `batedor.md` do vídeo.
 
 ---
 
