@@ -1,5 +1,7 @@
 # Stack de qualidade do What If ES (atualizada em 22/10/2026, madrugada: EZ-Tree, upload pelo painel)
 
+> Esta stack é a do **[Eddie3D](../../eddie3d/)**, o pipeline dos vídeos 3D do canal (código de referência em `eddie3d/`).
+
 Esta é a stack que substitui o visual "de cartão" dos vídeos 1 e 2 (fogo em cartão, fumaça em bolha, céu e água de desenho,
 bonecos de bloco, cenas paradas). Decisão do Eduardo em 21/10/2026: **atualizar a stack atual** (three.js + React Three Fiber +
 Remotion, render na G4 do Colab) **só com assets gratuitos** com licença comercial. Unreal e Unity ficaram para depois

@@ -13,6 +13,13 @@ O Minerador:
 
 A interface é a mesma do OW Agente: janela do Windows (WebView2) + servidor local + painel React. Ver [ARQUITETURA.md](ARQUITETURA.md).
 
+## Pipelines de produção neste repositório
+
+- **[Eddie3D](eddie3d/)**: o pipeline independente dos vídeos de simulação 3D do canal ¿Qué Pasaría Si? 3D (What If ES): leitura do
+  original a 10 fps, mapa de ações, batedor, cena 3D em Remotion + three.js, render na G4 do Colab, som gerado, mixagem, Shorts e
+  miniaturas. Documentação das produções em [docs/whatif-es](docs/whatif-es/).
+- `motor/` + `painel/`: o Minerador e o pipeline de vídeo de persona descritos acima.
+
 ## Rodar
 
 ```bash

@@ -1,0 +1,26 @@
+{
+  "name": "whatif-stack",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@dgreenheck/ez-tree": "1.1.0",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
+    "@react-three/postprocessing": "3.2.1",
+    "@remotion/cli": "4.0.537",
+    "@remotion/google-fonts": "4.0.537",
+    "@remotion/noise": "4.0.537",
+    "@remotion/three": "4.0.537",
+    "postprocessing": "6.39.5",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.537",
+    "three": "0.180.0",
+    "three-stdlib": "2.36.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "@types/three": "0.180.0",
+    "typescript": "5.6.3"
+  }
+}
