@@ -112,6 +112,8 @@ Antes de produzir um vídeo novo, ler esta lista inteira.
 | 67 | O render das 20:08 saiu de código velho: uma célula antiga reexecutou sozinha (o Colab avisava "atualizado remotamente ou em outra guia") | Limpar as células antes de cada disparo longo; tudo em uma cadeia só, sem usar o Colab em paralelo. |
 | 68 | O download de 300 MB falhava quando eu lia o status por célula ao mesmo tempo (e o `timeout 590` matava antes do fim) | Download sozinho, sem timeout curto, sem outra célula em paralelo. |
 | 69 | Na vista aérea apareceu um disco bege pálido sobre o mar | Era a bola de fogo: o atlas dela é RGB sem alfa e o cinza da borda do quadro, somado em aditivo, virava disco. Flipbook aditivo corta a luminância baixa (`smoothstep(0.06, 0.3, lum)`). Isolar com as flags `semRaios`/`semNevoa` antes de culpar o pós. |
+| 70 | O upload travou 28 min com "No file chosen": o `subir` entregou o arquivo ao widget de upload **antigo**, que ficou na saída da célula que o `limpar` mantém | `colab.subir` só aceita o iframe que **nasceu** depois do Ctrl+Enter e confere `files.length` antes de esperar; cada upload na rodada tem `timeout` e a rodada para se faltar o `SUBIU`. |
+| 71 | Parar a tarefa em segundo plano (TaskStop) deixou o `bash` da rodada órfão no Windows; o laço de `ler` dele continuava apagando as células da rodada nova | Depois de parar uma rodada, procurar e matar `rodada|g4.py|colab.subir` nos processos (PowerShell `Get-CimInstance Win32_Process`) antes de começar outra. |
 
 ## 5. Ordem de produção de cada vídeo
 
