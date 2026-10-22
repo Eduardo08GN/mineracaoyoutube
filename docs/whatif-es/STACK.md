@@ -1,4 +1,4 @@
-# Stack de qualidade do What If ES (atualizada em 22/10/2026)
+# Stack de qualidade do What If ES (atualizada em 22/10/2026, madrugada: EZ-Tree, upload pelo painel)
 
 Esta é a stack que substitui o visual "de cartão" dos vídeos 1 e 2 (fogo em cartão, fumaça em bolha, céu e água de desenho,
 bonecos de bloco, cenas paradas). Decisão do Eduardo em 21/10/2026: **atualizar a stack atual** (three.js + React Three Fiber +
@@ -25,6 +25,7 @@ O código dos módulos fica em [`stack/`](stack/) (cópia) e no projeto vivo em 
 | Cenas paradas | — | **mapa de ações** do original executado no mesmo segundo (regra 4.4 do PRODUCAO.md) | `acoes.ts` por vídeo |
 | Fundo "colado" no primeiro plano, sem profundidade | nada | **névoa de perspectiva aérea** pela profundidade (o longe some na cor do horizonte) | `look/Look.tsx` → `NevoaEffect` |
 | Contraluz sem volume | nada | **god rays** (raios de sol saindo do disco do sol atrás de fumaça, palmeiras e prédios) | `look/Look.tsx` → `GodRaysEffect` |
+| Árvores "de bolha" low-poly | esferas/cones | **EZ-Tree** (`@dgreenheck/ez-tree` 1.1.0, MIT): galhos 3D com semente, cascas CC0, estações, neve e crescimento por `mundo/arvores.tsx` (vídeo 5) | `arvores.tsx` |
 
 ## 2. Assets (todos com uso comercial liberado)
 

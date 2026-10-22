@@ -1,0 +1,702 @@
+[
+ {
+  "s": 0.0,
+  "e": 5.0,
+  "txt": "Llevas cinco minutos aquí de pie."
+ },
+ {
+  "s": 11.0,
+  "e": 13.0,
+  "txt": "Todos caminan demasiado rápido."
+ },
+ {
+  "s": 14.0,
+  "e": 17.0,
+  "txt": "Tu reloj va bien. Es todo lo demás."
+ },
+ {
+  "s": 18.0,
+  "e": 21.0,
+  "txt": "Un segundo para ti es un minuto ahí fuera."
+ },
+ {
+  "s": 22.0,
+  "e": 24.0,
+  "txt": "El Sol se está cayendo del cielo."
+ },
+ {
+  "s": 25.0,
+  "e": 28.0,
+  "txt": "Se enciende la farola que tienes al lado."
+ },
+ {
+  "s": 28.0,
+  "e": 30.0,
+  "txt": "Una noche entera, en seis segundos."
+ },
+ {
+  "s": 31.0,
+  "e": 34.0,
+  "txt": "Amanece. A tu espalda."
+ },
+ {
+  "s": 34.0,
+  "e": 37.0,
+  "txt": "Un día entero. Se fue."
+ },
+ {
+  "s": 38.0,
+  "e": 40.0,
+  "txt": "Luego otro. Y otro más."
+ },
+ {
+  "s": 41.0,
+  "e": 43.0,
+  "txt": "El Sol ya no es un disco. Es una franja."
+ },
+ {
+  "s": 44.0,
+  "e": 47.0,
+  "txt": "El día y la noche se funden en una sola luz."
+ },
+ {
+  "s": 48.0,
+  "e": 51.0,
+  "txt": "Las hojas cambian de color."
+ },
+ {
+  "s": 52.0,
+  "e": 54.0,
+  "txt": "Nieve."
+ },
+ {
+  "s": 55.0,
+  "e": 57.0,
+  "txt": "Primavera. Verano."
+ },
+ {
+  "s": 58.0,
+  "e": 61.0,
+  "txt": "Un año entero. Tu reloj marca cincuenta y cuatro segundos."
+ },
+ {
+  "s": 63.0,
+  "e": 65.0,
+  "txt": "Para todos ahí fuera, eres una estatua."
+ },
+ {
+  "s": 66.0,
+  "e": 69.0,
+  "txt": "Verano, invierno. Verano, invierno."
+ },
+ {
+  "s": 70.0,
+  "e": 72.0,
+  "txt": "La casa de enfrente ya no está. Hay una nueva."
+ },
+ {
+  "s": 73.0,
+  "e": 76.0,
+  "txt": "Ahora también se difuminan las estaciones."
+ },
+ {
+  "s": 77.0,
+  "e": 80.0,
+  "txt": "Todos los que conoces tienen diez años más. Tú, un minuto más."
+ },
+ {
+  "s": 80.0,
+  "e": 83.0,
+  "txt": "El arbolito de tu lado ya es más alto que las casas."
+ },
+ {
+  "s": 84.0,
+  "e": 87.0,
+  "txt": "La ciudad crece como si estuviera viva."
+ },
+ {
+  "s": 87.0,
+  "e": 90.0,
+  "txt": "El año 2100. Ya no queda nadie de los que conociste."
+ },
+ {
+  "s": 91.0,
+  "e": 94.0,
+  "txt": "Nadie recuerda quién era la estatua."
+ },
+ {
+  "s": 95.0,
+  "e": 98.0,
+  "txt": "El mar sube. La ciudad levanta un muro."
+ },
+ {
+  "s": 99.0,
+  "e": 101.0,
+  "txt": "Las torres miden más de un kilómetro y medio."
+ },
+ {
+  "s": 102.0,
+  "e": 105.0,
+  "txt": "El año 3000."
+ },
+ {
+  "s": 106.0,
+  "e": 109.0,
+  "txt": "Hasta que, un siglo, se apagan las luces."
+ },
+ {
+  "s": 109.0,
+  "e": 112.0,
+  "txt": "Nadie sabe cómo termina nuestra historia. Solo que termina."
+ },
+ {
+  "s": 113.0,
+  "e": 116.0,
+  "txt": "Las torres caen. Tardan seis segundos."
+ },
+ {
+  "s": 117.0,
+  "e": 119.0,
+  "txt": "Bosque, donde antes estaba tu calle."
+ },
+ {
+  "s": 120.0,
+  "e": 123.0,
+  "txt": "La Estrella Polar ya no marca el norte."
+ },
+ {
+  "s": 124.0,
+  "e": 127.0,
+  "txt": "Una estrella explota. Se ve hasta a mediodía."
+ },
+ {
+  "s": 127.0,
+  "e": 130.0,
+  "txt": "Algo blanco avanza desde el norte."
+ },
+ {
+  "s": 131.0,
+  "e": 133.0,
+  "txt": "Hielo. Una muralla de hielo."
+ },
+ {
+  "s": 134.0,
+  "e": 137.0,
+  "txt": "Te eleva un kilómetro por los aires."
+ },
+ {
+  "s": 138.0,
+  "e": 141.0,
+  "txt": "Tu calle está en algún lugar bajo tus pies."
+ },
+ {
+  "s": 142.0,
+  "e": 144.0,
+  "txt": "Se derrite. Vuelve. Se derrite."
+ },
+ {
+  "s": 145.0,
+  "e": 148.0,
+  "txt": "Un asteroide. Un solo fotograma."
+ },
+ {
+  "s": 149.0,
+  "e": 151.0,
+  "txt": "Cada glaciación dura ahora un suspiro."
+ },
+ {
+  "s": 152.0,
+  "e": 155.0,
+  "txt": "Pasa una estrella. Lo más brillante de la noche."
+ },
+ {
+  "s": 156.0,
+  "e": 159.0,
+  "txt": "Ya no queda en pie nada construido por humanos."
+ },
+ {
+  "s": 160.0,
+  "e": 162.0,
+  "txt": "Un río encuentra tu colina."
+ },
+ {
+  "s": 163.0,
+  "e": 166.0,
+  "txt": "Abre un cañón de kilómetro y medio. En cinco segundos."
+ },
+ {
+  "s": 167.0,
+  "e": 170.0,
+  "txt": "Mira arriba. Las estrellas se derraman."
+ },
+ {
+  "s": 171.0,
+  "e": 174.0,
+  "txt": "Ninguna estrella que conocías sigue en su sitio."
+ },
+ {
+  "s": 175.0,
+  "e": 178.0,
+  "txt": "El suelo también se mueve. Tan rápido como crecen las uñas."
+ },
+ {
+  "s": 178.0,
+  "e": 181.0,
+  "txt": "A estas alturas, ya son mil kilómetros."
+ },
+ {
+  "s": 182.0,
+  "e": 185.0,
+  "txt": "Tu costa choca contra otra."
+ },
+ {
+  "s": 186.0,
+  "e": 189.0,
+  "txt": "La tierra se arruga. Y tú subes con ella."
+ },
+ {
+  "s": 190.0,
+  "e": 193.0,
+  "txt": "Estás de pie sobre una cordillera."
+ },
+ {
+  "s": 194.0,
+  "e": 196.0,
+  "txt": "Por encima de las nubes."
+ },
+ {
+  "s": 198.0,
+  "e": 200.0,
+  "txt": "La lluvia la deshace otra vez. Grano a grano."
+ },
+ {
+  "s": 201.0,
+  "e": 204.0,
+  "txt": "Ahora los días son más largos. De veinticinco horas."
+ },
+ {
+  "s": 205.0,
+  "e": 208.0,
+  "txt": "Los continentes se van juntando."
+ },
+ {
+  "s": 209.0,
+  "e": 212.0,
+  "txt": "Un solo continente. Un solo océano."
+ },
+ {
+  "s": 213.0,
+  "e": 215.0,
+  "txt": "Estás justo en el medio. Desierto."
+ },
+ {
+  "s": 217.0,
+  "e": 219.0,
+  "txt": "El Sol brilla un 1 % más cada cien millones de años."
+ },
+ {
+  "s": 220.0,
+  "e": 223.0,
+  "txt": "No parece mucho."
+ },
+ {
+  "s": 224.0,
+  "e": 227.0,
+  "txt": "Al aire se le acaba el dióxido de carbono."
+ },
+ {
+  "s": 228.0,
+  "e": 230.0,
+  "txt": "Muere el último árbol."
+ },
+ {
+  "s": 231.0,
+  "e": 234.0,
+  "txt": "Luego la hierba. Luego todo lo verde."
+ },
+ {
+  "s": 235.0,
+  "e": 238.0,
+  "txt": "Roca desnuda, como antes de que la vida saliera del mar."
+ },
+ {
+  "s": 239.0,
+  "e": 242.0,
+  "txt": "Los océanos echan vapor."
+ },
+ {
+  "s": 243.0,
+  "e": 246.0,
+  "txt": "Mil millones de años. Los mares se evaporan."
+ },
+ {
+  "s": 247.0,
+  "e": 250.0,
+  "txt": "Sal, donde antes estaba el océano."
+ },
+ {
+  "s": 251.0,
+  "e": 253.0,
+  "txt": "Después se van también las nubes."
+ },
+ {
+  "s": 254.0,
+  "e": 257.0,
+  "txt": "Tu reloj marca cuatro minutos."
+ },
+ {
+  "s": 258.0,
+  "e": 261.0,
+  "txt": "Algo sigue vivo, en lo profundo de la roca."
+ },
+ {
+  "s": 262.0,
+  "e": 265.0,
+  "txt": "El aire ya es muy fino. Las estrellas se ven todo el día."
+ },
+ {
+  "s": 266.0,
+  "e": 269.0,
+  "txt": "Das la vuelta a toda la galaxia cada cuatro segundos."
+ },
+ {
+  "s": 270.0,
+  "e": 273.0,
+  "txt": "Una mancha de luz no para de crecer."
+ },
+ {
+  "s": 276.0,
+  "e": 278.0,
+  "txt": "Muere el último ser vivo de la Tierra."
+ },
+ {
+  "s": 280.0,
+  "e": 282.0,
+  "txt": "No queda nadie para ver lo que viene."
+ },
+ {
+  "s": 284.0,
+  "e": 286.0,
+  "txt": "Excepto tú."
+ },
+ {
+  "s": 287.0,
+  "e": 290.0,
+  "txt": "La mancha es una galaxia. Andrómeda."
+ },
+ {
+  "s": 291.0,
+  "e": 294.0,
+  "txt": "Podría pasar de largo. Supongamos que no."
+ },
+ {
+  "s": 295.0,
+  "e": 298.0,
+  "txt": "Llega."
+ },
+ {
+  "s": 299.0,
+  "e": 302.0,
+  "txt": "Dos galaxias se atraviesan."
+ },
+ {
+  "s": 303.0,
+  "e": 305.0,
+  "txt": "Casi nada choca. Las estrellas están demasiado lejos entre sí."
+ },
+ {
+  "s": 306.0,
+  "e": 309.0,
+  "txt": "El cielo arde de estrellas nuevas."
+ },
+ {
+  "s": 310.0,
+  "e": 313.0,
+  "txt": "Y tu Sol se está hinchando."
+ },
+ {
+  "s": 314.0,
+  "e": 317.0,
+  "txt": "Ocupa medio cielo. El suelo se derrite."
+ },
+ {
+  "s": 318.0,
+  "e": 320.0,
+  "txt": "El Sol te ha alcanzado."
+ },
+ {
+  "s": 322.0,
+  "e": 324.0,
+  "txt": "La Tierra ya no existe."
+ },
+ {
+  "s": 325.0,
+  "e": 328.0,
+  "txt": "No hay nada bajo tus pies."
+ },
+ {
+  "s": 329.0,
+  "e": 332.0,
+  "txt": "El Sol se desprende de su piel."
+ },
+ {
+  "s": 333.0,
+  "e": 336.0,
+  "txt": "Una nube de luz, de un año luz de ancho."
+ },
+ {
+  "s": 337.0,
+  "e": 340.0,
+  "txt": "Lo que queda es del tamaño de la Tierra. Una enana blanca."
+ },
+ {
+  "s": 341.0,
+  "e": 343.0,
+  "txt": "Nunca volverá a arder. Solo puede enfriarse."
+ },
+ {
+  "s": 344.0,
+  "e": 347.0,
+  "txt": "Ahí fuera, las demás galaxias se alejan."
+ },
+ {
+  "s": 348.0,
+  "e": 351.0,
+  "txt": "El espacio se estira. Se las lleva más rápido que la luz."
+ },
+ {
+  "s": 352.0,
+  "e": 355.0,
+  "txt": "Una a una, se enrojecen y se van."
+ },
+ {
+  "s": 357.0,
+  "e": 360.0,
+  "txt": "Cien mil millones de años."
+ },
+ {
+  "s": 361.0,
+  "e": 364.0,
+  "txt": "Más allá de tu galaxia, el cielo está vacío."
+ },
+ {
+  "s": 365.0,
+  "e": 368.0,
+  "txt": "Quien naciera ahora creería que esto es todo lo que hubo."
+ },
+ {
+  "s": 369.0,
+  "e": 372.0,
+  "txt": "Las estrellas grandes se fueron primero."
+ },
+ {
+  "s": 373.0,
+  "e": 375.0,
+  "txt": "Luego, las que eran como tu Sol."
+ },
+ {
+  "s": 376.0,
+  "e": 379.0,
+  "txt": "Las pequeñas y rojas duran mil veces más."
+ },
+ {
+  "s": 380.0,
+  "e": 383.0,
+  "txt": "Cien billones de años. Se están acabando."
+ },
+ {
+  "s": 384.0,
+  "e": 386.0,
+  "txt": "Se apaga la última estrella."
+ },
+ {
+  "s": 388.0,
+  "e": 390.0,
+  "txt": "Ahora está oscuro. Y seguirá oscuro."
+ },
+ {
+  "s": 391.0,
+  "e": 394.0,
+  "txt": "Tu reloj marca seis minutos y medio."
+ },
+ {
+  "s": 395.0,
+  "e": 398.0,
+  "txt": "Las estrellas muertas siguen aquí. Frías, casi invisibles."
+ },
+ {
+  "s": 399.0,
+  "e": 402.0,
+  "txt": "A veces, dos de ellas chocan."
+ },
+ {
+  "s": 403.0,
+  "e": 406.0,
+  "txt": "Durante unas semanas, vuelve a haber luz."
+ },
+ {
+  "s": 407.0,
+  "e": 410.0,
+  "txt": "Luego, nada. Más tiempo del que puedes imaginar."
+ },
+ {
+  "s": 411.0,
+  "e": 414.0,
+  "txt": "La galaxia se deshace. Estrellas muertas, lanzadas una a una."
+ },
+ {
+  "s": 415.0,
+  "e": 417.0,
+  "txt": "La tuya no es una de ellas."
+ },
+ {
+  "s": 418.0,
+  "e": 421.0,
+  "txt": "La tuya cae hacia dentro."
+ },
+ {
+  "s": 422.0,
+  "e": 425.0,
+  "txt": "Hacia lo que siempre estuvo en el centro."
+ },
+ {
+  "s": 426.0,
+  "e": 428.0,
+  "txt": "Un agujero negro."
+ },
+ {
+  "s": 430.0,
+  "e": 432.0,
+  "txt": "Devora lo que queda de dos galaxias."
+ },
+ {
+  "s": 433.0,
+  "e": 436.0,
+  "txt": "Durante un tiempo, es lo más brillante que existe."
+ },
+ {
+  "s": 437.0,
+  "e": 440.0,
+  "txt": "Luego se queda sin alimento."
+ },
+ {
+  "s": 441.0,
+  "e": 443.0,
+  "txt": "Y se apaga."
+ },
+ {
+  "s": 445.0,
+  "e": 448.0,
+  "txt": "Nadie sabe si los átomos duran para siempre."
+ },
+ {
+  "s": 449.0,
+  "e": 451.0,
+  "txt": "Si no, este es el momento en que desaparecen."
+ },
+ {
+  "s": 452.0,
+  "e": 455.0,
+  "txt": "El Sol muerto a tu lado se vuelve luz, grano a grano."
+ },
+ {
+  "s": 457.0,
+  "e": 459.0,
+  "txt": "Todo lo que alguna vez fue sólido."
+ },
+ {
+  "s": 460.0,
+  "e": 462.0,
+  "txt": "Desaparece."
+ },
+ {
+  "s": 464.0,
+  "e": 466.0,
+  "txt": "Solo quedan agujeros negros."
+ },
+ {
+  "s": 468.0,
+  "e": 470.0,
+  "txt": "Y hasta ellos se van vaciando."
+ },
+ {
+  "s": 471.0,
+  "e": 474.0,
+  "txt": "Los pequeños se van primero. Cada uno acaba en un destello."
+ },
+ {
+  "s": 475.0,
+  "e": 478.0,
+  "txt": "Son las últimas luces del universo."
+ },
+ {
+  "s": 480.0,
+  "e": 482.0,
+  "txt": "El grande se está encogiendo."
+ },
+ {
+  "s": 483.0,
+  "e": 486.0,
+  "txt": "Cuanto más pequeño, más brilla."
+ },
+ {
+  "s": 490.0,
+  "e": 492.0,
+  "txt": "Tu reloj marca ocho minutos."
+ },
+ {
+  "s": 494.0,
+  "e": 496.0,
+  "txt": "Ahí fuera, el año tiene cien cifras."
+ },
+ {
+  "s": 498.0,
+  "e": 500.0,
+  "txt": "Ahí viene."
+ },
+ {
+  "s": 507.0,
+  "e": 510.0,
+  "txt": "Eso fue lo último que pasará jamás."
+ },
+ {
+  "s": 511.0,
+  "e": 513.0,
+  "txt": "Ya no queda nada que pueda cambiar."
+ },
+ {
+  "s": 514.0,
+  "e": 517.0,
+  "txt": "El tiempo sigue acelerándose. Ya no tiene nada que hacer."
+ },
+ {
+  "s": 518.0,
+  "e": 521.0,
+  "txt": "Y tú sigues aquí de pie."
+ },
+ {
+  "s": 522.0,
+  "e": 523.0,
+  "txt": "Espera."
+ },
+ {
+  "s": 524.0,
+  "e": 527.0,
+  "txt": "Una luz."
+ },
+ {
+  "s": 528.0,
+  "e": 530.0,
+  "txt": "Es tu farola."
+ },
+ {
+  "s": 531.0,
+  "e": 533.0,
+  "txt": "Esta es tu calle."
+ },
+ {
+  "s": 534.0,
+  "e": 537.0,
+  "txt": "Son las 5:42 de la tarde."
+ }
+]

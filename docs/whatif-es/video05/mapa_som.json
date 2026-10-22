@@ -1,0 +1,529 @@
+{
+ "duracao": 537.2,
+ "insercao": {
+  "t": 386.5,
+  "dur": 30
+ },
+ "silencio": [
+  [
+   510.5,
+   522.0
+  ]
+ ],
+ "nota": "Tempos do ORIGINAL; camadas com tempo=video (take) no tempo do video. Original: musica ambiente (gongo, tigela tibetana, marimba/glockenspiel, piano eletrico) sobre drone grave constante, SEM narracao (PANNs: 0 de 268 janelas com fala), mono, ~-24 LUFS estavel; cai a ~-33 dB em 509-522 (aqui: silencio total 510,5-522). vezes = o mesmo som (variantes em rodizio) em cada segundo da lista; alinhar = pico|ataque cai no segundo; dur = duracao gerada; fi/fo = fades; extra = cauda apos e.",
+ "musica": [
+  {
+   "id": "m01",
+   "s": 0,
+   "e": 6.4,
+   "lufs": -22,
+   "caption": "dark cosmic ambient drone, deep resonant gong swells, fiery low rumble, ominous and vast, slow, instrumental, no vocals",
+   "fi": 0.4
+  },
+  {
+   "id": "m02",
+   "s": 6.4,
+   "e": 24.8,
+   "lufs": -25,
+   "caption": "warm calm ambient electric piano, soft evening pads, gentle and nostalgic suburban sunset, slow tempo, instrumental, no vocals",
+   "fi": 0.6
+  },
+  {
+   "id": "m03",
+   "s": 24.8,
+   "e": 64.5,
+   "lufs": -23,
+   "caption": "hypnotic pulsing ambient electronic, steady ticking marimba arpeggio, soft synth pads, feeling of time speeding up, building motion, instrumental, no vocals"
+  },
+  {
+   "id": "m04",
+   "s": 64.5,
+   "e": 116,
+   "lufs": -23,
+   "caption": "rising cinematic ambient electronic, driving pulse, synth layers growing grand like a city rising, turning dark and ominous with deep gong hits, instrumental, no vocals"
+  },
+  {
+   "id": "m05",
+   "s": 116,
+   "e": 162.5,
+   "lufs": -23,
+   "caption": "cold shimmering glacial ambient, glockenspiel and singing bowls, airy pads, mystery and wonder, slow, instrumental, no vocals"
+  },
+  {
+   "id": "m06",
+   "s": 162.5,
+   "e": 230,
+   "lufs": -23,
+   "caption": "vast majestic ambient score, deep warm drones, slow mallet percussion and soft gongs, geological time, awe and patience, instrumental, no vocals"
+  },
+  {
+   "id": "m07",
+   "s": 230,
+   "e": 297,
+   "lufs": -24,
+   "caption": "dark desolate ambient drone, sparse low gongs, empty and lonely, slowly rising sense of cosmic awe, instrumental, no vocals"
+  },
+  {
+   "id": "m08",
+   "s": 297,
+   "e": 345,
+   "lufs": -21,
+   "caption": "epic swelling cosmic score, deep pulsing synth bass and fiery pads, enormous and burning, resolving into ethereal shimmering calm, instrumental, no vocals"
+  },
+  {
+   "id": "m09",
+   "s": 345,
+   "e": 386.5,
+   "lufs": -24,
+   "caption": "lonely sparse space ambient, slow singing bowl tones and soft chimes, fading light, melancholic and vast, instrumental, no vocals"
+  },
+  {
+   "id": "mtake",
+   "s": 386.5,
+   "e": 416.5,
+   "lufs": -23,
+   "caption": "curious gentle ambient, soft ticking clock pulse, warm felt piano and celesta, intimate wonder, light and thoughtful, instrumental, no vocals",
+   "tempo": "video"
+  },
+  {
+   "id": "m10",
+   "s": 386.5,
+   "e": 442,
+   "lufs": -22,
+   "caption": "deep dark space drone, slow low pulse, tension building into an immense ominous swell, cinematic, instrumental, no vocals"
+  },
+  {
+   "id": "m11",
+   "s": 442,
+   "e": 509,
+   "lufs": -24,
+   "caption": "cold minimal eternal ambient, singing bowls and sparse crystalline tones, vast emptiness, very slow, instrumental, no vocals"
+  },
+  {
+   "id": "m12",
+   "s": 522,
+   "e": 537.2,
+   "lufs": -25,
+   "caption": "warm gentle ambient electric piano and soft guitar, homecoming, calm evening, hopeful and tender, instrumental, no vocals",
+   "fi": 1.0,
+   "fo": 1.0
+  }
+ ],
+ "efeitos": [
+  {
+   "id": "s01",
+   "s": 0,
+   "e": 5.9,
+   "lufs": -20,
+   "prompt": "deep roaring rumble of a giant red star, fiery plasma roar, distant low thunder",
+   "fi": 0.4,
+   "fo": 0.5,
+   "extra": 0
+  },
+  {
+   "id": "s02",
+   "s": 6.4,
+   "e": 24.8,
+   "lufs": -26,
+   "prompt": "quiet suburban street at sunset, light breeze, birdsong, distant traffic hum",
+   "fi": 0.6
+  },
+  {
+   "id": "s03",
+   "s": 9,
+   "e": 13,
+   "lufs": -19,
+   "prompt": "a single car driving past quickly on a quiet residential street, doppler whoosh",
+   "dur": 4,
+   "variantes": 2,
+   "vezes": [
+    9,
+    11,
+    13.5,
+    15.5,
+    534,
+    535.8
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s04",
+   "s": 12,
+   "e": 15,
+   "lufs": -22,
+   "prompt": "brisk footsteps of one person walking past on a concrete sidewalk",
+   "dur": 3,
+   "variantes": 2,
+   "vezes": [
+    12.0,
+    12.75,
+    533.5,
+    536.0
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s05",
+   "s": 17,
+   "e": 24.8,
+   "lufs": -21,
+   "prompt": "rising whoosh of time accelerating, wind gusting faster and faster, blurred traffic streaks"
+  },
+  {
+   "id": "s06",
+   "s": 24.8,
+   "e": 29.8,
+   "lufs": -22,
+   "prompt": "a street lamp switching on with an electric click, then a steady buzzing electrical hum",
+   "alinhar": "ataque",
+   "fi": 0.02
+  },
+  {
+   "id": "s07",
+   "s": 25.5,
+   "e": 41,
+   "lufs": -25,
+   "prompt": "time-lapse night ambience, rushing wind, crickets chirping in rapid bursts, distant traffic streaks"
+  },
+  {
+   "id": "s08",
+   "s": 30.3,
+   "e": 32.8,
+   "lufs": -14,
+   "prompt": "very fast whip pan whoosh, sharp airy swish",
+   "dur": 2.5,
+   "variantes": 2,
+   "vezes": [
+    30.3,
+    33.3
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s09",
+   "s": 41,
+   "e": 64.5,
+   "lufs": -25,
+   "prompt": "steady rushing wind, leaves rustling in strong gusts, seasons passing"
+  },
+  {
+   "id": "s10",
+   "s": 50.3,
+   "e": 55.8,
+   "lufs": -20,
+   "prompt": "soft deep whoomp of heavy snow blanketing everything, then muffled quiet winter wind",
+   "alinhar": "ataque",
+   "fi": 0.05,
+   "fo": 0.6,
+   "extra": 0.2
+  },
+  {
+   "id": "s11",
+   "s": 55.8,
+   "e": 57.5,
+   "lufs": -24,
+   "prompt": "ice melting quickly, water dripping and trickling",
+   "fi": 0.2
+  },
+  {
+   "id": "s12",
+   "s": 64.5,
+   "e": 90,
+   "lufs": -24,
+   "prompt": "city time-lapse, distant construction cranes and hammering, traffic hum growing louder"
+  },
+  {
+   "id": "s13",
+   "s": 90,
+   "e": 105.8,
+   "lufs": -23,
+   "prompt": "huge megacity hum, deep traffic roar, wind between skyscrapers, low mechanical drone",
+   "fo": 0.3,
+   "extra": 0
+  },
+  {
+   "id": "s14",
+   "s": 105.8,
+   "e": 108.8,
+   "lufs": -16,
+   "prompt": "a huge power grid shutting down, deep electrical power-down hum dropping in pitch, then silence",
+   "dur": 3,
+   "vezes": [
+    105.8
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s15",
+   "s": 112.8,
+   "e": 117,
+   "lufs": -13,
+   "prompt": "massive skyscrapers collapsing, deep rumbling crash, debris falling, long low rumble",
+   "alinhar": "ataque",
+   "fi": 0.05
+  },
+  {
+   "id": "s16",
+   "s": 110,
+   "e": 128,
+   "lufs": -27,
+   "prompt": "time-lapse forest ambience, wind in tall trees, birds, distant waves"
+  },
+  {
+   "id": "s17",
+   "s": 125.3,
+   "e": 129.3,
+   "lufs": -18,
+   "prompt": "distant bright shimmering swell, ethereal rising tone burst then a slow fade",
+   "dur": 4,
+   "vezes": [
+    125.3
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s18",
+   "s": 129,
+   "e": 141,
+   "lufs": -18,
+   "prompt": "glacier ice creaking and cracking, deep groaning ice sheet, cold wind",
+   "fi": 0.3
+  },
+  {
+   "id": "s19",
+   "s": 145.5,
+   "e": 150.5,
+   "lufs": -12,
+   "prompt": "distant massive asteroid impact, deep low boom with a long rolling rumble",
+   "dur": 5,
+   "vezes": [
+    145.5
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s20",
+   "s": 152,
+   "e": 156.5,
+   "lufs": -20,
+   "prompt": "deep cosmic whoosh slowly passing overhead, low swelling hum"
+  },
+  {
+   "id": "s21",
+   "s": 162.5,
+   "e": 168.5,
+   "lufs": -14,
+   "prompt": "ground collapsing into a canyon, huge rock landslide, rocks tumbling down a cliff, deep rumble",
+   "dur": 6,
+   "vezes": [
+    162.5
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s22",
+   "s": 167,
+   "e": 187,
+   "lufs": -25,
+   "prompt": "vast howling wind over a deep canyon, distant geological rumble"
+  },
+  {
+   "id": "s23",
+   "s": 187.2,
+   "e": 190.5,
+   "lufs": -14,
+   "prompt": "enormous deep tectonic rumble rising, earth groaning and lifting, rocks grinding",
+   "fi": 0.3
+  },
+  {
+   "id": "s24",
+   "s": 189.5,
+   "e": 200.5,
+   "lufs": -22,
+   "prompt": "strong cold wind at a mountain summit, howling gusts"
+  },
+  {
+   "id": "s25",
+   "s": 200.3,
+   "e": 201.8,
+   "lufs": -21,
+   "prompt": "short heavy rain shower burst",
+   "fi": 0.2,
+   "fo": 0.6,
+   "extra": 0.3
+  },
+  {
+   "id": "s26",
+   "s": 205,
+   "e": 230,
+   "lufs": -26,
+   "prompt": "dry desert wind, sand blowing, hot empty desert ambience"
+  },
+  {
+   "id": "s27",
+   "s": 230,
+   "e": 239,
+   "lufs": -27,
+   "prompt": "dry hot wind over bare rock, empty and desolate"
+  },
+  {
+   "id": "s28",
+   "s": 239,
+   "e": 252.5,
+   "lufs": -17,
+   "prompt": "ocean violently boiling, massive hissing steam, roaring vapor storm"
+  },
+  {
+   "id": "s29",
+   "s": 284,
+   "e": 297,
+   "lufs": -22,
+   "prompt": "deep slowly rising cosmic drone, growing hum, vast presence approaching"
+  },
+  {
+   "id": "s30",
+   "s": 297,
+   "e": 309.3,
+   "lufs": -20,
+   "prompt": "huge cosmic rumble, swirling roaring stellar winds"
+  },
+  {
+   "id": "s31",
+   "s": 309.5,
+   "e": 320.3,
+   "lufs": -16,
+   "prompt": "thick molten lava bubbling, deep fiery roar, crackling crust",
+   "fo": 1.0,
+   "extra": 0.3
+  },
+  {
+   "id": "s32",
+   "s": 321.4,
+   "e": 328.4,
+   "lufs": -18,
+   "prompt": "deep roaring plasma inside the sun, turbulent fiery rumble",
+   "fi": 0.3
+  },
+  {
+   "id": "s33",
+   "s": 330.6,
+   "e": 336.5,
+   "lufs": -19,
+   "prompt": "bright expanding cosmic swell, airy rising shimmer whoosh"
+  },
+  {
+   "id": "s34",
+   "s": 386.5,
+   "e": 416.5,
+   "lufs": -27,
+   "prompt": "two mechanical clocks ticking softly in a quiet room, slightly out of sync",
+   "tempo": "video",
+   "fi": 1.0
+  },
+  {
+   "id": "s35",
+   "s": 396.5,
+   "e": 401.7,
+   "lufs": -21,
+   "prompt": "two deep low hums circling each other faster and faster, rising tension whoosh",
+   "fo": 0.3,
+   "extra": 0
+  },
+  {
+   "id": "s36",
+   "s": 401.7,
+   "e": 407.7,
+   "lufs": -11,
+   "prompt": "massive deep cosmic impact boom with a bright ringing shimmer and a long tail",
+   "dur": 6,
+   "vezes": [
+    401.7
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s37",
+   "s": 410,
+   "e": 418,
+   "lufs": -24,
+   "prompt": "occasional fast distant whooshes passing by"
+  },
+  {
+   "id": "s38",
+   "s": 417,
+   "e": 440.3,
+   "lufs": -17,
+   "prompt": "deep ominous black hole drone, low rumble and roar steadily growing louder and more intense, swirling",
+   "fi": 3.0,
+   "fo": 1.5
+  },
+  {
+   "id": "s39",
+   "s": 452,
+   "e": 461.5,
+   "lufs": -25,
+   "prompt": "grainy crumbling sizzle, sand slowly disintegrating, soft crackle fading"
+  },
+  {
+   "id": "s40",
+   "s": 462.9,
+   "e": 465.4,
+   "lufs": -22,
+   "prompt": "a single short bright crystalline chime ping with a soft shimmering decay, ethereal",
+   "dur": 2.5,
+   "variantes": 3,
+   "vezes": [
+    462.9,
+    464.4,
+    465.6,
+    471.4,
+    473.0,
+    474.4,
+    475.0,
+    476.0,
+    476.5,
+    477.5,
+    480.5,
+    486.0,
+    488.5,
+    493.5,
+    495.0,
+    496.5,
+    498.5,
+    499.5,
+    503.0,
+    504.0
+   ],
+   "alinhar": "pico"
+  },
+  {
+   "id": "s41",
+   "s": 505.5,
+   "e": 510.5,
+   "lufs": -11,
+   "prompt": "blinding final flash, huge bright explosive boom with an expanding shockwave whoosh fading into silence",
+   "dur": 5,
+   "vezes": [
+    505.5
+   ],
+   "alinhar": "ataque"
+  },
+  {
+   "id": "s42",
+   "s": 523.5,
+   "e": 530,
+   "lufs": -28,
+   "prompt": "a soft warm electrical buzz of a street lamp glowing, faint hum",
+   "fi": 1.0
+  },
+  {
+   "id": "s43",
+   "s": 528.8,
+   "e": 537.2,
+   "lufs": -24,
+   "prompt": "quiet suburban neighborhood evening ambience, birds, light breeze, distant voices",
+   "fi": 1.2,
+   "fo": 1.0
+  }
+ ]
+}
