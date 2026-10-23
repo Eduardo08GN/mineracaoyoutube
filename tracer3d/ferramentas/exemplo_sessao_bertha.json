@@ -1,0 +1,13 @@
+{"log": "D:/tmp/sessao_bertha.log",
+ "passos": [
+  {"tipo": "ligar"},
+  {"tipo": "subir", "zip": "D:/kriegschronik/tracer3d_02_bertha/g4/kb1.zip"},
+  {"tipo": "rodar", "rotulo": "audio + alinhamento", "cmd": "cd /content && rm -rf kb1 && unzip -q -o kb1.zip && cd kb1 && flock -n /content/kb1.lock bash rodada.sh > rodada.out 2>&1", "vida": "/content/kb1/status.txt"},
+  {"tipo": "preparar", "projeto": "D:/kriegschronik/tracer3d_02_bertha/v1", "zip": "D:/kriegschronik/tracer3d_02_bertha/g4/kc_v1.zip", "projeto_vm": "/content/kc/v1"},
+  {"tipo": "stills", "projeto": "D:/kriegschronik/tracer3d_02_bertha/v1", "pasta": "g4teste", "segundos": [10, 300, 600]},
+  {"tipo": "stills", "projeto": "D:/kriegschronik/tracer3d_02_bertha/v1", "pasta": "g4teste2", "segundos": [30, 700]},
+  {"tipo": "esperar", "status": "/content/kb1/status.txt", "fim": "FIM_TUDO", "falha": "FALHOU|Traceback", "prazo_min": 45, "estagnado_min": 15},
+  {"tipo": "baixar", "remoto": "/content/kb1/musica.tar", "local": "D:/kriegschronik/tracer3d_02_bertha/audio/musica.tar"},
+  {"tipo": "baixar", "remoto": "/content/kb1/efeitos.tar", "local": "D:/kriegschronik/tracer3d_02_bertha/audio/efeitos.tar"},
+  {"tipo": "baixar", "remoto": "/content/kb1/alinhamento.json", "local": "D:/kriegschronik/tracer3d_02_bertha/voz/alinhamento.json"}
+ ]}

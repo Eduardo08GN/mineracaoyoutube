@@ -5,6 +5,8 @@ caísse em…", supervulcão, bomba nuclear numa cidade, tsunami…) contados po
 e cenas 3D-herói. Nasceu da engenharia reversa do canal Tracer Project
 ([pesquisa](../docs/pesquisa/tracer3d-2026-10/)) e do empirismo acumulado no **[Eddie3D](../eddie3d/)**.
 
+**Mapa completo da esteira (postos, recursos, regras pró-ativas, ferramentas, erros):** [PIPELINE.md](PIPELINE.md)
+
 ## Convivência com o Eddie3D
 - O Tracer3D é **independente** e **não sobrescreve nada** do Eddie3D: pasta, projetos, assets de saída e documentação próprios.
 - Pode **ler e reaproveitar** a biblioteca do Eddie3D (`eddie3d/biblioteca/src`: look com névoa e god rays, flipbooks, céu físico,

@@ -5,7 +5,7 @@
 # Pre-requisito: G4 ligada e o projeto ja preparado nela (g4_stills.py --preparar <projeto v1> <zip do projeto>).
 # Varios agentes podem chamar ao mesmo tempo: uma trava local serializa o uso do Colab (a aba e uma so).
 import io, json, os, sys, tarfile, time, zipfile
-sys.path.insert(0, r"D:\prehistoria")
+sys.path.insert(0, os.environ.get("COLAB_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "eddie3d", "ferramentas")))
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import colab
 
@@ -29,7 +29,7 @@ def guarda():
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         if not colab.conectado(colab.aba(p)):
-            raise SystemExit("G4_DESLIGADA: ligue com 'python D:/whatif_es/g4.py ligar' (sobe o vigia: desliga sozinha apos 20 min sem uso)")
+            raise SystemExit("G4_DESLIGADA: ligue com 'python eddie3d/ferramentas/g4.py ligar' (sobe o vigia: desliga sozinha apos 20 min sem uso)")
 
 
 def pacote(proj):
@@ -56,7 +56,7 @@ def stills(proj, pasta, segundos, escala):
     tag = f"{pasta}_{int(time.time())}"
     # o zip vai pelo painel Arquivos (input de arquivo), NUNCA como texto base64 numa celula: 400 KB de texto numa celula
     # congelaram o editor do Colab ("Page Unresponsive", 23/10/2026)
-    zloc = os.path.join(r"D:	mp", f"src_{tag}.zip"); open(zloc, "wb").write(dados)
+    zloc = os.path.join("D:/tmp", f"src_{tag}.zip"); open(zloc, "wb").write(dados)
     colab.subir_painel(zloc)
     cod = (f"!cd {REMOTO} && unzip -q -o /content/src_{tag}.zip && rm -f /content/src_{tag}.zip && "
            f"bash /content/vm_comum/stills_srv.sh {REMOTO} {tag} {escala} {quadros} 2>&1 | tail -25; echo STILLS_FEITOS")

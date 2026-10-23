@@ -2,6 +2,7 @@
 #   python colab.py rodar "<codigo da celula>" [espera_s]   -> cria uma celula no fim, roda e imprime a saida
 #   python colab.py shot arquivo.png
 import os
+import re
 import sys
 import time
 
@@ -15,9 +16,33 @@ JS_SAIDA = "() => { const c = [...document.querySelectorAll('.cell')].pop(); ret
 JS_RODANDO = "() => { const c = [...document.querySelectorAll('.cell')].pop(); return !!(c && c.querySelector('.running, colab-run-button[running], .cell-execution.running')); }"
 
 
+DIALOGOS = ("Confira se os arquivos foram salvos", "Make sure your files are saved", "Os arquivos deste ambiente")
+
+
+def fechar_dialogos(nb):
+    """Fecha avisos modais do Colab que bloqueiam todo clique (ex.: aviso de arquivos temporarios apos upload, 23/10/2026).
+    Enter aciona o botao padrao; se o aviso continuar, clica no OK pela caixa na tela (force)."""
+    # menus que ficaram abertos (ex.: "Ambiente de execucao" apos desligar) interceptam todo clique: fecha com Escape
+    try:
+        if nb.evaluate("() => [...document.querySelectorAll('.goog-menu')].some(m => m.offsetParent !== null && getComputedStyle(m).visibility !== 'hidden')"):
+            nb.keyboard.press("Escape"); time.sleep(0.4); nb.keyboard.press("Escape"); time.sleep(0.4)
+    except Exception: pass
+    for _ in range(3):
+        try: txt = nb.locator("body").inner_text(timeout=3000)
+        except Exception: return
+        if not any(d in txt for d in DIALOGOS): return
+        nb.keyboard.press("Enter"); time.sleep(0.8)
+        try:
+            ok = [e for e in nb.get_by_role("button", name=re.compile(r"^(OK|Ok)$")).all() if e.is_visible()]
+            if ok: ok[-1].click(force=True, timeout=3000); time.sleep(0.8)
+        except Exception: pass
+
+
 def aba(p):
     b = local.conectar(p)
-    return next(x for c in b.contexts for x in c.pages if URL.split("/")[-1] in x.url)
+    nb = next(x for c in b.contexts for x in c.pages if URL.split("/")[-1] in x.url)
+    fechar_dialogos(nb)
+    return nb
 
 
 def saida(nb):
@@ -37,10 +62,15 @@ def saida(nb):
 def nova_celula(nb):
     nb.keyboard.press("Escape"); time.sleep(0.3)
     n0 = nb.locator(".cell").count()
-    nb.locator(".cell").last.scroll_into_view_if_needed()
-    nb.locator(".cell").last.click(position={"x": 4, "y": 4}); time.sleep(0.4)
-    nb.keyboard.press("Escape"); time.sleep(0.2)
-    nb.keyboard.press("Control+m"); time.sleep(0.15); nb.keyboard.press("b"); time.sleep(1.5)
+    if n0 == 0:
+        # notebook sem nenhuma celula (alguem apagou todas): cria a primeira pelo botao "+ Codigo" da barra (23/10/2026)
+        b = [e for e in nb.get_by_text(re.compile(r"^(Código|Code)$")).all() if e.is_visible()]
+        (b[0].click() if b else nb.mouse.click(170, 84)); time.sleep(1.5)
+    else:
+        nb.locator(".cell").last.scroll_into_view_if_needed()
+        nb.locator(".cell").last.click(position={"x": 4, "y": 4}); time.sleep(0.4)
+        nb.keyboard.press("Escape"); time.sleep(0.2)
+        nb.keyboard.press("Control+m"); time.sleep(0.15); nb.keyboard.press("b"); time.sleep(1.5)
     if nb.locator(".cell").count() <= n0:
         nb.mouse.click(170, 84); time.sleep(1.5)
     if nb.locator(".cell").count() <= n0: raise SystemExit("nao criou celula nova")
@@ -195,9 +225,11 @@ def limpar(nb):
     try:
         _menu_runtime(nb)
         it = _item(nb, "Interromper execução", "Interrupt execution")
-        if it: it.click(); time.sleep(3)
-        else: nb.keyboard.press("Escape")
+        # sem runtime o item vem desativado: clicar nele estourava o tempo e o menu ficava aberto, bloqueando tudo (23/10/2026)
+        if it and not it.evaluate("e => !!e.closest('.goog-menuitem-disabled, [aria-disabled=true]')"): it.click(timeout=3000); time.sleep(3)
     except Exception: pass
+    finally:
+        nb.keyboard.press("Escape"); time.sleep(0.3); fechar_dialogos(nb)
     for _ in range(60):
         if nb.locator(".cell").count() <= 1: break
         c = nb.locator(".cell").first; c.scroll_into_view_if_needed(); c.click(position={"x": 4, "y": 4}); time.sleep(.3)
@@ -351,8 +383,7 @@ def subir_painel(arquivo, espera=1800, pedaco=45 * 1024 * 1024):
             if not nb.locator("input[type=file]").count():
                 nb.locator("[aria-label='Files'], [aria-label='Arquivos'], [title='Files'], [title='Arquivos']").first.click(); time.sleep(3)
             nb.locator("input[type=file]").first.set_input_files(pt, timeout=900000); time.sleep(3)
-            ok = nb.get_by_role("button", name="OK")
-            if ok.count() and ok.first.is_visible(): ok.first.click()
+            fechar_dialogos(nb)
         alvo = "/content/" + os.path.basename(pt); fim = time.time() + espera
         while time.time() < fim:
             time.sleep(20)
@@ -367,5 +398,7 @@ def subir_painel(arquivo, espera=1800, pedaco=45 * 1024 * 1024):
     # idempotente: o Colab as vezes reexecuta a celula; um segundo `cat ... > final` sem os pedacos zerava o arquivo
     p0 = f"/content/{os.path.basename(partes[0][0])}"
     out = rodar(f"![ -f '{p0}' ] && cat {junta} > '/content/{nome}.tmp' && mv '/content/{nome}.tmp' '/content/{nome}' && rm -f {junta}; stat -c 'TAMFINAL %s' '/content/{nome}' && echo JUNTOU_OK", 600, "JUNTOU_OK")
-    print(f"SUBIU_PAINEL {nome} {tam}", "JUNTOU_OK" in out and f"TAMFINAL {tam}" in out)
+    ok = "JUNTOU_OK" in out and f"TAMFINAL {tam}" in out
+    print(f"SUBIU_PAINEL {nome} {tam}", ok)
+    if not ok: raise SystemExit(f"FALHOU subir_painel {nome}: tamanho final nao confere")
     return out
