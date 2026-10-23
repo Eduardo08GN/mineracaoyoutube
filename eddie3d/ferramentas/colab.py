@@ -93,10 +93,13 @@ def rodar(codigo, espera=600, marca=None):
         nova_celula(nb)
         nb.keyboard.insert_text(codigo); time.sleep(0.8)
         nb.keyboard.press("Control+Enter")
-        fim = time.time() + espera
+        fim = time.time() + espera; t0 = time.time(); bat = t0
         while time.time() < fim and marca:
             time.sleep(5)
             if marca in saida(nb): break
+            if time.time() - bat >= 30:   # batimento (vai direto ao stdout real, mesmo com redirect): esperar nunca e calado
+                bat = time.time(); ult = (saida(nb).strip().splitlines() or [""])[-1][:90]
+                sys.__stdout__.write(f"BATIMENTO rodar: {time.time() - t0:.0f}s aguardando {marca[:20]} | {ult}" + chr(10)); sys.__stdout__.flush()
         time.sleep(2)
         txt = saida(nb); print(txt[-3000:]); return txt
 
@@ -382,11 +385,15 @@ def subir_painel(arquivo, espera=1800, pedaco=45 * 1024 * 1024):
             nb = aba(p); nb.bring_to_front(); nb.keyboard.press("Escape")
             if not nb.locator("input[type=file]").count():
                 nb.locator("[aria-label='Files'], [aria-label='Arquivos'], [title='Files'], [title='Arquivos']").first.click(); time.sleep(3)
+            sys.__stdout__.write(f"BATIMENTO subir: enviando {os.path.basename(pt)} ({n / 1e6:.0f} MB)" + chr(10)); sys.__stdout__.flush()
+            t_env = time.time()
             nb.locator("input[type=file]").first.set_input_files(pt, timeout=900000); time.sleep(3)
+            sys.__stdout__.write(f"BATIMENTO subir: {os.path.basename(pt)} entregue ao navegador em {time.time() - t_env:.0f}s" + chr(10)); sys.__stdout__.flush()
             fechar_dialogos(nb)
         alvo = "/content/" + os.path.basename(pt); fim = time.time() + espera
         while time.time() < fim:
             time.sleep(20)
+            sys.__stdout__.write(f"BATIMENTO subir: aguardando {os.path.basename(pt)} chegar na VM" + chr(10)); sys.__stdout__.flush()
             out = rodar(f"import os; print('TAM', os.path.getsize('{alvo}') if os.path.exists('{alvo}') else -1, 'TAM_OK')", 120, "TAM_OK")
             import re
             m = re.search(r"TAM (-?\d+) TAM_OK", out)

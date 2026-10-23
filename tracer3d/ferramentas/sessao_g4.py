@@ -11,7 +11,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 AQUI = os.path.dirname(os.path.abspath(__file__))
 COLAB_DIR = os.environ.get("COLAB_DIR", os.path.join(AQUI, "..", "..", "eddie3d", "ferramentas"))
 G4 = os.environ.get("G4_PY", os.path.join(COLAB_DIR, "g4.py"))
-STILLS = r"D:\tracer3d\g4_stills.py"
+STILLS = os.path.join(AQUI, "g4_stills.py")
 LOG = None
 
 
@@ -24,23 +24,40 @@ def log(*x):
 class Falha(Exception): pass
 
 
-def sh(args, prazo, exige=None, nome=""):
-    """Roda um comando local com prazo; exige = regex que PRECISA aparecer na saida (senao Falha)."""
-    try:
-        r = subprocess.run(args, capture_output=True, text=True, timeout=prazo, encoding="utf-8", errors="replace",
-                           env={**os.environ, "MSYS_NO_PATHCONV": "1"})
-    except subprocess.TimeoutExpired:
-        raise Falha(f"{nome}: passou do prazo de {prazo}s")
-    out = (r.stdout or "") + (r.stderr or "")
-    if LOG: open(LOG, "a", encoding="utf-8").write(out[-4000:] + "\n")
-    if r.returncode != 0 or (exige and not re.search(exige, out)):
-        ult = [l for l in out.splitlines() if l.strip() and "socket.send" not in l][-3:]
-        raise Falha(f"{nome}: resposta inesperada (rc={r.returncode}) {' | '.join(ult)[:400]}")
+SILENCIO_MAX = 180   # s sem NENHUMA linha nova do subprocesso = surdez: aborta (nenhuma espera interna pode passar disso calada)
+
+
+def sh(args, prazo, exige=None, nome="", silencio=SILENCIO_MAX):
+    """Roda um comando local escutando a saida em tempo real: batimento no log a cada 60 s, aborta se o processo ficar
+    `silencio` s sem produzir nada ou passar do prazo; exige = regex que PRECISA aparecer na saida (senao Falha)."""
+    import threading, queue
+    q = queue.Queue(); linhas = []
+    pr = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace",
+                          env={**os.environ, "MSYS_NO_PATHCONV": "1", "PYTHONUNBUFFERED": "1"})
+    threading.Thread(target=lambda: [q.put(l) for l in pr.stdout] + [q.put(None)], daemon=True).start()
+    t0 = ult = bat = time.time(); fim = False
+    while not fim:
+        try:
+            l = q.get(timeout=5)
+            if l is None: fim = True
+            else:
+                if "socket.send" not in l: linhas.append(l.rstrip()); ult = time.time()
+        except queue.Empty: pass
+        checar_vigia_ui()
+        agora = time.time()
+        if agora - bat > 60: bat = agora; log(f"   ... {nome}: {agora - t0:.0f} s, ultima resposta ha {agora - ult:.0f} s: {(linhas[-1] if linhas else '')[:100]}")
+        if not fim and agora - ult > silencio: pr.kill(); raise Falha(f"{nome}: {silencio} s sem nenhuma resposta (surdo) — abortado")
+        if not fim and agora - t0 > prazo: pr.kill(); raise Falha(f"{nome}: passou do prazo de {prazo}s")
+    pr.wait()
+    out = chr(10).join(linhas)
+    if LOG: open(LOG, "a", encoding="utf-8").write(out[-4000:] + chr(10))
+    if pr.returncode != 0 or (exige and not re.search(exige, out)):
+        raise Falha(f"{nome}: resposta inesperada (rc={pr.returncode}) {' | '.join(linhas[-3:])[:400]}")
     return out
 
 
-def g4(*args, prazo=600, exige=None, nome=None):
-    return sh([sys.executable, G4, *args], prazo, exige, nome or args[0])
+def g4(*args, prazo=600, exige=None, nome=None, silencio=SILENCIO_MAX):
+    return sh([sys.executable, "-u", G4, *args], prazo, exige, nome or args[0], silencio)
 
 
 def ler_vm(caminho, n=600):
@@ -106,8 +123,20 @@ def passo(p):
     elif tipo == "esperar":
         esperar(p["status"], p["fim"], p.get("falha", "FALHOU|Traceback"), p.get("prazo_min", 60), p.get("estagnado_min", 10))
     elif tipo == "baixar":
-        g4("baixar", p["remoto"], p["local"], prazo=p.get("prazo", 1800), exige="baixado")
+        g4("baixar", p["remoto"], p["local"], prazo=p.get("prazo", 1800), exige="baixado", silencio=900)   # download do navegador nao da sinal parcial
         if not os.path.exists(p["local"]) or os.path.getsize(p["local"]) == 0: raise Falha(f"baixar: {p['local']} vazio")
+    elif tipo == "manter":           # servidor de stills: G4 ligada enquanto os agentes montam as cenas
+        parar = p.get("parar", "D:/tmp/g4_manter.parar"); fim = time.time() + p.get("prazo_min", 180) * 60
+        if os.path.exists(parar): os.remove(parar)
+        ult = 0
+        while not os.path.exists(parar):
+            checar_vigia_ui()
+            if time.time() > fim: log("manter: prazo maximo atingido, encerrando"); break
+            if time.time() - ult >= 300:   # a cada 5 min: confere que a VM responde e relata
+                ult = time.time(); txt = ler_vm("/content/vigia.txt", 50)
+                log(f"BACKLOG manter: G4 ligada ha {(time.time() - fim) / 60 + p.get('prazo_min', 180):.0f} min | ociosidade na VM: {txt.strip()[:20]} min")
+            time.sleep(20)
+        log("manter: fim (sinal de parar ou prazo)")
     else:
         raise Falha(f"passo desconhecido {tipo}")
 
@@ -123,7 +152,21 @@ def desligar():
     return False
 
 
+TRAVA = "D:/tmp/sessao_g4.pid"
+
+
+def outra_sessao_viva():
+    """Uma sessao por vez: no Windows, parar a tarefa nao mata os filhos e sobravam sessoes velhas disputando o Colab (23/10/2026)."""
+    if not os.path.exists(TRAVA): return None
+    pid = open(TRAVA).read().strip()
+    r = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"], capture_output=True, text=True)
+    return pid if pid and pid in r.stdout else None
+
+
 if __name__ == "__main__":
+    viva = outra_sessao_viva()
+    if viva: print(f"FALHOU: outra sessao_g4 viva (PID {viva}); encerre com 'taskkill /PID {viva} /T /F'"); sys.exit(2)
+    open(TRAVA, "w").write(str(os.getpid()))
     plano = json.load(open(sys.argv[1], encoding="utf-8"))
     LOG = plano.get("log", "D:/tmp/sessao_g4.log"); open(LOG, "w").close()
     ok = False
@@ -154,4 +197,6 @@ if __name__ == "__main__":
         try: vigia.wait(30)
         except Exception: vigia.kill()
     log("SESSAO_OK" if ok else "SESSAO_FALHOU")
+    try: os.remove(TRAVA)
+    except Exception: pass
     sys.exit(0 if ok else 1)

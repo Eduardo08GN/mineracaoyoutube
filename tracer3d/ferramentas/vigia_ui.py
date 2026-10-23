@@ -73,19 +73,26 @@ if __name__ == "__main__":
         if os.path.exists(f): os.remove(f)
     log("vigia de UI ativo")
     with sync_playwright() as p:
-        nb = colab.aba(p); vistos = {}
+        nb = colab.aba(p); vistos = {}; menu_seq = 0; ult_rel = 0; n_trat = 0; n_alertas = 0; n_ciclos = 0
         while not os.path.exists(PARAR):
+            n_ciclos += 1
+            if time.time() - ult_rel >= 60:   # BACKLOG periodico para o orquestrador: o vigia nunca fica calado
+                ult_rel = time.time()
+                log(f"BACKLOG vigia_ui: {n_ciclos} leituras da tela | dialogos tratados {n_trat} | alertas {n_alertas} | "
+                    f"{'ALERTA PENDENTE' if os.path.exists(ALERTA) else 'tela ok'}")
             try:
                 dialogos = nb.evaluate(JS_DIALOGOS)
             except Exception as e:
                 if "Timeout" in str(e) or "Target closed" in str(e): alertar("pagina_travada", str(e)[:200])
                 time.sleep(10); continue
-            try:   # menu esquecido aberto bloqueia cliques da automacao: fecha
-                if nb.evaluate("() => [...document.querySelectorAll('.goog-menu')].some(m => m.offsetParent !== null && getComputedStyle(m).visibility !== 'hidden')"):
-                    nb.keyboard.press("Escape"); log("menu aberto fechado")
+            try:   # menu ESQUECIDO aberto (2 leituras seguidas, >= 8 s) bloqueia cliques: fecha. Menu recem-aberto pela automacao: espera
+                aberto = nb.evaluate("() => [...document.querySelectorAll('.goog-menu')].some(m => m.offsetParent !== null && getComputedStyle(m).visibility !== 'hidden')")
+                menu_seq = (menu_seq + 1) if aberto else 0
+                if menu_seq >= 3: nb.keyboard.press("Escape"); log("menu esquecido aberto (>= 8 s) fechado"); menu_seq = 0
             except Exception: pass
             for t in dialogos:
                 if t.strip() and time.time() - vistos.get(t, 0) > 20:     # mesmo dialogo: reage de novo so apos 20 s
-                    vistos[t] = time.time(); tratar(nb, t)
+                    vistos[t] = time.time(); n_trat += 1; tratar(nb, t)
+                    if os.path.exists(ALERTA): n_alertas += 1
             time.sleep(4)
     log("vigia de UI parado")

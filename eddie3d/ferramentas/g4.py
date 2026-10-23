@@ -35,12 +35,22 @@ if cmd == "ligar":
         if not colab.conectado(nb):
             bt = [e for e in nb.locator("colab-connect-button").all() if e.is_visible()]
             (bt[0] if bt else nb.get_by_text(re.compile(r"^(Conectar|Reconectar|Connect|Reconnect)$")).first).click()
-            for _ in range(60):
+            for k in range(60):
                 time.sleep(5)
                 if colab.conectado(nb): break
+                if k % 6 == 5: print(f"BATIMENTO ligar: conectando ha {(k + 1) * 5}s", flush=True)
         print("conectado:", colab.conectado(nb))
-    out = cel("exec(__import__('base64').b64decode('" + base64.b64encode(colab.VIGIA.encode()).decode() + "').decode())", "VIGIA_OK", 900)
-    print("VIGIA_OK" in out and "vigia ativo" or "FALHOU: " + out[-400:])
+    # pro-ativo (23/10/2026): a celula do vigia as vezes roda sem mostrar a saida; em vez de esperar 15 min pelo marcador,
+    # espera 90 s, confere o vigia pela thread viva na VM e, se nao estiver, reenvia (ate 3 vezes); senao FALHOU na hora
+    cod_vigia = "exec(__import__('base64').b64decode('" + base64.b64encode(colab.VIGIA.encode()).decode() + "').decode())"
+    ok = False
+    for tent in range(3):
+        out = cel(cod_vigia, "VIGIA_OK", 90)
+        if "VIGIA_OK" in out: ok = True; break
+        chk = cel("import threading; print('VIGIA_THREAD', any(t.name == 'vigia' for t in threading.enumerate()), 'CHK_OK')", "CHK_OK", 90)
+        if "VIGIA_THREAD True" in chk: ok = True; break
+        print(f"vigia nao confirmado (tentativa {tent + 1}), reenviando")
+    print("vigia ativo" if ok else "FALHOU: vigia nao subiu apos 3 tentativas")
 elif cmd == "enviar":
     b64 = base64.b64encode(open(sys.argv[2], "rb").read()).decode()
     dest = sys.argv[3] if len(sys.argv) > 3 else '/content/es'
