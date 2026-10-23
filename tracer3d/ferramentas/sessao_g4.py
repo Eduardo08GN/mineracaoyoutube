@@ -66,8 +66,15 @@ def esperar(caminho, fim_regex, falha_regex, prazo_min, estagnado_min):
 VIGIA_UI = "D:/tmp/vigia_ui"
 
 
+VIGIA_PROC = None
+
+
 def checar_vigia_ui():
-    """O vigia de UI grava alerta.json quando ve um problema na tela do Colab: a sessao para na hora."""
+    """O vigia de UI grava alerta.json quando ve um problema na tela do Colab: a sessao para na hora.
+    Tambem exige que o proprio vigia esteja vivo (vigia morto = sessao surda)."""
+    if VIGIA_PROC is not None and VIGIA_PROC.poll() is not None:
+        err = open(os.path.join(VIGIA_UI, "vigia_err.txt"), encoding="utf-8", errors="replace").read()[-300:]
+        raise Falha(f"vigia de UI morreu (rc={VIGIA_PROC.poll()}): {err}")
     a = os.path.join(VIGIA_UI, "alerta.json")
     if os.path.exists(a):
         j = json.load(open(a, encoding="utf-8")); raise Falha(f"vigia de UI: {j['tipo']} — {j['texto'][:200]} (print: {j.get('screenshot')})")
@@ -121,11 +128,19 @@ if __name__ == "__main__":
     LOG = plano.get("log", "D:/tmp/sessao_g4.log"); open(LOG, "w").close()
     ok = False
     os.makedirs(VIGIA_UI, exist_ok=True)
-    for f in ("alerta.json", "parar"):
+    for f in ("alerta.json", "parar", "vigia_ui.log"):
         if os.path.exists(os.path.join(VIGIA_UI, f)): os.remove(os.path.join(VIGIA_UI, f))
-    vigia = subprocess.Popen([sys.executable, r"D:	racer3digia_ui.py", VIGIA_UI], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    vigia = subprocess.Popen([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "vigia_ui.py"), VIGIA_UI],
+                             stdout=subprocess.DEVNULL, stderr=open(os.path.join(VIGIA_UI, "vigia_err.txt"), "w"))
+    globals()["VIGIA_PROC"] = vigia
     log("vigia de UI iniciado (pid", vigia.pid, ")")
     try:
+        for _ in range(20):                       # prova de vida do vigia antes de qualquer passo
+            time.sleep(1)
+            lg = os.path.join(VIGIA_UI, "vigia_ui.log")
+            if os.path.exists(lg) and "vigia de UI ativo" in open(lg, encoding="utf-8").read(): break
+            checar_vigia_ui()
+        else: raise Falha("vigia de UI nao confirmou que esta ativo em 20 s")
         for p in plano["passos"]: passo(p)
         checar_vigia_ui()
         ok = True
