@@ -4,6 +4,7 @@
 de vídeos "What If" com cena 3D própria, painel, legendas, música e efeitos gerados, render na GPU do Colab ("G4") e
 entrega com miniatura, Shorts/Reels e textos de publicação.
 
+Convive com o **[Tracer3D](../tracer3d/)** (explicador narrado), que reaproveita a biblioteca daqui sem alterá-la.
 É um pipeline **independente** do resto deste repositório (a pasta `motor/` é outro pipeline, para outro tipo de vídeo). Tudo o que o
 Eddie3D usa está nesta pasta; a documentação detalhada de cada produção fica em [`../docs/whatif-es/`](../docs/whatif-es/).
 

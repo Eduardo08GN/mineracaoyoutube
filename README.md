@@ -18,6 +18,9 @@ A interface é a mesma do OW Agente: janela do Windows (WebView2) + servidor loc
 - **[Eddie3D](eddie3d/)**: o pipeline independente dos vídeos de simulação 3D do canal ¿Qué Pasaría Si? 3D (What If ES): leitura do
   original a 10 fps, mapa de ações, batedor, cena 3D em Remotion + three.js, render na G4 do Colab, som gerado, mixagem, Shorts e
   miniaturas. Documentação das produções em [docs/whatif-es](docs/whatif-es/).
+- **[Tracer3D](tracer3d/)**: o pipeline de explicador narrado com simulação 3D e dados reais (catástrofes e fenômenos, voz TTS,
+  matemática na tela, mapas de dados). Independente do Eddie3D, reaproveita a biblioteca dele sem alterá-la.
+  Pesquisa de origem em [docs/pesquisa/tracer3d-2026-10](docs/pesquisa/tracer3d-2026-10/).
 - `motor/` + `painel/`: o Minerador e o pipeline de vídeo de persona descritos acima.
 
 ## Rodar
