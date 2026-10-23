@@ -13,6 +13,9 @@ def fechar_terminal():
             if x: x[-1].click(); time.sleep(2)
 
 def cel(cod, marca, espera=180):
+    # guarda: celula num notebook desconectado faz o Colab LIGAR uma G4 nova, sem o vigia de ociosidade (23/10/2026)
+    with sync_playwright() as p:
+        if not colab.conectado(colab.aba(p)): raise SystemExit('G4_DESLIGADA: rode "python g4.py ligar" (sobe o vigia que desliga apos ociosidade)')
     fechar_terminal()
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
@@ -70,6 +73,8 @@ elif cmd == "status":
     out = cel("!cat /content/es/status.txt; echo ---; cat /content/au/status.txt 2>/dev/null; tail -2 /content/au/efeitos.log 2>/dev/null; echo ---; tail -c 300 /content/es/render.log 2>/dev/null; echo; tail -3 /content/es/musica.log 2>/dev/null; echo; nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader; cat /content/vigia.txt; echo; echo FIM_ST", "FIM_ST", 120)
     print(out[-2500:])
 elif cmd == "baixar":
+    with sync_playwright() as p:
+        if not colab.conectado(colab.aba(p)): raise SystemExit('G4_DESLIGADA')
     # limpa as celulas antes: o texto novo caia na celula do download anterior e o Colab baixava o arquivo velho primeiro
     fechar_terminal()
     with sync_playwright() as p: colab.limpar(colab.aba(p))

@@ -46,6 +46,14 @@ tema (radar) → pesquisa e roteiro com números e fontes → física em código
 | Som | música e efeitos gerados na G4 (ACE-Step, MOSS) como no Eddie3D; cama sob a voz |
 | Duração | 12–15 min (tempo de exibição e intervalos de anúncio) |
 
+## Miniaturas (padrão dos canais de guerra, desde 23/10/2026)
+Sempre **3 variantes para o Teste A/B** do YouTube, montadas com [`miniaturas/miniaturas_guerra.py`](miniaturas/miniaturas_guerra.py):
+- **A — simulação:** quadro forte do vídeo + inset do momento-herói + número grande (ex.: „42 KM HOCH“).
+- **B — rosto:** retrato fotorrealista de uma pessoa **fictícia** da época, susto expressivo olhando a ameaça + pergunta-gancho (ex.: „KEIN FLUGZEUG?“).
+- **C — híbrida:** rosto + número-chave.
+
+Rostos gerados no Google Flow (Nano Banana, 16:9, ×4, prompt com „no text, no flags, no insignia, no logos“); nunca figura histórica real nem símbolos.
+
 ## Onde está o buraco (radar de 23/10/2026)
 Em espanhol há pouca oferta para: **humanos desaparecendo/colapso (~84×)**, **o Sol (~19×)**, **erupção de vulcão (~16×)**,
 **simulação de impacto de asteroide (~15×)**, **supervulcão (~11×)**, **bomba nuclear em cidade (~8×)**, **asteroide atingindo a

@@ -1,6 +1,8 @@
 #!/bin/bash
 # Stills locais (WebGL por software): bash teste/still.sh <pasta> <segundo_do_VIDEO> [...]  (segundos, nao quadros)
 # Empacota uma vez por pasta e renderiza em sequencia. Trava global de 3 renders ao mesmo tempo na maquina (varios agentes).
+# temporarios do Chrome do Remotion (um perfil por still) fora do C:, que enche (29 GB em 22/10/2026)
+export TEMP=D:/tmp TMP=D:/tmp; mkdir -p D:/tmp
 cd "$(dirname "$0")/.."
 D=$1; shift; mkdir -p teste/$D
 B=teste/_b_$D; rm -rf $B; npx remotion bundle src/index.tsx --out-dir=$B > teste/$D/bundle.log 2>&1 || { tail -20 teste/$D/bundle.log; exit 1; }
