@@ -158,3 +158,20 @@ postprocessing, n8ao, `@takram/three-atmosphere` 0.19.1, `@takram/three-geospati
 3. Nunca tocar na G4 sem `sessao_g4.py` (ou `g4.py ligar` + vigia) e sem desligar no fim.
 4. Um navegador por posto; nada no C:.
 5. Entregar só o mp4 com áudio conferido.
+
+---
+
+## 10. Lições do vídeo #2 (Die Dicke Bertha, 23/10/2026)
+
+| O que aconteceu | Regra / ferramenta |
+|---|---|
+| 5 agentes ficaram ~20 min **parados na fila** dos stills da G4 (lotes de 15–25 s cada) | `g4_stills.py`: espera máxima de 120 s na fila (senão `G4_FILA` → still local), no máximo 8 stills por pedido, resposta imediata `G4_NAO_PRONTA` sem servidor no ar |
+| Checagem da sessão e stills dos agentes digitando ao mesmo tempo no Colab | toda conversa com o Colab usa a **mesma trava** (`D:/tmp/g4_stills.lock`) |
+| O canal Colab (células pelo navegador) leva ~1 min por comando e virou o gargalo com 3 processos | próximo passo: canal de comando mais rápido para a VM (uma célula de longa duração lendo comandos de um arquivo) |
+| Render "disparado" que nunca começou | [`ferramentas/render_g4.py`](ferramentas/render_g4.py): **prova de vida** 45 s após disparar (pasta de quadros/log), progresso a cada 60 s, aborta se os quadros pararem 5 min, baixa e confere com ffprobe |
+| Git Bash converteu `/content/kc/v1` em `C:/Program Files/Git/content/kc/v1` | sempre `export MSYS_NO_PATHCONV=1` ao passar caminhos da VM para Python a partir do Git Bash |
+| Sessões antigas sobreviveram ao "parar tarefa" (Windows não mata filhos) e disputaram o Colab | trava por PID em `sessao_g4.py`; encerrar com `taskkill /PID … /T /F` |
+| Preparo reenviaria o pacote antigo (sem o trabalho dos agentes) | reempacotar (`empacotar.py`) imediatamente antes de cada `preparar` |
+| Batidas planejadas **depois** da narração alinhada, ancoradas em palavras | `plano.py` por âncora (`wort` + ocorrência): nenhuma defasagem fala × imagem neste vídeo |
+| Um agente criou um renderizador local de stills com **um navegador persistente** (segundos por still após o primeiro) | adotar para cenas 2D no vídeo #3 (dispensa a G4 para cartões e mapas) |
+| Render completo na RTX PRO 6000: ~3 min de quadros + ~6 min de reparo/encode para 30,6 mil quadros | fazer **render de prévia** assim que todos registrarem as batidas e revisar pelas folhas de contato; correções só do que a prévia mostra |

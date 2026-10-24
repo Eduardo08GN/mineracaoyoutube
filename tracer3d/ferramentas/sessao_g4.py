@@ -128,15 +128,22 @@ def passo(p):
     elif tipo == "manter":           # servidor de stills: G4 ligada enquanto os agentes montam as cenas
         parar = p.get("parar", "D:/tmp/g4_manter.parar"); fim = time.time() + p.get("prazo_min", 180) * 60
         if os.path.exists(parar): os.remove(parar)
+        open("D:/tmp/g4_pronta", "w").write(time.strftime("%H:%M:%S"))   # sinal para os agentes: servidor de stills no ar
         ult = 0
         while not os.path.exists(parar):
             checar_vigia_ui()
             if time.time() > fim: log("manter: prazo maximo atingido, encerrando"); break
-            if time.time() - ult >= 300:   # a cada 5 min: confere que a VM responde e relata
-                ult = time.time(); txt = ler_vm("/content/vigia.txt", 50)
+            if time.time() - ult >= 300:   # a cada 5 min: confere que a VM responde e relata (com a MESMA trava dos stills:
+                ult = time.time()           # duas automacoes digitando celulas ao mesmo tempo no Colab se atropelam)
+                trava = "D:/tmp/g4_stills.lock"
+                try: os.mkdir(trava)
+                except FileExistsError: log("BACKLOG manter: agente usando a G4 (stills) — checagem adiada"); continue
+                try: txt = ler_vm("/content/vigia.txt", 50)
+                finally: os.rmdir(trava)
                 log(f"BACKLOG manter: G4 ligada ha {(time.time() - fim) / 60 + p.get('prazo_min', 180):.0f} min | ociosidade na VM: {txt.strip()[:20]} min")
             time.sleep(20)
         log("manter: fim (sinal de parar ou prazo)")
+        if os.path.exists("D:/tmp/g4_pronta"): os.remove("D:/tmp/g4_pronta")
     else:
         raise Falha(f"passo desconhecido {tipo}")
 
@@ -192,6 +199,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         log("FALHOU interrompido")
     finally:
+        if os.path.exists("D:/tmp/g4_pronta"): os.remove("D:/tmp/g4_pronta")
         desligar()
         open(os.path.join(VIGIA_UI, "parar"), "w").close()
         try: vigia.wait(30)

@@ -14,12 +14,19 @@ TRAVA = r"D:\tmp\g4_stills.lock"
 LIMITE_PUBLIC = 25 * 1024 * 1024        # acima disso, sincronizar public/ com --preparar (subir_painel)
 
 
-def travar():
+MAX_FILA_S = 120      # agente nunca fica parado esperando a G4: passou disso, usa o still local (23/10/2026)
+MAX_POR_PEDIDO = 8    # lotes grandes prendiam a fila para os outros agentes
+
+
+def travar(max_espera=MAX_FILA_S):
     os.makedirs(os.path.dirname(TRAVA), exist_ok=True)
+    t0 = time.time()
     while True:
         try: os.mkdir(TRAVA); return
         except FileExistsError:
-            if time.time() - os.path.getmtime(TRAVA) > 900: os.rmdir(TRAVA)   # trava velha de um processo morto
+            if time.time() - os.path.getmtime(TRAVA) > 600: os.rmdir(TRAVA); continue   # trava velha de processo morto
+            if time.time() - t0 > max_espera:
+                raise SystemExit(f"G4_FILA: a G4 esta ocupada por outro agente ha mais de {max_espera} s; use o still local (teste/still.sh) agora e tente a G4 depois")
             time.sleep(3)
 
 
@@ -86,11 +93,16 @@ def preparar(proj, zip_projeto):
 
 if __name__ == "__main__":
     if sys.argv[1] == "--preparar":
-        travar()
+        travar(max_espera=900)
         try: guarda(); preparar(sys.argv[2], sys.argv[3])
         finally: os.rmdir(TRAVA)
     else:
         proj, pasta, segs = sys.argv[1], sys.argv[2], [float(s) for s in sys.argv[3:]]
+        if len(segs) > MAX_POR_PEDIDO:
+            print(f"AVISO: {len(segs)} segundos pedidos; a G4 faz {MAX_POR_PEDIDO} por pedido (os outros agentes tambem usam). Renderizando os {MAX_POR_PEDIDO} primeiros; peca o resto em outra chamada.")
+            segs = segs[:MAX_POR_PEDIDO]
+        if not os.path.exists("D:/tmp/g4_pronta"):   # antes da fila: sem servidor no ar, resposta imediata
+            raise SystemExit("G4_NAO_PRONTA: o servidor de stills ainda nao esta no ar; use o still local (teste/still.sh) e tente a G4 de novo depois")
         travar()
         try: guarda(); stills(proj, pasta, segs, os.environ.get("ESCALA", "0.5"))
         finally: os.rmdir(TRAVA)
