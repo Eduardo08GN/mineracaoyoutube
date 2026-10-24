@@ -1,0 +1,3467 @@
+{
+ "06_10": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 5,
+    "fantasma": {
+     "opak": 0.55,
+     "largura": 3.2,
+     "brilho": 0.7
+    },
+    "fluxo": [
+     [
+      0.0,
+      27.375
+     ],
+     [
+      0.592,
+      28.158
+     ],
+     [
+      1.183,
+      28.657
+     ],
+     [
+      1.775,
+      29.062
+     ],
+     [
+      2.367,
+      29.396
+     ],
+     [
+      2.958,
+      29.665
+     ],
+     [
+      3.55,
+      29.877
+     ],
+     [
+      4.142,
+      30.042
+     ],
+     [
+      4.733,
+      30.167
+     ],
+     [
+      5.325,
+      30.26
+     ],
+     [
+      5.917,
+      30.33
+     ],
+     [
+      6.508,
+      30.384
+     ],
+     [
+      7.1,
+      30.428
+     ]
+    ]
+   },
+   "projetil": {
+    "tipo": "granada",
+    "px": 40
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "meio",
+      "lado": 12400.0,
+      "alto": 2700.0,
+      "frente": 900.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 1600,
+      "frente": 150
+     },
+     "fov": 40
+    },
+    {
+     "t": 3.55,
+     "pos": {
+      "ancora": "meio",
+      "lado": 10343.0,
+      "alto": 3175.0,
+      "frente": -208.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 1600,
+      "frente": 150
+     },
+     "fov": 40
+    },
+    {
+     "t": 7.1,
+     "pos": {
+      "ancora": "meio",
+      "lado": 9800.0,
+      "alto": 3300.0,
+      "frente": -500.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 1600,
+      "frente": 150
+     },
+     "fov": 40
+    }
+   ],
+   "hud": {
+    "titulo": "GIPFEL"
+   },
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "regua_h",
+     "em": 3.2,
+     "dur": 0.8,
+     "ticks": [
+      1000,
+      2000,
+      3000,
+      4000
+     ],
+     "plano": [
+      -7400,
+      3600
+     ],
+     "rotulo": {
+      "texto": "h = {hmax} m",
+      "em": 3.4,
+      "tam": 42,
+      "cor": "signal"
+     }
+    },
+    {
+     "tipo": "vetor",
+     "direcao": "horizontal",
+     "comp_px": 150,
+     "v_ref": 125,
+     "cor": "cyan",
+     "largura": 5,
+     "brilho": 0.8,
+     "kopf": 0.2,
+     "em": 5.0,
+     "dur": 0.6
+    },
+    {
+     "tipo": "ponto",
+     "pos": "proj",
+     "px": 26,
+     "cor": "signal"
+    },
+    {
+     "tipo": "texto",
+     "pos": "proj",
+     "dx": 160,
+     "dy": -34,
+     "em": 5.0,
+     "tam": 30,
+     "cor": "cyan",
+     "texto": "vₓ = {vmin} m/s"
+    }
+   ]
+  }
+ },
+ "06_07": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 3.2,
+    "brilho": 0.8,
+    "atraso": 0.05,
+    "fluxo": [
+     [
+      0.0,
+      6.737
+     ],
+     [
+      0.594,
+      7.999
+     ],
+     [
+      1.189,
+      9.206
+     ],
+     [
+      1.783,
+      10.341
+     ],
+     [
+      2.377,
+      11.393
+     ],
+     [
+      2.971,
+      12.37
+     ],
+     [
+      3.566,
+      13.283
+     ],
+     [
+      4.16,
+      14.144
+     ]
+    ]
+   },
+   "projetil": {
+    "tipo": "granada",
+    "escala": 1.6,
+    "giro": 40
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "proj",
+      "frente": -27.19,
+      "lado": -11.41,
+      "alto": 3.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -2
+     },
+     "fov": 42
+    },
+    {
+     "t": 1.0,
+     "pos": {
+      "ancora": "proj",
+      "frente": -35.43,
+      "lado": 3.01,
+      "alto": 6.14
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -2
+     },
+     "fov": 42
+    },
+    {
+     "t": 2.0,
+     "pos": {
+      "ancora": "proj",
+      "frente": -29.81,
+      "lado": 28.02,
+      "alto": 10.37
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -2
+     },
+     "fov": 42
+    },
+    {
+     "t": 3.8,
+     "pos": {
+      "ancora": "proj",
+      "frente": -21.6,
+      "lado": 36.55,
+      "alto": 12.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -2
+     },
+     "fov": 42
+    },
+    {
+     "t": 4.2,
+     "pos": {
+      "ancora": "proj",
+      "frente": -21.6,
+      "lado": 36.55,
+      "alto": 12.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -2
+     },
+     "fov": 42
+    }
+   ],
+   "hud": {
+    "titulo": "REFERENZSCHUSS"
+   },
+   "eventos": []
+  }
+ },
+ "04_10": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 4.5,
+    "fluxo": [
+     [
+      0,
+      36
+     ],
+     [
+      0.65,
+      46.7
+     ],
+     [
+      1.3,
+      57.4
+     ],
+     [
+      4.86,
+      57.4
+     ]
+    ],
+    "cabeca": {
+     "px": 46,
+     "cor": "signal",
+     "ate": 1.3
+    }
+   },
+   "camera": {
+    "chaves": [
+     {
+      "t": 0,
+      "pos": {
+       "ts": 36,
+       "lado": 2900,
+       "alto": 500,
+       "frente": -700
+      },
+      "alvo": {
+       "ts": 38
+      },
+      "fov": 40
+     },
+     {
+      "t": 1.3,
+      "pos": {
+       "ancora": "alvo",
+       "lado": 2300,
+       "alto": 520,
+       "frente": -900
+      },
+      "alvo": {
+       "ancora": "alvo",
+       "alto": 250,
+       "frente": -500
+      },
+      "fov": 40
+     },
+     {
+      "t": 2.6,
+      "pos": {
+       "ancora": "meio",
+       "lado": 8800,
+       "alto": 3300
+      },
+      "alvo": {
+       "ancora": "meio",
+       "alto": 1600
+      },
+      "fov": 40
+     },
+     {
+      "t": 4.86,
+      "pos": {
+       "ancora": "meio",
+       "lado": 10400,
+       "alto": 3700
+      },
+      "alvo": {
+       "ancora": "meio",
+       "alto": 1550
+      },
+      "fov": 40
+     }
+    ],
+    "tremor": 0.6
+   },
+   "hud": {
+    "titulo": "REFERENZSCHUSS"
+   },
+   "eventos": [
+    {
+     "tipo": "impacto",
+     "em": 1.3,
+     "rotulo": "EINSCHLAG",
+     "sub": "t = {T} s · v = {vfim} m/s",
+     "dx": -90,
+     "dy": -130
+    }
+   ],
+   "camadas": [
+    {
+     "tipo": "energia",
+     "em": 2.1,
+     "de": 44.9,
+     "para": 33.9,
+     "fa": 2.25,
+     "fe": 3.0,
+     "rotulo_de": "Mündung",
+     "unidade": "MJ",
+     "texto_perda": "Luftwiderstand −25 %",
+     "x": 1030,
+     "y": 900,
+     "w": 780
+    }
+   ]
+  }
+ },
+ "06_08": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 4,
+    "fluxo": [
+     [
+      0.0,
+      13.569
+     ],
+     [
+      0.57,
+      14.382
+     ],
+     [
+      1.14,
+      15.151
+     ],
+     [
+      1.71,
+      15.883
+     ],
+     [
+      2.28,
+      16.583
+     ],
+     [
+      2.85,
+      17.258
+     ],
+     [
+      3.42,
+      17.916
+     ],
+     [
+      3.99,
+      18.563
+     ],
+     [
+      4.56,
+      19.206
+     ],
+     [
+      5.13,
+      19.852
+     ],
+     [
+      5.7,
+      20.507
+     ]
+    ]
+   },
+   "projetil": {
+    "tipo": "granada",
+    "px": 70
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "proj",
+      "lado": 520.0,
+      "alto": 40.0,
+      "frente": -90.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 260.0,
+      "alto": 10
+     },
+     "fov": 42
+    },
+    {
+     "t": 1.8,
+     "pos": {
+      "ancora": "proj",
+      "lado": 723.0,
+      "alto": 136.0,
+      "frente": -181.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 303.0,
+      "alto": 10
+     },
+     "fov": 42
+    },
+    {
+     "t": 3.6,
+     "pos": {
+      "ancora": "proj",
+      "lado": 873.0,
+      "alto": 207.0,
+      "frente": -248.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 334.0,
+      "alto": 10
+     },
+     "fov": 42
+    },
+    {
+     "t": 5.3,
+     "pos": {
+      "ancora": "proj",
+      "lado": 900.0,
+      "alto": 220.0,
+      "frente": -260.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 340.0,
+      "alto": 10
+     },
+     "fov": 42
+    },
+    {
+     "t": 5.7,
+     "pos": {
+      "ancora": "proj",
+      "lado": 900.0,
+      "alto": 220.0,
+      "frente": -260.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 340.0,
+      "alto": 10
+     },
+     "fov": 42
+    }
+   ],
+   "hud": {
+    "titulo": "REFERENZSCHUSS",
+    "em": 0
+   },
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "vetor",
+     "direcao": "gravidade",
+     "comp_px": 120,
+     "inicio_px": 26,
+     "cor": "rot",
+     "largura": 5,
+     "brilho": 0.8,
+     "kopf": 0.2,
+     "em": 0,
+     "dur": 0.3,
+     "rotulo": {
+      "texto": "g = 9,81 m/s²",
+      "dx": 26,
+      "dy": 8,
+      "em": 0.4,
+      "tam": 32,
+      "cor": "rot"
+     }
+    },
+    {
+     "tipo": "vt",
+     "em": 0.2,
+     "marca": 10,
+     "tmax": 60,
+     "vmax": 350,
+     "titulo": "v (m/s) über t (s)"
+    },
+    {
+     "tipo": "texto",
+     "x": 1460,
+     "y": 440,
+     "em": 2.75,
+     "anker": "mitte",
+     "cor": "signal",
+     "tam": 36,
+     "fonte": "titulo",
+     "tafel": true,
+     "texto": "jede Sekunde kostet Tempo"
+    }
+   ]
+  }
+ },
+ "06_11": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao"
+   ],
+   "look": {
+    "preset": "dramatico"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 4.5,
+    "fantasma": {
+     "opak": 0.5,
+     "largura": 3,
+     "brilho": 0.6
+    },
+    "fluxo": [
+     [
+      0.0,
+      30.4
+     ],
+     [
+      0.585,
+      30.438
+     ],
+     [
+      1.17,
+      30.475
+     ],
+     [
+      1.755,
+      30.534
+     ],
+     [
+      2.34,
+      30.637
+     ],
+     [
+      2.925,
+      30.809
+     ],
+     [
+      3.51,
+      31.073
+     ],
+     [
+      4.095,
+      31.452
+     ],
+     [
+      4.68,
+      32.574
+     ]
+    ]
+   },
+   "projetil": {
+    "tipo": "granada",
+    "px": 64
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "proj",
+      "lado": 620.0,
+      "alto": -60.0,
+      "frente": -160.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 60,
+      "alto": 10
+     },
+     "fov": 36
+    },
+    {
+     "t": 1.6,
+     "pos": {
+      "ancora": "proj",
+      "lado": 566.0,
+      "alto": -17.0,
+      "frente": -10.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 60,
+      "alto": 10
+     },
+     "fov": 36
+    },
+    {
+     "t": 3.2,
+     "pos": {
+      "ancora": "proj",
+      "lado": 527.0,
+      "alto": 14.0,
+      "frente": 101.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 60,
+      "alto": 10
+     },
+     "fov": 36
+    },
+    {
+     "t": 4.7,
+     "pos": {
+      "ancora": "proj",
+      "lado": 520.0,
+      "alto": 20.0,
+      "frente": 120.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 60,
+      "alto": 10
+     },
+     "fov": 36
+    },
+    {
+     "t": 5.1,
+     "pos": {
+      "ancora": "proj",
+      "lado": 520.0,
+      "alto": 20.0,
+      "frente": 120.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "frente": 60,
+      "alto": 10
+     },
+     "fov": 36
+    }
+   ],
+   "hud": {
+    "titulo": "APOGÄUM"
+   },
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "vetor",
+     "direcao": "horizontal",
+     "inicio_px": 40,
+     "comp_px": 330,
+     "v_ref": 125,
+     "cor": "signal",
+     "largura": 6,
+     "brilho": 1,
+     "kopf": 0.12,
+     "em": 0.9,
+     "dur": 0.6,
+     "rotulo": {
+      "texto": "{vmin} m/s · Mach {mach}",
+      "dx": -330,
+      "dy": -54,
+      "em": 1.15,
+      "tam": 40,
+      "cor": "signal"
+     }
+    },
+    {
+     "tipo": "vinheta"
+    }
+   ]
+  }
+ },
+ "06_12": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 3.6,
+    "fluxo": [
+     [
+      0.0,
+      31.6
+     ],
+     [
+      0.598,
+      33.47
+     ],
+     [
+      1.196,
+      37.364
+     ],
+     [
+      1.794,
+      42.208
+     ],
+     [
+      2.392,
+      46.93
+     ],
+     [
+      2.99,
+      50.457
+     ],
+     [
+      3.588,
+      52.509
+     ],
+     [
+      4.186,
+      53.813
+     ],
+     [
+      4.784,
+      54.756
+     ],
+     [
+      5.382,
+      55.723
+     ],
+     [
+      5.98,
+      56.983
+     ]
+    ]
+   },
+   "projetil": {
+    "tipo": "granada",
+    "px": 60
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "proj",
+      "lado": 70.0,
+      "alto": 34.0,
+      "frente": -90.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -26,
+      "frente": 14
+     },
+     "fov": 46
+    },
+    {
+     "t": 1.9,
+     "pos": {
+      "ancora": "proj",
+      "lado": 52.9,
+      "alto": 27.6,
+      "frente": -63.3
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -26,
+      "frente": 14
+     },
+     "fov": 46
+    },
+    {
+     "t": 3.8,
+     "pos": {
+      "ancora": "proj",
+      "lado": 40.2,
+      "alto": 22.8,
+      "frente": -43.5
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -26,
+      "frente": 14
+     },
+     "fov": 46
+    },
+    {
+     "t": 5.6,
+     "pos": {
+      "ancora": "proj",
+      "lado": 38.0,
+      "alto": 22.0,
+      "frente": -40.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -26,
+      "frente": 14
+     },
+     "fov": 46
+    },
+    {
+     "t": 6.0,
+     "pos": {
+      "ancora": "proj",
+      "lado": 38.0,
+      "alto": 22.0,
+      "frente": -40.0
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -26,
+      "frente": 14
+     },
+     "fov": 46
+    }
+   ],
+   "hud": {
+    "titulo": "FALL"
+   },
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "anel",
+     "centro": "alvo",
+     "alto": 30,
+     "sobe": 520,
+     "raio": 120,
+     "vr": 260,
+     "vida": 2.2,
+     "n": 3,
+     "cada": 0.42,
+     "em": 3.45,
+     "cor": "cyan",
+     "largura": 4,
+     "brilho": 1.1,
+     "ate_proj": true,
+     "folga": 60
+    },
+    {
+     "tipo": "texto",
+     "x": 64,
+     "y": 400,
+     "em": 3.5,
+     "cor": "cyan",
+     "tam": 34,
+     "tafel": true,
+     "texto": "Schall steigt vom Fort auf"
+    }
+   ]
+  }
+ },
+ "06_14": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 4.5,
+    "fantasma": {
+     "opak": 0.45,
+     "largura": 3,
+     "brilho": 0.6
+    },
+    "fluxo": [
+     [
+      0.15,
+      0.0
+     ],
+     [
+      0.525,
+      2.215
+     ],
+     [
+      0.9,
+      11.042
+     ],
+     [
+      1.275,
+      25.449
+     ],
+     [
+      1.65,
+      37.447
+     ],
+     [
+      2.025,
+      45.418
+     ],
+     [
+      2.4,
+      50.616
+     ],
+     [
+      2.775,
+      53.963
+     ],
+     [
+      3.15,
+      56.006
+     ],
+     [
+      3.525,
+      57.079
+     ],
+     [
+      3.9,
+      57.4
+     ],
+     [
+      4.76,
+      57.4
+     ]
+    ]
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "meio",
+      "lado": 11800.0,
+      "alto": 3200.0,
+      "frente": -1500.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 1450
+     },
+     "fov": 40
+    },
+    {
+     "t": 2.2,
+     "pos": {
+      "ancora": "meio",
+      "lado": 10607.0,
+      "alto": 2753.0,
+      "frente": 289.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 1450
+     },
+     "fov": 40
+    },
+    {
+     "t": 4.76,
+     "pos": {
+      "ancora": "meio",
+      "lado": 10200.0,
+      "alto": 2600.0,
+      "frente": 900.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 1450
+     },
+     "fov": 40
+    }
+   ],
+   "hud": {
+    "titulo": "SCHALL ZUERST",
+    "linhas": [
+     [
+      "Granate",
+      "{v} m/s"
+     ],
+     [
+      "Schall",
+      "343 m/s",
+      "cyan"
+     ]
+    ]
+   },
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "onda_som",
+     "c": 343,
+     "cada": 4,
+     "ate_ts": 52,
+     "raio": 330,
+     "largura": 3.6,
+     "opak": 0.95,
+     "cor": "cyan"
+    },
+    {
+     "tipo": "texto",
+     "x": 960,
+     "y": 940,
+     "em": 2.2,
+     "anker": "mitte",
+     "cor": "cyan",
+     "tam": 40,
+     "fonte": "titulo",
+     "tafel": true,
+     "texto": "Das Geräusch eilt ihr voraus"
+    }
+   ]
+  }
+ },
+ "06_17": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia"
+   },
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "largura": 3.2,
+    "brilho": 0.7,
+    "opak": 0.7,
+    "de": -14,
+    "fluxo": [
+     [
+      0,
+      57.4
+     ]
+    ]
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "alvo",
+      "lado": 2500.0,
+      "alto": 520.0,
+      "frente": -500.0
+     },
+     "alvo": {
+      "ancora": "alvo",
+      "alto": 420,
+      "frente": -380
+     },
+     "fov": 40
+    },
+    {
+     "t": 2.3,
+     "pos": {
+      "ancora": "alvo",
+      "lado": 2166.0,
+      "alto": 654.0,
+      "frente": -240.0
+     },
+     "alvo": {
+      "ancora": "alvo",
+      "alto": 420,
+      "frente": -380
+     },
+     "fov": 40
+    },
+    {
+     "t": 4.6,
+     "pos": {
+      "ancora": "alvo",
+      "lado": 2052.0,
+      "alto": 699.0,
+      "frente": -151.0
+     },
+     "alvo": {
+      "ancora": "alvo",
+      "alto": 420,
+      "frente": -380
+     },
+     "fov": 40
+    },
+    {
+     "t": 5.0,
+     "pos": {
+      "ancora": "alvo",
+      "lado": 2050.0,
+      "alto": 700.0,
+      "frente": -150.0
+     },
+     "alvo": {
+      "ancora": "alvo",
+      "alto": 420,
+      "frente": -380
+     },
+     "fov": 40
+    }
+   ],
+   "hud": {
+    "titulo": "EINSCHLAG",
+    "linhas": [
+     [
+      "Aufschlag",
+      "{vfim} m/s"
+     ],
+     [
+      "Winkel",
+      "{angfim|1}°"
+     ]
+    ]
+   },
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "angulo",
+     "em": 0.6,
+     "em_arco": 0.9,
+     "raio": 620,
+     "projetil_dist": 520,
+     "projetil_escala": 46,
+     "texto": "{angfim|1}°"
+    },
+    {
+     "tipo": "texto",
+     "x": 960,
+     "y": 930,
+     "em": 2.55,
+     "anker": "mitte",
+     "cor": "papier",
+     "tam": 56,
+     "fonte": "titulo",
+     "tafel": true,
+     "texto": "Fast von oben"
+    }
+   ]
+  }
+ },
+ "06_05": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "dia",
+    "exposicao": 8
+   },
+   "origem": {
+    "lat": 50.642838,
+    "lon": 5.5807,
+    "h": 70.6
+   },
+   "alvo": {
+    "lat": 50.67456,
+    "lon": 5.49238,
+    "h": 168
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "meio",
+      "lado": 3750.0,
+      "alto": 15040.0,
+      "frente": -360.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 50
+     },
+     "fov": 40
+    },
+    {
+     "t": 1.5,
+     "pos": {
+      "ancora": "meio",
+      "lado": 4564.0,
+      "alto": 12827.0,
+      "frente": 143.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 50
+     },
+     "fov": 40
+    },
+    {
+     "t": 3.5,
+     "pos": {
+      "ancora": "meio",
+      "lado": 4795.0,
+      "alto": 11868.0,
+      "frente": 360.0
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 50
+     },
+     "fov": 40
+    }
+   ],
+   "hud": false,
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "linha",
+     "de": "origem",
+     "para": "alvo",
+     "n": 40,
+     "alturas": [
+      70.7,
+      54.0,
+      70.6,
+      62.9,
+      74.2,
+      79.3,
+      94.7,
+      105.8,
+      121.5,
+      142.6,
+      158.4,
+      150.3,
+      138.5,
+      121.2,
+      144.4,
+      166.5,
+      146.8,
+      162.8,
+      167.0,
+      178.2,
+      184.6,
+      185.4,
+      185.1,
+      184.4,
+      180.8,
+      182.0,
+      182.9,
+      180.0,
+      179.0,
+      174.1,
+      176.8,
+      176.0,
+      174.7,
+      169.3,
+      173.5,
+      167.1,
+      171.0,
+      163.9,
+      169.6,
+      168.4,
+      167.1
+     ],
+     "alto": 55,
+     "crescer": [
+      0.25,
+      1.4
+     ],
+     "cor": "papier",
+     "largura": 5,
+     "brilho": 1,
+     "tracejado": [
+      150,
+      110
+     ]
+    },
+    {
+     "tipo": "marca",
+     "pos": {
+      "ancora": "origem",
+      "alto": 10
+     },
+     "em": 0.1,
+     "titulo": "STELLUNG",
+     "sub": "Simulation · nicht überliefert",
+     "dx": 60,
+     "dy": -100,
+     "cor": "gruen"
+    },
+    {
+     "tipo": "alvo",
+     "pos": {
+      "ancora": "alvo",
+      "alto": 10
+     },
+     "em": 0.2,
+     "titulo": "LONCIN",
+     "r0": 110,
+     "r1": 30,
+     "dx": -70,
+     "dy": -90
+    },
+    {
+     "tipo": "regua",
+     "de": {
+      "ancora": "origem",
+      "alto": 10
+     },
+     "para": {
+      "ancora": "alvo",
+      "alto": 10
+     },
+     "em": 0.9,
+     "texto": "≈ 7,15 km",
+     "deslocamento": 60,
+     "tam": 46
+    }
+   ]
+  }
+ },
+ "06_01": {
+  "comp": "Globus",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao"
+   ],
+   "look": {
+    "preset": "espaco"
+   },
+   "alvo": {
+    "lat": 50.67456,
+    "lon": 5.49238,
+    "h": 168
+   },
+   "camera": [
+    {
+     "t": 0.0,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 16000000,
+      "elev": 70,
+      "az": 200
+     },
+     "fov": 30
+    },
+    {
+     "t": 0.872,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 1501562,
+      "elev": 66.46,
+      "az": 201.87
+     },
+     "fov": 31.25
+    },
+    {
+     "t": 1.744,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 227550,
+      "elev": 58.03,
+      "az": 206.34
+     },
+     "fov": 34.22
+    },
+    {
+     "t": 2.616,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 56480,
+      "elev": 47.97,
+      "az": 211.66
+     },
+     "fov": 37.78
+    },
+    {
+     "t": 3.488,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 23451,
+      "elev": 39.54,
+      "az": 216.13
+     },
+     "fov": 40.75
+    },
+    {
+     "t": 4.36,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 17000,
+      "elev": 36,
+      "az": 218
+     },
+     "fov": 42
+    },
+    {
+     "t": 4.86,
+     "alvo": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "orbita": {
+      "dist": 17000,
+      "elev": 36,
+      "az": 218
+     },
+     "fov": 42
+    }
+   ],
+   "camadas": [
+    {
+     "tipo": "plaqueta",
+     "em": 0.5,
+     "texto": "REFERENZSCHUSS",
+     "sub": "65° · VOLLE LADUNG"
+    },
+    {
+     "tipo": "alvo",
+     "pos": {
+      "lat": 50.67456,
+      "lon": 5.49238,
+      "h": 168
+     },
+     "em": 2.7,
+     "titulo": "LONCIN",
+     "sub": "Fort · 50,67° N 5,49° O"
+    }
+   ]
+  }
+ },
+ "01_07": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T18:52:00Z"
+   },
+   "detalhes": [
+    "regiao",
+    "loncin"
+   ],
+   "look": {
+    "preset": "crepusculo"
+   },
+   "brilho_terra": 0.9,
+   "curva": {
+    "id": "ref",
+    "arquivo": "bahn.json",
+    "serie": "referenz_schwer_65",
+    "solo": [
+     70.6,
+     168
+    ],
+    "cor": "orange",
+    "visivel": false,
+    "fluxo": [
+     [
+      0,
+      38
+     ]
+    ]
+   },
+   "projetil": {
+    "tipo": "disco",
+    "raio_px": [
+     2.6,
+     9.1
+    ]
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "alvo",
+      "alto": 10
+     },
+     "alvo": {
+      "ancora": "alvo",
+      "alto": 418,
+      "norte": -557,
+      "leste": 724
+     },
+     "fov": 54
+    },
+    {
+     "t": 2.6,
+     "pos": {
+      "ancora": "alvo",
+      "alto": 10
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -450
+     },
+     "fov": 54
+    },
+    {
+     "t": 3.4,
+     "pos": {
+      "ancora": "alvo",
+      "alto": 10
+     },
+     "alvo": {
+      "ancora": "proj",
+      "alto": -450
+     },
+     "fov": 54
+    }
+   ],
+   "hud": false,
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "fumaca",
+     "centro": {
+      "ancora": "alvo",
+      "alto": 10
+     },
+     "alto": 650,
+     "raio": 7000,
+     "brasa": {
+      "ancora": "alvo",
+      "norte": -900,
+      "leste": 700
+     },
+     "densidade": 0.62,
+     "vento": 0.6,
+     "em": 0
+    },
+    {
+     "tipo": "espectro",
+     "em": 0,
+     "titulo": "RAUSCHEN",
+     "eixo": "Frequenz →",
+     "x": 64,
+     "y": 790,
+     "cresce": 3.0
+    }
+   ]
+  }
+ },
+ "04_21": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao"
+   ],
+   "look": {
+    "preset": "dia",
+    "exposicao": 7
+   },
+   "t0": 0,
+   "curvas": [
+    {
+     "id": "815",
+     "arquivo": "g2/bahn_815.json",
+     "solo": [
+      70.6,
+      140
+     ],
+     "cor": "orange",
+     "largura": 4.5,
+     "fluxo": [
+      [
+       0.35,
+       0.0
+      ],
+      [
+       0.63,
+       3.364
+      ],
+      [
+       0.91,
+       16.774
+      ],
+      [
+       1.19,
+       38.661
+      ],
+      [
+       1.47,
+       56.888
+      ],
+      [
+       1.75,
+       68.998
+      ],
+      [
+       2.03,
+       76.894
+      ],
+      [
+       2.31,
+       81.979
+      ],
+      [
+       2.59,
+       85.082
+      ],
+      [
+       2.87,
+       86.712
+      ],
+      [
+       3.15,
+       87.2
+      ],
+      [
+       9.719999999999999,
+       87.2
+      ]
+     ],
+     "cabeca": {
+      "px": 44,
+      "cor": "signal",
+      "ate": 3.3
+     },
+     "muda": {
+      "em": 5.27,
+      "ate": 5.92,
+      "cor": "rot",
+      "opak": 0.6,
+      "brilho": 0.4,
+      "tracejado": [
+       380,
+       260
+      ]
+     }
+    },
+    {
+     "id": "max",
+     "arquivo": "bahn.json",
+     "serie": "schwer_max_reichweite",
+     "solo": [
+      70.6,
+      150
+     ],
+     "cor": "papier",
+     "largura": 6,
+     "brilho": 1.4,
+     "fluxo": [
+      [
+       5.32,
+       0.0
+      ],
+      [
+       5.465,
+       2.199
+      ],
+      [
+       5.61,
+       10.965
+      ],
+      [
+       5.755,
+       25.272
+      ],
+      [
+       5.9,
+       37.186
+      ],
+      [
+       6.045,
+       45.102
+      ],
+      [
+       6.19,
+       50.264
+      ],
+      [
+       6.335,
+       53.587
+      ],
+      [
+       6.48,
+       55.616
+      ],
+      [
+       6.625,
+       56.681
+      ],
+      [
+       6.77,
+       57.0
+      ],
+      [
+       9.719999999999999,
+       57.0
+      ]
+     ],
+     "cabeca": {
+      "px": 40,
+      "cor": "papier"
+     }
+    }
+   ],
+   "camera": {
+    "chaves": [
+     {
+      "t": 0,
+      "pos": {
+       "ancora": "origem",
+       "frente": 4800,
+       "alto": 9100,
+       "lado": 17000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 4800,
+       "alto": 1500
+      },
+      "fov": 40
+     },
+     {
+      "t": 3.0,
+      "pos": {
+       "ancora": "origem",
+       "frente": 9500,
+       "alto": 15100,
+       "lado": 31000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 9500,
+       "alto": 2400
+      },
+      "fov": 40
+     },
+     {
+      "t": 5.22,
+      "pos": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 19200,
+       "lado": 41000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 3000
+      },
+      "fov": 40
+     },
+     {
+      "t": 9.719999999999999,
+      "pos": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 19700,
+       "lado": 43000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 3000
+      },
+      "fov": 40
+     }
+    ],
+    "tremor": 0.3
+   },
+   "hud": false,
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "ponto",
+     "arquivo": "geo/forts_liege.geojson",
+     "h": 120,
+     "px": 16,
+     "cor": "cyan",
+     "nucleo": 0.4,
+     "forca": 0.9
+    },
+    {
+     "tipo": "plaqueta",
+     "em": 0.2,
+     "ate": 5.319999999999999,
+     "texto": "v₀ = 815 m/s",
+     "sub": "MANCHE QUELLEN",
+     "cor": "orange"
+    },
+    {
+     "tipo": "plaqueta",
+     "em": 5.42,
+     "texto": "v₀ = 333 m/s",
+     "sub": "ÜBERLIEFERT: 9 300 m",
+     "cor": "papier"
+    },
+    {
+     "tipo": "marca",
+     "pos": "origem",
+     "em": 0.1,
+     "titulo": "STELLUNG",
+     "sub": "Simulation",
+     "dx": -70,
+     "dy": 90,
+     "align": "rechts",
+     "cor": "gruen"
+    },
+    {
+     "tipo": "regua",
+     "de": "origem",
+     "para": {
+      "ancora": "alvo",
+      "curva": "815"
+     },
+     "em": 2.9,
+     "texto": "≈ 25,8 km",
+     "cor": "orange",
+     "deslocamento": 46,
+     "tam": 44
+    },
+    {
+     "tipo": "regua",
+     "de": "origem",
+     "para": {
+      "ancora": "alvo",
+      "curva": "max"
+     },
+     "em": 5.819999999999999,
+     "texto": "9 300 m",
+     "cor": "papier",
+     "deslocamento": -44,
+     "tam": 44
+    }
+   ]
+  }
+ },
+ "04_22": {
+  "comp": "Bahn",
+  "props": {
+   "azimute": 299.6,
+   "sol": {
+    "data": "1914-08-15T15:40:00Z"
+   },
+   "detalhes": [
+    "regiao"
+   ],
+   "look": {
+    "preset": "dia",
+    "exposicao": 7
+   },
+   "t0": 5.22,
+   "curvas": [
+    {
+     "id": "815",
+     "arquivo": "g2/bahn_815.json",
+     "solo": [
+      70.6,
+      140
+     ],
+     "cor": "orange",
+     "largura": 4.5,
+     "fluxo": [
+      [
+       0.35,
+       0.0
+      ],
+      [
+       0.63,
+       3.364
+      ],
+      [
+       0.91,
+       16.774
+      ],
+      [
+       1.19,
+       38.661
+      ],
+      [
+       1.47,
+       56.888
+      ],
+      [
+       1.75,
+       68.998
+      ],
+      [
+       2.03,
+       76.894
+      ],
+      [
+       2.31,
+       81.979
+      ],
+      [
+       2.59,
+       85.082
+      ],
+      [
+       2.87,
+       86.712
+      ],
+      [
+       3.15,
+       87.2
+      ],
+      [
+       9.719999999999999,
+       87.2
+      ]
+     ],
+     "cabeca": {
+      "px": 44,
+      "cor": "signal",
+      "ate": 3.3
+     },
+     "muda": {
+      "em": 5.27,
+      "ate": 5.92,
+      "cor": "rot",
+      "opak": 0.6,
+      "brilho": 0.4,
+      "tracejado": [
+       380,
+       260
+      ]
+     }
+    },
+    {
+     "id": "max",
+     "arquivo": "bahn.json",
+     "serie": "schwer_max_reichweite",
+     "solo": [
+      70.6,
+      150
+     ],
+     "cor": "papier",
+     "largura": 6,
+     "brilho": 1.4,
+     "fluxo": [
+      [
+       5.32,
+       0.0
+      ],
+      [
+       5.465,
+       2.199
+      ],
+      [
+       5.61,
+       10.965
+      ],
+      [
+       5.755,
+       25.272
+      ],
+      [
+       5.9,
+       37.186
+      ],
+      [
+       6.045,
+       45.102
+      ],
+      [
+       6.19,
+       50.264
+      ],
+      [
+       6.335,
+       53.587
+      ],
+      [
+       6.48,
+       55.616
+      ],
+      [
+       6.625,
+       56.681
+      ],
+      [
+       6.77,
+       57.0
+      ],
+      [
+       9.719999999999999,
+       57.0
+      ]
+     ],
+     "cabeca": {
+      "px": 40,
+      "cor": "papier"
+     }
+    }
+   ],
+   "camera": {
+    "chaves": [
+     {
+      "t": 0,
+      "pos": {
+       "ancora": "origem",
+       "frente": 4800,
+       "alto": 9100,
+       "lado": 17000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 4800,
+       "alto": 1500
+      },
+      "fov": 40
+     },
+     {
+      "t": 3.0,
+      "pos": {
+       "ancora": "origem",
+       "frente": 9500,
+       "alto": 15100,
+       "lado": 31000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 9500,
+       "alto": 2400
+      },
+      "fov": 40
+     },
+     {
+      "t": 5.22,
+      "pos": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 19200,
+       "lado": 41000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 3000
+      },
+      "fov": 40
+     },
+     {
+      "t": 9.719999999999999,
+      "pos": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 19700,
+       "lado": 43000
+      },
+      "alvo": {
+       "ancora": "origem",
+       "frente": 11800,
+       "alto": 3000
+      },
+      "fov": 40
+     }
+    ],
+    "tremor": 0.3
+   },
+   "hud": false,
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "ponto",
+     "arquivo": "geo/forts_liege.geojson",
+     "h": 120,
+     "px": 16,
+     "cor": "cyan",
+     "nucleo": 0.4,
+     "forca": 0.9
+    },
+    {
+     "tipo": "plaqueta",
+     "em": 0.2,
+     "ate": 5.319999999999999,
+     "texto": "v₀ = 815 m/s",
+     "sub": "MANCHE QUELLEN",
+     "cor": "orange"
+    },
+    {
+     "tipo": "plaqueta",
+     "em": 5.42,
+     "texto": "v₀ = 333 m/s",
+     "sub": "ÜBERLIEFERT: 9 300 m",
+     "cor": "papier"
+    },
+    {
+     "tipo": "marca",
+     "pos": "origem",
+     "em": 0.1,
+     "titulo": "STELLUNG",
+     "sub": "Simulation",
+     "dx": -70,
+     "dy": 90,
+     "align": "rechts",
+     "cor": "gruen"
+    },
+    {
+     "tipo": "regua",
+     "de": "origem",
+     "para": {
+      "ancora": "alvo",
+      "curva": "815"
+     },
+     "em": 2.9,
+     "texto": "≈ 25,8 km",
+     "cor": "orange",
+     "deslocamento": 46,
+     "tam": 44
+    },
+    {
+     "tipo": "regua",
+     "de": "origem",
+     "para": {
+      "ancora": "alvo",
+      "curva": "max"
+     },
+     "em": 5.819999999999999,
+     "texto": "9 300 m",
+     "cor": "papier",
+     "deslocamento": -44,
+     "tam": 44
+    }
+   ]
+  }
+ },
+ "11_14": {
+  "comp": "Bahn",
+  "props": {
+   "sol": {
+    "data": "1918-03-23T11:30:00Z"
+   },
+   "look": {
+    "preset": "dia"
+   },
+   "detalhes": [],
+   "curva": {
+    "id": "paris",
+    "arquivo": "g2/bahn_paris.json",
+    "cor": "cyan",
+    "largura": 4.5,
+    "brilho": 1.1,
+    "cabeca": {
+     "px": 42,
+     "cor": "signal"
+    },
+    "fluxo": [
+     [
+      0.9,
+      0.0
+     ],
+     [
+      1.35,
+      7.199
+     ],
+     [
+      1.8,
+      35.895
+     ],
+     [
+      2.25,
+      82.732
+     ],
+     [
+      2.7,
+      121.736
+     ],
+     [
+      3.15,
+      147.648
+     ],
+     [
+      3.6,
+      164.547
+     ],
+     [
+      4.05,
+      175.428
+     ],
+     [
+      4.5,
+      182.068
+     ],
+     [
+      4.95,
+      185.555
+     ],
+     [
+      5.4,
+      186.6
+     ],
+     [
+      7.02,
+      186.6
+     ]
+    ]
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "ancora": "origem",
+      "lado": 120000,
+      "alto": 70000,
+      "frente": -30000
+     },
+     "alvo": {
+      "ancora": "meio",
+      "frente": -30000
+     },
+     "fov": 42
+    },
+    {
+     "t": 3.3,
+     "pos": {
+      "ancora": "meio",
+      "lado": 150000,
+      "alto": 52000
+     },
+     "alvo": {
+      "ancora": "meio",
+      "alto": 20000
+     },
+     "fov": 42
+    },
+    {
+     "t": 7.02,
+     "pos": {
+      "ancora": "alvo",
+      "lado": 85000,
+      "alto": 42000,
+      "frente": -20000
+     },
+     "alvo": {
+      "ancora": "alvo",
+      "frente": -8000
+     },
+     "fov": 42
+    }
+   ],
+   "hud": false,
+   "eventos": [],
+   "camadas": [
+    {
+     "tipo": "linha",
+     "de": {
+      "lat": 49.615,
+      "lon": 3.505,
+      "h": 400
+     },
+     "para": {
+      "lat": 48.853,
+      "lon": 2.3499,
+      "h": 400
+     },
+     "n": 40,
+     "crescer": [
+      4.05,
+      5.0
+     ],
+     "cor": "papier",
+     "largura": 4,
+     "brilho": 1,
+     "tracejado": [
+      2200,
+      1500
+     ]
+    },
+    {
+     "tipo": "ponto",
+     "pos": {
+      "lat": 49.615,
+      "lon": 3.505,
+      "h": 460
+     },
+     "px": 34,
+     "cor": "gruen",
+     "nucleo": 0.4
+    },
+    {
+     "tipo": "ponto",
+     "pos": {
+      "lat": 48.853,
+      "lon": 2.3499,
+      "h": 335
+     },
+     "px": 34,
+     "cor": "signal",
+     "nucleo": 0.4
+    },
+    {
+     "tipo": "plaqueta",
+     "em": 0.15,
+     "texto": "PARIS-GESCHÜTZ",
+     "sub": "VIDEO 1 · 1918",
+     "cor": "cyan"
+    },
+    {
+     "tipo": "texto",
+     "x": 64,
+     "y": 256,
+     "em": 0.3,
+     "cor": "papier",
+     "tam": 120,
+     "fonte": "titulo",
+     "peso": 600,
+     "espaco": 8,
+     "opaco": 0.92,
+     "sombra": "0 4px 30px rgba(0,0,0,0.9)",
+     "texto": "1918"
+    },
+    {
+     "tipo": "marca",
+     "pos": {
+      "lat": 49.615,
+      "lon": 3.505,
+      "h": 160
+     },
+     "em": 0.4,
+     "titulo": "CRÉPY",
+     "dx": -70,
+     "dy": -90,
+     "cor": "gruen",
+     "align": "rechts"
+    },
+    {
+     "tipo": "marca",
+     "pos": {
+      "lat": 48.853,
+      "lon": 2.3499,
+      "h": 35
+     },
+     "em": 3.6,
+     "titulo": "PARIS",
+     "dx": 70,
+     "dy": -90,
+     "cor": "signal"
+    },
+    {
+     "tipo": "regua",
+     "de": {
+      "lat": 49.615,
+      "lon": 3.505,
+      "h": 160
+     },
+     "para": {
+      "lat": 48.853,
+      "lon": 2.3499,
+      "h": 35
+     },
+     "em": 4.1,
+     "texto": "{alcance_km|0} km",
+     "deslocamento": 60,
+     "tam": 46
+    }
+   ]
+  }
+ },
+ "01_01": {
+  "comp": "Flug",
+  "props": {
+   "terreno": {
+    "pacote": "loncin",
+    "variante": "2021sc",
+    "horizonte": [
+     "regiao"
+    ],
+    "horizonte_mat": {
+     "alt": 0.7,
+     "hell": 0.9,
+     "detail": 0.2
+    },
+    "horizonte_seg": 420
+   },
+   "luz": {
+    "preset": "tarde_cinza"
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "leste": -784.0,
+      "norte": 443.0,
+      "h": 888
+     },
+     "alvo": {
+      "leste": 60,
+      "norte": -20,
+      "h": 168
+     },
+     "fov": 40
+    },
+    {
+     "t": 4.02,
+     "pos": {
+      "leste": -443.8,
+      "norte": 251.7,
+      "h": 418
+     },
+     "alvo": {
+      "leste": 90,
+      "norte": -40,
+      "h": 188
+     },
+     "fov": 44
+    }
+   ],
+   "tremor": 1,
+   "rotulos": [
+    {
+     "lat": 50.64473,
+     "lon": 5.57308,
+     "h": 60,
+     "texto": "LÜTTICH",
+     "sub": "≈ 6,6 km",
+     "em": {
+      "wort": "westlich"
+     },
+     "tam": 34
+    }
+   ],
+   "cabecalho": {
+    "titulo": "Fort de Loncin",
+    "linhas": [
+     "15. August 1914"
+    ],
+    "em": 0.4
+   },
+   "entrada": 1.2
+  }
+ },
+ "01_13": {
+  "comp": "Flug",
+  "props": {
+   "terreno": {
+    "pacote": "regiao",
+    "mat": {
+     "alt": 0.65,
+     "hell": 2.4,
+     "detail": 0,
+     "ton": "#b9c6d2"
+    }
+   },
+   "ueb": 2.2,
+   "luz": {
+    "preset": "frio_azul"
+   },
+   "camera": [
+    {
+     "t": 0,
+     "pos": {
+      "leste": 685.0,
+      "norte": 15945.0,
+      "h": 1727.3
+     },
+     "alvo": {
+      "leste": -5300,
+      "norte": -500,
+      "h": 190.9
+     },
+     "fov": 38
+    },
+    {
+     "t": 1.84,
+     "pos": {
+      "leste": -4426.0,
+      "norte": 16978.0,
+      "h": 1604.3
+     },
+     "alvo": {
+      "leste": -5300,
+      "norte": -500,
+      "h": 190.9
+     },
+     "fov": 38
+    },
+    {
+     "t": 4.08,
+     "pos": {
+      "leste": -10708.0,
+      "norte": 16143.0,
+      "h": 1454.5
+     },
+     "alvo": {
+      "leste": -5300,
+      "norte": -500,
+      "h": 190.9
+     },
+     "fov": 38
+    }
+   ],
+   "pontos_arquivo": {
+    "arquivo": "geo/forts_liege.geojson",
+    "contornos": "geo/forts_liege_umriss.geojson",
+    "id": "id",
+    "ordem": [
+     "barchon",
+     "evegnee",
+     "fleron",
+     "chaudfontaine",
+     "embourg",
+     "boncelles",
+     "flemalle",
+     "hollogne",
+     "loncin",
+     "lantin",
+     "liers",
+     "pontisse"
+    ],
+    "em0": 0.15,
+    "passo": 0.13,
+    "halo": 572,
+    "pulso": 1144,
+    "cor": "#9ec7e8",
+    "altura": 40
+   },
+   "ligar": {
+    "de": 1.6,
+    "ate": 3.3,
+    "acima": 60,
+    "altura": 60,
+    "raio": 44,
+    "cor": "#9cc6e6",
+    "opak": 0.95
+   },
+   "rotulos": [
+    {
+     "lat": 50.64473,
+     "lon": 5.57308,
+     "h": 378.2,
+     "texto": "LÜTTICH",
+     "em": 0.1,
+     "tam": 40,
+     "mitte": true
+    }
+   ],
+   "legenda": {
+    "texto": "nahezu unbezwingbar",
+    "em": {
+     "wort": "galten"
+    },
+    "tam": 56,
+    "baixo": 96
+   },
+   "notas": [
+    {
+     "texto": "Höhen ×2,2",
+     "em": 0
+    }
+   ]
+  }
+ },
+ "06_03": {
+  "comp": "Flug",
+  "props": {
+   "terreno": {
+    "pacote": "regiao",
+    "mat": {
+     "alt": 0.6,
+     "hell": 2.2,
+     "detail": 0,
+     "ton": "#b9c6d2"
+    }
+   },
+   "ueb": 1.8,
+   "luz": {
+    "preset": "tarde_quente"
+   },
+   "camera": [
+    {
+     "pos": {
+      "leste": -5992.0,
+      "norte": -854.0,
+      "h": 1277.8
+     },
+     "alvo": {
+      "leste": -11113.0,
+      "norte": 2731.0,
+      "h": 209.4
+     },
+     "fov": 42,
+     "t": 0
+    },
+    {
+     "pos": {
+      "leste": -7895.0,
+      "norte": 255.0,
+      "h": 1068.0
+     },
+     "alvo": {
+      "leste": -11113.0,
+      "norte": 2731.0,
+      "h": 209.4
+     },
+     "fov": 42,
+     "t": {
+      "wort": "Rücken",
+      "plus": -0.6
+     }
+    },
+    {
+     "pos": {
+      "leste": -7909.0,
+      "norte": 586.0,
+      "h": 1005.4
+     },
+     "alvo": {
+      "leste": -11350.0,
+      "norte": 2731.0,
+      "h": 209.4
+     },
+     "fov": 42,
+     "t": 4.6
+    },
+    {
+     "pos": {
+      "leste": -8260.0,
+      "norte": 876.0,
+      "h": 950.6
+     },
+     "alvo": {
+      "leste": -11413.0,
+      "norte": 2731.0,
+      "h": 209.4
+     },
+     "fov": 42,
+     "t": {
+      "wort": "Rücken",
+      "plus": 1.0
+     }
+    },
+    {
+     "pos": {
+      "leste": -8820.0,
+      "norte": 1202.0,
+      "h": 888.9
+     },
+     "alvo": {
+      "leste": -11413.0,
+      "norte": 2731.0,
+      "h": 209.4
+     },
+     "fov": 42,
+     "t": 7.22
+    }
+   ],
+   "near": 10,
+   "pontos_arquivo": {
+    "arquivo": "geo/forts_liege.geojson",
+    "contornos": "geo/forts_liege_umriss.geojson",
+    "id": "id",
+    "ordem": [
+     "barchon",
+     "evegnee",
+     "fleron",
+     "chaudfontaine",
+     "embourg",
+     "boncelles",
+     "flemalle",
+     "hollogne",
+     "loncin",
+     "lantin",
+     "liers",
+     "pontisse"
+    ],
+    "em0": 0,
+    "passo": 0,
+    "halo": 260,
+    "pulso": 0,
+    "cor": "#9ec7e8",
+    "altura": 40,
+    "destaque": {
+     "id": "loncin",
+     "halo_extra": 250
+    }
+   },
+   "arcos": [
+    {
+     "de": {
+      "lat": 50.6468,
+      "lon": 5.5746,
+      "h": 80
+     },
+     "para": {
+      "lat": 50.674247486173606,
+      "lon": 5.493088842074893,
+      "h": 165
+     },
+     "altura": 900,
+     "raio": 9,
+     "cor": "#f2c14e",
+     "opak": 0.9,
+     "em": 0.3,
+     "dur": 1.6
+    },
+    {
+     "de": {
+      "lat": 50.6429,
+      "lon": 5.5807,
+      "h": 80
+     },
+     "para": {
+      "lat": 50.674247486173606,
+      "lon": 5.493088842074893,
+      "h": 165
+     },
+     "altura": 900,
+     "raio": 9,
+     "cor": "#f2c14e",
+     "opak": 0.9,
+     "em": 0.58,
+     "dur": 1.6
+    },
+    {
+     "de": {
+      "lat": 50.6412,
+      "lon": 5.5668,
+      "h": 80
+     },
+     "para": {
+      "lat": 50.674247486173606,
+      "lon": 5.493088842074893,
+      "h": 165
+     },
+     "altura": 900,
+     "raio": 9,
+     "cor": "#f2c14e",
+     "opak": 0.9,
+     "em": 0.86,
+     "dur": 1.6
+    },
+    {
+     "de": {
+      "lat": 50.6491,
+      "lon": 5.5662,
+      "h": 80
+     },
+     "para": {
+      "lat": 50.674247486173606,
+      "lon": 5.493088842074893,
+      "h": 165
+     },
+     "altura": 900,
+     "raio": 9,
+     "cor": "#f2c14e",
+     "opak": 0.9,
+     "em": 1.14,
+     "dur": 1.6
+    },
+    {
+     "de": {
+      "lat": 50.6383,
+      "lon": 5.59,
+      "h": 80
+     },
+     "para": {
+      "lat": 50.674247486173606,
+      "lon": 5.493088842074893,
+      "h": 165
+     },
+     "altura": 900,
+     "raio": 9,
+     "cor": "#f2c14e",
+     "opak": 0.9,
+     "em": 1.42,
+     "dur": 1.6
+    }
+   ],
+   "rotulos": [
+    {
+     "lat": 50.674247486173606,
+     "lon": 5.493088842074893,
+     "h": 387.2,
+     "texto": "Rücken des Forts",
+     "sub": "Kehle",
+     "em": {
+      "wort": "Rücken",
+      "plus": -0.4
+     },
+     "cor": "signal",
+     "tam": 38,
+     "mitte": true
+    },
+    {
+     "lat": 50.64473,
+     "lon": 5.57308,
+     "h": 367.8,
+     "texto": "LÜTTICH",
+     "em": {
+      "wort": "Stadt",
+      "plus": -0.1
+     },
+     "tam": 36,
+     "mitte": true
+    }
+   ]
+  }
+ },
+ "05_04": {
+  "comp": "Modell",
+  "props": {
+   "modelos": [
+    {
+     "modelo": "MGeraet",
+     "anim": {
+      "elev": {
+       "de": [
+        0,
+        4.92
+       ],
+       "v": [
+        18,
+        24
+       ],
+       "ease": "glatt"
+      }
+     }
+    }
+   ],
+   "camera": [
+    {
+     "t": 0.0,
+     "alvo": [
+      0.6,
+      2.7,
+      0
+     ],
+     "orbita": {
+      "az": -22,
+      "dist": 17.5,
+      "alto": 3.6
+     },
+     "fov": 38,
+     "far": 3000
+    },
+    {
+     "t": 1.23,
+     "alvo": [
+      0.6,
+      2.7,
+      0
+     ],
+     "orbita": {
+      "az": -4.81,
+      "dist": 17.109,
+      "alto": 3.788
+     },
+     "fov": 38,
+     "far": 3000
+    },
+    {
+     "t": 2.46,
+     "alvo": [
+      0.6,
+      2.7,
+      0
+     ],
+     "orbita": {
+      "az": 33.0,
+      "dist": 16.25,
+      "alto": 4.2
+     },
+     "fov": 38,
+     "far": 3000
+    },
+    {
+     "t": 3.69,
+     "alvo": [
+      0.6,
+      2.7,
+      0
+     ],
+     "orbita": {
+      "az": 70.81,
+      "dist": 15.391,
+      "alto": 4.612
+     },
+     "fov": 38,
+     "far": 3000
+    },
+    {
+     "t": 4.92,
+     "alvo": [
+      0.6,
+      2.7,
+      0
+     ],
+     "orbita": {
+      "az": 88,
+      "dist": 15.0,
+      "alto": 4.8
+     },
+     "fov": 38,
+     "far": 3000
+    }
+   ],
+   "luz": {
+    "centro": [
+     0,
+     2,
+     0
+    ],
+    "raio": 18
+   },
+   "rotulos": [
+    {
+     "pos": [
+      2.5,
+      6.6,
+      0
+     ],
+     "texto": "M-Gerät",
+     "sub": "Krupp · 42 cm",
+     "em": {
+      "wort": "M-Gerät"
+     },
+     "cor": "signal",
+     "dx": 40,
+     "dy": -60,
+     "tam": 64,
+     "seta": false
+    }
+   ]
+  }
+ },
+ "05_07": {
+  "comp": "Modell",
+  "props": {
+   "modelos": [
+    {
+     "modelo": "MGeraet",
+     "opcoes": {
+      "elev": 12
+     }
+    }
+   ],
+   "camera": [
+    {
+     "t": 0.0,
+     "pos": [
+      13,
+      0.8,
+      6.4
+     ],
+     "alvo": [
+      1.0,
+      2.8,
+      0
+     ],
+     "fov": 40,
+     "far": 2000
+    },
+    {
+     "t": 2.072,
+     "pos": [
+      12.236,
+      1.08,
+      6.961
+     ],
+     "alvo": [
+      1.0,
+      2.927,
+      0
+     ],
+     "fov": 40,
+     "far": 2000
+    },
+    {
+     "t": 4.145,
+     "pos": [
+      10.805,
+      1.605,
+      8.01
+     ],
+     "alvo": [
+      1.0,
+      3.166,
+      0
+     ],
+     "fov": 40,
+     "far": 2000
+    },
+    {
+     "t": 6.28,
+     "pos": [
+      10,
+      1.9,
+      8.6
+     ],
+     "alvo": [
+      1.0,
+      3.3,
+      0
+     ],
+     "fov": 40,
+     "far": 2000
+    }
+   ],
+   "luz": {
+    "centro": [
+     1,
+     2,
+     0
+    ],
+    "raio": 16
+   },
+   "grade_centro": [
+    0,
+    0
+   ],
+   "rotulos": [
+    {
+     "pos": [
+      -0.5,
+      5.0,
+      0
+     ],
+     "texto": "42,6 t",
+     "sub": "in Feuerstellung",
+     "em": {
+      "wort": "Zweiundvierzig"
+     },
+     "cor": "signal",
+     "dx": -140,
+     "dy": -120,
+     "tam": 96,
+     "seta": false
+    }
+   ],
+   "chips": [
+    {
+     "texto": "auf Rädern · keine Schienen",
+     "em": {
+      "wort": "Antwort",
+      "plus": -0.2
+     },
+     "cor": "papier",
+     "pos": {
+      "left": 64,
+      "bottom": 90
+     }
+    }
+   ],
+   "hud": {
+    "titulo": "GEWICHT",
+    "linhas": [
+     [
+      "Feuerstellung",
+      "42,6 t"
+     ],
+     [
+      "Gamma",
+      "150 t"
+     ]
+    ],
+    "em": {
+     "wort": "Zweiundvierzig",
+     "plus": -0.1
+    }
+   }
+  }
+ },
+ "05_08": {
+  "comp": "Modell",
+  "props": {
+   "modelos": [
+    {
+     "modelo": "MGeraet",
+     "opcoes": {
+      "elev": 6
+     }
+    }
+   ],
+   "camera": [
+    {
+     "t": 0.0,
+     "pos": [
+      7.322,
+      3.6,
+      15.5
+     ],
+     "alvo": [
+      4.322,
+      4.1,
+      0
+     ],
+     "fov": 36,
+     "far": 500
+    },
+    {
+     "t": 1.02,
+     "pos": [
+      6.233,
+      3.559,
+      15.5
+     ],
+     "alvo": [
+      3.803,
+      4.038,
+      0
+     ],
+     "fov": 36,
+     "far": 500
+    },
+    {
+     "t": 2.04,
+     "pos": [
+      2.065,
+      3.4,
+      15.5
+     ],
+     "alvo": [
+      1.815,
+      3.8,
+      0
+     ],
+     "fov": 36,
+     "far": 500
+    },
+    {
+     "t": 3.06,
+     "pos": [
+      -2.103,
+      3.241,
+      15.5
+     ],
+     "alvo": [
+      -0.173,
+      3.562,
+      0
+     ],
+     "fov": 36,
+     "far": 500
+    },
+    {
+     "t": 4.08,
+     "pos": [
+      -3.192,
+      3.2,
+      15.5
+     ],
+     "alvo": [
+      -0.692,
+      3.5,
+      0
+     ],
+     "fov": 36,
+     "far": 500
+    }
+   ],
+   "luz": {
+    "centro": [
+     1.5,
+     3.5,
+     0
+    ],
+    "raio": 12
+   },
+   "cotas": [
+    {
+     "de": [
+      3.9217,
+      3.6991,
+      2.15
+     ],
+     "para": [
+      -1.0907,
+      3.1723,
+      2.15
+     ],
+     "texto": "5,04 m",
+     "em": {
+      "wort": "Metern",
+      "plus": -0.3
+     },
+     "cor": "signal",
+     "deslocamento": 70,
+     "tam": 54
+    }
+   ],
+   "graduacao": {
+    "de": [
+     3.9217,
+     3.6991,
+     2.15
+    ],
+    "para": [
+     -1.0907,
+     3.1723,
+     2.15
+    ],
+    "n": 12,
+    "em": {
+     "wort": "zwölf",
+     "plus": -0.2
+    },
+    "fim": {
+     "wort": "Kaliber",
+     "plus": 0.7
+    },
+    "cor": "cyan",
+    "cor_pontas": "signal",
+    "atraso_num": 0.2,
+    "passo_num": 0.04,
+    "dy_num": -84,
+    "tam_num": 30
+   },
+   "barra": {
+    "de": [
+     3.9217,
+     3.6991,
+     2.15
+    ],
+    "para": [
+     -1.0907,
+     3.1723,
+     2.15
+    ],
+    "em": {
+     "wort": "Metern",
+     "plus": -0.4
+    },
+    "dur": 0.6,
+    "cor": "signal"
+   },
+   "chips": [
+    {
+     "texto": "L/12 · 12 × 42 cm",
+     "em": {
+      "wort": "zwölf"
+     },
+     "cor": "cyan",
+     "pos": {
+      "right": 70,
+      "top": 70
+     }
+    }
+   ]
+  }
+ }
+}

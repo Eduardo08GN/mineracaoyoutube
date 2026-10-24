@@ -1,0 +1,3973 @@
+{
+ "_vorlagen": {
+  "k3a": {
+   "phi0": 50.5,
+   "kamera": [
+    [
+     {
+      "s": 97.46
+     },
+     8.3,
+     50.5,
+     0.78
+    ],
+    [
+     {
+      "s": 103.14
+     },
+     7.6,
+     50.55,
+     0.7
+    ],
+    [
+     {
+      "s": 105.6
+     },
+     6.3,
+     50.55,
+     0.52
+    ],
+    [
+     {
+      "s": 108.2
+     },
+     5.3,
+     50.6,
+     0.085
+    ],
+    [
+     {
+      "s": 110.94
+     },
+     5.35,
+     50.62,
+     0.078
+    ]
+   ],
+   "grund": {
+    "netz": 0.45,
+    "grenzen": 0.5,
+    "fluesse": [
+     [
+      {
+       "wort": "Tal",
+       "s": 105,
+       "fb": 106.7,
+       "plus": 0.2
+      },
+      0.5
+     ],
+     [
+      {
+       "wort": "Tal",
+       "s": 105,
+       "fb": 106.7,
+       "plus": 2.2
+      },
+      0.25
+     ]
+    ]
+   },
+   "titel": {
+    "text": "Belgien",
+    "unter": "1914",
+    "em": {
+     "s": 97.6
+    }
+   },
+   "quelle": "Relief: NASA Blue Marble · Grenzen: Natural Earth (heutige Grenzen; Belgien 1914 schematisch) · Orte: © OpenStreetMap-Mitwirkende",
+   "ebenen": [
+    {
+     "typ": "geojson",
+     "datei": "grenzen.geojson",
+     "filter": {
+      "iso3": "BEL"
+     },
+     "em": {
+      "wort": "neutral",
+      "s": 97,
+      "fb": 98.2,
+      "plus": -0.3
+     },
+     "blende": 1.0,
+     "kappeOst": [
+      [
+       50.0,
+       5.9
+      ],
+      [
+       50.3,
+       5.93
+      ],
+      [
+       50.55,
+       5.95
+      ],
+      [
+       50.66,
+       5.975
+      ],
+      [
+       50.75,
+       6.01
+      ],
+      [
+       50.8,
+       5.99
+      ],
+      [
+       51.0,
+       5.86
+      ],
+      [
+       51.5,
+       5.8
+      ]
+     ],
+     "o": [
+      [
+       {
+        "wort": "Tal",
+        "s": 105,
+        "fb": 106.7,
+        "plus": 0.2
+       },
+       1
+      ],
+      [
+       {
+        "wort": "Tal",
+        "s": 105,
+        "fb": 106.7,
+        "plus": 2.2
+       },
+       0.5
+      ]
+     ],
+     "stil": {
+      "fill": "rgba(94,200,229,0.14)",
+      "stroke": "rgba(94,200,229,0.85)",
+      "breite": 2.6,
+      "dash": "10 7"
+     }
+    },
+    {
+     "typ": "gebiet",
+     "ll": [
+      2.6,
+      49.1
+     ],
+     "text": "Frankreich",
+     "groesse": 50,
+     "em": {
+      "wort": "Frankreich",
+      "s": 103.1,
+      "fb": 104.1,
+      "plus": -0.3
+     },
+     "blende": 0.5,
+     "blendeAus": 0.9,
+     "ate": {
+      "s": 106.8
+     }
+    },
+    {
+     "typ": "gebiet",
+     "ll": [
+      8.6,
+      50.2
+     ],
+     "text": "Deutschland",
+     "groesse": 50,
+     "em": {
+      "wort": "Deutschland",
+      "s": 104.3,
+      "fb": 105.2,
+      "plus": -0.3
+     },
+     "blende": 0.5,
+     "blendeAus": 0.9,
+     "ate": {
+      "s": 106.8
+     }
+    },
+    {
+     "typ": "gebiet",
+     "ll": [
+      4.6,
+      50.75
+     ],
+     "text": "Belgien",
+     "groesse": 46,
+     "farbe": "#5ec8e5",
+     "o": 0.9,
+     "em": {
+      "wort": "neutral",
+      "s": 97,
+      "fb": 98.2,
+      "plus": -0.3
+     },
+     "blende": 1.0,
+     "blendeAus": 0.8,
+     "ate": {
+      "s": 106.6
+     }
+    },
+    {
+     "typ": "strahl",
+     "blendeAus": 0.9,
+     "ate": {
+      "s": 106.8
+     },
+     "o": 0.9,
+     "breite": 2.2,
+     "dauer": 0.55,
+     "liste": [
+      {
+       "a": [
+        -0.1276,
+        51.5072
+       ],
+       "b": [
+        3.4,
+        51.0
+       ],
+       "farbe": "#e9e1cf",
+       "em": {
+        "wort": "garantiert",
+        "s": 97,
+        "fb": 99.26,
+        "plus": 0.05
+       }
+      },
+      {
+       "a": [
+        2.35005,
+        48.85294
+       ],
+       "b": [
+        4.0,
+        50.2
+       ],
+       "farbe": "#e9e1cf",
+       "em": {
+        "wort": "garantiert",
+        "s": 97,
+        "fb": 99.26,
+        "plus": 0.5
+       }
+      },
+      {
+       "a": [
+        16.3738,
+        48.2082
+       ],
+       "b": [
+        5.7,
+        50.3
+       ],
+       "farbe": "#e9e1cf",
+       "em": {
+        "wort": "garantiert",
+        "s": 97,
+        "fb": 99.26,
+        "plus": 0.95
+       }
+      },
+      {
+       "a": [
+        13.405,
+        52.52
+       ],
+       "b": [
+        5.9,
+        50.75
+       ],
+       "farbe": "#f2c14e",
+       "em": {
+        "wort": "auch",
+        "s": 100.5,
+        "fb": 101.3,
+        "plus": 0.05
+       }
+      }
+     ]
+    },
+    {
+     "typ": "marke",
+     "r": 7,
+     "gross": 26,
+     "blendeAus": 0.9,
+     "ate": {
+      "s": 106.8
+     },
+     "liste": [
+      {
+       "ll": [
+        -0.1276,
+        51.5072
+       ],
+       "titel": "London",
+       "farbe": "#e9e1cf",
+       "seite": "o",
+       "em": {
+        "wort": "garantiert",
+        "s": 97,
+        "fb": 99.26,
+        "plus": 0.0
+       }
+      },
+      {
+       "ll": [
+        2.35005,
+        48.85294
+       ],
+       "titel": "Paris",
+       "farbe": "#e9e1cf",
+       "seite": "u",
+       "em": {
+        "wort": "garantiert",
+        "s": 97,
+        "fb": 99.26,
+        "plus": 0.45
+       }
+      },
+      {
+       "ll": [
+        16.3738,
+        48.2082
+       ],
+       "titel": "Wien",
+       "farbe": "#e9e1cf",
+       "seite": "o",
+       "em": {
+        "wort": "garantiert",
+        "s": 97,
+        "fb": 99.26,
+        "plus": 0.9
+       }
+      },
+      {
+       "ll": [
+        13.405,
+        52.52
+       ],
+       "titel": "Berlin",
+       "farbe": "#f2c14e",
+       "seite": "o",
+       "em": {
+        "wort": "auch",
+        "s": 100.5,
+        "fb": 101.3,
+        "plus": 0.0
+       }
+      }
+     ]
+    },
+    {
+     "typ": "stempel",
+     "xy": [
+      780,
+      330
+     ],
+     "em": {
+      "wort": "neutral",
+      "s": 97,
+      "fb": 98.2,
+      "plus": 0.2
+     },
+     "text": "NEUTRAL",
+     "unter": "seit 1839",
+     "ate": {
+      "s": 105.8
+     },
+     "dreh": -5,
+     "groesse": 64
+    },
+    {
+     "typ": "text",
+     "xy": [
+      960,
+      930
+     ],
+     "align": "c",
+     "gross": "Londoner Vertrag 1839",
+     "groesse": 44,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Preußen",
+      "s": 100.5,
+      "fb": 101.7,
+      "plus": 0.1
+     },
+     "ate": {
+      "s": 105.8
+     }
+    },
+    {
+     "typ": "strahl",
+     "a": [
+      1.4,
+      50.05
+     ],
+     "b": [
+      3.5,
+      50.3
+     ],
+     "em": {
+      "wort": "Frankreich",
+      "s": 103.1,
+      "fb": 104.1,
+      "plus": -0.1
+     },
+     "dauer": 1.0,
+     "farbe": "#b8a27a",
+     "breite": 7,
+     "glow": true,
+     "ate": {
+      "s": 106.8
+     },
+     "blendeAus": 0.9
+    },
+    {
+     "typ": "strahl",
+     "a": [
+      9.5,
+      50.6
+     ],
+     "b": [
+      6.9,
+      50.5
+     ],
+     "em": {
+      "wort": "Deutschland",
+      "s": 104.3,
+      "fb": 105.2,
+      "plus": -0.1
+     },
+     "dauer": 1.0,
+     "farbe": "#b8a27a",
+     "breite": 7,
+     "glow": true,
+     "ate": {
+      "s": 106.8
+     },
+     "blendeAus": 0.9
+    },
+    {
+     "typ": "linie",
+     "pts": {
+      "datei": "fluesse.geojson",
+      "filter": {
+       "name": "Maas",
+       "geom": "MultiLineString"
+      },
+      "lat": [
+       50.08,
+       50.9
+      ],
+      "sortiere": "lat",
+      "glatten": 4
+     },
+     "em": {
+      "wort": "Tal",
+      "s": 105,
+      "fb": 106.7,
+      "plus": 0.2
+     },
+     "dauer": 2.0,
+     "farbe": "#5ec8e5",
+     "breite": 5,
+     "glow": 1.2,
+     "kopf": true
+    },
+    {
+     "typ": "ort",
+     "gross": 26,
+     "em": {
+      "wort": "Tal",
+      "s": 105,
+      "fb": 106.7,
+      "plus": 0.8
+     },
+     "stufe": 0.5,
+     "blende": 0.5,
+     "liste": [
+      {
+       "ll": [
+        4.86619,
+        50.46653
+       ],
+       "name": "Namur",
+       "seite": "l"
+      },
+      {
+       "ll": [
+        5.57308,
+        50.64473
+       ],
+       "name": "Lüttich"
+      },
+      {
+       "ll": [
+        5.69699,
+        50.85799
+       ],
+       "name": "Maastricht"
+      }
+     ]
+    },
+    {
+     "typ": "text",
+     "xy": [
+      110,
+      850
+     ],
+     "klein": "TAL DER MAAS",
+     "gross": "Einfallstor",
+     "groesse": 88,
+     "em": {
+      "wort": "Einfallstor",
+      "s": 107,
+      "fb": 109.0,
+      "plus": -0.1
+     },
+     "align": "l"
+    }
+   ]
+  },
+  "k3_05": {
+   "phi0": 50.55,
+   "kamera": {
+    "lon": 5.2,
+    "lat": 50.56,
+    "km": 0.098,
+    "drift": [
+     0.02,
+     0
+    ],
+    "zoom": 0.8367
+   },
+   "grund": {
+    "netz": 0.5,
+    "grenzen": 0.5
+   },
+   "titel": {
+    "text": "Maas-Festungen",
+    "unter": "1888 · BRIALMONT",
+    "em": 0.1
+   },
+   "quelle": "Lüttich: echte Fortlagen (OSM) · Namur: Lage der Forts schematisch · Relief: NASA Blue Marble · Grenzen: Natural Earth (heutige Grenzen; Belgien 1914 schematisch) · Orte: © OpenStreetMap-Mitwirkende",
+   "ebenen": [
+    {
+     "typ": "ort",
+     "ll": [
+      4.35252,
+      50.84671
+     ],
+     "name": "Brüssel",
+     "o": 0.6,
+     "gross": 20
+    },
+    {
+     "typ": "symbol",
+     "id": "namur",
+     "kranz": {
+      "mitte": [
+       4.86619,
+       50.46653
+      ],
+      "n": 9,
+      "km": 7.2,
+      "saat": 1888
+     },
+     "form": "kreis",
+     "farbe": "#b8a27a",
+     "s": 11,
+     "em": {
+      "wort": "neun",
+      "fb": 118.52,
+      "plus": -0.1
+     },
+     "stufe": 0.1
+    },
+    {
+     "typ": "ring",
+     "aus": "namur",
+     "farbe": "#b8a27a",
+     "breite": 2.5,
+     "dash": "8 7",
+     "em": {
+      "wort": "neun",
+      "fb": 118.52,
+      "plus": 0.7
+     },
+     "dauer": 0.8
+    },
+    {
+     "typ": "symbol",
+     "id": "luettich",
+     "datei": "forts_liege.geojson",
+     "ordnung": {
+      "winkel": [
+       5.57308,
+       50.64473
+      ]
+     },
+     "s": 11,
+     "em": {
+      "wort": "zwölf",
+      "fb": 120.42,
+      "plus": -0.1
+     },
+     "stufe": 0.085,
+     "formProp": "typ",
+     "formen": {
+      "grand fort": "dreieck",
+      "fortin": "quadrat"
+     },
+     "gefuelltProp": "typ",
+     "gefuelltWert": "grand fort"
+    },
+    {
+     "typ": "ring",
+     "aus": "luettich",
+     "farbe": "#e9e1cf",
+     "breite": 2.5,
+     "dash": "8 7",
+     "em": {
+      "wort": "zwölf",
+      "fb": 120.42,
+      "plus": 0.9
+     },
+     "dauer": 0.8
+    },
+    {
+     "typ": "text",
+     "ll": [
+      4.86619,
+      50.46653
+     ],
+     "dy": 118,
+     "align": "c",
+     "klein": "schematisch",
+     "gross": "Namur · {n} Forts",
+     "zaehltAus": "namur",
+     "groesse": 32,
+     "farbe": "#b8a27a",
+     "em": {
+      "wort": "neun",
+      "fb": 118.52,
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "dy": 140,
+     "align": "c",
+     "gross": "Lüttich · {n} Forts",
+     "zaehltAus": "luettich",
+     "groesse": 32,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "zwölf",
+      "fb": 120.42,
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "stempel",
+     "xy": [
+      1560,
+      240
+     ],
+     "em": 0.1,
+     "text": "1888",
+     "unter": "Brialmont",
+     "ate": {
+      "wort": "neun",
+      "fb": 118.52,
+      "plus": -0.2
+     },
+     "dreh": 3,
+     "groesse": 84
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1560,
+      360
+     ],
+     "align": "c",
+     "gross": "zwei Festungsringe",
+     "groesse": 42,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Festungsringe",
+      "fb": 116.82,
+      "plus": -0.2
+     },
+     "ate": {
+      "wort": "neun",
+      "fb": 118.52,
+      "plus": -0.2
+     }
+    }
+   ]
+  },
+  "k3_07": {
+   "phi0": 50.65,
+   "kamera": {
+    "lon": 5.585,
+    "lat": 50.642,
+    "km": 0.0225,
+    "zoom": 0.92
+   },
+   "titel": {
+    "text": "Lüttich",
+    "unter": "DER RING · 12 FORTS",
+    "em": 0.1
+   },
+   "quelle": "Relief: Copernicus DEM GLO-30 · Satellit: EOxCloudless 2017 (Sentinel-2) · Forts: © OpenStreetMap-Mitwirkende · Falldaten: Dossier Fort de Loncin, Provinz Lüttich",
+   "ebenen": [
+    {
+     "typ": "kreis",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "farbe": "#f2c14e",
+     "breite": 2.5,
+     "dash": "12 8",
+     "em": {
+      "wort": "sechs",
+      "nach": 1.5,
+      "fb": 126.82
+     },
+     "liste": [
+      {
+       "km": 6,
+       "text": "6 km",
+       "dauer": 0.9
+      },
+      {
+       "km": 10,
+       "text": "10 km",
+       "dauer": 1.0,
+       "em": {
+        "wort": "sechs",
+        "nach": 1.5,
+        "fb": 126.82,
+        "plus": 0.5
+       }
+      }
+     ]
+    },
+    {
+     "typ": "marke",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "titel": "Zentrum",
+     "r": 7,
+     "gross": 28,
+     "ring": false,
+     "em": {
+      "wort": "sechs",
+      "nach": 1.5,
+      "fb": 126.82,
+      "plus": -0.2
+     }
+    },
+    {
+     "typ": "symbol",
+     "id": "forts",
+     "datei": "forts_liege.geojson",
+     "s": 17,
+     "em": 0,
+     "namen": {
+      "em": 0.3,
+      "groesse": 21,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ]
+     },
+     "ereignisse": [
+      {
+       "wo": {
+        "typ": "grand fort"
+       },
+       "art": "hell",
+       "t": 0,
+       "dauer": 0.3,
+       "bis": {
+        "wort": "kleine",
+        "fb": 125.92,
+        "plus": 0.3
+       },
+       "bisDauer": 0.4
+      },
+      {
+       "wo": {
+        "typ": "fortin"
+       },
+       "art": "hell",
+       "t": {
+        "wort": "kleine",
+        "fb": 125.92,
+        "plus": -0.1
+       },
+       "dauer": 0.3,
+       "bis": {
+        "wort": "sechs",
+        "nach": 1.5,
+        "fb": 126.82,
+        "plus": 0.4
+       },
+       "bisDauer": 0.5
+      }
+     ],
+     "formProp": "typ",
+     "formen": {
+      "grand fort": "dreieck",
+      "fortin": "quadrat"
+     },
+     "gefuelltProp": "typ",
+     "gefuelltWert": "grand fort"
+    },
+    {
+     "typ": "zahl",
+     "label": "GROSSE FORTS ▲",
+     "wert": "6",
+     "groesse": 110,
+     "top": 120,
+     "right": 90,
+     "unter": "grand fort",
+     "farbe": "#e9e1cf",
+     "em": 0.1
+    },
+    {
+     "typ": "zahl",
+     "label": "KLEINE FORTS ■",
+     "wert": "6",
+     "groesse": 110,
+     "top": 400,
+     "right": 90,
+     "unter": "fortin",
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "kleine",
+      "fb": 125.92,
+      "plus": -0.1
+     }
+    }
+   ]
+  },
+  "ring8": {
+   "phi0": 50.65,
+   "quelle": "Relief: Copernicus DEM GLO-30 · Satellit: EOxCloudless 2017 (Sentinel-2) · Forts: © OpenStreetMap-Mitwirkende · Falldaten: Dossier Fort de Loncin, Provinz Lüttich",
+   "titel": {
+    "text": "Fort für Fort",
+    "unter": "LÜTTICH · AUGUST 1914"
+   },
+   "ebenen": [
+    {
+     "typ": "marke",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "titel": "Lüttich",
+     "r": 5,
+     "gross": 26,
+     "o": 0.8,
+     "seite": "o",
+     "ring": false,
+     "dy": -2,
+     "em": {
+      "s": 0
+     }
+    }
+   ]
+  },
+  "kap8": {
+   "vorlage": "ring8",
+   "ebenen": [
+    {
+     "typ": "symbol",
+     "id": "forts",
+     "datei": "forts_liege.geojson",
+     "ordnung": {
+      "winkel": [
+       5.57308,
+       50.64473
+      ]
+     },
+     "tagProp": "fall_1914.datum",
+     "em": {
+      "s": 0
+     },
+     "namen": {
+      "em": {
+       "s": 0
+      },
+      "groesse": 21,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ]
+     },
+     "ereignisse": [
+      {
+       "ids": [
+        "barchon"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Barchon",
+        "s": 660,
+        "fb": 663.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "evegnee"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Évegnée",
+        "s": 664,
+        "fb": 667.1
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "pontisse"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "auf",
+        "s": 679.5,
+        "fb": 680.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "embourg"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Embourg",
+        "s": 682,
+        "fb": 683.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Chaudfontaine",
+        "s": 683,
+        "fb": 684.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0,
+        "plus": 0.3
+       },
+       "dauer": 1.2
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "liers"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Liers",
+        "s": 689,
+        "fb": 690.6
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "fleron"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Fléron",
+        "s": 694.7,
+        "fb": 695.3,
+        "plus": 0.2
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "boncelles"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Boncelles",
+        "s": 705,
+        "fb": 706.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "lantin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Lantin",
+        "s": 706.5,
+        "fb": 707.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.7
+       },
+       "dauer": 1.1
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "hollogne"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Hollogne",
+        "s": 717.5,
+        "fb": 718.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "flemalle"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Flémalle",
+        "s": 718.7,
+        "fb": 719.5
+       },
+       "dauer": 0.9
+      }
+     ],
+     "formProp": "typ",
+     "formen": {
+      "grand fort": "dreieck",
+      "fortin": "quadrat"
+     },
+     "gefuelltProp": "typ",
+     "gefuelltWert": "grand fort"
+    },
+    {
+     "typ": "datum",
+     "id": "tag",
+     "anker": [
+      {
+       "t": {
+        "s": 652.0
+       },
+       "wert": 4
+      },
+      {
+       "t": {
+        "wort": "achten",
+        "s": 660,
+        "fb": 661.0
+       },
+       "wert": 8
+      },
+      {
+       "t": {
+        "wort": "Kurz",
+        "s": 665,
+        "fb": 666.7
+       },
+       "wert": 11
+      },
+      {
+       "t": {
+        "wort": "zwölften",
+        "s": 668,
+        "fb": 669.1
+       },
+       "wert": 12
+      },
+      {
+       "t": {
+        "wort": "nächsten",
+        "s": 678,
+        "fb": 678.8
+       },
+       "wert": 13
+      },
+      {
+       "t": {
+        "wort": "vierzehnten",
+        "s": 688,
+        "fb": 688.7
+       },
+       "wert": 14
+      },
+      {
+       "t": {
+        "wort": "Fünfzehnten",
+        "s": 703,
+        "fb": 703.9
+       },
+       "wert": 15
+      },
+      {
+       "t": {
+        "wort": "sechzehnten",
+        "s": 714,
+        "fb": 714.2
+       },
+       "wert": 16
+      },
+      {
+       "t": {
+        "s": 730
+       },
+       "wert": 16
+      }
+     ],
+     "fmt": "{nn}.08.",
+     "kopf": "AUGUST 1914",
+     "em": {
+      "s": 0
+     }
+    },
+    {
+     "typ": "zeitleiste",
+     "id": "zeitleiste",
+     "datum": "tag",
+     "symbole": "forts",
+     "von": 3.6,
+     "bis": 16.7,
+     "ticks": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+     ],
+     "kopf": "AUGUST 1914",
+     "em": {
+      "s": 0
+     },
+     "blende": 0.01
+    }
+   ]
+  },
+  "k8a": {
+   "vorlage": "kap8",
+   "kamera": [
+    [
+     {
+      "s": 652.84
+     },
+     5.62,
+     50.645,
+     0.0172
+    ],
+    [
+     {
+      "s": 657.26
+     },
+     5.62,
+     50.645,
+     0.0158
+    ],
+    [
+     {
+      "s": 660.0
+     },
+     5.62,
+     50.642,
+     0.016
+    ],
+    [
+     {
+      "s": 662.6
+     },
+     5.625,
+     50.6285,
+     0.0185
+    ],
+    [
+     {
+      "s": 669.4
+     },
+     5.627,
+     50.6285,
+     0.0185
+    ]
+   ],
+   "titel": {
+    "em": {
+     "s": 653.0400000000001
+    }
+   },
+   "ebenen": [
+    {
+     "id": "forts",
+     "erbt": true,
+     "em": {
+      "s": 653.84
+     },
+     "stufe": 0.17,
+     "namen": {
+      "em": {
+       "wort": "Zwölf",
+       "s": 655,
+       "fb": 655.9,
+       "plus": 0.1
+      },
+      "groesse": 21,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ]
+     }
+    },
+    {
+     "id": "tag",
+     "erbt": true,
+     "em": {
+      "s": 660.9
+     }
+    },
+    {
+     "id": "zeitleiste",
+     "erbt": true,
+     "em": {
+      "s": 660.6
+     },
+     "blende": 0.8,
+     "baender": [
+      {
+       "a": 4,
+       "b": 8,
+       "text": "vier Tage Kampf",
+       "farbe": "#5ec8e5",
+       "em": {
+        "wort": "vier",
+        "s": 664.5,
+        "fb": 664.9,
+        "plus": -0.2
+       },
+       "dauer": 1.4
+      }
+     ]
+    },
+    {
+     "typ": "kreis",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "farbe": "#f2c14e",
+     "breite": 1.8,
+     "dash": "10 8",
+     "o": [
+      [
+       {
+        "s": 660.6
+       },
+       0.5
+      ],
+      [
+       {
+        "s": 661.2
+       },
+       0
+      ]
+     ],
+     "liste": [
+      {
+       "km": 6,
+       "em": {
+        "wort": "Stadt.",
+        "s": 658.5,
+        "fb": 659.4,
+        "plus": -0.3
+       },
+       "dauer": 1.2
+      },
+      {
+       "km": 10,
+       "em": {
+        "wort": "Stadt.",
+        "s": 658.5,
+        "fb": 659.4
+       },
+       "dauer": 1.0
+      }
+     ]
+    },
+    {
+     "typ": "ring",
+     "aus": "forts",
+     "em": {
+      "s": 657.3
+     },
+     "dauer": 1.7,
+     "farbe": "#e9e1cf",
+     "breite": 3,
+     "glow": 1
+    },
+    {
+     "typ": "zahl",
+     "label": "FORTS",
+     "zaehltAus": "forts",
+     "groesse": 150,
+     "top": 110,
+     "right": 90,
+     "farbe": "#e9e1cf",
+     "em": {
+      "s": 653.84
+     },
+     "ate": {
+      "s": 661.2
+     },
+     "blendeAus": 0.6
+    },
+    {
+     "typ": "zahl",
+     "label": "RINGLÄNGE",
+     "zaehlt": {
+      "von": 0,
+      "bis": 48.9,
+      "em": {
+       "wort": "fünfzig",
+       "s": 657,
+       "fb": 658.1,
+       "plus": -0.1
+      },
+      "dauer": 1.1,
+      "praefix": "≈ ",
+      "suffix": " km"
+     },
+     "groesse": 84,
+     "top": 330,
+     "right": 90,
+     "farbe": "#f2c14e",
+     "em": {
+      "wort": "fünfzig",
+      "s": 657,
+      "fb": 658.1,
+      "plus": -0.1
+     },
+     "blende": 0.5,
+     "ate": {
+      "s": 661.2
+     },
+     "blendeAus": 0.6
+    },
+    {
+     "typ": "text",
+     "ll": "@forts_liege.geojson:barchon",
+     "dx": 54,
+     "dy": -52,
+     "gross": "Nordosten",
+     "groesse": 40,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Nordosten",
+      "s": 662,
+      "fb": 662.9,
+      "plus": -0.1
+     },
+     "ate": {
+      "wort": "Nordosten",
+      "s": 662,
+      "fb": 662.9,
+      "plus": 2.0
+     }
+    },
+    {
+     "typ": "text",
+     "ll": "@forts_liege.geojson:evegnee",
+     "dx": 190,
+     "dy": 8,
+     "gross": "kurz darauf",
+     "groesse": 36,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Kurz",
+      "s": 665.5,
+      "fb": 666.7,
+      "plus": -0.1
+     },
+     "ate": {
+      "wort": "Kurz",
+      "s": 665.5,
+      "fb": 666.7,
+      "plus": 1.9
+     }
+    }
+   ]
+  },
+  "k3b": {
+   "phi0": 50.5,
+   "kamera": [
+    [
+     {
+      "s": 156.44
+     },
+     4.95,
+     50.32,
+     0.31
+    ],
+    [
+     {
+      "s": 162.4
+     },
+     4.9,
+     50.3,
+     0.29
+    ],
+    [
+     {
+      "s": 165.6
+     },
+     5.86,
+     50.7,
+     0.052
+    ],
+    [
+     {
+      "s": 167.4
+     },
+     5.84,
+     50.69,
+     0.046
+    ]
+   ],
+   "grund": {
+    "netz": 0.5,
+    "grenzen": 0.5
+   },
+   "titel": {
+    "text": "Lüttich",
+    "unter": "AUGUST 1914",
+    "em": {
+     "s": 156.6
+    },
+    "ate": {
+     "s": 163.8
+    }
+   },
+   "quelle": "Relief: NASA Blue Marble · Grenzen: Natural Earth (heutige Grenzen; Belgien 1914 schematisch) · Orte: © OpenStreetMap-Mitwirkende",
+   "ebenen": [
+    {
+     "typ": "geojson",
+     "datei": "grenzen.geojson",
+     "filter": {
+      "iso3": "BEL"
+     },
+     "em": {
+      "s": 150
+     },
+     "kappeOst": [
+      [
+       50.0,
+       5.9
+      ],
+      [
+       50.3,
+       5.93
+      ],
+      [
+       50.55,
+       5.95
+      ],
+      [
+       50.66,
+       5.975
+      ],
+      [
+       50.75,
+       6.01
+      ],
+      [
+       50.8,
+       5.99
+      ],
+      [
+       51.0,
+       5.86
+      ],
+      [
+       51.5,
+       5.8
+      ]
+     ],
+     "stil": {
+      "fill": "rgba(94,200,229,0.10)",
+      "stroke": "rgba(94,200,229,0.75)",
+      "breite": 2.4,
+      "dash": "10 7"
+     }
+    },
+    {
+     "typ": "pfeil",
+     "pts": [
+      [
+       7.35,
+       51.05
+      ],
+      [
+       6.95555,
+       50.94244
+      ],
+      [
+       6.08399,
+       50.77476
+      ],
+      [
+       5.57308,
+       50.64473
+      ],
+      [
+       4.95,
+       50.76
+      ],
+      [
+       4.35252,
+       50.84671
+      ],
+      [
+       3.55,
+       50.52
+      ],
+      [
+       2.85,
+       50.0
+      ],
+      [
+       2.45,
+       49.35
+      ]
+     ],
+     "verlauf": [
+      [
+       {
+        "s": 156.64
+       },
+       0
+      ],
+      [
+       {
+        "s": 158.0
+       },
+       0.25
+      ],
+      [
+       {
+        "s": 162.7
+       },
+       1
+      ]
+     ],
+     "breite": 28,
+     "farbe": "#d9483b",
+     "fill": "rgba(217,72,59,0.30)",
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6
+    },
+    {
+     "typ": "ziel",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "r": 52,
+     "farbe": "#f2c14e",
+     "drehen": 30,
+     "em": {
+      "wort": "Lüttich",
+      "s": 156,
+      "fb": 158.0,
+      "plus": -0.1
+     },
+     "blende": 0.5,
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6
+    },
+    {
+     "typ": "marke",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "titel": "Lüttich",
+     "r": 8,
+     "gross": 36,
+     "farbe": "#e9e1cf",
+     "seite": "l",
+     "ring": false,
+     "em": {
+      "wort": "Lüttich",
+      "s": 156,
+      "fb": 158.0,
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "ort",
+     "gross": 22,
+     "o": 0.75,
+     "em": {
+      "s": 150
+     },
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6,
+     "liste": [
+      {
+       "ll": [
+        6.95555,
+        50.94244
+       ],
+       "name": "Köln"
+      },
+      {
+       "ll": [
+        4.35252,
+        50.84671
+       ],
+       "name": "Brüssel"
+      },
+      {
+       "ll": [
+        2.35005,
+        48.85294
+       ],
+       "name": "Paris",
+       "seite": "l"
+      }
+     ]
+    },
+    {
+     "typ": "ort",
+     "ll": [
+      6.08399,
+      50.77476
+     ],
+     "name": "Aachen",
+     "gross": 23,
+     "em": {
+      "s": 150
+     },
+     "o": [
+      [
+       {
+        "s": 162.6
+       },
+       0.75
+      ],
+      [
+       {
+        "s": 164.2
+       },
+       1
+      ]
+     ]
+    },
+    {
+     "typ": "gebiet",
+     "ll": [
+      7.7,
+      50.2
+     ],
+     "text": "Deutsches Reich",
+     "groesse": 42,
+     "em": {
+      "s": 156.8
+     },
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1180,
+      780
+     ],
+     "klein": "DER DEUTSCHE",
+     "gross": "Aufmarschplan",
+     "groesse": 64,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Aufmarschplan",
+      "s": 158.5,
+      "fb": 160.2,
+      "plus": -0.2
+     },
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1180,
+      846
+     ],
+     "gross": "schematisch",
+     "groesse": 26,
+     "farbe": "#8d949c",
+     "mono": true,
+     "em": {
+      "wort": "Aufmarschplan",
+      "s": 158.5,
+      "fb": 160.2
+     },
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1830,
+      96
+     ],
+     "align": "r",
+     "gross": "AUGUST 1914",
+     "groesse": 28,
+     "farbe": "#f2c14e",
+     "mono": true,
+     "em": {
+      "s": 156.6
+     },
+     "ate": {
+      "s": 164.2
+     },
+     "blendeAus": 1.6
+    },
+    {
+     "typ": "strahl",
+     "farbe": "#d9483b",
+     "breite": 3.2,
+     "glow": true,
+     "dauer": 1.7,
+     "em": {
+      "wort": "überschreiten",
+      "s": 163.4,
+      "fb": 164.5,
+      "plus": -0.3
+     },
+     "stufe": 0.28,
+     "liste": [
+      {
+       "a": [
+        6.12,
+        50.78
+       ],
+       "b": [
+        5.72,
+        50.7
+       ],
+       "bog": 0
+      },
+      {
+       "a": [
+        6.14,
+        50.72
+       ],
+       "b": [
+        5.7,
+        50.655
+       ],
+       "bog": 16
+      },
+      {
+       "a": [
+        6.14,
+        50.66
+       ],
+       "b": [
+        5.68,
+        50.64
+       ],
+       "bog": -14
+      }
+     ]
+    },
+    {
+     "typ": "ort",
+     "gross": 24,
+     "em": {
+      "s": 162.6
+     },
+     "blende": 1.6,
+     "liste": [
+      {
+       "ll": [
+        5.99682,
+        50.74644
+       ],
+       "name": "Gemmenich"
+      },
+      {
+       "ll": [
+        5.98482,
+        50.66041
+       ],
+       "name": "Herbesthal"
+      },
+      {
+       "ll": [
+        5.69364,
+        50.73478
+       ],
+       "name": "Visé",
+       "seite": "l"
+      }
+     ]
+    },
+    {
+     "typ": "stempel",
+     "xy": [
+      1500,
+      180
+     ],
+     "em": {
+      "wort": "vierten",
+      "s": 163,
+      "fb": 164.0,
+      "plus": 0.1
+     },
+     "text": "04.08.1914",
+     "unter": "Grenzübertritt",
+     "dreh": -3,
+     "groesse": 74
+    },
+    {
+     "typ": "text",
+     "xy": [
+      64,
+      930
+     ],
+     "gross": "Grenze 1914: schematisch",
+     "groesse": 22,
+     "farbe": "#8d949c",
+     "mono": true,
+     "o": 0.8,
+     "em": {
+      "s": 162.6
+     },
+     "blende": 1.6
+    }
+   ]
+  },
+  "k3c": {
+   "phi0": 50.65,
+   "kamera": [
+    [
+     {
+      "s": 174.04
+     },
+     5.635,
+     50.64,
+     0.0158
+    ],
+    [
+     {
+      "s": 183.9
+     },
+     5.66,
+     50.645,
+     0.015
+    ]
+   ],
+   "titel": {
+    "text": "Lüttich",
+    "unter": "7. AUGUST 1914",
+    "em": {
+     "s": 174.1
+    }
+   },
+   "quelle": "Reichweite der Forts, Bahn- und Straßenlinie: schematisch · Stadtplan: heutiges OSM · Relief: Copernicus DEM GLO-30 · Satellit: EOxCloudless 2017 (Sentinel-2) · Forts: © OpenStreetMap-Mitwirkende · Falldaten: Dossier Fort de Loncin, Provinz Lüttich",
+   "ebenen": [
+    {
+     "typ": "geojson",
+     "datei": "maas.json",
+     "em": {
+      "s": 150
+     },
+     "o": 0.8,
+     "stil": {
+      "fill": "rgba(94,200,229,0.22)",
+      "stroke": "rgba(94,200,229,0.45)",
+      "breite": 1.2
+     }
+    },
+    {
+     "typ": "geojson",
+     "datei": "luettich_strassen.json",
+     "filter": {
+      "k": {
+       "max": 3
+      }
+     },
+     "em": {
+      "s": 150
+     },
+     "o": 0.8,
+     "stil": {
+      "stroke": "rgba(233,225,207,0.30)",
+      "breite": 1.4
+     }
+    },
+    {
+     "typ": "fleck",
+     "id": "stadt",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "km": 3.1,
+     "em": {
+      "wort": "siebten",
+      "s": 174,
+      "fb": 174.1,
+      "plus": 0.2
+     },
+     "dauer": 1.2
+    },
+    {
+     "typ": "marke",
+     "ll": [
+      5.57308,
+      50.64473
+     ],
+     "titel": "Lüttich",
+     "r": 7,
+     "gross": 32,
+     "ring": false,
+     "dy": -6,
+     "em": {
+      "s": 174.2
+     }
+    },
+    {
+     "typ": "bogen",
+     "id": "bogen",
+     "datei": "forts_liege.geojson",
+     "ordnung": {
+      "winkel": [
+       5.57308,
+       50.64473
+      ]
+     },
+     "km": 4.6,
+     "zentrum": [
+      5.57308,
+      50.64473
+     ],
+     "halb": 55,
+     "farbe": "#e8873a",
+     "breite": 2.6,
+     "em": {
+      "wort": "Doch",
+      "s": 175.5,
+      "fb": 176.8
+     },
+     "stufe": 0.18,
+     "dauer": 0.6
+    },
+    {
+     "typ": "symbol",
+     "id": "forts",
+     "datei": "forts_liege.geojson",
+     "ordnung": {
+      "winkel": [
+       5.57308,
+       50.64473
+      ]
+     },
+     "s": 15,
+     "em": {
+      "s": 0
+     },
+     "namen": {
+      "em": {
+       "s": 174.6
+      },
+      "groesse": 19,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "o": 0.9,
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ]
+     },
+     "ereignisse": [
+      {
+       "art": "blitz",
+       "t": {
+        "wort": "Doch",
+        "s": 175.5,
+        "fb": 176.8
+       },
+       "stufe": 0.18,
+       "dauer": 0.9
+      }
+     ],
+     "formProp": "typ",
+     "formen": {
+      "grand fort": "dreieck",
+      "fortin": "quadrat"
+     },
+     "gefuelltProp": "typ",
+     "gefuelltWert": "grand fort"
+    },
+    {
+     "typ": "linie",
+     "pts": [
+      [
+       5.568,
+       50.626
+      ],
+      [
+       5.65,
+       50.62
+      ],
+      [
+       5.76,
+       50.605
+      ],
+      [
+       5.86,
+       50.592
+      ],
+      [
+       5.935,
+       50.615
+      ],
+      [
+       5.98482,
+       50.66041
+      ],
+      [
+       6.03,
+       50.715
+      ],
+      [
+       6.08399,
+       50.77476
+      ]
+     ],
+     "em": {
+      "wort": "Eisenbahnlinien",
+      "s": 179.5,
+      "fb": 180.3,
+      "plus": -0.2
+     },
+     "dauer": 1.7,
+     "farbe": "#5ec8e5",
+     "breite": 4,
+     "glow": 1,
+     "kopf": true
+    },
+    {
+     "typ": "linie",
+     "pts": [
+      [
+       5.57308,
+       50.64473
+      ],
+      [
+       5.64,
+       50.628
+      ],
+      [
+       5.69,
+       50.618
+      ],
+      [
+       5.74,
+       50.628
+      ],
+      [
+       5.79,
+       50.64
+      ],
+      [
+       5.86,
+       50.645
+      ],
+      [
+       5.95,
+       50.67
+      ],
+      [
+       6.03,
+       50.72
+      ],
+      [
+       6.08399,
+       50.77476
+      ]
+     ],
+     "em": {
+      "wort": "Straßen,",
+      "s": 180.5,
+      "fb": 181.4,
+      "plus": -0.2
+     },
+     "dauer": 1.5,
+     "farbe": "#5ec8e5",
+     "breite": 3,
+     "dash": "12 8",
+     "o": 0.9
+    },
+    {
+     "typ": "kreuz",
+     "routen": [
+      [
+       [
+        6.08399,
+        50.77476
+       ],
+       [
+        6.03,
+        50.715
+       ],
+       [
+        5.98482,
+        50.66041
+       ],
+       [
+        5.935,
+        50.615
+       ],
+       [
+        5.86,
+        50.592
+       ],
+       [
+        5.76,
+        50.605
+       ],
+       [
+        5.65,
+        50.62
+       ],
+       [
+        5.568,
+        50.626
+       ]
+      ],
+      [
+       [
+        6.08399,
+        50.77476
+       ],
+       [
+        6.03,
+        50.72
+       ],
+       [
+        5.95,
+        50.67
+       ],
+       [
+        5.86,
+        50.645
+       ],
+       [
+        5.79,
+        50.64
+       ],
+       [
+        5.74,
+        50.628
+       ],
+       [
+        5.69,
+        50.618
+       ],
+       [
+        5.64,
+        50.628
+       ],
+       [
+        5.57308,
+        50.64473
+       ]
+      ]
+     ],
+     "bogen": "bogen",
+     "em": {
+      "wort": "Nachschub",
+      "s": 181.5,
+      "fb": 182.6,
+      "plus": -0.3
+     },
+     "stufe": 0.05
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1840,
+      560
+     ],
+     "align": "r",
+     "klein": "AUS RICHTUNG AACHEN",
+     "gross": "→ Bahn · Straße",
+     "groesse": 36,
+     "farbe": "#5ec8e5",
+     "o": 0.95,
+     "em": {
+      "wort": "Eisenbahnlinien",
+      "s": 179.5,
+      "fb": 180.3
+     }
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1840,
+      700
+     ],
+     "align": "r",
+     "gross": "Nachschub blockiert",
+     "groesse": 56,
+     "farbe": "#d9483b",
+     "em": {
+      "wort": "Nachschub",
+      "s": 181.5,
+      "fb": 182.6
+     }
+    },
+    {
+     "typ": "stempel",
+     "xy": [
+      1560,
+      250
+     ],
+     "em": {
+      "wort": "siebten",
+      "s": 174,
+      "fb": 174.1,
+      "plus": 0.1
+     },
+     "text": "07.08.",
+     "unter": "Deutsche in der Stadt",
+     "ate": {
+      "wort": "Doch",
+      "s": 175.5,
+      "fb": 176.8,
+      "plus": 1.5
+     },
+     "dreh": 3,
+     "groesse": 84
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1560,
+      250
+     ],
+     "align": "c",
+     "klein": "DIE FORTS RINGSUM",
+     "gross": "schießen weiter",
+     "groesse": 50,
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "Doch",
+      "s": 175.5,
+      "fb": 176.8,
+      "plus": 1.6
+     }
+    }
+   ]
+  },
+  "k8b": {
+   "vorlage": "kap8",
+   "titel": {
+    "em": {
+     "s": 674.4
+    }
+   },
+   "kamera": [
+    [
+     {
+      "s": 674.4
+     },
+     5.6,
+     50.665,
+     0.0108
+    ],
+    [
+     {
+      "s": 678.0
+     },
+     5.612,
+     50.662,
+     0.0118
+    ],
+    [
+     {
+      "s": 681.8
+     },
+     5.62,
+     50.635,
+     0.017
+    ],
+    [
+     {
+      "s": 685.5
+     },
+     5.632,
+     50.592,
+     0.0112
+    ],
+    [
+     {
+      "s": 688.6
+     },
+     5.627,
+     50.615,
+     0.0128
+    ],
+    [
+     {
+      "s": 694.8
+     },
+     5.595,
+     50.668,
+     0.012
+    ]
+   ],
+   "ebenen": [
+    {
+     "id": "forts",
+     "erbt": true,
+     "ereignisse": [
+      {
+       "ids": [
+        "barchon"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Barchon",
+        "s": 660,
+        "fb": 663.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "evegnee"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Évegnée",
+        "s": 664,
+        "fb": 667.1
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "pontisse"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "auf",
+        "s": 679.5,
+        "fb": 680.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "embourg"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Embourg",
+        "s": 682,
+        "fb": 683.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Chaudfontaine",
+        "s": 683,
+        "fb": 684.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0,
+        "plus": 0.3
+       },
+       "dauer": 1.2
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "liers"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Liers",
+        "s": 689,
+        "fb": 690.6
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "fleron"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Fléron",
+        "s": 694.7,
+        "fb": 695.3,
+        "plus": 0.2
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "boncelles"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Boncelles",
+        "s": 705,
+        "fb": 706.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "lantin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Lantin",
+        "s": 706.5,
+        "fb": 707.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.7
+       },
+       "dauer": 1.1
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "hollogne"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Hollogne",
+        "s": 717.5,
+        "fb": 718.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "flemalle"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Flémalle",
+        "s": 718.7,
+        "fb": 719.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "pontisse"
+       ],
+       "art": "hell",
+       "t": {
+        "wort": "Pontisse",
+        "s": 674,
+        "fb": 674.5,
+        "plus": -0.2
+       },
+       "dauer": 0.3,
+       "bis": {
+        "wort": "achte",
+        "s": 676,
+        "fb": 676.7,
+        "plus": 1.3
+       },
+       "bisDauer": 0.3,
+       "puls": {
+        "freq": 9,
+        "tief": 0.2
+       }
+      }
+     ],
+     "namen": {
+      "em": {
+       "s": 0
+      },
+      "groesse": 21,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ],
+      "o": 0.9
+     }
+    },
+    {
+     "typ": "hauch",
+     "id": "hauchb",
+     "ll": [
+      5.5807,
+      50.64284
+     ],
+     "a": 1.4,
+     "b": 0.85,
+     "winkel": -18,
+     "fragen": 4,
+     "em": {
+      "s": 674.4
+     },
+     "blende": 0.6,
+     "ate": {
+      "s": 679.6
+     },
+     "blendeAus": 1.0
+    },
+    {
+     "typ": "strahl",
+     "a": [
+      5.5807,
+      50.64284
+     ],
+     "b": "@forts_liege.geojson:pontisse",
+     "em": {
+      "wort": "Pontisse",
+      "s": 674,
+      "fb": 674.5,
+      "plus": -0.1
+     },
+     "dauer": 1.0,
+     "farbe": "#f2c14e",
+     "breite": 3,
+     "dash": "10 8",
+     "ate": {
+      "s": 679.5
+     },
+     "blendeAus": 1.0
+    },
+    {
+     "typ": "blitz",
+     "ll": "@forts_liege.geojson:pontisse",
+     "n": 8,
+     "em": {
+      "s": 674.9
+     },
+     "bis": {
+      "wort": "achte",
+      "s": 676,
+      "fb": 676.7
+     },
+     "farbe": "#e8873a",
+     "r": 5,
+     "ringR": 46,
+     "rest": 0,
+     "dauer": 0.9,
+     "letzte": {
+      "farbe": "#d9483b",
+      "r": 9,
+      "ringR": 70
+     }
+    },
+    {
+     "typ": "zahl",
+     "label": "SCHÜSSE",
+     "zaehlt": {
+      "von": 1,
+      "bis": 8,
+      "stufen": true,
+      "em": {
+       "s": 674.9
+      },
+      "endeT": {
+       "wort": "achte",
+       "s": 676,
+       "fb": 676.7
+      }
+     },
+     "groesse": 160,
+     "top": 110,
+     "right": 470,
+     "farbe": "#f2c14e",
+     "em": {
+      "s": 674.8
+     },
+     "blende": 0.3,
+     "ate": {
+      "s": 678.8
+     },
+     "blendeAus": 0.6,
+     "phasen": [
+      {
+       "t": {
+        "wort": "sitzt",
+        "s": 676.8,
+        "fb": 677.4,
+        "plus": -0.2
+       },
+       "suffix": " ✓"
+      },
+      {
+       "t": {
+        "wort": "achte",
+        "s": 676,
+        "fb": 676.7
+       },
+       "farbe": "#d9483b"
+      }
+     ]
+    },
+    {
+     "typ": "text",
+     "ll": "@forts_liege.geojson:pontisse",
+     "dx": -50,
+     "dy": 40,
+     "align": "r",
+     "gross": "gibt auf",
+     "groesse": 44,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "gibt",
+      "s": 678.8,
+      "fb": 679.4,
+      "plus": -0.1
+     },
+     "ate": {
+      "wort": "gibt",
+      "s": 678.8,
+      "fb": 679.4,
+      "plus": 2.4
+     }
+    },
+    {
+     "typ": "flamme",
+     "ll": "@forts_liege.geojson:chaudfontaine",
+     "dx": 34,
+     "dy": -36,
+     "s": 24,
+     "em": {
+      "wort": "explodiert",
+      "s": 686,
+      "fb": 687.0
+     },
+     "dauer": 4
+    },
+    {
+     "typ": "text",
+     "ll": "@forts_liege.geojson:chaudfontaine",
+     "dx": 70,
+     "dy": -36,
+     "gross": "Pulvermagazin explodiert",
+     "groesse": 32,
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "explodiert",
+      "s": 686,
+      "fb": 687.0,
+      "plus": -0.4
+     },
+     "ate": {
+      "wort": "explodiert",
+      "s": 686,
+      "fb": 687.0,
+      "plus": 3.2
+     }
+    },
+    {
+     "typ": "zeichen",
+     "ll": "@forts_liege.geojson:liers",
+     "dy": 62,
+     "text": "0",
+     "r": 28,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Schuss",
+      "s": 692.2,
+      "fb": 692.9,
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "ll": "@forts_liege.geojson:liers",
+     "dx": 44,
+     "dy": 62,
+     "gross": "Schüsse der Bertha",
+     "groesse": 34,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Schuss",
+      "s": 692.2,
+      "fb": 692.9
+     }
+    }
+   ]
+  },
+  "k8c": {
+   "vorlage": "kap8",
+   "titel": {
+    "em": {
+     "s": 701.08
+    }
+   },
+   "kamera": [
+    [
+     {
+      "s": 701.08
+     },
+     5.625,
+     50.6285,
+     0.0185
+    ],
+    [
+     {
+      "s": 708.9
+     },
+     5.6,
+     50.6285,
+     0.0185
+    ]
+   ],
+   "ebenen": [
+    {
+     "id": "forts",
+     "erbt": true,
+     "ereignisse": [
+      {
+       "ids": [
+        "barchon"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Barchon",
+        "s": 660,
+        "fb": 663.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "evegnee"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Évegnée",
+        "s": 664,
+        "fb": 667.1
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "pontisse"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "auf",
+        "s": 679.5,
+        "fb": 680.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "embourg"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Embourg",
+        "s": 682,
+        "fb": 683.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Chaudfontaine",
+        "s": 683,
+        "fb": 684.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0,
+        "plus": 0.3
+       },
+       "dauer": 1.2
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "liers"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Liers",
+        "s": 689,
+        "fb": 690.6
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "fleron"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Fléron",
+        "s": 694.7,
+        "fb": 695.3,
+        "plus": 0.2
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "boncelles"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Boncelles",
+        "s": 705,
+        "fb": 706.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "lantin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Lantin",
+        "s": 706.5,
+        "fb": 707.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.7
+       },
+       "dauer": 1.1
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "hollogne"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Hollogne",
+        "s": 717.5,
+        "fb": 718.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "flemalle"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Flémalle",
+        "s": 718.7,
+        "fb": 719.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "boncelles",
+        "lantin",
+        "loncin",
+        "hollogne",
+        "flemalle"
+       ],
+       "art": "hell",
+       "t": {
+        "s": 0
+       },
+       "dauer": 0.01,
+       "wert": 0.55
+      },
+      {
+       "ids": [
+        "boncelles",
+        "lantin",
+        "loncin",
+        "hollogne",
+        "flemalle"
+       ],
+       "art": "name",
+       "t": {
+        "s": 0
+       },
+       "dauer": 0.01
+      }
+     ],
+     "namen": {
+      "em": {
+       "s": 0
+      },
+      "groesse": 21,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ],
+      "o": 0.55
+     }
+    },
+    {
+     "typ": "pfeil",
+     "pts": [
+      [
+       5.74,
+       50.652
+      ],
+      [
+       5.62,
+       50.664
+      ],
+      [
+       5.46,
+       50.652
+      ]
+     ],
+     "em": {
+      "wort": "Westen",
+      "s": 701.5,
+      "fb": 702.6,
+      "plus": -0.9
+     },
+     "dauer": 1.9,
+     "breite": 46,
+     "farbe": "#e9e1cf"
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1640,
+      720
+     ],
+     "align": "c",
+     "klein": "DER KAMPF",
+     "gross": "nach Westen",
+     "groesse": 58,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Westen",
+      "s": 701.5,
+      "fb": 702.6,
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "uhr",
+     "x": 1700,
+     "y": 470,
+     "em": {
+      "wort": "früh",
+      "s": 703.5,
+      "fb": 704.7,
+      "plus": -0.3
+     },
+     "schritte": [
+      {
+       "t": {
+        "s": 0
+       },
+       "wert": 0.14,
+       "text": "morgens"
+      },
+      {
+       "t": {
+        "wort": "mittags",
+        "s": 706.5,
+        "fb": 707.1,
+        "plus": -0.2
+       },
+       "wert": 0.5,
+       "text": "mittags",
+       "dauer": 1.0
+      }
+     ]
+    }
+   ]
+  },
+  "k8d": {
+   "vorlage": "kap8",
+   "titel": {
+    "em": {
+     "s": 714.14
+    }
+   },
+   "kamera": [
+    [
+     {
+      "s": 714.14
+     },
+     5.58,
+     50.6285,
+     0.017
+    ],
+    [
+     {
+      "s": 721.0
+     },
+     5.61,
+     50.6285,
+     0.0185
+    ],
+    [
+     {
+      "s": 724.9
+     },
+     5.625,
+     50.6285,
+     0.0185
+    ]
+   ],
+   "ebenen": [
+    {
+     "id": "forts",
+     "erbt": true,
+     "ereignisse": [
+      {
+       "ids": [
+        "barchon"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Barchon",
+        "s": 660,
+        "fb": 663.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "evegnee"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Évegnée",
+        "s": 664,
+        "fb": 667.1
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "pontisse"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "auf",
+        "s": 679.5,
+        "fb": 680.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "embourg"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Embourg",
+        "s": 682,
+        "fb": 683.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Chaudfontaine",
+        "s": 683,
+        "fb": 684.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0,
+        "plus": 0.3
+       },
+       "dauer": 1.2
+      },
+      {
+       "ids": [
+        "chaudfontaine"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "explodiert",
+        "s": 686,
+        "fb": 687.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "liers"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Liers",
+        "s": 689,
+        "fb": 690.6
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "fleron"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Fléron",
+        "s": 694.7,
+        "fb": 695.3,
+        "plus": 0.2
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "boncelles"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Boncelles",
+        "s": 705,
+        "fb": 706.0
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "lantin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Lantin",
+        "s": 706.5,
+        "fb": 707.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "rot",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.7
+       },
+       "dauer": 1.1
+      },
+      {
+       "ids": [
+        "loncin"
+       ],
+       "art": "blitz",
+       "t": {
+        "wort": "Loncin",
+        "s": 710,
+        "fb": 712.4,
+        "plus": 0.4
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "hollogne"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Hollogne",
+        "s": 717.5,
+        "fb": 718.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "flemalle"
+       ],
+       "art": "fall",
+       "t": {
+        "wort": "Flémalle",
+        "s": 718.7,
+        "fb": 719.5
+       },
+       "dauer": 0.9
+      },
+      {
+       "ids": [
+        "hollogne",
+        "flemalle"
+       ],
+       "art": "hell",
+       "t": {
+        "wort": "letzten",
+        "s": 716.5,
+        "fb": 717.1,
+        "plus": -0.2
+       },
+       "dauer": 0.3,
+       "puls": {
+        "freq": 8,
+        "tief": 0
+       }
+      },
+      {
+       "ids": [
+        "hollogne",
+        "flemalle"
+       ],
+       "art": "name",
+       "t": {
+        "s": 0
+       },
+       "dauer": 0.01
+      }
+     ],
+     "namen": {
+      "em": {
+       "s": 0
+      },
+      "groesse": 21,
+      "zentrum": [
+       5.57308,
+       50.64473
+      ],
+      "sub": [
+       "^Fort (de |d')",
+       ""
+      ],
+      "o": 0.6
+     }
+    },
+    {
+     "id": "zeitleiste",
+     "erbt": true,
+     "baender": [
+      {
+       "a": 4,
+       "b": 16,
+       "text": "zwölf Tage",
+       "farbe": "#5ec8e5",
+       "em": {
+        "wort": "Zwölf",
+        "s": 720.5,
+        "fb": 721.0
+       },
+       "dauer": 1.2
+      }
+     ],
+     "marke": {
+      "tag": 16,
+      "text": "12 Tage",
+      "em": {
+       "wort": "Zwölf",
+       "s": 720.5,
+       "fb": 721.0,
+       "plus": 1.2
+      }
+     }
+    },
+    {
+     "typ": "ring",
+     "aus": "forts",
+     "verlauf": 1,
+     "em": {
+      "wort": "Ring",
+      "s": 722.5,
+      "fb": 722.9,
+      "plus": -0.2
+     },
+     "blende": 0.8,
+     "farbe": "#d9483b",
+     "breite": 4,
+     "glow": 1.5,
+     "puls": 8
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1540,
+      640
+     ],
+     "klein": "DER RING",
+     "gross": "gebrochen",
+     "groesse": 80,
+     "farbe": "#d9483b",
+     "em": {
+      "wort": "Ring",
+      "s": 722.5,
+      "fb": 722.9
+     }
+    },
+    {
+     "typ": "uhr",
+     "x": 1700,
+     "y": 470,
+     "em": {
+      "wort": "Morgen,",
+      "s": 715,
+      "fb": 715.7,
+      "plus": -0.3
+     },
+     "ate": {
+      "s": 720.6
+     },
+     "blendeAus": 0.6,
+     "schritte": [
+      {
+       "t": {
+        "s": 0
+       },
+       "wert": 0.12,
+       "text": "am Morgen"
+      }
+     ]
+    }
+   ]
+  },
+  "k8e": {
+   "vorlage": "ring8",
+   "titel": {
+    "text": "Die Reihenfolge",
+    "unter": "12 FORTS · 8.–16. AUGUST",
+    "em": {
+     "s": 743.6
+    }
+   },
+   "kamera": [
+    [
+     {
+      "s": 743.6
+     },
+     5.64,
+     50.64,
+     0.0166
+    ],
+    [
+     {
+      "s": 754.8
+     },
+     5.64,
+     50.64,
+     0.016
+    ]
+   ],
+   "ebenen": [
+    {
+     "typ": "symbol",
+     "id": "forts",
+     "datei": "forts_liege.geojson",
+     "reihenfolge": [
+      "barchon",
+      "evegnee",
+      "pontisse",
+      "embourg",
+      "chaudfontaine",
+      "liers",
+      "fleron",
+      "boncelles",
+      "lantin",
+      "loncin",
+      "hollogne",
+      "flemalle"
+     ],
+     "zahl": "nr",
+     "s": 22,
+     "em": {
+      "s": 743.7
+     },
+     "stufe": 0.17,
+     "ereignisse": [
+      {
+       "art": "fall",
+       "t": {
+        "s": 0
+       },
+       "dauer": 0.01
+      },
+      {
+       "ids": [
+        "loncin",
+        "chaudfontaine"
+       ],
+       "art": "rot",
+       "t": {
+        "s": 0
+       },
+       "dauer": 0.01
+      },
+      {
+       "art": "intakt",
+       "t": {
+        "wort": "meisten",
+        "s": 747.6,
+        "fb": 747.8
+       },
+       "dauer": 0.8
+      }
+     ],
+     "formProp": "typ",
+     "formen": {
+      "grand fort": "dreieck",
+      "fortin": "quadrat"
+     },
+     "gefuelltProp": "typ",
+     "gefuelltWert": "grand fort"
+    },
+    {
+     "typ": "pfeil",
+     "pts": [
+      [
+       5.79,
+       50.56
+      ],
+      [
+       5.66,
+       50.552
+      ],
+      [
+       5.52,
+       50.552
+      ],
+      [
+       5.4,
+       50.56
+      ]
+     ],
+     "em": {
+      "wort": "Osten",
+      "s": 745,
+      "fb": 745.9,
+      "plus": -0.2
+     },
+     "dauer": 1.6,
+     "breite": 44,
+     "farbe": "#e9e1cf"
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1560,
+      900
+     ],
+     "align": "c",
+     "gross": "OSTEN",
+     "groesse": 34,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Osten",
+      "s": 745,
+      "fb": 745.9
+     }
+    },
+    {
+     "typ": "text",
+     "xy": [
+      330,
+      900
+     ],
+     "align": "c",
+     "gross": "WESTEN",
+     "groesse": 34,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Osten",
+      "s": 745,
+      "fb": 745.9,
+      "plus": 0.7
+     }
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1560,
+      330
+     ],
+     "align": "c",
+     "klein": "REIHENFOLGE DES FALLS",
+     "gross": "Osten → Westen",
+     "groesse": 56,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "Osten",
+      "s": 745,
+      "fb": 745.9,
+      "plus": -0.1
+     },
+     "ate": {
+      "wort": "meisten",
+      "s": 747.6,
+      "fb": 747.8,
+      "plus": -0.2
+     }
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1590,
+      290
+     ],
+     "align": "c",
+     "klein": "ERGEBEN SICH · UNZERSTÖRT",
+     "gross": "die meisten",
+     "groesse": 58,
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "meisten",
+      "s": 747.6,
+      "fb": 747.8
+     }
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1590,
+      420
+     ],
+     "align": "c",
+     "klein": "ZERSTÖRT (MAGAZINEXPLOSION)",
+     "gross": "Loncin · Chaudfontaine",
+     "groesse": 38,
+     "farbe": "#d9483b",
+     "em": {
+      "wort": "meisten",
+      "s": 747.6,
+      "fb": 747.8,
+      "plus": 1.4
+     }
+    },
+    {
+     "typ": "text",
+     "xy": [
+      1600,
+      620
+     ],
+     "align": "c",
+     "gross": "?",
+     "groesse": 380,
+     "farbe": "#f2c14e",
+     "em": {
+      "wort": "Warum,",
+      "s": 750.5,
+      "fb": 751.2
+     },
+     "atmen": 3
+    }
+   ]
+  }
+ },
+ "03_02": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3a"
+  }
+ },
+ "03_03": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3a"
+  }
+ },
+ "03_05": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3_05"
+  }
+ },
+ "03_07": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3_07"
+  }
+ },
+ "08_01": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8a"
+  }
+ },
+ "08_02": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8a"
+  }
+ },
+ "08_03": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8a"
+  }
+ },
+ "08_04": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8a"
+  }
+ },
+ "03_13": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3b"
+  }
+ },
+ "03_14": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3b"
+  }
+ },
+ "03_16": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3c"
+  }
+ },
+ "03_17": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k3c"
+  }
+ },
+ "08_06": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8b"
+  }
+ },
+ "08_07": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8b"
+  }
+ },
+ "08_08": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8b"
+  }
+ },
+ "08_09": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8b"
+  }
+ },
+ "08_11": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8c"
+  }
+ },
+ "08_12": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8c"
+  }
+ },
+ "08_14": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8d"
+  }
+ },
+ "08_15": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8d"
+  }
+ },
+ "08_20": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8e"
+  }
+ },
+ "08_21": {
+  "comp": "Karte",
+  "props": {
+   "vorlage": "k8e"
+  }
+ }
+}

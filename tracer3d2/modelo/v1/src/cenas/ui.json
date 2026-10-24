@@ -1,0 +1,3703 @@
+{
+ "02_01": {
+  "comp": "Liste",
+  "props": {
+   "ab": "02_01",
+   "fuss": "MODELL: m 810 kg · Ø 420 mm · v₀ 333 m/s · G1 × 1,006 · USSA-1976 · rotierende Kugelerde",
+   "kopf": {
+    "titel": "Hinweis",
+    "thema": "vorab",
+    "em": {
+     "wort": "Hinweis"
+    }
+   },
+   "deko": [
+    {
+     "typ": "schale",
+     "em": {
+      "wort": "Hinweis"
+     },
+     "dur": 2
+    }
+   ],
+   "held": {
+    "titel": "SIMULATION",
+    "em": {
+     "wort": "Simulation"
+    },
+    "unter": [
+     {
+      "text": "Alle Zahlen auf dem Bildschirm ",
+      "em": {
+       "wort": "Zahlen"
+      }
+     },
+     {
+      "text": "· berechnet",
+      "fett": true,
+      "em": {
+       "wort": "berechnet"
+      }
+     }
+    ],
+    "hoch": {
+     "wort": "berechnet",
+     "plus": 0.3
+    },
+    "hochDauer": 1.8
+   },
+   "zeilen": [
+    {
+     "ikon": "atmo",
+     "titel": "Atmosphäre",
+     "detail": "US-Standardatmosphäre 1976",
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "Standardatmosphäre",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "kurve",
+     "titel": "Luftwiderstand",
+     "detail": "G1-Kurve × Formfaktor 1,006",
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "Luftwiderstand",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "beton",
+     "titel": "Beton",
+     "detail": "empirische Formeln · Petry 1910 · NDRC 1946",
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "empirischen",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "quellen",
+     "titel": "Quellen widersprechen sich?",
+     "detail": "→ wir sagen es.",
+     "farbe": "#f2c14e",
+     "titelfarbe": "#f2c14e",
+     "em": {
+      "wort": "Wo",
+      "plus": -0.2
+     },
+     "rechts": {
+      "typ": "vergleich",
+      "a": "815 m/s",
+      "b": "333 m/s",
+      "em": {
+       "wort": "widersprechen"
+      }
+     }
+    },
+    {
+     "ikon": "schaetzung",
+     "titel": "Nur Schätzung?",
+     "detail": "→ als Schätzung markiert (gestrichelt)",
+     "farbe": "#8d949c",
+     "titelfarbe": "#8d949c",
+     "em": {
+      "wort": "Und",
+      "nach": 19,
+      "plus": -0.1
+     },
+     "rechts": {
+      "typ": "fehler",
+      "em": {
+       "wort": "schätzen"
+      }
+     }
+    }
+   ],
+   "schluss": {
+    "atem": {
+     "wort": "auch"
+    },
+    "aus": 22.88
+   }
+  }
+ },
+ "02_02": {
+  "comp": "Liste",
+  "props": {
+   "ab": "02_01",
+   "fuss": "MODELL: m 810 kg · Ø 420 mm · v₀ 333 m/s · G1 × 1,006 · USSA-1976 · rotierende Kugelerde",
+   "kopf": {
+    "titel": "Hinweis",
+    "thema": "vorab",
+    "em": {
+     "wort": "Hinweis"
+    }
+   },
+   "deko": [
+    {
+     "typ": "schale",
+     "em": {
+      "wort": "Hinweis"
+     },
+     "dur": 2
+    }
+   ],
+   "held": {
+    "titel": "SIMULATION",
+    "em": {
+     "wort": "Simulation"
+    },
+    "unter": [
+     {
+      "text": "Alle Zahlen auf dem Bildschirm ",
+      "em": {
+       "wort": "Zahlen"
+      }
+     },
+     {
+      "text": "· berechnet",
+      "fett": true,
+      "em": {
+       "wort": "berechnet"
+      }
+     }
+    ],
+    "hoch": {
+     "wort": "berechnet",
+     "plus": 0.3
+    },
+    "hochDauer": 1.8
+   },
+   "zeilen": [
+    {
+     "ikon": "atmo",
+     "titel": "Atmosphäre",
+     "detail": "US-Standardatmosphäre 1976",
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "Standardatmosphäre",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "kurve",
+     "titel": "Luftwiderstand",
+     "detail": "G1-Kurve × Formfaktor 1,006",
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "Luftwiderstand",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "beton",
+     "titel": "Beton",
+     "detail": "empirische Formeln · Petry 1910 · NDRC 1946",
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "empirischen",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "quellen",
+     "titel": "Quellen widersprechen sich?",
+     "detail": "→ wir sagen es.",
+     "farbe": "#f2c14e",
+     "titelfarbe": "#f2c14e",
+     "em": {
+      "wort": "Wo",
+      "plus": -0.2
+     },
+     "rechts": {
+      "typ": "vergleich",
+      "a": "815 m/s",
+      "b": "333 m/s",
+      "em": {
+       "wort": "widersprechen"
+      }
+     }
+    },
+    {
+     "ikon": "schaetzung",
+     "titel": "Nur Schätzung?",
+     "detail": "→ als Schätzung markiert (gestrichelt)",
+     "farbe": "#8d949c",
+     "titelfarbe": "#8d949c",
+     "em": {
+      "wort": "Und",
+      "nach": 19,
+      "plus": -0.1
+     },
+     "rechts": {
+      "typ": "fehler",
+      "em": {
+       "wort": "schätzen"
+      }
+     }
+    }
+   ],
+   "schluss": {
+    "atem": {
+     "wort": "auch"
+    },
+    "aus": 22.88
+   }
+  }
+ },
+ "02_03": {
+  "comp": "Liste",
+  "props": {
+   "ab": "02_01",
+   "fuss": "MODELL: m 810 kg · Ø 420 mm · v₀ 333 m/s · G1 × 1,006 · USSA-1976 · rotierende Kugelerde",
+   "kopf": {
+    "titel": "Hinweis",
+    "thema": "vorab",
+    "em": {
+     "wort": "Hinweis"
+    }
+   },
+   "deko": [
+    {
+     "typ": "schale",
+     "em": {
+      "wort": "Hinweis"
+     },
+     "dur": 2
+    }
+   ],
+   "held": {
+    "titel": "SIMULATION",
+    "em": {
+     "wort": "Simulation"
+    },
+    "unter": [
+     {
+      "text": "Alle Zahlen auf dem Bildschirm ",
+      "em": {
+       "wort": "Zahlen"
+      }
+     },
+     {
+      "text": "· berechnet",
+      "fett": true,
+      "em": {
+       "wort": "berechnet"
+      }
+     }
+    ],
+    "hoch": {
+     "wort": "berechnet",
+     "plus": 0.3
+    },
+    "hochDauer": 1.8
+   },
+   "zeilen": [
+    {
+     "ikon": "atmo",
+     "titel": "Atmosphäre",
+     "detail": "US-Standardatmosphäre 1976",
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "Standardatmosphäre",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "kurve",
+     "titel": "Luftwiderstand",
+     "detail": "G1-Kurve × Formfaktor 1,006",
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "Luftwiderstand",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "beton",
+     "titel": "Beton",
+     "detail": "empirische Formeln · Petry 1910 · NDRC 1946",
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "empirischen",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "quellen",
+     "titel": "Quellen widersprechen sich?",
+     "detail": "→ wir sagen es.",
+     "farbe": "#f2c14e",
+     "titelfarbe": "#f2c14e",
+     "em": {
+      "wort": "Wo",
+      "plus": -0.2
+     },
+     "rechts": {
+      "typ": "vergleich",
+      "a": "815 m/s",
+      "b": "333 m/s",
+      "em": {
+       "wort": "widersprechen"
+      }
+     }
+    },
+    {
+     "ikon": "schaetzung",
+     "titel": "Nur Schätzung?",
+     "detail": "→ als Schätzung markiert (gestrichelt)",
+     "farbe": "#8d949c",
+     "titelfarbe": "#8d949c",
+     "em": {
+      "wort": "Und",
+      "nach": 19,
+      "plus": -0.1
+     },
+     "rechts": {
+      "typ": "fehler",
+      "em": {
+       "wort": "schätzen"
+      }
+     }
+    }
+   ],
+   "schluss": {
+    "atem": {
+     "wort": "auch"
+    },
+    "aus": 22.88
+   }
+  }
+ },
+ "02_04": {
+  "comp": "Liste",
+  "props": {
+   "ab": "02_01",
+   "fuss": "MODELL: m 810 kg · Ø 420 mm · v₀ 333 m/s · G1 × 1,006 · USSA-1976 · rotierende Kugelerde",
+   "kopf": {
+    "titel": "Hinweis",
+    "thema": "vorab",
+    "em": {
+     "wort": "Hinweis"
+    }
+   },
+   "deko": [
+    {
+     "typ": "schale",
+     "em": {
+      "wort": "Hinweis"
+     },
+     "dur": 2
+    }
+   ],
+   "held": {
+    "titel": "SIMULATION",
+    "em": {
+     "wort": "Simulation"
+    },
+    "unter": [
+     {
+      "text": "Alle Zahlen auf dem Bildschirm ",
+      "em": {
+       "wort": "Zahlen"
+      }
+     },
+     {
+      "text": "· berechnet",
+      "fett": true,
+      "em": {
+       "wort": "berechnet"
+      }
+     }
+    ],
+    "hoch": {
+     "wort": "berechnet",
+     "plus": 0.3
+    },
+    "hochDauer": 1.8
+   },
+   "zeilen": [
+    {
+     "ikon": "atmo",
+     "titel": "Atmosphäre",
+     "detail": "US-Standardatmosphäre 1976",
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "Standardatmosphäre",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "kurve",
+     "titel": "Luftwiderstand",
+     "detail": "G1-Kurve × Formfaktor 1,006",
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "Luftwiderstand",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "beton",
+     "titel": "Beton",
+     "detail": "empirische Formeln · Petry 1910 · NDRC 1946",
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "empirischen",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "quellen",
+     "titel": "Quellen widersprechen sich?",
+     "detail": "→ wir sagen es.",
+     "farbe": "#f2c14e",
+     "titelfarbe": "#f2c14e",
+     "em": {
+      "wort": "Wo",
+      "plus": -0.2
+     },
+     "rechts": {
+      "typ": "vergleich",
+      "a": "815 m/s",
+      "b": "333 m/s",
+      "em": {
+       "wort": "widersprechen"
+      }
+     }
+    },
+    {
+     "ikon": "schaetzung",
+     "titel": "Nur Schätzung?",
+     "detail": "→ als Schätzung markiert (gestrichelt)",
+     "farbe": "#8d949c",
+     "titelfarbe": "#8d949c",
+     "em": {
+      "wort": "Und",
+      "nach": 19,
+      "plus": -0.1
+     },
+     "rechts": {
+      "typ": "fehler",
+      "em": {
+       "wort": "schätzen"
+      }
+     }
+    }
+   ],
+   "schluss": {
+    "atem": {
+     "wort": "auch"
+    },
+    "aus": 22.88
+   }
+  }
+ },
+ "02_05": {
+  "comp": "Liste",
+  "props": {
+   "ab": "02_01",
+   "fuss": "MODELL: m 810 kg · Ø 420 mm · v₀ 333 m/s · G1 × 1,006 · USSA-1976 · rotierende Kugelerde",
+   "kopf": {
+    "titel": "Hinweis",
+    "thema": "vorab",
+    "em": {
+     "wort": "Hinweis"
+    }
+   },
+   "deko": [
+    {
+     "typ": "schale",
+     "em": {
+      "wort": "Hinweis"
+     },
+     "dur": 2
+    }
+   ],
+   "held": {
+    "titel": "SIMULATION",
+    "em": {
+     "wort": "Simulation"
+    },
+    "unter": [
+     {
+      "text": "Alle Zahlen auf dem Bildschirm ",
+      "em": {
+       "wort": "Zahlen"
+      }
+     },
+     {
+      "text": "· berechnet",
+      "fett": true,
+      "em": {
+       "wort": "berechnet"
+      }
+     }
+    ],
+    "hoch": {
+     "wort": "berechnet",
+     "plus": 0.3
+    },
+    "hochDauer": 1.8
+   },
+   "zeilen": [
+    {
+     "ikon": "atmo",
+     "titel": "Atmosphäre",
+     "detail": "US-Standardatmosphäre 1976",
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "Standardatmosphäre",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "kurve",
+     "titel": "Luftwiderstand",
+     "detail": "G1-Kurve × Formfaktor 1,006",
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "Luftwiderstand",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "beton",
+     "titel": "Beton",
+     "detail": "empirische Formeln · Petry 1910 · NDRC 1946",
+     "farbe": "#e9e1cf",
+     "em": {
+      "wort": "empirischen",
+      "plus": -0.3
+     }
+    },
+    {
+     "ikon": "quellen",
+     "titel": "Quellen widersprechen sich?",
+     "detail": "→ wir sagen es.",
+     "farbe": "#f2c14e",
+     "titelfarbe": "#f2c14e",
+     "em": {
+      "wort": "Wo",
+      "plus": -0.2
+     },
+     "rechts": {
+      "typ": "vergleich",
+      "a": "815 m/s",
+      "b": "333 m/s",
+      "em": {
+       "wort": "widersprechen"
+      }
+     }
+    },
+    {
+     "ikon": "schaetzung",
+     "titel": "Nur Schätzung?",
+     "detail": "→ als Schätzung markiert (gestrichelt)",
+     "farbe": "#8d949c",
+     "titelfarbe": "#8d949c",
+     "em": {
+      "wort": "Und",
+      "nach": 19,
+      "plus": -0.1
+     },
+     "rechts": {
+      "typ": "fehler",
+      "em": {
+       "wort": "schätzen"
+      }
+     }
+    }
+   ],
+   "schluss": {
+    "atem": {
+     "wort": "auch"
+    },
+    "aus": 22.88
+   }
+  }
+ },
+ "04_01": {
+  "comp": "Titel",
+  "props": {
+   "kicker": "KAPITEL · BERECHNUNG",
+   "titel": "DIE MATHEMATIK",
+   "teil": "TEIL 1",
+   "unter": "Wucht",
+   "em": 0.1,
+   "aus": {
+    "wort": "Doppeltes",
+    "plus": -0.9
+   },
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 0.12,
+    "bis": 1,
+    "em": {
+     "wort": "Doppeltes",
+     "plus": -0.2
+    },
+    "ab": {
+     "wort": "Doppeltes"
+    },
+    "ende": {
+     "wort": "Volumen",
+     "plus": 1.0
+    }
+   },
+   "zoom": 0.0012
+  }
+ },
+ "04_02": {
+  "comp": "Vergleich",
+  "props": {
+   "ab": "04_01",
+   "zoom": 0.0012,
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht",
+    "em": {
+     "wort": "Doppeltes",
+     "plus": -0.4
+    }
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 0.12,
+    "bis": 1,
+    "em": {
+     "wort": "Doppeltes",
+     "plus": -0.2
+    },
+    "ab": {
+     "wort": "Doppeltes"
+    },
+    "ende": {
+     "wort": "Volumen",
+     "plus": 1.0
+    }
+   },
+   "spalten": [
+    {
+     "x": 260,
+     "y": 330,
+     "w": 640,
+     "mitte": true,
+     "em": {
+      "wort": "Doppeltes"
+     },
+     "ate": {
+      "wort": "Doppelter",
+      "nach": 8,
+      "plus": 0.2
+     },
+     "titel": "2 ×",
+     "titelpt": 200,
+     "titelabstandx": 4,
+     "label2": "Kaliber",
+     "label2pt": 76,
+     "titelabstand": 0
+    },
+    {
+     "x": 1020,
+     "y": 330,
+     "w": 640,
+     "mitte": true,
+     "em": {
+      "wort": "Wirkung",
+      "plus": -0.5
+     },
+     "ate": {
+      "wort": "Doppelter",
+      "nach": 8,
+      "plus": 0.2
+     },
+     "titel": "2 ×",
+     "titelpt": 200,
+     "titelabstandx": 4,
+     "titelfarbe": "#f2c14e",
+     "titelabstand": 0,
+     "anhang": {
+      "text": "?",
+      "ate": {
+       "wort": "viel",
+       "plus": -0.05
+      }
+     },
+     "label2": "Wirkung",
+     "label2pt": 76,
+     "label2farbe": "#f2c14e"
+    }
+   ],
+   "mitte": {
+    "typ": "chevron",
+    "x": 960,
+    "y": 520,
+    "em": {
+     "wort": "mehr"
+    },
+    "ate": {
+     "wort": "Doppelter",
+     "nach": 8,
+     "plus": 0.2
+    }
+   }
+  }
+ },
+ "04_03": {
+  "comp": "Formel",
+  "props": {
+   "ab": "04_01",
+   "zoom": 0.0012,
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht",
+    "em": {
+     "wort": "Doppeltes",
+     "plus": -0.4
+    }
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 0.12,
+    "bis": 1,
+    "em": {
+     "wort": "Doppeltes",
+     "plus": -0.2
+    },
+    "ab": {
+     "wort": "Doppeltes"
+    },
+    "ende": {
+     "wort": "Volumen",
+     "plus": 1.0
+    }
+   },
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{\\frac{A_{42}}{A_{21}}}\\htmlClass{T2}{\\;=\\;\\left(\\frac{42}{21}\\right)^{2}}\\htmlClass{T3}{\\;=\\;4}",
+     "groesse": 78,
+     "x": 120,
+     "y": 270,
+     "em": {
+      "wort": "Doppelter",
+      "nach": 8
+     },
+     "terme": [
+      {
+       "em": {
+        "wort": "Doppelter",
+        "nach": 8,
+        "plus": 0.05
+       }
+      },
+      {
+       "em": {
+        "wort": "heißt",
+        "plus": 0.25
+       }
+      },
+      {
+       "em": {
+        "wort": "Querschnittsfläche",
+        "plus": -0.65
+       },
+       "hi": [
+        {
+         "wort": "Querschnittsfläche",
+         "plus": -0.65
+        },
+        {
+         "wort": "Querschnittsfläche",
+         "plus": 1.2
+        }
+       ]
+      }
+     ],
+     "marken": [
+      {
+       "n": 3,
+       "text": "Querschnittsfläche",
+       "em": {
+        "wort": "Querschnittsfläche",
+        "plus": -0.1
+       },
+       "ate": {
+        "wort": "achtfaches",
+        "plus": -0.2
+       }
+      }
+     ]
+    },
+    {
+     "tex": "\\htmlClass{T1}{\\frac{V_{42}}{V_{21}}}\\htmlClass{T2}{\\;=\\;\\left(\\frac{42}{21}\\right)^{3}}\\htmlClass{T3}{\\;=\\;8}",
+     "groesse": 78,
+     "x": 120,
+     "y": 580,
+     "terme": [
+      {
+       "em": {
+        "wort": "gleicher",
+        "plus": -0.1
+       }
+      },
+      {
+       "em": {
+        "wort": "gleicher",
+        "plus": 0.5
+       }
+      },
+      {
+       "em": {
+        "wort": "achtfaches",
+        "plus": -0.05
+       },
+       "hi": [
+        {
+         "wort": "achtfaches"
+        },
+        {
+         "wort": "Volumen",
+         "nach": 12,
+         "plus": 1.2
+        }
+       ]
+      }
+     ],
+     "marken": [
+      {
+       "n": 3,
+       "text": "Volumen",
+       "em": {
+        "wort": "Volumen",
+        "nach": 12,
+        "plus": -0.2
+       }
+      }
+     ]
+    }
+   ],
+   "deko": [
+    {
+     "typ": "kreis",
+     "x": 1180,
+     "y": 340,
+     "r": 52,
+     "farbe": "#5ec8e5",
+     "fuell": 0,
+     "strich": 4,
+     "em": {
+      "wort": "Durchmesser",
+      "nach": 8
+     },
+     "unter": "Ø 21 cm",
+     "dur": 0.5
+    },
+    {
+     "typ": "text",
+     "text": "× 4",
+     "x": 1305,
+     "y": 308,
+     "ausr": "m",
+     "groesse": 52,
+     "schrift": "titel",
+     "farbe": "#f2c14e",
+     "em": {
+      "wort": "vierfache"
+     }
+    },
+    {
+     "typ": "kreis",
+     "x": 1387,
+     "y": 287,
+     "r": 50,
+     "farbe": "#5ec8e5",
+     "fuell": 0.3,
+     "strich": 3,
+     "em": {
+      "wort": "vierfache"
+     },
+     "dur": 0.4
+    },
+    {
+     "typ": "kreis",
+     "x": 1493,
+     "y": 287,
+     "r": 50,
+     "farbe": "#5ec8e5",
+     "fuell": 0.3,
+     "strich": 3,
+     "em": {
+      "wort": "vierfache",
+      "plus": 0.08
+     },
+     "dur": 0.4
+    },
+    {
+     "typ": "kreis",
+     "x": 1387,
+     "y": 393,
+     "r": 50,
+     "farbe": "#5ec8e5",
+     "fuell": 0.3,
+     "strich": 3,
+     "em": {
+      "wort": "vierfache",
+      "plus": 0.16
+     },
+     "dur": 0.4
+    },
+    {
+     "typ": "kreis",
+     "x": 1493,
+     "y": 393,
+     "r": 50,
+     "farbe": "#5ec8e5",
+     "fuell": 0.3,
+     "strich": 3,
+     "em": {
+      "wort": "vierfache",
+      "plus": 0.24
+     },
+     "dur": 0.4
+    },
+    {
+     "typ": "text",
+     "text": "=",
+     "x": 1575,
+     "y": 308,
+     "ausr": "m",
+     "groesse": 52,
+     "schrift": "titel",
+     "farbe": "#f2c14e",
+     "em": {
+      "wort": "heißt"
+     }
+    },
+    {
+     "typ": "kreis",
+     "x": 1700,
+     "y": 340,
+     "r": 104,
+     "farbe": "#f2c14e",
+     "fuell": 0.14,
+     "strich": 4.5,
+     "em": {
+      "wort": "heißt"
+     },
+     "dur": 0.6,
+     "unter": "Ø 42 cm"
+    },
+    {
+     "typ": "wuerfel",
+     "x": 1200,
+     "y": 850,
+     "u": 58,
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "gleicher"
+     },
+     "text": "1 ×"
+    },
+    {
+     "typ": "wuerfel",
+     "x": 1560,
+     "y": 850,
+     "u": 58,
+     "farbe": "#f2c14e",
+     "stapel": 2,
+     "em": {
+      "wort": "achtfaches"
+     },
+     "text": "8 ×",
+     "versatz": 0.1
+    }
+   ]
+  }
+ },
+ "04_07": {
+  "comp": "Balken",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 0.4,
+    "bis": 1,
+    "em": 0,
+    "ab": {
+     "wort": "Paris-Geschütz"
+    },
+    "ende": {
+     "wort": "fünfmal",
+     "plus": 0.5
+    }
+   },
+   "zoom": 0.0016,
+   "x": 330,
+   "breite": 1250,
+   "max": 1750,
+   "hoehe": 70,
+   "balken": [
+    {
+     "y": 360,
+     "wert": 333,
+     "farbe": "#f2c14e",
+     "label": "Dicke Bertha",
+     "unter": "Mündungsgeschwindigkeit",
+     "labelpt": 40,
+     "einheit": "m/s",
+     "em": 0.05,
+     "dur": 0.85
+    },
+    {
+     "y": 660,
+     "wert": 1640,
+     "farbe": "#e8873a",
+     "label": "Paris-Geschütz",
+     "unter": "aus Video 1",
+     "labelpt": 40,
+     "ikon": "bogen",
+     "innen": true,
+     "pfx": "~",
+     "einheit": "m/s",
+     "em": {
+      "wort": "Paris-Geschütz"
+     },
+     "dur": 3.18,
+     "teilung": {
+      "schritt": 333,
+      "strich": 4
+     },
+     "teilungEm": {
+      "wort": "fünfmal",
+      "plus": -0.5
+     }
+    }
+   ],
+   "faktor": {
+    "text": "≈ 4,9 ×",
+    "unter": "fast fünfmal so schnell",
+    "x": 330,
+    "y": 800,
+    "em": {
+     "wort": "fünfmal",
+     "plus": -0.1
+    },
+    "unterEm": {
+     "wort": "schnell",
+     "plus": -0.4
+    }
+   }
+  }
+ },
+ "04_08": {
+  "comp": "Formel",
+  "props": {
+   "ab": "04_08",
+   "zoom": 0.0012,
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 1,
+    "bis": 2,
+    "em": 0,
+    "ab": {
+     "wort": "Bewegungsenergie"
+    },
+    "ende": {
+     "wort": "Megajoule",
+     "nach": 4,
+     "plus": 1.0
+    }
+   },
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{E_{\\text{kin}}}\\htmlClass{T2}{\\;=\\;}\\htmlClass{T3}{\\tfrac{1}{2}}\\,\\htmlClass{T4}{m}\\,\\htmlClass{T5}{v^{2}}",
+     "groesse": 150,
+     "y": 220,
+     "schrumpf": {
+      "em": 3.8999999999999995,
+      "dauer": 0.9,
+      "vonY": 120,
+      "vonS": 1.15,
+      "nachY": 0,
+      "nachS": 0.8
+     },
+     "terme": [
+      {
+       "em": {
+        "wort": "Bewegungsenergie"
+       }
+      },
+      {
+       "em": {
+        "wort": "halb",
+        "plus": -0.1
+       }
+      },
+      {
+       "em": {
+        "wort": "halb"
+       }
+      },
+      {
+       "em": {
+        "wort": "Masse"
+       },
+       "hi": [
+        {
+         "wort": "Masse"
+        },
+        {
+         "wort": "Masse",
+         "plus": 1.2
+        }
+       ]
+      },
+      {
+       "em": {
+        "wort": "Geschwindigkeit"
+       },
+       "hi": [
+        {
+         "wort": "Geschwindigkeit"
+        },
+        {
+         "wort": "Quadrat",
+         "plus": 1.0
+        }
+       ]
+      }
+     ],
+     "marken": [
+      {
+       "n": 1,
+       "text": "Bewegungsenergie",
+       "em": {
+        "wort": "Bewegungsenergie",
+        "plus": 0.25
+       },
+       "ate": 4.5
+      },
+      {
+       "n": 4,
+       "text": "Masse",
+       "em": {
+        "wort": "Masse",
+        "plus": 0.1
+       },
+       "ate": 4.5
+      },
+      {
+       "n": 5,
+       "text": "Geschwindigkeit²",
+       "em": {
+        "wort": "Quadrat",
+        "plus": -0.2
+       },
+       "ate": 4.5
+      }
+     ]
+    },
+    {
+     "tex": "\\htmlClass{T1}{E_{\\text{Mündung}}}\\htmlClass{T2}{\\;=\\;\\tfrac{1}{2}\\cdot 810\\,\\text{kg}}\\htmlClass{T3}{{}\\cdot\\left(333\\,\\tfrac{\\text{m}}{\\text{s}}\\right)^{2}}\\htmlClass{T4}{\\;\\approx\\; {{z}}\\,\\text{MJ}}",
+     "groesse": 70,
+     "y": 520,
+     "zaehler": {
+      "von": 0,
+      "bis": 44.9,
+      "em": {
+       "wort": "Mündung",
+       "nach": 4,
+       "plus": 0.3
+      },
+      "dauer": 1.1,
+      "stellen": 1
+     },
+     "terme": [
+      {
+       "em": 4.199999999999999
+      },
+      {
+       "em": 4.6
+      },
+      {
+       "em": {
+        "wort": "Mündung",
+        "nach": 4
+       }
+      },
+      {
+       "em": {
+        "wort": "Mündung",
+        "nach": 4,
+        "plus": 0.3
+       },
+       "farbe": "#f2c14e",
+       "hi": [
+        {
+         "wort": "fünfundvierzig"
+        },
+        {
+         "wort": "Megajoule",
+         "plus": 0.8
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "balken": {
+    "x": 360,
+    "breite": 1200,
+    "max": 50,
+    "hoehe": 80,
+    "stellen": 1,
+    "wertpt": 52,
+    "y0": 800,
+    "balken": [
+     {
+      "y": 800,
+      "wert": 44.9,
+      "farbe": "#f2c14e",
+      "einheit": "MJ",
+      "em": {
+       "wort": "Mündung",
+       "nach": 4,
+       "plus": 0.3
+      },
+      "dur": 1.1,
+      "pfxEnde": "≈ "
+     }
+    ]
+   },
+   "deko": [
+    {
+     "typ": "text",
+     "text": "Energie an der Mündung · Megajoule",
+     "x": 360,
+     "y": 896,
+     "schrift": "mono",
+     "groesse": 24,
+     "farbe": "#8d949c",
+     "abstand": 1,
+     "em": {
+      "wort": "Mündung",
+      "nach": 4,
+      "plus": 0.3
+     }
+    }
+   ]
+  }
+ },
+ "04_09": {
+  "comp": "Formel",
+  "props": {
+   "ab": "04_08",
+   "zoom": 0.0012,
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 1,
+    "bis": 2,
+    "em": 0,
+    "ab": {
+     "wort": "Bewegungsenergie"
+    },
+    "ende": {
+     "wort": "Megajoule",
+     "nach": 4,
+     "plus": 1.0
+    }
+   },
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{E_{\\text{kin}}}\\htmlClass{T2}{\\;=\\;}\\htmlClass{T3}{\\tfrac{1}{2}}\\,\\htmlClass{T4}{m}\\,\\htmlClass{T5}{v^{2}}",
+     "groesse": 150,
+     "y": 220,
+     "schrumpf": {
+      "em": 3.8999999999999995,
+      "dauer": 0.9,
+      "vonY": 120,
+      "vonS": 1.15,
+      "nachY": 0,
+      "nachS": 0.8
+     },
+     "terme": [
+      {
+       "em": {
+        "wort": "Bewegungsenergie"
+       }
+      },
+      {
+       "em": {
+        "wort": "halb",
+        "plus": -0.1
+       }
+      },
+      {
+       "em": {
+        "wort": "halb"
+       }
+      },
+      {
+       "em": {
+        "wort": "Masse"
+       },
+       "hi": [
+        {
+         "wort": "Masse"
+        },
+        {
+         "wort": "Masse",
+         "plus": 1.2
+        }
+       ]
+      },
+      {
+       "em": {
+        "wort": "Geschwindigkeit"
+       },
+       "hi": [
+        {
+         "wort": "Geschwindigkeit"
+        },
+        {
+         "wort": "Quadrat",
+         "plus": 1.0
+        }
+       ]
+      }
+     ],
+     "marken": [
+      {
+       "n": 1,
+       "text": "Bewegungsenergie",
+       "em": {
+        "wort": "Bewegungsenergie",
+        "plus": 0.25
+       },
+       "ate": 4.5
+      },
+      {
+       "n": 4,
+       "text": "Masse",
+       "em": {
+        "wort": "Masse",
+        "plus": 0.1
+       },
+       "ate": 4.5
+      },
+      {
+       "n": 5,
+       "text": "Geschwindigkeit²",
+       "em": {
+        "wort": "Quadrat",
+        "plus": -0.2
+       },
+       "ate": 4.5
+      }
+     ]
+    },
+    {
+     "tex": "\\htmlClass{T1}{E_{\\text{Mündung}}}\\htmlClass{T2}{\\;=\\;\\tfrac{1}{2}\\cdot 810\\,\\text{kg}}\\htmlClass{T3}{{}\\cdot\\left(333\\,\\tfrac{\\text{m}}{\\text{s}}\\right)^{2}}\\htmlClass{T4}{\\;\\approx\\; {{z}}\\,\\text{MJ}}",
+     "groesse": 70,
+     "y": 520,
+     "zaehler": {
+      "von": 0,
+      "bis": 44.9,
+      "em": {
+       "wort": "Mündung",
+       "nach": 4,
+       "plus": 0.3
+      },
+      "dauer": 1.1,
+      "stellen": 1
+     },
+     "terme": [
+      {
+       "em": 4.199999999999999
+      },
+      {
+       "em": 4.6
+      },
+      {
+       "em": {
+        "wort": "Mündung",
+        "nach": 4
+       }
+      },
+      {
+       "em": {
+        "wort": "Mündung",
+        "nach": 4,
+        "plus": 0.3
+       },
+       "farbe": "#f2c14e",
+       "hi": [
+        {
+         "wort": "fünfundvierzig"
+        },
+        {
+         "wort": "Megajoule",
+         "plus": 0.8
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "balken": {
+    "x": 360,
+    "breite": 1200,
+    "max": 50,
+    "hoehe": 80,
+    "stellen": 1,
+    "wertpt": 52,
+    "y0": 800,
+    "balken": [
+     {
+      "y": 800,
+      "wert": 44.9,
+      "farbe": "#f2c14e",
+      "einheit": "MJ",
+      "em": {
+       "wort": "Mündung",
+       "nach": 4,
+       "plus": 0.3
+      },
+      "dur": 1.1,
+      "pfxEnde": "≈ "
+     }
+    ]
+   },
+   "deko": [
+    {
+     "typ": "text",
+     "text": "Energie an der Mündung · Megajoule",
+     "x": 360,
+     "y": 896,
+     "schrift": "mono",
+     "groesse": 24,
+     "farbe": "#8d949c",
+     "abstand": 1,
+     "em": {
+      "wort": "Mündung",
+      "nach": 4,
+      "plus": 0.3
+     }
+    }
+   ]
+  }
+ },
+ "04_11": {
+  "comp": "Balken",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 2,
+    "bis": 2,
+    "em": 0
+   },
+   "zoom": 0.0012,
+   "x": 300,
+   "breite": 1320,
+   "max": 40,
+   "hoehe": 76,
+   "stellen": 1,
+   "wertpt": 50,
+   "balken": [
+    {
+     "y": 296,
+     "wert": 33.9,
+     "farbe": "#f2c14e",
+     "label": "Aufschlag der Granate",
+     "unter": "Energie",
+     "labelpt": 36,
+     "einheit": "MJ",
+     "em": 0.05,
+     "dur": 1.0
+    }
+   ],
+   "deko": [
+    {
+     "typ": "pfad",
+     "d": "M0 0V58M-30 28L0 64L30 28",
+     "x": 960,
+     "y": 392,
+     "farbe": "#f2c14e",
+     "strich": 5,
+     "em": {
+      "wort": "Vierzigtonner",
+      "plus": -0.4
+     }
+    },
+    {
+     "typ": "text",
+     "text": "=",
+     "x": 1030,
+     "y": 390,
+     "groesse": 64,
+     "schrift": "titel",
+     "farbe": "#f2c14e",
+     "em": {
+      "wort": "Vierzigtonner",
+      "plus": -0.4
+     }
+    },
+    {
+     "typ": "lkw",
+     "x": 250,
+     "y": 462,
+     "gr": 0.95,
+     "em": {
+      "wort": "Vierzigtonner"
+     }
+    },
+    {
+     "typ": "text",
+     "text": "voll beladen · 40 t",
+     "x": 280,
+     "y": 750,
+     "schrift": "mono",
+     "groesse": 28,
+     "abstand": 3,
+     "em": {
+      "wort": "Vierzigtonner"
+     }
+    },
+    {
+     "typ": "zahl",
+     "wert": 148,
+     "zaehler": true,
+     "zaehlEm": {
+      "wort": "hundertfünfzig",
+      "plus": -0.2
+     },
+     "zaehlDauer": 1.4,
+     "x": 940,
+     "y": 540,
+     "groesse": 190,
+     "einheit": "km/h",
+     "einheitInline": true,
+     "em": {
+      "wort": "hundertfünfzig",
+      "plus": -0.3
+     },
+     "unter": "bei dieser Geschwindigkeit: gleiche Energie",
+     "unterabstand": 3,
+     "untenEm": {
+      "wort": "Kilometern"
+     }
+    }
+   ]
+  }
+ },
+ "04_12": {
+  "comp": "Zahl",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 2,
+    "bis": 2.6,
+    "em": 0,
+    "ab": 0,
+    "ende": 3.9
+   },
+   "zoom": 0.0012,
+   "zahlen": [
+    {
+     "typ": "zahl",
+     "kicker": "ENERGIE PRO FLÄCHE",
+     "wert": 244,
+     "zaehler": true,
+     "zaehlEm": {
+      "wort": "kleiner",
+      "plus": -0.1
+     },
+     "zaehlDauer": 1.4,
+     "x": 1020,
+     "y": 400,
+     "groesse": 210,
+     "einheit": "MJ pro m²",
+     "em": {
+      "wort": "kleiner",
+      "plus": -0.3
+     },
+     "unter": "33,9 MJ ÷ 0,1385 m²",
+     "untenEm": {
+      "wort": "kleiner",
+      "plus": 0.6
+     }
+    }
+   ],
+   "deko": [
+    {
+     "typ": "chip",
+     "text": "Aufschlag · 33,9 MJ",
+     "x": 1810,
+     "y": 150,
+     "ausr": "r",
+     "farbe": "#f2c14e",
+     "groesse": 30,
+     "em": 0
+    },
+    {
+     "typ": "kreis",
+     "x": 590,
+     "y": 590,
+     "r": 250,
+     "farbe": "#8d949c",
+     "fuell": 0.1,
+     "strich": 5,
+     "em": {
+      "wort": "Kanaldeckel",
+      "plus": -0.3
+     },
+     "unter": "KANALDECKEL",
+     "ring": true,
+     "ringR": 0.9,
+     "dur": 0.8,
+     "unterabstand": 3
+    },
+    {
+     "typ": "kreis",
+     "x": 590,
+     "y": 590,
+     "r": 168,
+     "farbe": "#f2c14e",
+     "fuell": 0.22,
+     "strich": 6,
+     "em": {
+      "wort": "Fläche",
+      "plus": -0.3
+     },
+     "ring": true,
+     "text": "Ø 42 cm",
+     "dur": 0.8
+    }
+   ]
+  }
+ },
+ "04_13": {
+  "comp": "Titel",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 3,
+    "bis": 3.5,
+    "em": 0,
+    "ab": 0,
+    "ende": {
+     "wort": "acht",
+     "plus": 1.5
+    }
+   },
+   "zoom": 0.0012,
+   "stil": "zeile",
+   "kicker": "DER ÜBERSEHENE PUNKT",
+   "kickerEm": 0.1,
+   "kickerAte": {
+    "wort": "Sprengstoff"
+   },
+   "titel": "Aufprall in *TNT* umgerechnet",
+   "titelEm": {
+    "wort": "Sprengstoff",
+    "plus": -0.2
+   },
+   "y": 250,
+   "groesse": 96,
+   "deko": [
+    {
+     "typ": "chip",
+     "text": "Aufschlag · 33,9 MJ",
+     "x": 1810,
+     "y": 150,
+     "ausr": "r",
+     "farbe": "#f2c14e",
+     "groesse": 30,
+     "em": 0
+    },
+    {
+     "typ": "raster",
+     "x": 460,
+     "y": 640,
+     "spalten": 4,
+     "zeilen": 2,
+     "w": 164,
+     "h": 84,
+     "abstand": 12,
+     "text": "TNT",
+     "farbe": "#d9483b",
+     "em": {
+      "wort": "acht",
+      "plus": -0.1
+     },
+     "dauer": 1.2
+    },
+    {
+     "typ": "zahl",
+     "wert": "≈ 8 kg",
+     "x": 1230,
+     "y": 650,
+     "groesse": 130,
+     "em": {
+      "wort": "acht",
+      "plus": -0.1
+     },
+     "unter": "33,9 MJ ≈ 8,1 kg TNT",
+     "unterabstand": 3,
+     "untenEm": {
+      "wort": "acht",
+      "plus": 0.3
+     },
+     "zeilenhoehe": 1
+    }
+   ]
+  }
+ },
+ "04_15": {
+  "comp": "Balken",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "1",
+    "thema": "Wucht"
+   },
+   "fortschritt": {
+    "labels": [
+     "KALIBER",
+     "ENERGIE",
+     "FLÄCHE",
+     "SPRENGSTOFF"
+    ],
+    "von": 3.5,
+    "bis": 4,
+    "em": 0,
+    "ab": {
+     "wort": "Aufprall"
+    },
+    "ende": {
+     "wort": "Schlüssel"
+    }
+   },
+   "zoom": 0.0016,
+   "x": 300,
+   "breite": 1300,
+   "max": 110,
+   "hoehe": 74,
+   "wertpt": 50,
+   "balken": [
+    {
+     "y": 262,
+     "wert": 8.1,
+     "farbe": "#f2c14e",
+     "label": "Aufprall",
+     "unter": "in TNT umgerechnet",
+     "labelpt": 38,
+     "stellen": 1,
+     "einheit": "kg TNT",
+     "em": 0,
+     "dur": 0.7
+    },
+    {
+     "y": 462,
+     "wert": 100,
+     "farbe": "#d9483b",
+     "label": "Sprengladung in der Granate",
+     "unter": "Größenordnung",
+     "labelpt": 38,
+     "innen": true,
+     "pfx": "~",
+     "einheit": "kg TNT",
+     "em": 0.15,
+     "dur": 1.15,
+     "teilung": {
+      "schritt": 8.1,
+      "strich": 3
+     },
+     "teilungEm": {
+      "wort": "zehnmal",
+      "plus": -0.2
+     }
+    }
+   ],
+   "faktor": {
+    "text": "≈ 12 ×",
+    "unter": "mehr Energie im Sprengstoff",
+    "x": 300,
+    "y": 590,
+    "groesse": 120,
+    "unterpt": 52,
+    "em": {
+     "wort": "zehnmal"
+    },
+    "unterEm": {
+     "wort": "Energie",
+     "plus": -0.4
+    }
+   },
+   "deko": [
+    {
+     "typ": "text",
+     "text": "Der Aufprall ist nicht die eigentliche *Zerstörung.*",
+     "x": 960,
+     "y": 770,
+     "ausr": "m",
+     "schrift": "titel",
+     "groesse": 66,
+     "abstand": 2,
+     "tippen": 26,
+     "em": {
+      "wort": "Aufprall",
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "Sprengladung nach verfügbaren Angaben rund 100 kg; genaue Füllung des M-Geräts nicht bestätigt.",
+     "x": 300,
+     "y": 900,
+     "schrift": "mono",
+     "groesse": 20,
+     "abstand": 1,
+     "farbe": "#8d949c",
+     "em": 1.2
+    }
+   ]
+  }
+ },
+ "04_20": {
+  "comp": "Vergleich",
+  "props": {
+   "kopf": {
+    "titel": "Quellenlage",
+    "thema": "Übrigens",
+    "em": 0
+   },
+   "zoom": 0.0014,
+   "spalten": [
+    {
+     "x": 130,
+     "y": 270,
+     "w": 740,
+     "farbe": "#f2c14e",
+     "fuell": "rgba(242,193,78,0.06)",
+     "pad": "34px 40px 40px",
+     "puls": true,
+     "em": {
+      "wort": "Quellen",
+      "plus": -0.7
+     },
+     "kicker": "IN MANCHEN QUELLEN",
+     "kickerpt": 26,
+     "kickerabstand": 6,
+     "label": "Mündungsgeschwindigkeit",
+     "labelEm": {
+      "wort": "Mündungsgeschwindigkeit",
+      "plus": -0.2
+     },
+     "wert": 0,
+     "bis": 815,
+     "wertEm": {
+      "wort": "achthundertfünfzehn",
+      "plus": -0.1
+     },
+     "zaehlDauer": 1.1,
+     "wertfarbe": "#f2c14e",
+     "einheit": "m/s",
+     "einheitfarbe": "#f2c14e"
+    },
+    {
+     "x": 1050,
+     "y": 270,
+     "w": 740,
+     "farbe": "rgba(233,225,207,0.55)",
+     "fuell": "rgba(233,225,207,0.04)",
+     "pad": "34px 40px 40px",
+     "em": {
+      "wort": "Sekunde",
+      "plus": -0.2
+     },
+     "kicker": "UNSER MODELL",
+     "kickerpt": 26,
+     "kickerabstand": 6,
+     "label": "Mündungsgeschwindigkeit",
+     "wert": "333",
+     "wertEm": {
+      "wort": "Sekunde",
+      "plus": -0.1
+     },
+     "einheit": "m/s"
+    }
+   ],
+   "mitte": {
+    "text": "?",
+    "x": 960,
+    "y": 580,
+    "groesse": 250,
+    "em": {
+     "wort": "Sekunde",
+     "plus": 0.1
+    }
+   },
+   "deko": [
+    {
+     "typ": "text",
+     "text": "Welche Zahl stimmt? Wir rechnen nach.",
+     "x": 960,
+     "y": 800,
+     "ausr": "m",
+     "schrift": "mono",
+     "groesse": 32,
+     "abstand": 4,
+     "em": {
+      "wort": "Sekunde",
+      "plus": 0.4
+     }
+    }
+   ]
+  }
+ },
+ "04_23": {
+  "comp": "Vergleich",
+  "props": {
+   "kopf": {
+    "titel": "Gegenprobe",
+    "thema": "Reichweite und Aufschlagwucht",
+    "em": 0.1
+   },
+   "zoom": 0.0014,
+   "spalten": [
+    {
+     "x": 130,
+     "y": 330,
+     "w": 760,
+     "h": 470,
+     "farbe": "#d9483b",
+     "dim": 0.78,
+     "em": 0,
+     "kicker": "ANNAHME A",
+     "titel": "v₀ = 815 m/s",
+     "zeilen": [
+      {
+       "k": "Reichweite (Modell)",
+       "v": "25,8 km",
+       "farbe": "#d9483b",
+       "em": 0.8
+      },
+      {
+       "k": "überliefert",
+       "v": "9,3 km",
+       "em": 1.2
+      }
+     ]
+    },
+    {
+     "x": 1030,
+     "y": 330,
+     "w": 760,
+     "h": 470,
+     "farbe": "#7fbf6a",
+     "rahmen": 4,
+     "em": {
+      "wort": "dreihundertdreißig",
+      "plus": -0.2
+     },
+     "kicker": "ANNAHME B · UNSER MODELL",
+     "titel": "v₀ = 333 m/s",
+     "zeilen": [
+      {
+       "k": "Reichweite",
+       "v": "9,3 km",
+       "farbe": "#7fbf6a",
+       "em": {
+        "wort": "Reichweite",
+        "plus": -0.3
+       }
+      },
+      {
+       "k": "Aufschlagwucht",
+       "v": "≈ 3.500 mt",
+       "farbe": "#7fbf6a",
+       "em": {
+        "wort": "Aufschlagwucht",
+        "plus": -0.3
+       }
+      }
+     ],
+     "notiz": "dokumentiert: 9 300 m · 3 500 mt (Meter-Tonnen)",
+     "notizEm": {
+      "wort": "Aufschlagwucht"
+     }
+    }
+   ],
+   "deko": [
+    {
+     "typ": "ikon",
+     "name": "kreuz",
+     "x": 795,
+     "y": 305,
+     "groesse": 110,
+     "em": 1.8
+    },
+    {
+     "typ": "siegel",
+     "text": "✓ passt",
+     "x": 1690,
+     "y": 770,
+     "farbe": "#7fbf6a",
+     "groesse": 80,
+     "drehung": -6,
+     "em": {
+      "wort": "passt"
+     }
+    },
+    {
+     "typ": "text",
+     "text": "Nur mit etwa *330 m/s* passen Reichweite ~und~ Aufschlagwucht zusammen.",
+     "x": 960,
+     "y": 860,
+     "ausr": "m",
+     "groesse": 44,
+     "em": {
+      "wort": "Reichweite"
+     }
+    }
+   ]
+  }
+ },
+ "07_01": {
+  "comp": "Titel",
+  "props": {
+   "kicker": "KAPITEL · BERECHNUNG",
+   "titel": "DIE MATHEMATIK",
+   "teil": "TEIL 2",
+   "unter": "Steil gegen flach",
+   "em": 0.1,
+   "zoom": 0.004
+  }
+ },
+ "07_06": {
+  "comp": "Formel",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Steil gegen flach",
+    "em": 0.05
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{v_{\\perp}}\\htmlClass{T2}{\\;=\\;v\\cdot\\sin\\gamma}",
+     "groesse": 88,
+     "x": 1100,
+     "y": 250,
+     "terme": [
+      {
+       "em": 0.35
+      },
+      {
+       "em": 0.9,
+       "hi": [
+        {
+         "wort": "Drittel",
+         "plus": -0.4
+        },
+        {
+         "wort": "Drittel",
+         "plus": 1.1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tex": "\\htmlClass{T1}{=\\;279\\,\\tfrac{\\text{m}}{\\text{s}}\\cdot\\sin 22{,}3^{\\circ}}\\htmlClass{T2}{\\;\\approx\\;\\mathbf{106}\\,\\tfrac{\\text{m}}{\\text{s}}}",
+     "groesse": 44,
+     "x": 1100,
+     "y": 420,
+     "terme": [
+      {
+       "em": 1.4
+      },
+      {
+       "em": 1.9,
+       "farbe": "#f2c14e"
+      }
+     ]
+    }
+   ],
+   "deko": [
+    {
+     "typ": "rechteck",
+     "x": 150,
+     "y": 700,
+     "w": 900,
+     "h": 110,
+     "schraffur": true,
+     "strich": 0,
+     "dur": 0,
+     "em": 0
+    },
+    {
+     "typ": "linie",
+     "x1": 150,
+     "y1": 700,
+     "x2": 1050,
+     "y2": 700,
+     "farbe": "#e9e1cf",
+     "strich": 3,
+     "dur": 0.4,
+     "em": 0
+    },
+    {
+     "typ": "text",
+     "text": "BETONDECKE",
+     "x": 170,
+     "y": 828,
+     "schrift": "mono",
+     "groesse": 22,
+     "abstand": 3,
+     "farbe": "#8d949c",
+     "em": 0
+    },
+    {
+     "typ": "pfeil",
+     "x1": 297.39514080710893,
+     "y1": 510.2719202354975,
+     "x2": 760,
+     "y2": 510.2719202354975,
+     "farbe": "rgba(141,148,156,0.95)",
+     "strich": 4,
+     "spitze": 16,
+     "em": 0.35,
+     "dur": 0.45
+    },
+    {
+     "typ": "pfeil",
+     "x1": 760,
+     "y1": 510.2719202354975,
+     "x2": 760,
+     "y2": 697,
+     "farbe": "#f2c14e",
+     "strich": 8,
+     "spitze": 26,
+     "em": 0.55,
+     "dur": 0.55
+    },
+    {
+     "typ": "pfeil",
+     "x1": 297.39514080710893,
+     "y1": 510.2719202354975,
+     "x2": 760,
+     "y2": 700,
+     "farbe": "#e9e1cf",
+     "strich": 5,
+     "spitze": 22,
+     "em": 0,
+     "dur": 0.7
+    },
+    {
+     "typ": "linie",
+     "x1": 640,
+     "y1": 700,
+     "x2": 760,
+     "y2": 700,
+     "farbe": "#e9e1cf",
+     "strich": 2,
+     "gestrichelt": true,
+     "deckkraft": 0.5,
+     "em": 0.2
+    },
+    {
+     "typ": "bogen",
+     "x": 760,
+     "y": 700,
+     "r": 120,
+     "von": 180,
+     "bis": 202.3,
+     "farbe": "#5ec8e5",
+     "em": 0.5,
+     "dur": 0.4
+    },
+    {
+     "typ": "text",
+     "text": "γ = 22,3°",
+     "x": 505,
+     "y": 676,
+     "schrift": "mono",
+     "groesse": 30,
+     "farbe": "#5ec8e5",
+     "em": 0.6
+    },
+    {
+     "typ": "pfad",
+     "d": "M-70 -18 L20 -18 Q58 -18 74 0 Q58 18 20 18 L-70 18 Z M-70 -18 V18",
+     "x": 297.39514080710893,
+     "y": 510.2719202354975,
+     "drehung": 22.3,
+     "farbe": "#e9e1cf",
+     "fuell": 0.16,
+     "strich": 3,
+     "em": 0
+    },
+    {
+     "typ": "text",
+     "text": "v = 279 m/s",
+     "x": 544,
+     "y": 536,
+     "ausr": "m",
+     "schrift": "mono",
+     "groesse": 34,
+     "winkel": 22.3,
+     "em": 0.5
+    },
+    {
+     "typ": "text",
+     "text": "v⊥ = 106 m/s",
+     "x": 784,
+     "y": 578,
+     "schrift": "mono",
+     "groesse": 40,
+     "gewicht": 600,
+     "farbe": "#f2c14e",
+     "em": 0.8
+    },
+    {
+     "typ": "text",
+     "text": "v∥",
+     "x": 529,
+     "y": 452,
+     "ausr": "m",
+     "schrift": "mono",
+     "groesse": 28,
+     "farbe": "#8d949c",
+     "em": 0.8
+    },
+    {
+     "typ": "tex",
+     "tex": "\\dfrac{v_{\\perp}}{v}\\;\\approx\\;\\dfrac{1}{3}",
+     "groesse": 78,
+     "farbe": "#f2c14e",
+     "rahmen": true,
+     "x": 1100,
+     "y": 560,
+     "em": {
+      "wort": "Drittel",
+      "plus": -0.1
+     },
+     "puls": {
+      "wort": "Drittel",
+      "plus": 0.3
+     },
+     "unter": "10° Elevation: 19 %  ·  20°: 38 %"
+    },
+    {
+     "typ": "text",
+     "text": "Flachfeuer, 20° Elevation · Ziel auf gleicher Höhe",
+     "x": 150,
+     "y": 880,
+     "schrift": "mono",
+     "groesse": 22,
+     "abstand": 1,
+     "farbe": "#8d949c",
+     "em": {
+      "wort": "Senkrecht",
+      "plus": 0.2
+     }
+    }
+   ]
+  }
+ },
+ "07_08": {
+  "comp": "Balken",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Steil gegen flach",
+    "em": 0.05
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "x": 300,
+   "breite": 880,
+   "max": 300,
+   "hoehe": 56,
+   "wertpt": 40,
+   "wertGewicht": 600,
+   "balken": [
+    {
+     "y": 292,
+     "wert": 289,
+     "farbe": "#e9e1cf",
+     "label": "v · Aufschlaggeschwindigkeit",
+     "schrift": "mono",
+     "labelpt": 28,
+     "einheit": "m/s",
+     "em": 0.15,
+     "dur": 0.9
+    },
+    {
+     "y": 422,
+     "wert": 266,
+     "farbe": "#f2c14e",
+     "label": "v⊥ · senkrecht auf die Decke",
+     "schrift": "mono",
+     "labelpt": 28,
+     "einheit": "m/s",
+     "em": 0.45,
+     "dur": 0.9
+    }
+   ],
+   "deko": [
+    {
+     "typ": "text",
+     "text": "Dicke Bertha · Aufschlag unter 67,2°",
+     "x": 300,
+     "y": 190,
+     "groesse": 34,
+     "em": 0.05
+    },
+    {
+     "typ": "siegel",
+     "text": "> 9⁄10",
+     "unter": "92 % frontal",
+     "x": 1560,
+     "y": 360,
+     "groesse": 96,
+     "em": {
+      "wort": "Zehntel",
+      "plus": 0.1
+     }
+    },
+    {
+     "typ": "linie",
+     "x1": 300,
+     "y1": 590,
+     "x2": 1600,
+     "y2": 590,
+     "farbe": "rgba(233,225,207,0.18)",
+     "strich": 2,
+     "em": {
+      "wort": "treffen"
+     },
+     "dur": 0.5
+    },
+    {
+     "typ": "text",
+     "text": "zum Vergleich: Flachfeuer unter 22,3°",
+     "x": 300,
+     "y": 610,
+     "groesse": 34,
+     "farbe": "#8d949c",
+     "em": {
+      "wort": "treffen",
+      "plus": 0.1
+     }
+    },
+    {
+     "typ": "balken",
+     "x": 300,
+     "breite": 880,
+     "max": 300,
+     "hoehe": 56,
+     "wertpt": 40,
+     "wertGewicht": 600,
+     "balken": [
+      {
+       "y": 707,
+       "wert": 279,
+       "farbe": "rgba(233,225,207,0.6)",
+       "label": "v",
+       "schrift": "mono",
+       "labelpt": 28,
+       "dim": 0.8,
+       "einheit": "m/s",
+       "em": {
+        "wort": "treffen",
+        "plus": 0.2
+       },
+       "dur": 0.9
+      },
+      {
+       "y": 837,
+       "wert": 106,
+       "farbe": "#e8873a",
+       "label": "v⊥",
+       "schrift": "mono",
+       "labelpt": 28,
+       "dim": 0.9,
+       "einheit": "m/s",
+       "em": {
+        "wort": "treffen",
+        "plus": 0.45
+       },
+       "dur": 0.9
+      }
+     ]
+    },
+    {
+     "typ": "text",
+     "text": "38 %",
+     "x": 1450,
+     "y": 782,
+     "ausr": "m",
+     "schrift": "titel",
+     "groesse": 64,
+     "farbe": "#e8873a",
+     "em": {
+      "wort": "treffen",
+      "plus": 0.9
+     }
+    }
+   ]
+  }
+ },
+ "07_10": {
+  "comp": "Zitat",
+  "props": {
+   "typ": "karte",
+   "x": 450,
+   "y": 235,
+   "w": 1000,
+   "h": 560,
+   "kicker": "EINDRINGTIEFE IN BETON",
+   "zeile": "die älteste empirische Formel",
+   "zeileEm": {
+    "wort": "älteste",
+    "plus": -0.1
+   },
+   "gross": "PETRY",
+   "grossEm": {
+    "wort": "Petry",
+    "plus": -0.1
+   },
+   "klein": "1910",
+   "kleinEm": {
+    "wort": "neunzehnhundertzehn",
+    "plus": -0.1
+   },
+   "schrumpf": {
+    "em": 4.62,
+    "dauer": 1.0,
+    "x": 96,
+    "y": 168,
+    "scale": 0.3,
+    "winkel": -2.4
+   },
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Eindringtiefe",
+    "em": 4.92
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "zoom": 0.0022
+  }
+ },
+ "07_11": {
+  "comp": "Formel",
+  "props": {
+   "ab": "07_10",
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Eindringtiefe",
+    "em": 4.92
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "zoom": 0.0022,
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{x}\\;\\htmlClass{T2}{=\\;12\\,K_p}\\;\\htmlClass{T3}{A_p}\\;\\htmlClass{T4}{\\log_{10}\\!\\left(1+\\dfrac{V^{2}}{215\\,000}\\right)}",
+     "groesse": 72,
+     "y": 350,
+     "terme": [
+      {
+       "em": 5.220000000000001
+      },
+      {
+       "em": {
+        "wort": "Eindringtiefe",
+        "nach": 5,
+        "plus": 0.3
+       }
+      },
+      {
+       "em": {
+        "wort": "Masse",
+        "nach": 6,
+        "plus": -0.1
+       },
+       "hi": [
+        {
+         "wort": "Masse",
+         "nach": 6
+        },
+        9.73
+       ]
+      },
+      {
+       "em": {
+        "wort": "Logarithmus",
+        "plus": -0.15
+       },
+       "hi": [
+        {
+         "wort": "Logarithmus"
+        },
+        {
+         "wort": "Quadrat",
+         "nach": 9,
+         "plus": 0.9
+        }
+       ]
+      }
+     ],
+     "marken": [
+      {
+       "n": 1,
+       "text": "Eindringtiefe",
+       "em": {
+        "wort": "Eindringtiefe",
+        "nach": 5,
+        "plus": 0.1
+       }
+      },
+      {
+       "n": 3,
+       "text": "Masse pro Querschnittsfläche",
+       "em": {
+        "wort": "Masse",
+        "nach": 6,
+        "plus": 0.4
+       }
+      },
+      {
+       "n": 4,
+       "text": "Logarithmus der Geschwindigkeit²",
+       "em": {
+        "wort": "Logarithmus",
+        "plus": 0.5
+       },
+       "oben": true
+      }
+     ]
+    }
+   ],
+   "deko": [
+    {
+     "typ": "karte",
+     "x": 450,
+     "y": 235,
+     "w": 1000,
+     "h": 560,
+     "kicker": "EINDRINGTIEFE IN BETON",
+     "zeile": "die älteste empirische Formel",
+     "zeileEm": {
+      "wort": "älteste",
+      "plus": -0.1
+     },
+     "gross": "PETRY",
+     "grossEm": {
+      "wort": "Petry",
+      "plus": -0.1
+     },
+     "klein": "1910",
+     "kleinEm": {
+      "wort": "neunzehnhundertzehn",
+      "plus": -0.1
+     },
+     "schrumpf": {
+      "em": 4.62,
+      "dauer": 1.0,
+      "x": 96,
+      "y": 168,
+      "scale": 0.3,
+      "winkel": -2.4
+     }
+    },
+    {
+     "typ": "text",
+     "text": "Originaleinheiten: x in Zoll · A_p = W/A in lb/ft² · V in ft/s\nK_p = 0,00799 für unbewehrten Beton",
+     "x": 96,
+     "y": 905,
+     "schrift": "mono",
+     "groesse": 22,
+     "abstand": 1,
+     "farbe": "#8d949c",
+     "em": {
+      "wort": "Eindringtiefe",
+      "nach": 5,
+      "plus": 0.8
+     }
+    },
+    {
+     "typ": "kurve",
+     "x": 1010,
+     "y": 960,
+     "breite": 700,
+     "hoehe": 300,
+     "xmax": 350,
+     "ymax": 1,
+     "ausdruck": "log10(1+pow(x*3.28084,2)/215000)",
+     "xticks": [
+      0,
+      100,
+      200,
+      300
+     ],
+     "xlabel": "V in m/s",
+     "titel": "log₁₀(1 + V²/215 000)",
+     "em": {
+      "wort": "Logarithmus",
+      "plus": 0.4
+     },
+     "kurvem": {
+      "wort": "Logarithmus",
+      "plus": 0.55
+     },
+     "dur": 1.35,
+     "marken": [
+      {
+       "x": 289,
+       "text": "Bertha · 289 m/s",
+       "em": {
+        "wort": "Logarithmus",
+        "plus": 1.7
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "07_12": {
+  "comp": "Formel",
+  "props": {
+   "ab": "07_10",
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Eindringtiefe",
+    "em": 4.92
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "zoom": 0.0022,
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{x}\\;\\htmlClass{T2}{=\\;12\\,K_p}\\;\\htmlClass{T3}{A_p}\\;\\htmlClass{T4}{\\log_{10}\\!\\left(1+\\dfrac{V^{2}}{215\\,000}\\right)}",
+     "groesse": 72,
+     "y": 350,
+     "terme": [
+      {
+       "em": 5.220000000000001
+      },
+      {
+       "em": {
+        "wort": "Eindringtiefe",
+        "nach": 5,
+        "plus": 0.3
+       }
+      },
+      {
+       "em": {
+        "wort": "Masse",
+        "nach": 6,
+        "plus": -0.1
+       },
+       "hi": [
+        {
+         "wort": "Masse",
+         "nach": 6
+        },
+        9.73
+       ]
+      },
+      {
+       "em": {
+        "wort": "Logarithmus",
+        "plus": -0.15
+       },
+       "hi": [
+        {
+         "wort": "Logarithmus"
+        },
+        {
+         "wort": "Quadrat",
+         "nach": 9,
+         "plus": 0.9
+        }
+       ]
+      }
+     ],
+     "marken": [
+      {
+       "n": 1,
+       "text": "Eindringtiefe",
+       "em": {
+        "wort": "Eindringtiefe",
+        "nach": 5,
+        "plus": 0.1
+       }
+      },
+      {
+       "n": 3,
+       "text": "Masse pro Querschnittsfläche",
+       "em": {
+        "wort": "Masse",
+        "nach": 6,
+        "plus": 0.4
+       }
+      },
+      {
+       "n": 4,
+       "text": "Logarithmus der Geschwindigkeit²",
+       "em": {
+        "wort": "Logarithmus",
+        "plus": 0.5
+       },
+       "oben": true
+      }
+     ]
+    }
+   ],
+   "deko": [
+    {
+     "typ": "karte",
+     "x": 450,
+     "y": 235,
+     "w": 1000,
+     "h": 560,
+     "kicker": "EINDRINGTIEFE IN BETON",
+     "zeile": "die älteste empirische Formel",
+     "zeileEm": {
+      "wort": "älteste",
+      "plus": -0.1
+     },
+     "gross": "PETRY",
+     "grossEm": {
+      "wort": "Petry",
+      "plus": -0.1
+     },
+     "klein": "1910",
+     "kleinEm": {
+      "wort": "neunzehnhundertzehn",
+      "plus": -0.1
+     },
+     "schrumpf": {
+      "em": 4.62,
+      "dauer": 1.0,
+      "x": 96,
+      "y": 168,
+      "scale": 0.3,
+      "winkel": -2.4
+     }
+    },
+    {
+     "typ": "text",
+     "text": "Originaleinheiten: x in Zoll · A_p = W/A in lb/ft² · V in ft/s\nK_p = 0,00799 für unbewehrten Beton",
+     "x": 96,
+     "y": 905,
+     "schrift": "mono",
+     "groesse": 22,
+     "abstand": 1,
+     "farbe": "#8d949c",
+     "em": {
+      "wort": "Eindringtiefe",
+      "nach": 5,
+      "plus": 0.8
+     }
+    },
+    {
+     "typ": "kurve",
+     "x": 1010,
+     "y": 960,
+     "breite": 700,
+     "hoehe": 300,
+     "xmax": 350,
+     "ymax": 1,
+     "ausdruck": "log10(1+pow(x*3.28084,2)/215000)",
+     "xticks": [
+      0,
+      100,
+      200,
+      300
+     ],
+     "xlabel": "V in m/s",
+     "titel": "log₁₀(1 + V²/215 000)",
+     "em": {
+      "wort": "Logarithmus",
+      "plus": 0.4
+     },
+     "kurvem": {
+      "wort": "Logarithmus",
+      "plus": 0.55
+     },
+     "dur": 1.35,
+     "marken": [
+      {
+       "x": 289,
+       "text": "Bertha · 289 m/s",
+       "em": {
+        "wort": "Logarithmus",
+        "plus": 1.7
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "07_14": {
+  "comp": "Formel",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Eindringtiefe",
+    "em": 0.02
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "etikett": {
+    "text": "NDRC · 1946",
+    "unter": "amerikanische Versuche der 1940er Jahre",
+    "x": 96,
+    "y": 170,
+    "em": 0.1,
+    "unterEm": {
+     "wort": "amerikanischen",
+     "plus": -0.1
+    }
+   },
+   "formeln": [
+    {
+     "tex": "\\htmlClass{T1}{G\\;=}\\;\\htmlClass{T2}{\\dfrac{180}{\\sqrt{f_c}}}\\,\\htmlClass{T3}{N}\\,\\htmlClass{T4}{\\dfrac{W}{d}}\\,\\htmlClass{T5}{\\left(\\dfrac{V}{1000\\,d}\\right)^{1{,}8}}",
+     "groesse": 88,
+     "y": 330,
+     "terme": [
+      {
+       "em": 0.3
+      },
+      {
+       "em": 0.7
+      },
+      {
+       "em": 1.1
+      },
+      {
+       "em": 1.5
+      },
+      {
+       "em": 1.9
+      }
+     ],
+     "marken": [
+      {
+       "n": 2,
+       "text": "Betonfestigkeit",
+       "em": 1.2
+      },
+      {
+       "n": 4,
+       "text": "Gewicht ÷ Kaliber",
+       "em": 1.8
+      },
+      {
+       "n": 5,
+       "text": "Geschwindigkeit",
+       "em": 2.2
+      }
+     ]
+    }
+   ],
+   "deko": [
+    {
+     "typ": "tex",
+     "tex": "\\dfrac{x}{d}=\\begin{cases}2\\sqrt{G} & G\\le 1\\\\[2pt] G+1 & G>1\\end{cases}",
+     "groesse": 54,
+     "farbe": "#f2c14e",
+     "x": 960,
+     "y": 740,
+     "ausr": "m",
+     "em": {
+      "wort": "neunzehnhundertvierziger",
+      "plus": 0.2
+     }
+    }
+   ]
+  }
+ },
+ "07_19": {
+  "comp": "Vergleich",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Grenzen der Rechnung",
+    "em": 0.02
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "deko": [
+    {
+     "typ": "rahmen",
+     "x": 150,
+     "y": 200,
+     "w": 1620,
+     "h": 700,
+     "farbe": "#f2c14e",
+     "em": 0.05,
+     "dur": 1.05
+    },
+    {
+     "typ": "text",
+     "text": "EHRLICHERWEISE",
+     "x": 960,
+     "y": 242,
+     "ausr": "m",
+     "schrift": "titel",
+     "groesse": 132,
+     "abstand": 18,
+     "farbe": "#f2c14e",
+     "em": 0.05,
+     "dur": 0.5
+    },
+    {
+     "typ": "text",
+     "text": "PETRY UND NDRC WURDEN ENTWICKELT FÜR",
+     "x": 960,
+     "y": 410,
+     "ausr": "m",
+     "schrift": "mono",
+     "groesse": 30,
+     "abstand": 5,
+     "farbe": "#8d949c",
+     "em": {
+      "wort": "Diese",
+      "plus": -0.1
+     }
+    }
+   ],
+   "spalten": [
+    {
+     "x": 250,
+     "y": 500,
+     "w": 670,
+     "h": 330,
+     "mitte": true,
+     "farbe": "rgba(242,193,78,0.55)",
+     "rahmen": 1.5,
+     "fuell": "rgba(13,15,18,0.55)",
+     "pad": "24px 20px",
+     "em": {
+      "wort": "Geschosse",
+      "plus": -0.9
+     },
+     "klein": "moderne",
+     "titel": "Geschosse",
+     "titelpt": 110,
+     "titelabstandx": 3,
+     "unter": "starre Stahlgeschosse"
+    },
+    {
+     "x": 1000,
+     "y": 500,
+     "w": 670,
+     "h": 330,
+     "mitte": true,
+     "farbe": "rgba(242,193,78,0.55)",
+     "rahmen": 1.5,
+     "fuell": "rgba(13,15,18,0.55)",
+     "pad": "24px 20px",
+     "em": {
+      "wort": "modernen",
+      "plus": -0.1
+     },
+     "klein": "moderner",
+     "titel": "Beton",
+     "titelpt": 110,
+     "titelabstandx": 3,
+     "unter": "heutige Betongüte"
+    }
+   ]
+  }
+ },
+ "07_20": {
+  "comp": "Zahl",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Grenzen der Rechnung",
+    "em": 0.02
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "zahlen": [
+    {
+     "typ": "zahl",
+     "wert": "1888",
+     "x": 130,
+     "y": 262,
+     "groesse": 330,
+     "farbe": "#e9e1cf",
+     "abstand": 6,
+     "zeilenhoehe": 1,
+     "em": {
+      "wort": "achtzehnhundertachtundachtzig",
+      "plus": -0.1
+     }
+    }
+   ],
+   "deko": [
+    {
+     "typ": "text",
+     "text": "WIE GUT WAR DER BETON VON",
+     "x": 150,
+     "y": 226,
+     "schrift": "mono",
+     "groesse": 32,
+     "abstand": 6,
+     "farbe": "#8d949c",
+     "em": 0.3
+    },
+    {
+     "typ": "text",
+     "text": "?",
+     "x": 1050,
+     "y": 150,
+     "schrift": "titel",
+     "groesse": 470,
+     "farbe": "#f2c14e",
+     "winkel": 6,
+     "pop": true,
+     "glow": true,
+     "zeilenhoehe": 1,
+     "em": {
+      "wort": "war",
+      "nach": 1
+     },
+     "dur": 0.2
+    },
+    {
+     "typ": "skala",
+     "x": 520,
+     "y": 790,
+     "breite": 880,
+     "min": 5,
+     "max": 35,
+     "ticks": [
+      10,
+      15,
+      20,
+      30
+     ],
+     "einheit": "MPa",
+     "label": "Druckfestigkeit f_c des Betons",
+     "em": {
+      "wort": "war",
+      "nach": 1,
+      "plus": 0.1
+     },
+     "bereiche": [
+      {
+       "von": 10,
+       "bis": 30,
+       "kern": [
+        10,
+        20
+       ],
+       "farbe": "#f2c14e",
+       "em": {
+        "wort": "war",
+        "nach": 1,
+        "plus": 0.1
+       },
+       "dur": 1.1
+      }
+     ]
+    },
+    {
+     "typ": "text",
+     "text": "gerechnet: 10 bis 20 MPa",
+     "x": 667,
+     "y": 652,
+     "schrift": "mono",
+     "groesse": 24,
+     "farbe": "#f2c14e",
+     "abstand": 1,
+     "em": {
+      "wort": "war",
+      "nach": 1,
+      "plus": 0.9
+     }
+    },
+    {
+     "typ": "text",
+     "text": "weiß niemand genau.",
+     "x": 150,
+     "y": 862,
+     "groesse": 52,
+     "farbe": "#f2c14e",
+     "em": {
+      "wort": "weiß",
+      "plus": -0.1
+     }
+    }
+   ]
+  }
+ },
+ "07_21": {
+  "comp": "Balken",
+  "props": {
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Eindringtiefe",
+    "em": 0.02
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "skala": "log",
+   "min": 0.5,
+   "max": 5,
+   "x": 500,
+   "breite": 1240,
+   "hoehe": 62,
+   "wertpt": 34,
+   "wertGewicht": 600,
+   "stellen": 2,
+   "balken": [
+    {
+     "y": 366,
+     "von": 0.65,
+     "wert": 1.22,
+     "farbe": "#5ec8e5",
+     "label": "21-cm-Granate",
+     "unter": "120 kg",
+     "einheit": "m",
+     "einheitGross": true,
+     "em": 0.3,
+     "dur": 0.9
+    },
+    {
+     "y": 526,
+     "von": 1.3,
+     "wert": 2.08,
+     "farbe": "#f2c14e",
+     "label": "42-cm-Granate",
+     "unter": "810 kg",
+     "einheit": "m",
+     "einheitGross": true,
+     "em": 0.7,
+     "dur": 0.9
+    }
+   ],
+   "achse": {
+    "ticks": [
+     0.5,
+     1,
+     2,
+     4
+    ],
+    "y": 740,
+    "einheit": "m",
+    "label": "Eindringtiefe · logarithmische Skala",
+    "em": 0.1,
+    "gitterOben": 300
+   },
+   "grenze": {
+    "wert": 4,
+    "label": "Decke Brialmont",
+    "text": "4,0 m",
+    "y1": 290,
+    "em": 1.0
+   },
+   "rahmenbox": {
+    "x": 90,
+    "y": 250,
+    "w": 1740,
+    "h": 600,
+    "em": {
+     "wort": "Größenordnung"
+    },
+    "gruen": {
+     "wort": "reicht"
+    },
+    "label": "GRÖSSENORDNUNG",
+    "label2": "GRÖSSENORDNUNG · REICHT FÜR DEN VERGLEICH",
+    "haken": true
+   },
+   "deko": [
+    {
+     "typ": "text",
+     "text": "unbewehrter Beton · NDRC (links) bis Petry (rechts) · 0,65 … 2,08 m",
+     "x": 96,
+     "y": 905,
+     "schrift": "mono",
+     "groesse": 24,
+     "abstand": 2,
+     "farbe": "#8d949c",
+     "em": 0.4
+    }
+   ]
+  }
+ },
+ "07_22": {
+  "comp": "Balken",
+  "props": {
+   "ab": "07_22",
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Bewehrung",
+    "em": 0.02
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "x": 330,
+   "breite": 1100,
+   "max": 2.5,
+   "hoehe": 62,
+   "stellen": 2,
+   "balken": [
+    {
+     "y": 279,
+     "wert": 2.08,
+     "farbe": "#f2c14e",
+     "label": "unbewehrter Beton",
+     "unter": "Petry · 42 cm · 810 kg",
+     "labelpt": 30,
+     "unterpt": 22,
+     "einheit": "m",
+     "em": 0.5,
+     "dur": 1.1
+    },
+    {
+     "y": 479,
+     "wert": 1.11,
+     "farbe": "#5ec8e5",
+     "label": "mit Stahlbewehrung",
+     "unter": "normal",
+     "labelpt": 30,
+     "unterpt": 22,
+     "einheit": "m",
+     "em": {
+      "wort": "Stahlbewehrung",
+      "plus": -0.2
+     },
+     "dur": 1.2
+    },
+    {
+     "y": 679,
+     "wert": 0.74,
+     "farbe": "#7fbf6a",
+     "label": "mit besonders dichter Bewehrung",
+     "unter": "Petry",
+     "labelpt": 30,
+     "unterpt": 22,
+     "einheit": "m",
+     "em": {
+      "wort": "dichter",
+      "nach": 5,
+      "plus": -0.1
+     },
+     "dur": 1.3
+    }
+   ],
+   "deko": [
+    {
+     "typ": "pfeil",
+     "x1": 1495,
+     "y1": 290,
+     "x2": 1495,
+     "y2": 496,
+     "farbe": "#5ec8e5",
+     "strich": 3,
+     "spitze": 16,
+     "offen": true,
+     "em": {
+      "wort": "halbiert",
+      "plus": -0.1
+     },
+     "dur": 0.6
+    },
+    {
+     "typ": "pfeil",
+     "x1": 1495,
+     "y1": 520,
+     "x2": 1495,
+     "y2": 696,
+     "farbe": "#7fbf6a",
+     "strich": 3,
+     "spitze": 16,
+     "offen": true,
+     "em": {
+      "wort": "Drittel",
+      "plus": -0.1
+     },
+     "dur": 0.6
+    },
+    {
+     "typ": "text",
+     "text": "−47 %",
+     "x": 1545,
+     "y": 350,
+     "schrift": "titel",
+     "groesse": 84,
+     "farbe": "#5ec8e5",
+     "zeilenhoehe": 1,
+     "em": {
+      "wort": "halbiert",
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "halbiert sich",
+     "x": 1545,
+     "y": 440,
+     "schrift": "mono",
+     "groesse": 28,
+     "abstand": 2,
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "halbiert",
+      "plus": 0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "−64 %",
+     "x": 1545,
+     "y": 530,
+     "schrift": "titel",
+     "groesse": 84,
+     "farbe": "#7fbf6a",
+     "zeilenhoehe": 1,
+     "em": {
+      "wort": "Drittel",
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "≈ ein Drittel",
+     "x": 1545,
+     "y": 620,
+     "schrift": "mono",
+     "groesse": 28,
+     "abstand": 2,
+     "farbe": "#7fbf6a",
+     "em": {
+      "wort": "Drittel",
+      "plus": 0.1
+     }
+    },
+    {
+     "typ": "pfeil",
+     "x1": 710,
+     "y1": 740,
+     "x2": 710,
+     "y2": 868,
+     "farbe": "#e9e1cf",
+     "strich": 3,
+     "spitze": 16,
+     "offen": true,
+     "gestrichelt": true,
+     "doppelt": true,
+     "em": {
+      "wort": "Merken",
+      "plus": -0.1
+     },
+     "dur": 0.5
+    },
+    {
+     "typ": "chip",
+     "text": "VERDUN",
+     "x": 480,
+     "y": 880,
+     "farbe": "#e9e1cf",
+     "schrift": "titel",
+     "groesse": 52,
+     "abstand": 8,
+     "strich": 2,
+     "pad": "10px 34px",
+     "fuell": true,
+     "em": {
+      "wort": "Merken",
+      "plus": -0.1
+     }
+    }
+   ]
+  }
+ },
+ "07_23": {
+  "comp": "Balken",
+  "props": {
+   "ab": "07_22",
+   "kopf": {
+    "titel": "DIE MATHEMATIK",
+    "nr": "2",
+    "thema": "Bewehrung",
+    "em": 0.02
+   },
+   "fuss": "Petry (1910) · NDRC (1946) · Formeln nach Kennedy 1976 · Hosseini & Dalvand 2015",
+   "x": 330,
+   "breite": 1100,
+   "max": 2.5,
+   "hoehe": 62,
+   "stellen": 2,
+   "balken": [
+    {
+     "y": 279,
+     "wert": 2.08,
+     "farbe": "#f2c14e",
+     "label": "unbewehrter Beton",
+     "unter": "Petry · 42 cm · 810 kg",
+     "labelpt": 30,
+     "unterpt": 22,
+     "einheit": "m",
+     "em": 0.5,
+     "dur": 1.1
+    },
+    {
+     "y": 479,
+     "wert": 1.11,
+     "farbe": "#5ec8e5",
+     "label": "mit Stahlbewehrung",
+     "unter": "normal",
+     "labelpt": 30,
+     "unterpt": 22,
+     "einheit": "m",
+     "em": {
+      "wort": "Stahlbewehrung",
+      "plus": -0.2
+     },
+     "dur": 1.2
+    },
+    {
+     "y": 679,
+     "wert": 0.74,
+     "farbe": "#7fbf6a",
+     "label": "mit besonders dichter Bewehrung",
+     "unter": "Petry",
+     "labelpt": 30,
+     "unterpt": 22,
+     "einheit": "m",
+     "em": {
+      "wort": "dichter",
+      "nach": 5,
+      "plus": -0.1
+     },
+     "dur": 1.3
+    }
+   ],
+   "deko": [
+    {
+     "typ": "pfeil",
+     "x1": 1495,
+     "y1": 290,
+     "x2": 1495,
+     "y2": 496,
+     "farbe": "#5ec8e5",
+     "strich": 3,
+     "spitze": 16,
+     "offen": true,
+     "em": {
+      "wort": "halbiert",
+      "plus": -0.1
+     },
+     "dur": 0.6
+    },
+    {
+     "typ": "pfeil",
+     "x1": 1495,
+     "y1": 520,
+     "x2": 1495,
+     "y2": 696,
+     "farbe": "#7fbf6a",
+     "strich": 3,
+     "spitze": 16,
+     "offen": true,
+     "em": {
+      "wort": "Drittel",
+      "plus": -0.1
+     },
+     "dur": 0.6
+    },
+    {
+     "typ": "text",
+     "text": "−47 %",
+     "x": 1545,
+     "y": 350,
+     "schrift": "titel",
+     "groesse": 84,
+     "farbe": "#5ec8e5",
+     "zeilenhoehe": 1,
+     "em": {
+      "wort": "halbiert",
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "halbiert sich",
+     "x": 1545,
+     "y": 440,
+     "schrift": "mono",
+     "groesse": 28,
+     "abstand": 2,
+     "farbe": "#5ec8e5",
+     "em": {
+      "wort": "halbiert",
+      "plus": 0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "−64 %",
+     "x": 1545,
+     "y": 530,
+     "schrift": "titel",
+     "groesse": 84,
+     "farbe": "#7fbf6a",
+     "zeilenhoehe": 1,
+     "em": {
+      "wort": "Drittel",
+      "plus": -0.1
+     }
+    },
+    {
+     "typ": "text",
+     "text": "≈ ein Drittel",
+     "x": 1545,
+     "y": 620,
+     "schrift": "mono",
+     "groesse": 28,
+     "abstand": 2,
+     "farbe": "#7fbf6a",
+     "em": {
+      "wort": "Drittel",
+      "plus": 0.1
+     }
+    },
+    {
+     "typ": "pfeil",
+     "x1": 710,
+     "y1": 740,
+     "x2": 710,
+     "y2": 868,
+     "farbe": "#e9e1cf",
+     "strich": 3,
+     "spitze": 16,
+     "offen": true,
+     "gestrichelt": true,
+     "doppelt": true,
+     "em": {
+      "wort": "Merken",
+      "plus": -0.1
+     },
+     "dur": 0.5
+    },
+    {
+     "typ": "chip",
+     "text": "VERDUN",
+     "x": 480,
+     "y": 880,
+     "farbe": "#e9e1cf",
+     "schrift": "titel",
+     "groesse": 52,
+     "abstand": 8,
+     "strich": 2,
+     "pad": "10px 34px",
+     "fuell": true,
+     "em": {
+      "wort": "Merken",
+      "plus": -0.1
+     }
+    }
+   ]
+  }
+ }
+}
