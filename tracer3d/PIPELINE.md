@@ -145,6 +145,8 @@ postprocessing, n8ao, `@takram/three-atmosphere` 0.19.1, `@takram/three-geospati
 
 ## 8. Regras fixas de conteúdo (canal de guerra)
 
+- **Sem marca d'água "@KriegsChronik · SIMULATION"** nos vídeos, a partir do vídeo #3 (24/10/2026). Créditos de dados continuam no fim do vídeo (Abspann), nas linhas de fonte dos mapas e na descrição.
+
 - Engenharia sim, glorificação não; sem gore, sem símbolos, sem 2ª Guerra; impacto = marcador geométrico; vítimas tratadas com sobriedade.
 - Todo número na tela vem de `zahlen.json`/`bahn.json`; fatos com 2 fontes (o que tem 1 fonte não entra como fato).
 - Só dados/assets com licença comercial; créditos obrigatórios no vídeo (fim) e na descrição.
