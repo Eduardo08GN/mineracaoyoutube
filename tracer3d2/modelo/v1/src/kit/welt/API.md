@@ -63,3 +63,6 @@ Palco escuro com grade em metros e luz de estúdio; o modelo vem do **registro**
  "cotas":[{"de":[3.9,3.5,2.15],"para":[-1.3,3.4,2.15],"texto":"5,04 m","em":0.5,"deslocamento":70}],
  "rotulos":[{"pos":{"ancora":"boca"},"texto":"Mündung","sub":"Ø 42 cm","em":1,"cor":"cyan"}],"escala_humana":{"pos":[3,0],"altura":1.75,"texto":"1,75 m","em":1}}}
 ```
+
+## Pacotes de terreno do vídeo (24/10/2026)
+`terreno.pacote` aceita, por nome, `loncin`, `regiao` **ou qualquer nome registrado em `src/cenas/pacotes.json`** (dados por vídeo, no mesmo formato do objeto inline). O batedor de dados acrescenta os pacotes ali, sem mexer no código.

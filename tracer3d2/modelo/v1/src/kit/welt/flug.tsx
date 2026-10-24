@@ -44,7 +44,9 @@ const registra = (s: PacoteT) => {
   (GEBIETE as any)['kit_' + s.id] = {bounds: s.bounds, zentrum: s.zentrum, hmin: s.hmin, hmax: s.hmax, hoehe: s.hoehe, farbe: s.farbe, farbeMax: s.farbeMax ?? 4096};
   return 'kit_' + s.id;
 };
-const pacoteDe = (x: any): PacoteT => (typeof x === 'string' ? PACOTES_T[x] : {...x});
+// pacotes de terreno do video ficam em DADOS (cenas/pacotes.json), nao em codigo: o batedor de dados so acrescenta entradas
+import PACOTES_VIDEO from '../../cenas/pacotes.json';
+const pacoteDe = (x: any): PacoteT => (typeof x === 'string' ? (PACOTES_T[x] ?? (PACOTES_VIDEO as any)[x]) : {...x});
 
 // carregamento sincrono fora do canvas (delayRender): campo de alturas
 const useCampo = (gid: string): Hoehenfeld | null => {

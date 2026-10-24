@@ -14,7 +14,8 @@ import requests
 
 sys.path.insert(0, os.environ.get("COLAB_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "eddie3d", "ferramentas"))); sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 AQUI = os.path.dirname(os.path.abspath(__file__))
-ESTADO = "D:/tmp/t2_canal.json"; CACHE_SHA = "D:/tmp/t2_sha.json"
+TMP = os.environ.get("T2_TMP", "D:/tmp")   # nunca no C: (disco cheio)
+ESTADO = f"{TMP}/t2_canal.json"; CACHE_SHA = f"{TMP}/t2_sha.json"
 G4 = os.environ.get("G4_PY", os.path.join(sys.path[0], "g4.py"))
 PEDACO = 16 << 20
 REMOTO = "/content/t2/proj"
@@ -60,7 +61,10 @@ def req(metodo, rota, timeout=120, **kw):
     raise SystemExit("CANAL_SEM_ACESSO: o proxy recusou mesmo com cookies novos (G4 desligada?)")
 
 
-def saude(): return req("GET", "/saude", timeout=20).json()
+def saude():
+    # G4 desligada por ociosidade: o proxy responde com uma pagina que nao e JSON -> tratar como fora do ar (garantir religa)
+    try: return req("GET", "/saude", timeout=20).json()
+    except ValueError: raise SystemExit("G4_FORA: o proxy respondeu sem JSON (runtime desligado)")
 
 
 # ---------- arquivos ----------
@@ -160,11 +164,29 @@ if not any(t.name == 'vigia_t2' for t in threading.enumerate()):
     threading.Thread(target=_vigia_t2, name='vigia_t2', daemon=True).start()
 """
 
+def conectar_runtime():
+    """So conecta o runtime pelo botao do Colab (sem o vigia antigo do g4.py: a confirmacao dele travou 14 min em 24/10/2026;
+    no 2.0 quem desliga por ociosidade e a vigia_t2 do kernel, instalada pela celula do canal logo em seguida)."""
+    import re, colab
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        nb = colab.aba(p); nb.bring_to_front()
+        try: colab.limpar(nb)
+        except Exception: pass
+        if not colab.conectado(nb):
+            bt = [e for e in nb.locator("colab-connect-button").all() if e.is_visible()]
+            (bt[0] if bt else nb.get_by_text(re.compile(r"^(Conectar|Reconectar|Connect|Reconnect)$")).first).click()
+            for k in range(60):
+                time.sleep(5)
+                if colab.conectado(nb): break
+                if k % 6 == 5: log(f"BATIMENTO ligar: conectando ha {(k + 1) * 5}s")
+        if not colab.conectado(nb): raise SystemExit("G4_NAO_LIGOU: o runtime nao conectou em 5 min")
+    log("runtime conectado")
+
+
 def ligar():
     import colab
-    r = subprocess.run([sys.executable, G4, "ligar"], capture_output=True, text=True, encoding="utf-8", errors="replace")
-    print(r.stdout[-400:])
-    if "vigia ativo" not in r.stdout: raise SystemExit("G4_NAO_LIGOU")
+    conectar_runtime()
     arqs = {n: base64.b64encode(open(os.path.join(AQUI, "vm", n), "rb").read()).decode() for n in os.listdir(os.path.join(AQUI, "vm")) if os.path.isfile(os.path.join(AQUI, "vm", n))}
     cod = ("import base64, os, subprocess, time\nos.makedirs('/content/t2/vm', exist_ok=True)\n"
            f"for n, b in {arqs!r}.items(): open('/content/t2/vm/' + n, 'wb').write(base64.b64decode(b))\n"
@@ -200,7 +222,7 @@ def garantir(proj):
         try: return saude().get("stills")
         except SystemExit: return False
     if pronta(): return
-    trava = "D:/tmp/t2_garantir.lock"
+    trava = f"{TMP}/t2_garantir.lock"
     t0 = time.time()
     while True:
         try: os.mkdir(trava); break

@@ -77,7 +77,15 @@ const soloH = (h: number, x: number, xFim: number, hFim: number, solo: [number, 
 };
 
 type Cru = {t: number[]; lat: number[]; lon: number[]; h: number[]; x?: number[]; v?: number[]; mach?: number[]; ang?: number[]};
-const constroi = (id: string, c: Cru, solo: [number, number]): Track => {
+// remove amostras com t repetido (ex.: ultima amostra duplicada em series do fisica.py): monoton()/interpolacao dividiriam por zero e a cena inteira some (NaN)
+const semRepetidos = (c: Cru): Cru => {
+  const idx = c.t.map((_, i) => i).filter((i) => i === 0 || c.t[i] > c.t[i - 1] + 1e-9);
+  if (idx.length === c.t.length) return c;
+  const pick = (a?: number[]) => (a ? idx.map((i) => a[i]) : a);
+  return {t: pick(c.t)!, lat: pick(c.lat)!, lon: pick(c.lon)!, h: pick(c.h)!, x: pick(c.x), v: pick(c.v), mach: pick(c.mach), ang: pick(c.ang)};
+};
+const constroi = (id: string, c0: Cru, solo: [number, number]): Track => {
+  const c = semRepetidos(c0);
   let { t } = c;
   const n0 = t.length;
   const dt0 = (t[n0 - 1] - t[0]) / (n0 - 1);

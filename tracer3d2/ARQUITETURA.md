@@ -44,6 +44,29 @@ O 1.0 continua funcionando até o 2.0 provar, num vídeo inteiro, que entrega a 
 - Render em trecho: `canal.py render <proj> <ini_s> <fim_s> <destino>`, com um Chrome por faixa. Vários Chromes são obrigatórios, porque várias abas WebGL num Chrome só dão "Shader Error VALIDATE_STATUS". Medido: capítulo de 111 s em 146 s.
 - Brief dos agentes de código: `modelo/KIT_BRIEF.md`. O mesmo contrato vale para as cenas inéditas de cada vídeo.
 
+## Lições do vídeo 3 (V3, 24/10/2026): 3 h 20 min, ~27 % menos tokens que a Bertha
+- **Subir a G4 antes da narração.** Colab e AI Studio no mesmo navegador travam um ao outro. O `canal.py ligar` agora só conecta o runtime; o vigia é a `vigia_t2` do kernel, sem o vigia antigo do `g4.py`.
+- **G4 desligada por ociosidade devolve página sem JSON.** Isso conta como "fora do ar" (`G4_FORA`), e o `garantir` religa.
+- **TaskStop no Windows não mata o python filho.** Use `taskkill /T /F` e trava de processo único em todo script de automação (narrar.py).
+- **Tokens:** os planejadores (1,07 M) e as cenas inéditas (1,29 M) foram o grosso. Próximo passo:
+  - planejador confere por checagem automática mais uma folha por capítulo, não por rodadas de stills;
+  - inéditas só onde o roteiro exige;
+  - modelos novos (tubo, bunker, aviões) vão para o kit.
+- **Efeitos sonoros por regras sem LLM** (`ferramentas/efeitos.py`), e legendas pelas palavras alinhadas (`ferramentas/legendas.py`).
+
+## Portão obrigatório: batedor de stack (desde 24/10/2026)
+Ordem: plano de batidas → **batedor de stack** → agentes inéditos. É um portão: os agentes inéditos só começam depois do relatório `BATEDOR_<video>.md` aprovado pelo maestro.
+- O batedor inventaria os elementos novos ou fracos do vídeo (as batidas `INEDITO_*` e o que o kit faz mal). Depois varre GitHub, npm, fórum three.js e bancos CC0 em busca de libs e assets que elevem a qualidade, com prova rápida, licença comercial, determinismo e compatibilidade com three 0.180.
+- O batedor de dados (mapas, satélite, fotos) **não** substitui o batedor de stack.
+- Na V3 ele foi pulado: o Lancaster ficou simplificado, Suffolk ficou borrado e as rachaduras saíram desenhadas à mão em vez de pinata.
+
+## Dinamismo (feedback do Eduardo, 24/10/2026: a V3 ficou menos dinâmica que a Bertha)
+A V3 teve 58% de cartões 2D (`ui`), contra 37% na Bertha. Regras do planejador:
+- no máximo **40%** de batidas `ui` no vídeo;
+- nunca mais de **2 cartões seguidos**;
+- pelo menos **1 cena 3D ou mapa a cada ~15 s**.
+Números e fórmulas entram por cima do 3D (HUD e rótulos na cena) sempre que der, em vez de cartão sobre fundo liso.
+
 ## Regras herdadas do 1.0 (continuam valendo)
 Batedor sempre · G4 sempre desligada quando ociosa · entrega/ só com mp4 com áudio (ffprobe) · 3 miniaturas no teste A/B · sem marca SIMULATION · créditos de dados obrigatórios · nada no C: · repo público sem segredos.
 
