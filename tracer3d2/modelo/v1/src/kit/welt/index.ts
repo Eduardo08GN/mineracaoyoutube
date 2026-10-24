@@ -3,6 +3,7 @@ import React from 'react';
 import {Motor} from './motor';
 import {Flug} from './flug';
 import {Modell} from './modell';
+import './modelos_gustav';   // registra os modelos do video 4 (Schwerer Gustav) em modelos.tsx
 
 // Cenas da familia welt (documentadas em API.md desta pasta)
 const Bahn: React.FC<any> = (props) => React.createElement(Motor, {...props, modo: 'bahn'});

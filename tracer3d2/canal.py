@@ -12,7 +12,7 @@ import base64, hashlib, io, json, os, subprocess, sys, tarfile, threading, time
 from concurrent.futures import ThreadPoolExecutor
 import requests
 
-sys.path.insert(0, os.environ.get("COLAB_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "eddie3d", "ferramentas"))); sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+COLAB_DIR = os.environ.get("COLAB_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "eddie3d", "ferramentas")); sys.path.insert(0, COLAB_DIR); sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 AQUI = os.path.dirname(os.path.abspath(__file__))
 TMP = os.environ.get("T2_TMP", "D:/tmp")   # nunca no C: (disco cheio)
 ESTADO = f"{TMP}/t2_canal.json"; CACHE_SHA = f"{TMP}/t2_sha.json"
@@ -133,7 +133,8 @@ def exec_vm(cmd, cwd=None, prazo=3600, estagnacao=300, marca=None, daemon=False)
     t0 = time.time(); bat = t0; ultimo = ""; mudou = t0
     while True:
         time.sleep(5)
-        j = req("GET", "/job", params={"id": i, "n": 2000}).json()
+        try: j = req("GET", "/job", params={"id": i, "n": 2000}).json()
+        except ValueError: raise SystemExit(f"G4_FORA durante o job {i} (runtime caiu: limite de sessao do Colab?)")
         if j["cauda"] != ultimo: ultimo = j["cauda"]; mudou = time.time()
         if j["estado"] != "rodando":
             if j["estado"] == "falhou": raise SystemExit(f"JOB_FALHOU rc={j['rc']}:\n{j['cauda'][-1500:]}")
@@ -194,9 +195,23 @@ def ligar():
            f"exec(base64.b64decode({base64.b64encode(VIGIA_KERNEL.encode()).decode()!r}).decode())\n"
            "from google.colab.output import eval_js\n"
            "print('URL=' + eval_js('google.colab.kernel.proxyPort(8765, {cache: false})') + '=FIM'); print('CANAL_PRONTO')")
-    out = colab.rodar(cod, 180, "CANAL_PRONTO")
-    if "URL=" not in out: raise SystemExit("CANAL_SEM_URL:\n" + out[-800:])
-    json.dump({"url": out.split("URL=")[1].split("=FIM")[0].strip()}, open(ESTADO, "w"))
+    # colab.rodar travou 2x lendo a saida da celula (24/10/2026, 12 min parado com a celula ja pronta): roda num subprocesso
+    # com prazo e, se estourar, le a URL direto do texto da pagina
+    cf = f"{TMP}/t2_celula.py"; open(cf, "w", encoding="utf-8").write(cod)
+    runner = (f"import sys; sys.path.insert(0, {COLAB_DIR!r}); import colab; "
+              f"print(colab.rodar(open({cf!r}, encoding='utf-8').read(), 180, 'CANAL_PRONTO'))")
+    try:
+        out = subprocess.run([sys.executable, "-c", runner], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=240).stdout
+    except subprocess.TimeoutExpired:
+        log("ALERTA rodar travou; lendo a URL direto da pagina"); out = ""
+    if "URL=https://" not in out:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p: out = colab.aba(p).inner_text("body")
+    # so vale "URL=https://...=FIM" da SAIDA (o codigo da celula tambem contem "URL=" e enganou o plano B em 24/10/2026)
+    import re
+    m = re.search(r"URL=(https://[^\s=]+)=FIM", out)
+    if not m: raise SystemExit("CANAL_SEM_URL:\n" + out[-800:])
+    json.dump({"url": m.group(1)}, open(ESTADO, "w"))
     renovar_cookies(); log("canal no ar:", saude())
 
 

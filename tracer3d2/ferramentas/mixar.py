@@ -38,7 +38,11 @@ caps = PLAN["kapitel"]
 for i, k in enumerate(caps):
     y = ler(f"{R}/audio/pm/m{k['id'][:2]}.flac")
     fim = caps[i + 1]["s"] + 1.2 if i + 1 < len(caps) else PLAN["dauer"]
-    y = y[: int((fim - k["s"] + 0.6) * SR)]
+    falta = int((fim - k["s"] + 0.6) * SR)
+    while len(y) < falta:   # capitulo ficou mais longo que a trilha (ex.: TTS regerado): repete com fusao de 1,5 s
+        xf = int(1.5 * SR); r = np.linspace(0, 1, xf, dtype=np.float32)[:, None]
+        y = np.concatenate([y[:-xf], y[-xf:] * (1 - r) + y[:xf] * r, y[xf:]])
+    y = y[:falta]
     y = rampa(y * 10 ** ((-31 - lufs(y)) / 20), 0.8 if i else 0.05, 1.6)
     por(mus, y, max(0, k["s"] - 0.6))
 # cama sobe um pouco nos respiros entre capitulos e nos ultimos segundos (sem voz)

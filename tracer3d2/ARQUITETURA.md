@@ -60,6 +60,13 @@ Ordem: plano de batidas → **batedor de stack** → agentes inéditos. É um po
 - O batedor de dados (mapas, satélite, fotos) **não** substitui o batedor de stack.
 - Na V3 ele foi pulado: o Lancaster ficou simplificado, Suffolk ficou borrado e as rachaduras saíram desenhadas à mão em vez de pinata.
 
+## Narração: o alinhamento é o portão de qualidade (Gustav, 24/10/2026)
+- O Gemini TTS **pulou 69–76 palavras** do capítulo 8, duas vezes no mesmo trecho, e a checagem de duração não pegou. O trecho começava com "Ergebnis: …". O TTS tem modo de roteiro ("Nome: fala"), e uma palavra solta seguida de dois-pontos no início de frase pode virar rótulo e sumir.
+- **Regras:**
+  - no roteiro, nada de "Palavra:" abrindo frase; use frase completa;
+  - depois do alinhamento, todo capítulo com WER > 0,15 passa por diff contra o roteiro. Diferença de número escrito por extenso contra dígito é normal; trecho apagado não é.
+  - Para regerar um capítulo, use `narrar.py <id>`, depois `kv3/alinhar_um.py <id>` na G4, e mescle o resultado.
+
 ## Dinamismo (feedback do Eduardo, 24/10/2026: a V3 ficou menos dinâmica que a Bertha)
 A V3 teve 58% de cartões 2D (`ui`), contra 37% na Bertha. Regras do planejador:
 - no máximo **40%** de batidas `ui` no vídeo;

@@ -18,7 +18,8 @@ const assinar = (d) => fs.readdirSync(d, {recursive: true}).sort()
 	.map((f) => { const s = fs.statSync(path.join(d, f)); return s.isFile() ? `${f}:${s.size}:${s.mtimeMs}` : ''; }).join('|');
 
 async function garantirBundle() {
-	const a = assinar(path.join(PROJ, 'src'));
+	// public/ tambem entra: o bundle copia public/ e um arquivo novo (ex.: bahn.json) nao aparecia sem mexer em src (24/10/2026)
+	const a = assinar(path.join(PROJ, 'src')) + '#' + assinar(path.join(PROJ, 'public'));
 	if (a === assinatura && comp) return 0;
 	const t0 = Date.now();
 	execSync('npx remotion bundle src/index.tsx --out-dir=bundle_q', {cwd: PROJ, stdio: 'pipe'});

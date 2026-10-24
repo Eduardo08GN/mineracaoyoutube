@@ -66,3 +66,6 @@ Palco escuro com grade em metros e luz de estúdio; o modelo vem do **registro**
 
 ## Pacotes de terreno do vídeo (24/10/2026)
 `terreno.pacote` aceita, por nome, `loncin`, `regiao` **ou qualquer nome registrado em `src/cenas/pacotes.json`** (dados por vídeo, no mesmo formato do objeto inline). O batedor de dados acrescenta os pacotes ali, sem mexer no código.
+
+## Modelos do vídeo 4 (Schwerer Gustav), registrados no kit
+Use em `Modell` pelo nome: `Gustav` (elevação, recuo, explodido, carregamento, rede, brilho, blueprint, truques acesos), `GustavRohr` (corte do tubo), `Betongranate`, `Sprenggranate`, `Kleinwagen`, `Haus4`, `Portal` (guindaste), `Flachwagen`, `GleisG4`, `VerladeZug`, `Anel`, `Kriecher`, `Feuer`. Código: `welt/g4_gustav_modell.tsx` + `kit/welt/modelos_gustav.tsx`.
