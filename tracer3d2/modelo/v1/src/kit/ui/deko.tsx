@@ -1,7 +1,7 @@
 // Zeichnung/Deko: freie Elemente (1920 x 1080 px) mit Einsatzzeit; plus Rahmen (Heft-Hintergrund, Kopfzeile, Fortschritt, Fuss) fuer alle Szenen der Familie ui.
 // Element-Typen: text zahl tex kreis rechteck linie pfeil bogen wuerfel ikon chip siegel raster skala lkw schale kurve karte balken rahmen pfad
 import React from 'react';
-import {C, F, fase, sichtbar} from '../../ui/basis';
+import {C, F, fase, sichtbar, QUELLEN_IM_BILD} from '../../ui/basis';
 import {Heft, Siegel, Pfeil, zeichne, federn, mix} from '../../ui/u1_heft';
 import {Tex} from '../../ui/u1_formel';
 import {Fortschritt, Lkw, Schale} from '../../ui/b1_basis';
@@ -337,7 +337,7 @@ export const Rahmen: React.FC<{c: Ctx; p: any; children?: React.ReactNode; kopfE
         {children}
         <Deko c={c} el={p.deko} />
       </div>
-      {p.quelle && <div style={{position: 'absolute', right: 56, bottom: 36, fontFamily: F.mono, fontSize: 18, letterSpacing: 1.5, color: 'rgba(233,225,207,0.45)', opacity: sichtbar(c.ts, 0.5, 0.6), textAlign: 'right'}}>{p.quelle}</div>}
+      {p.quelle && QUELLEN_IM_BILD && <div style={{position: 'absolute', right: 56, bottom: 36, fontFamily: F.mono, fontSize: 18, letterSpacing: 1.5, color: 'rgba(233,225,207,0.45)', opacity: sichtbar(c.ts, 0.5, 0.6), textAlign: 'right'}}>{p.quelle}</div>}
     </Heft>
   );
 };

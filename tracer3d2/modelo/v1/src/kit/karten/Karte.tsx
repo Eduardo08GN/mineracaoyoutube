@@ -2,7 +2,7 @@
 //  base (raster/relevo/simples) + camera por keyframes ancoraveis em palavras + lista de camadas + titulo + linha de fonte.
 //  Tudo e funcao pura de t. Nenhum dado de video especifico aqui: coordenadas, arquivos, textos e cores vem das props.
 import React from 'react';
-import {C, F, fase, sichtbar} from '../../ui/basis';
+import {C, F, fase, sichtbar, QUELLEN_IM_BILD} from '../../ui/basis';
 import {de} from '../../daten';
 import {
   Atlas, Ort, Marke, Linie, Kreis, Pfeil, Lineal, Ziel, Blitz, Rahmen, KartenTitel, Gradnetz, Svg, projektion, kamFahrt, Proj, LL, XY, pfad, azimut, ziel as zielPkt, zufall, ausMetern, schneide, xyPfad, W, H,
@@ -392,7 +392,7 @@ export const Karte: React.FC<KitProps<any>> = ({t, d, b, p: raw}) => {
       {ebenen.map((e, i) => { const R = EBENEN[e.typ]; return R ? <R key={e.id ?? i} e={e} c={c} /> : null; })}
       {ti && <KartenTitel t={t} em={zt(ti.em, 0.15)} ate={ti.ate !== undefined ? zt(ti.ate) : undefined} titel={ti.text} unter={ti.unter} />}
       {rh && <Rahmen p={p} massstab={(rh.massstab ?? true) && zlSicht < 0.5} koord={rh.koord ?? false} />}
-      {P.quelle && <Credit text={P.quelle} />}
+      {P.quelle && QUELLEN_IM_BILD && <Credit text={P.quelle} />}
     </Atlas>
   );
 };

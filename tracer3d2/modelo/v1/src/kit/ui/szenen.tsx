@@ -1,7 +1,7 @@
 // Weitere Szenen der Familie ui: Kurve, Zitat, Zeitleiste, Foto.
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
-import {C, F, fase, sichtbar} from '../../ui/basis';
+import {C, F, fase, sichtbar, QUELLEN_IM_BILD} from '../../ui/basis';
 import {Korn, Vignette} from '../../ui/u2_basis';
 import {KitProps} from '../tipos';
 import {Ctx, mkCtx, Rt} from './lib';
@@ -126,7 +126,7 @@ export const Foto: React.FC<KitProps<any>> = ({t, b, p}) => {
           <div style={{fontFamily: F.text, fontWeight: 500, fontSize: 44, color: C.papier, textShadow: rahmen ? undefined : '0 2px 14px rgba(0,0,0,0.9)', lineHeight: 1.15}}><Rt text={p.legende} /></div>
         </div>
       )}
-      {p.quelle && <div style={{position: 'absolute', right: 56, bottom: 36, fontFamily: F.mono, fontSize: 18, letterSpacing: 1.5, color: 'rgba(233,225,207,0.6)', textShadow: '0 1px 6px rgba(0,0,0,0.9)', opacity: sichtbar(ts, 0.5, 0.6), textAlign: 'right'}}>{p.quelle}</div>}
+      {p.quelle && QUELLEN_IM_BILD && <div style={{position: 'absolute', right: 56, bottom: 36, fontFamily: F.mono, fontSize: 18, letterSpacing: 1.5, color: 'rgba(233,225,207,0.6)', textShadow: '0 1px 6px rgba(0,0,0,0.9)', opacity: sichtbar(ts, 0.5, 0.6), textAlign: 'right'}}>{p.quelle}</div>}
     </AbsoluteFill>
   );
 };

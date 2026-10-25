@@ -5,7 +5,7 @@ import {AbsoluteFill, useCurrentFrame} from 'remotion';
 import {BEATS} from './beats';
 import {CENAS, KIT} from './kit';
 import {Beat, PLAN} from './tempo';
-import {C, F, fase, Kanal} from './ui/basis';
+import {C, F, fase, Kanal, QUELLEN_IM_BILD} from './ui/basis';
 
 for (const Cl of [typeof WebGL2RenderingContext !== 'undefined' ? WebGL2RenderingContext : null, typeof WebGLRenderingContext !== 'undefined' ? WebGLRenderingContext : null]) {
   if (!Cl || (Cl.prototype as any).__semParalelo) continue;
@@ -61,7 +61,8 @@ export const Video: React.FC = () => {
       <AbsoluteFill style={{opacity: vor ? fase(tv - b.s, 0, UEB) : 1}}><Zeige b={b} tv={tv} /></AbsoluteFill>
       {/* marca d'agua: so '@<canal>' (KANAL em ui/basis), sem 'SIMULATION' (pedidos de 24/10/2026) */}
       <Kanal />
-      {b === PLAN.beats[PLAN.beats.length - 1] && <Abspann t={tv - b.s} />}
+      {/* creditos so na descricao (QUELLEN_IM_BILD = false) */}
+      {QUELLEN_IM_BILD && b === PLAN.beats[PLAN.beats.length - 1] && <Abspann t={tv - b.s} />}
     </AbsoluteFill>
   );
 };

@@ -194,7 +194,10 @@ def ligar():
            "subprocess.Popen('nohup python3 /content/t2/vm/servidor.py > /content/t2/servidor.log 2>&1 &', shell=True); time.sleep(2)\n"
            f"exec(base64.b64decode({base64.b64encode(VIGIA_KERNEL.encode()).decode()!r}).decode())\n"
            "from google.colab.output import eval_js\n"
-           "print('URL=' + eval_js('google.colab.kernel.proxyPort(8765, {cache: false})') + '=FIM'); print('CANAL_PRONTO')")
+           "print('URL=' + eval_js('google.colab.kernel.proxyPort(8765, {cache: false})') + '=FIM'); print('CANAL_PRONTO')\n"
+           # a celula FICA rodando: o Colab desconecta "por inatividade" um runtime sem celula ativa, mesmo com o canal HTTP em uso
+           # (24/10/2026: caiu no meio do render apos ~3 h). O desligamento continua com a vigia_t2 (ociosidade real/DESLIGAR).
+           "while not os.path.exists('/content/t2/DESLIGAR'): time.sleep(30)")
     # colab.rodar travou 2x lendo a saida da celula (24/10/2026, 12 min parado com a celula ja pronta): roda num subprocesso
     # com prazo e, se estourar, le a URL direto do texto da pagina
     cf = f"{TMP}/t2_celula.py"; open(cf, "w", encoding="utf-8").write(cod)
@@ -206,7 +209,11 @@ def ligar():
         log("ALERTA rodar travou; lendo a URL direto da pagina"); out = ""
     if "URL=https://" not in out:
         from playwright.sync_api import sync_playwright
-        with sync_playwright() as p: out = colab.aba(p).inner_text("body")
+        with sync_playwright() as p:   # a saida da celula fica num iframe (Colab, 24/10/2026): varre todos os frames
+            nb = colab.aba(p); out = nb.inner_text("body")
+            for fr in nb.frames:
+                try: out += " " + fr.evaluate("() => document.body ? document.body.innerText : ''")
+                except Exception: pass
     # so vale "URL=https://...=FIM" da SAIDA (o codigo da celula tambem contem "URL=" e enganou o plano B em 24/10/2026)
     import re
     m = re.search(r"URL=(https://[^\s=]+)=FIM", out)

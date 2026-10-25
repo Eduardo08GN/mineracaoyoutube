@@ -83,6 +83,8 @@ export const Hud: React.FC<{t: number; em?: number; zeilen: [string, string][]; 
 // marca d'agua do canal e selo de simulacao (sempre que houver cena calculada)
 // canal de destino do video: nome da marca d'agua e do CTA (Kriegsmomente desde o video 3, 24/10/2026)
 export const KANAL = 'Kriegsmomente';
+// creditos/licencas de dados NAO aparecem na imagem, so na descricao do video (pedido do Eduardo, 24/10/2026)
+export const QUELLEN_IM_BILD = false;
 // marca d'agua so com o nome do canal (sem 'SIMULATION', pedido de 24/10/2026)
 export const Kanal: React.FC<{art?: string}> = ({art}) => (
   <div style={{position: 'absolute', right: 48, bottom: 36, fontFamily: F.mono, fontSize: 18, letterSpacing: 2, color: 'rgba(233,225,207,0.45)'}}>@{KANAL}{art ? ` · ${art}` : ''}</div>
