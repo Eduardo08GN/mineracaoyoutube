@@ -32,8 +32,9 @@ ETAPAS = [
          "(19/10) Nunca cortar ingrediente nem quantidade (\"uma colher de alho em pó\").",
          "⭐ (20/10) Leve adaptação só no fechamento: o CTA da fonte vira uma fala curta da Tomiko (tradição, carinho), "
          "sem pedir nada; depois vem o take do CTA.",
-         "⭐ (20/10) CTA fixo da Tomiko: \"Escreva eu quero, aqui embaixo e te mando o guia completo.\" Não diz DM, "
-         "nem \"de graça\" (o livro é pago).",
+         "⭐ (20/10) CTA fixo da Tomiko. Não diz DM, nem \"de graça\" (o livro é pago).",
+         "⭐ (26/10) O CTA pede para seguir, para podermos mandar o material: \"Me segue pra eu poder te mandar. "
+         "Escreva eu quero, aqui embaixo e te mando o guia completo.\"",
          "⭐ (20/10) O Claude lê os quadros da fonte antes de descrever os objetos: copo é copo, nada de celular inventado.",
          "⭐ (26/10) A ação da fonte acontece no take: se a fonte (ou a fala) bate, polvilha, despeja ou mexe, a Tomiko "
          "faz isso de verdade, com o utensílio e o ingrediente já na mão desde o quadro inicial. Nunca só segurar a "

@@ -114,7 +114,8 @@ TOMIKO = {
          "on a low wooden stand, green garden visible, late afternoon light."),
     ],
     "idioma": "pt", "cta": "eu quero", "genero": "f",
-    "cta_fala": "Escreva eu quero, aqui embaixo e te mando o guia completo.",
+    # ⭐ (26/10, ordem do Eduardo) o CTA pede para seguir: a DM de quem nao segue cai em "Pedidos de mensagem"
+    "cta_fala": "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo.",
     "mundo": ("her small farm (chácara) near Londrina, Paraná, Brazil: rustic dark wood, ceramic fermentation jars, "
               "potted herbs, red earth, warm natural light"),
 }
@@ -703,8 +704,8 @@ def _autoteste():
     caso("⭐ (26/10) take com acao em que ela termina como comecou e' acusado (o CTA e o take sem acao, nao)",
          lido_a["takes"][0]["acao"] == "whisks the water" and takes_parados(lido_a["takes"]) == [1])
     caso("⭐ CTA fixo da Tomiko: a frase vai na regra, palavra por palavra",
-         cta_fala({"persona": "tomiko"}) == "Escreva eu quero, aqui embaixo e te mando o guia completo."
-         and "Escreva eu quero, aqui embaixo e te mando o guia completo." in regra_cta({"tipo": "palavra", "palavra": "eu quero"},
+         cta_fala({"persona": "tomiko"}) == "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo."
+         and "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo." in regra_cta({"tipo": "palavra", "palavra": "eu quero"},
                                                                                      {"persona": "tomiko"})
          and cta_fala({"persona": "tomiko"}, {"tipo": "palavra", "palavra": "umeboshi"}) == ""
          and cta_fala({"persona": "beppe"}) == "")

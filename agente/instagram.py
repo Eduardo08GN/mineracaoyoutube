@@ -1834,8 +1834,8 @@ def _autoteste():
     ig.esperar(120)
     r3 = ig.reel(r3["id"])
     caso("⭐ roteiro: a frase fixa do CTA da Tomiko vai no pedido e no take do CTA",
-         "Escreva eu quero, aqui embaixo e te mando o guia completo." in pedidos[-1]
-         and r3["takes"][-1]["cta"] and r3["takes"][-1]["fala"] == "Escreva eu quero, aqui embaixo e te mando o guia completo.")
+         "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo." in pedidos[-1]
+         and r3["takes"][-1]["cta"] and r3["takes"][-1]["fala"] == "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo.")
     caso("⭐ licao de palavra no roteiro: na regra e no lint", 'Never use the word "Tomiko"' in pedidos[-1]
          and all("Tomiko" not in t["fala"] for t in r3["takes"]) and "Fala 1 da Tomi" in r3["takes"][0]["fala"]
          and any("lições no roteiro" in x["texto"] for x in r3["registro"]))

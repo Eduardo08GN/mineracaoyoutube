@@ -158,7 +158,7 @@ def _autoteste():
          'rewrote the movimento by hand: "ela esta com tres maos"' in pm and "not text to copy" in pm)
     pc = pedido_correcao(_rot.TOMIKO, "pt", {"tipo": "palavra", "palavra": "eu quero"}, {**take, "cta": True}, "x", [], "", "P")
     caso("pedido: o take do CTA leva a regra do CTA (a frase fixa da Tomiko)",
-         "Escreva eu quero, aqui embaixo e te mando o guia completo." in pc)
+         "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo." in pc)
     caso("⭐ pedido: as licoes ativas entram nas regras", "- LICAO Y" in pedido_correcao(_rot.TOMIKO, "pt", {}, take, "x", [], "",
                                                                                      "P", extras="- LICAO Y"))
     r = ler_correcao('ok {"fala": "Sai um pão macio — leve", "quadro": "Q", "movimento": "M", "refazer_quadro": true,'
