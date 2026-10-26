@@ -24,6 +24,8 @@ Agente: se o sintoma aparecer, não investigue de novo; aplique a regra. Encontr
 | 1.12 | "Shader Error VALIDATE_STATUS" no render | Várias abas WebGL num mesmo Chrome | Um Chrome por faixa de quadros | `vm/render.sh` |
 | 1.13 | Agentes apagaram a trava do `garantir` e renderizaram localmente | Pressa diante da G4 lenta | Brief: **nunca** renderizar localmente nem apagar trava; esperar. A trava tem validade de 30 min | briefs, `canal.py` |
 | 1.14 | `ligar` travava durante a narração | Colab e AI Studio no **mesmo navegador** | **G4 primeiro**. A narração só começa depois de "stills quentes prontos" | procedimento |
+| 1.16 | `ligar`: `DevToolsActivePort` não existe | O perfil do Dolphin foi aberto **pela janela** (sem porta de automação) | Pela API local: `/browser_profiles/<id>/stop`, esperar uns segundos e `/start?automation=1` (repetir enquanto der `PROFILE_ALREADY_RUNNING`) | procedimento |
+| 1.17 | Depois de reiniciar o perfil, o Colab mostra "Escolha uma conta" e a conta aparece "Desconectada" | O reinício do perfil derrubou a sessão Google | Pedir ao Eduardo que entre (nunca digitar senha). Enquanto isso, adiantar o que não usa a G4. Depois do login, a aba do AI Studio também precisa ser reaberta (`/generate-speech`) | procedimento |
 | 1.15 | Batedor matou todos os `node.exe` da máquina | `taskkill /IM node.exe` | Mate só os PIDs que você abriu | brief do batedor |
 
 ## 2. Narração (AI Studio / Gemini TTS)
@@ -36,6 +38,7 @@ Agente: se o sintoma aparecer, não investigue de novo; aplique a regra. Encontr
 | 2.4 | Baixava lixo em 12 s | Run não tinha começado a gerar | Só conta depois de aparecer "Stop"; o wav é validado com ffprobe | `narrar.py` |
 | 2.5 | Download sempre com 0 byte | O clique em **pausa** passou a abortar o áudio | **Nunca** clicar em pausa; repetir o download vazio até 5 vezes | `narrar.py` |
 | 2.6 | O TTS **pulou 69–76 palavras** duas vezes no mesmo trecho; a duração não denunciou | A frase começava com "Ergebnis: …"; o modo roteiro ("Nome: fala") trata isso como rótulo | No roteiro, **nunca "Palavra:" abrindo frase**. O **WER é o portão**: capítulo com WER > 0,15 passa por diff (dígito contra número por extenso é normal; trecho apagado não é). Para regerar: `narrar.py <id>`, `kv3/alinhar_um.py <id>` na G4 e mesclar | `g4/alinhar_um.py`, ARQUITETURA |
+| 2.8 | WER 0,41–0,48 com áudio de fala contínua e duração normal (vídeo 6, caps. 8 e 9) | O `transcribe` do Whisper **pula trechos** em áudio longo. O alinhamento forçado (`align` com o roteiro) estava certo | Antes de regerar a narração, transcreva em **pedaços de 30 s** na G4. Só regere se o trecho faltar também nos pedaços | procedimento |
 | 2.7 | Âncoras de batida quebraram depois de reescrever uma frase | A ocorrência (`nr`) de palavras repetidas mudou | Depois de mudar o texto, rode `plano.py` e corrija `wort`/`nr` | procedimento |
 
 ## 3. Plano, kit e cenas
@@ -53,6 +56,8 @@ Agente: se o sintoma aparecer, não investigue de novo; aplique a regra. Encontr
 | 3.9 | `Bahn` à noite com chão preto | Sol abaixo do horizonte apaga o terreno | Cena noturna usa `Flug` com luar; `Bahn` só de dia | API do kit |
 | 3.10 | Terreno novo exigia código | Pacotes por nome eram fixos no código | Pacotes de terreno em **dados** (`cenas/pacotes.json`) | `kit/welt/flug.tsx` |
 | 3.11 | `public/bahn.json` e `zahlen.json` eram do vídeo anterior | Cópia do projeto-base | Ao criar o vídeo, copie `fisica/bahn.json` para `public/` (e sincronize) | procedimento |
+| 3.13 | Duelo de artilharia no `Bahn` ilegível: projéteis finos, trajetória rasa | O `Bahn` foi feito para tiros de dezenas de km; a 2 km a escala some | Tiros curtos e comparações lado a lado viram cena inédita | vídeo 6, `INEDITO_waffen` |
+| 3.14 | Geradores dos planejadores quebraram com `KeyError: 'dur'` | O `alinhamento.json` real não tinha `dur`; o provisório tinha | Depois de baixar o alinhamento, grave `dur` (duração do wav) em cada capítulo | procedimento |
 | 3.12 | Cenas inéditas fracas (céu vazio, tela cinza, manequins) | Acabamento sob pressão | Revise a folha de contato do vídeo inteiro. Batida fraca pode ser trocada por cena do kit **sem novo agente**: escreva `cena` na batida, porque o kit tem prioridade sobre `BEATS` | `Video.tsx` (ordem kit > beats) |
 
 ## 4. Fatos e legendas na tela

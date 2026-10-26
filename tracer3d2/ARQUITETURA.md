@@ -83,3 +83,13 @@ Batedor sempre · G4 sempre desligada quando ociosa · entrega/ só com mp4 com 
 1. Infra: daemon + canal Drive + imagem quente + esteira + boletim. Teste: re-render da Bertha sem custo de agentes.
 2. Biblioteca: ~12 componentes extraídos dos vídeos 1 e 2 + formato JSON das batidas. Teste: 2–3 capítulos da Bertha só a partir de JSON.
 3. Vídeo 3 (Verdun/Douaumont) no 2.0, medindo tempo e tokens contra o vídeo 2.
+
+## Vídeo 6 (1870/71 jeden Tag, 25/10/2026): 2 h 30, Sonnet ≈ 2,85 M, render inteiro em ~12 min
+- **Contador global** (`modelo/opcional/zaehler.tsx`): HUD fixo embaixo, lê uma série diária (`tage.json`).
+  - A data vem das batidas: `datum` (ISO), `lauf: true` (a data corre até a próxima batida datada) e `zaehler: false` (esconde).
+  - O `plano.py` repassa esses campos.
+  - Para usar: copie para `src/`, ponha a série em `src/tage.json` e monte `<Zaehler tv={tv} beat={b} />` no `Video.tsx`, antes do `<Kanal />`.
+- **Fontes de época** (`modelo/opcional/epoche.ts`): carrega TTF de `public/fonts` com `delayRender`.
+  - Old Standard TT (antiqua) para rótulos.
+  - UnifrakturMaguntia (Fraktur) só em títulos.
+- **Novidades do kit no projeto do vídeo 6:** `KruppC64` e `LaHitte` (`registraModelo`), multidões instanciadas (1 figura = 1.000 homens), trem de 1870, balão, neve do Jura.

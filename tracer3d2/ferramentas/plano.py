@@ -27,7 +27,9 @@ for c in caps:
         # 2.0: dono = familia do kit (ui/karten/welt) quando a batida traz "cena" {comp, props}; senao o agente da cena inedita
         bid = f"{k[:2]}_{i + 1:02d}"
         if b.get("cena"): cenas.setdefault(b["dono"], {})[bid] = b["cena"]
-        beats.append({"id": bid, "kap": k, "n": i + 1, "s": round(s, 3), "e": None, "dono": b["dono"], "bild": b.get("bild", ""), "wort": b["wort"]})
+        beats.append({"id": bid, "kap": k, "n": i + 1, "s": round(s, 3), "e": None, "dono": b["dono"], "bild": b.get("bild", ""), "wort": b["wort"],
+                      # video 6: contador de efetivos (src/zaehler.tsx) - data da batida, 'lauf' = data corre ate a proxima, 'zaehler': false = esconde
+                      **{x: b[x] for x in ("datum", "lauf", "zaehler") if x in b}})
     t += d + RESPIRO
 if erros: raise SystemExit("ERROS:\n" + "\n".join(erros))
 dauer = round(t - RESPIRO + CAUDA, 3)
