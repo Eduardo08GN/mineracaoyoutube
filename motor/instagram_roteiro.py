@@ -393,8 +393,13 @@ def regras_take(idioma, extras="", avatar=None):
   screen). Only the items and
   her hands: never the camera, the framing, her face, hair or clothes (the shot itself is copied from the source).
 - "quadro_fim": one short English sentence with the SAME items at the END of the step, after the action is done
-  (e.g. "the salt is inside the blender jar and the small dish is empty in her right hand"). If the step has no
-  physical action (she only talks or shows something), repeat the "quadro".
+  (e.g. "the salt is inside the blender jar and the small dish is empty in her right hand"). Repeat the "quadro"
+  ONLY when "acao" is empty; with an action, "quadro_fim" shows its result and is never the same as "quadro".
+- "acao": the hand actions of this step, in order, in short English ("whips the chickpea water with a whisk;
+  sprinkles cocoa powder over it"), taken from the source frames of the step AND from the original line: when the
+  line names an action (whip, beat, pour, sprinkle, stir, mix, cut, put in the fridge, taste), that action is in
+  "acao" even if no frame shows it. "" only when the source step shows no hand action and the line names none (she
+  only talks or shows the finished food).
 - "movimento": exactly two short English sentences, in positive phrasing (what she does, never what she does not
   do). The original line says what is being done in the source video: she does THAT action for real and
   completely, exactly as the source does it (if the source pours the salt into the blender, she pours it in;
@@ -402,6 +407,12 @@ def regras_take(idioma, extras="", avatar=None):
   holds the item and how, the knife direction (across the carrot into round slices, or along it into sticks) and
   that each stroke of the knife makes exactly one piece, the pieces piling up one by one (nothing appears, splits
   or multiplies on its own).
+  When "acao" is not empty, holding the item and talking is NEVER the movement: she performs the action of "acao"
+  for real (the whisk turns inside the bowl and the mixture foams, the cocoa powder falls from the spoon over the
+  mixture). When the source step has several quick actions (several shots), she does them in ONE continuous motion,
+  at most two, in the order of the line. Every tool and ingredient of the action is already in her hands or in front
+  of her in the "quadro" (the whisk inside the bowl, the small bowl of cocoa powder in her hand above it): nothing
+  appears later.
   1st sentence starts with "As she speaks," and describes the whole action from the "quadro" state to the
   "quadro_fim" state: name the hand (right hand, left hand or both hands), the contact point, the item with the
   SAME noun used in the "quadro", and what happens to it (it falls into, is poured into, is sprinkled over...).
@@ -419,14 +430,21 @@ REGRAS_CONTEUDO = """Content rules (mandatory):
 def texto_quadros(quadros):
     """⭐⭐ (20/10) o Claude so' via a TRANSCRICAO e adivinhava os objetos (um celular no "me segue", um amassador no
     lugar do copo): agora ele le os quadros do video de origem (o inicio e o fim de cada take) antes de escrever.
-    quadros = {n: (inicio.jpg, fim.jpg)}"""
+    ⭐⭐ (26/10, Eduardo) com so' o inicio e o fim ele nao via a acao do meio (bater, polvilhar o cacau) e punha a
+    Tomiko so' segurando a tigela: agora vai a sequencia do take, do inicio ao fim.
+    quadros = {n: (inicio.jpg, meio1.jpg, ..., fim.jpg)}"""
     if not quadros: return ""
-    linhas = "\n".join(f"- take {n}: start {a} ; end {b}" for n, (a, b) in sorted(quadros.items()))
+
+    def seq(fotos):
+        return f"start {fotos[0]} ; " + "".join(f"then {f} ; " for f in fotos[1:-1]) + f"end {fotos[-1]}"
+    linhas = "\n".join(f"- take {n}: {seq(fotos)}" for n, fotos in sorted(quadros.items()))
     return f"""
-Frames of the source video (open each one with the Read tool BEFORE writing; they are the truth about what is on
-screen in each take: the items, the tools, the hands, the action from start to end):
+Frames of the source video, in order, from the start to the end of each take (open EVERY one with the Read tool
+BEFORE writing; they are the truth about what is on screen in each take: the items, the tools, the hands and every
+action that happens between them, like whisking, pouring or sprinkling):
 {linhas}
-"quadro", "quadro_fim" and "movimento" describe what these frames show, never what the speech suggests.
+"quadro", "quadro_fim", "acao" and "movimento" describe what these frames show, never what the speech suggests
+(except that an action named in the line is always in "acao").
 """
 
 
@@ -460,7 +478,7 @@ Also write "legenda_post": the Instagram post caption in {info["lingua"]} (2 to 
 line, ending with the same call to action).
 
 JSON format:
-{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "quadro_fim": "...", "movimento": "...", "cta": false}}, ...],
+{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "acao": "...", "quadro_fim": "...", "movimento": "...", "cta": false}}, ...],
  "legenda_post": "..."}}"""
 
 
@@ -474,6 +492,14 @@ def frases_partidas(takes):
         if not re.search(r"[.!?…]$", fala) or (prox[:1].islower()):
             ruins.append(t["n"])
     return ruins
+
+
+def takes_parados(takes):
+    """⭐⭐ (26/10, Eduardo) os takes com acao ("acao" nao vazia) em que a Tomiko termina como comecou (o "quadro_fim"
+    igual ao "quadro"): ela so' segura a tigela e fala. Devolve os numeros dos takes (o CTA fica de fora)."""
+    norm = lambda s: " ".join((s or "").lower().split())                  # noqa: E731
+    return [t["n"] for t in takes if not t.get("cta") and (t.get("acao") or "").strip()
+            and norm(t.get("quadro_fim")) == norm(t.get("quadro"))]
 
 
 def ler_adaptacao(texto, n_origem):
@@ -498,7 +524,8 @@ def ler_adaptacao(texto, n_origem):
         fala = re.sub(r"\s*[—–]\s*|\s+-\s+", ", ", fala.strip())      # ⛔ o Veo vocaliza o travessao
         quadro, quadro_fim = t.get("quadro"), t.get("quadro_fim")
         quadro = quadro.strip() if isinstance(quadro, str) else ""
-        saida.append({"n": i, "fala": fala, "quadro": quadro,
+        acao = t.get("acao") if isinstance(t.get("acao"), str) else ""
+        saida.append({"n": i, "fala": fala, "quadro": quadro, "acao": " ".join(acao.split()),
                       "quadro_fim": quadro_fim.strip() if isinstance(quadro_fim, str) and quadro_fim.strip() else quadro,
                       "movimento": mov.strip(), "cta": t.get("cta") is True or i == n_origem + 1})
     if not any(t["cta"] for t in saida): saida[-1]["cta"] = True
@@ -662,6 +689,19 @@ def _autoteste():
                           {"n": 3, "fala": "Fica uma delícia!"}, {"n": 4, "fala": "Quer?"}]) == [1]
          and frases_partidas([{"n": 1, "fala": "Uma frase."}, {"n": 2, "fala": "outra frase."}]) == [1]
          and "COMPLETE sentences" in regras_take("pt"))
+    q3 = texto_quadros({1: ("o1.jpg", "m1.jpg", "m2.jpg", "f1.jpg")})
+    caso("⭐ (26/10) o roteiro le a sequencia do take, do inicio ao fim, e a acao entra no JSON",
+         "start o1.jpg ; then m1.jpg ; then m2.jpg ; end f1.jpg" in q3 and "open EVERY one" in q3
+         and '"acao": "..."' in ped and "holding the item and talking is NEVER the movement" in regras_take("pt"))
+    lido_a = ler_adaptacao(json.dumps({"takes": [
+        {"fala": "Bata.", "quadro": "A bowl and a whisk.", "acao": "whisks  the water", "quadro_fim": "a bowl and a whisk.",
+         "movimento": "m"},
+        {"fala": "Mostre.", "quadro": "The mousse.", "acao": "", "movimento": "m"},
+        {"fala": "Polvilhe.", "quadro": "A bowl.", "acao": "sprinkles cocoa", "quadro_fim": "Cocoa over the bowl.",
+         "movimento": "m"},
+        {"fala": "Escreva.", "quadro": "The book.", "acao": "holds the book", "movimento": "m", "cta": True}]}), 3)
+    caso("⭐ (26/10) take com acao em que ela termina como comecou e' acusado (o CTA e o take sem acao, nao)",
+         lido_a["takes"][0]["acao"] == "whisks the water" and takes_parados(lido_a["takes"]) == [1])
     caso("⭐ CTA fixo da Tomiko: a frase vai na regra, palavra por palavra",
          cta_fala({"persona": "tomiko"}) == "Escreva eu quero, aqui embaixo e te mando o guia completo."
          and "Escreva eu quero, aqui embaixo e te mando o guia completo." in regra_cta({"tipo": "palavra", "palavra": "eu quero"},

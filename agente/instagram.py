@@ -52,6 +52,7 @@ AJUSTES_PADRAO = {"backend": "", "repo_dir": "", "auto_subir": False, "dias": 5,
 EXT_IMAGEM = {"png", "jpg", "jpeg", "webp"}
 MAX_VIDEO_MB = 200
 COPIAS_REFAZER = 4           # ⭐ (20/10) versoes de cada take refeito: a pessoa assiste e escolhe a melhor
+QUADROS_MEIO = 3             # ⭐ (26/10) quadros do meio de cada trecho da fonte que o roteiro le, alem do inicio e do fim
 ESPERA_REFAZER = 6.0         # ⭐ s entre salvar um defeito e mandar refazer: apontar varios takes seguidos vira um job so'
 _ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 
@@ -115,8 +116,9 @@ class Instagram:
         return _persona.chamar_claude(pedido, timeout=timeout, pastas=pastas)
 
     def _quadros_origem(self, r, ns=None):
-        """{n: (origem_NN.jpg, origem_fim_NN.jpg)}: o inicio (15%) e o fim (90%) de cada trecho do video de origem,
-        os mesmos que os quadros do take usam. Sem a fonte, {}."""
+        """{n: (origem_NN.jpg, origem_meio_NN_1..3.jpg, origem_fim_NN.jpg)}: o inicio (15%) e o fim (90%) de cada
+        trecho do video de origem, os mesmos que os quadros do take usam, e (26/10) os quadros do meio, para o
+        Claude ver a acao que acontece entre eles (bater, polvilhar). Sem a fonte, {}."""
         p, origem = self._pasta_reel(r["id"]), r.get("takes_origem") or []
         fonte = os.path.join(p, "fonte.mp4")
         if not (origem and os.path.isfile(fonte)): return {}
@@ -136,7 +138,16 @@ class Instagram:
                     self.midia.quadro(fonte, fim_t, fim)
             except Exception:                                              # noqa: BLE001
                 continue
-            if os.path.isfile(ini) and os.path.isfile(fim): saida[n] = (ini, fim)
+            if not (os.path.isfile(ini) and os.path.isfile(fim)): continue
+            meio, t0, t1 = [], o["ini"] + 0.15 * (o["fim"] - o["ini"]), o["fim"] - 0.1 * (o["fim"] - o["ini"])
+            for k in range(1, QUADROS_MEIO + 1):           # igualmente espacados entre o inicio e o fim do trecho
+                arq = os.path.join(p, f"origem_meio_{n:02d}_{k}.jpg")
+                try:
+                    if not os.path.isfile(arq): self.midia.quadro(fonte, t0 + (t1 - t0) * k / (QUADROS_MEIO + 1), arq)
+                except Exception:                                          # noqa: BLE001
+                    continue
+                if os.path.isfile(arq): meio.append(arq)
+            saida[n] = (ini, *meio, fim)
         return saida
 
     def _gerador(self):
@@ -1117,7 +1128,7 @@ class Instagram:
         lics = self._licoes()
         p = self._pasta_reel(rid)
         for arq in os.listdir(p):                  # ⛔ quadro velho seria de outra fala: roteiro novo = quadros novos
-            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?(_base)?\.png|origem_(fim_)?\d{2}\.jpg)", arq):
+            if arq == "final.mp4" or re.fullmatch(r"(quadro_(fim_)?\d{2}(_q\d+)?(_base)?\.png|origem_(fim_|meio_)?\d{2}(_\d)?\.jpg)", arq):
                 os.remove(os.path.join(p, arq))
         quadros = self._quadros_origem(r)
         pedido = _rot.pedido_adaptacao(r["takes_origem"], r["idioma"], a, r["cta"], _lic.regras_texto(lics, a["id"], r["idioma"]),
@@ -1127,8 +1138,17 @@ class Instagram:
         for i in range(3):                         # ⭐ outra tentativa se vier fora do formato ou com frase partida
             lido = _rot.ler_adaptacao(self._claude(tentativa, pastas=(p,) if quadros else ()), len(r["takes_origem"]))
             if not lido: continue
-            partidas = _rot.frases_partidas(lido["takes"])
-            if not partidas or i == 2: break
+            partidas, parados = _rot.frases_partidas(lido["takes"]), _rot.takes_parados(lido["takes"])
+            if not (partidas or parados) or i == 2: break
+            if parados and not partidas:
+                # ⭐⭐ (26/10, Eduardo) take com acao em que ela so' segura e fala: o Claude refaz com a acao de verdade
+                self._log(f"instagram: takes {parados} de {rid} sem a ação da fonte: o Claude refaz")
+                tentativa = (pedido + f"\n\nIn your previous answer, takes {parados} have an \"acao\" but she ends "
+                             "exactly as she starts (\"quadro_fim\" equal to \"quadro\"): she only holds the item and "
+                             "talks. In those takes she performs the action for real: the \"quadro\" has the tool and "
+                             "the ingredient of the action ready in her hands, the \"movimento\" does the action and "
+                             "the \"quadro_fim\" shows its result. Answer again with the full JSON.")
+                continue
             # ⭐⭐ (23/10) frase partida entre takes muda a entonacao: o Claude refaz com o aviso de quais takes
             self._log(f"instagram: frase partida nos takes {partidas} de {rid}: o Claude refaz")
             tentativa = (pedido + f"\n\nYour previous answer split sentences across takes {partidas}: every take must be "
@@ -1791,9 +1811,12 @@ def _autoteste():
          and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]).startswith("foto.")
          and "Londrina" in g.imagens[n_img][0] and "bamboo bench" not in g.imagens[n_img][0]
          and "same camera angle" in g.imagens[n_img][0] and "step 1." in g.imagens[n_img][0])
-    qs = Midia.quadros[nq0:]
+    qs, k = Midia.quadros[nq0:], 2 + QUADROS_MEIO          # por trecho: inicio, fim e os do meio
     caso("o take do CTA usa o ultimo trecho da origem; o quadro final vem depois do inicial",
-         qs[2 * (len(vs2) - 1)] == qs[2 * (len(vs2) - 2)] and qs[1] > qs[0])
+         qs[k * (len(vs2) - 1)] == qs[k * (len(vs2) - 2)] and qs[1] > qs[0])
+    caso("⭐ (26/10) o roteiro le os quadros do meio de cada trecho, em ordem, entre o inicio e o fim",
+         qs[0] < qs[2] < qs[3] < qs[4] < qs[1]
+         and os.path.isfile(os.path.join(ig._pasta_reel(r2["id"]), f"origem_meio_01_{QUADROS_MEIO}.jpg")))
     caso("⭐ legenda estilo 2: cartoes por cima, sem .ass", ig.reel(r2["id"])["final"]
          and os.path.isdir(os.path.join(ig._pasta_reel(r2["id"]), "cartoes"))
          and not os.path.isfile(os.path.join(ig._pasta_reel(r2["id"]), "legenda.ass")))

@@ -8,7 +8,7 @@ produzir o proximo Reel seguir. Cada etapa: o que faz, onde roda, e as REGRAS do
    que a aplica), com a data. A aba Instagram le daqui (GET /api/instagram/pipeline).
 """
 
-ATUALIZADO = "23/10/2026"
+ATUALIZADO = "26/10/2026"
 
 ETAPAS = [
     {"id": "fonte", "nome": "Fonte", "onde": "agente/instagram.py (_etapa_fonte) · motor/instagram_qa.py",
@@ -35,6 +35,10 @@ ETAPAS = [
          "⭐ (20/10) CTA fixo da Tomiko: \"Escreva eu quero, aqui embaixo e te mando o guia completo.\" Não diz DM, "
          "nem \"de graça\" (o livro é pago).",
          "⭐ (20/10) O Claude lê os quadros da fonte antes de descrever os objetos: copo é copo, nada de celular inventado.",
+         "⭐ (26/10) A ação da fonte acontece no take: se a fonte (ou a fala) bate, polvilha, despeja ou mexe, a Tomiko "
+         "faz isso de verdade, com o utensílio e o ingrediente já na mão desde o quadro inicial. Nunca só segurar a "
+         "tigela e falar. O Claude vê a sequência de cada take da fonte (início, três quadros do meio e fim), e a "
+         "ferramenta devolve ao Claude o take com ação em que ela termina igual começou.",
      ]},
     {"id": "quadros", "nome": "Quadros", "onde": "agente/instagram.py (_quadro_take, _quadro_fim_take) · Flow (imagem)",
      "faz": "Para cada take, o quadro de abertura (com a 2ª passada que reenquadra pela fonte) e o quadro final do "
@@ -64,6 +68,7 @@ ETAPAS = [
      "faz": "Apara cada take, monta 1080×1920 a -14 LUFS e queima a legenda.",
      "regras": [
          "(18/10) Legenda estilo 2, na posição mais baixa do Reel.",
+         "⭐ (26/10) Legenda um pouco mais baixa: a base do cartão em 85% da altura (era 82%).",
          "(19/10) Velocidade 1,11× com ±5% de variação por take.",
          "⭐ (22/10) O corte não pega uma fusão que o Veo faça depois da fala.",
          "⭐ (23/10) Livro na mão no take final quando pedido (capa no avatar, Reel com livro).",

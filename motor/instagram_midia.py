@@ -21,7 +21,8 @@ RESPIRO_S = 0.15
 # ⭐ (18/10, ordem do Eduardo) a legenda fica SEMPRE na posicao mais baixa do Reel: a base do cartao em 82% da altura.
 #    Mais baixo que isso ela entra embaixo da descricao, do @ e dos botoes que o Instagram poe por cima do video.
 #    A base (nao o centro) e' que fica fixa: cartao de 2 linhas cresce para cima, nunca para dentro da faixa do app.
-BASE_LEGENDA = 0.82
+# ⭐ (26/10, ordem do Eduardo) "um pouco mais baixa": a base desceu de 82% para 85% da altura.
+BASE_LEGENDA = 0.85
 # ⭐ (19/10, ordem do Eduardo) cada take entra no Reel a 1,11x, com +-5% de variacao sorteada por take: o ritmo fica
 #    mais vivo e nao soa como o mesmo acelerador aplicado igual no video inteiro.
 VELOCIDADE = 1.11
@@ -295,7 +296,7 @@ def _autoteste():
     tempos = [l.split(",")[1:3] for l in ass.splitlines() if l.startswith("Dialogue")]
     caso("⛔ legenda: uma linha so' por vez", all(a[1] <= b[0] for a, b in zip(tempos, tempos[1:])))
     caso("⛔ legenda: chaves nao viram comando do ASS", "{x}" not in ass.split("[Events]")[1])
-    caso("⭐ legenda simples na base do Reel (82% da altura)", ",90,90,346,1" in ass)
+    caso("⭐ legenda simples na base do Reel (85% da altura)", ",90,90,288,1" in ass)
     f = queimar(m, ass, os.path.join(d, "final.mp4"))
     caso("queimar: final gravado com audio", os.path.getsize(f) > 10_000 and abs(duracao(f) - 5.5) < 0.2)
     cta = [{"w": w, "ini": 2 + i * 0.4, "fim": 2 + i * 0.4 + 0.35} for i, w in enumerate("Comente eu quero, aqui".split())]
@@ -310,7 +311,7 @@ def _autoteste():
         filtro = open(os.path.join(d, "estilo", "cartoes.txt"), encoding="utf-8").read()
         from PIL import Image
         alt = Image.open(os.path.join(d, "estilo", "cartoes", "c000.png")).size[1]
-        caso("⭐ legenda estilo 2: a base do cartao em 82% da altura", f":{int(BASE_LEGENDA * H - alt)}:enable" in filtro)
+        caso("⭐ legenda estilo 2: a base do cartao em 85% da altura", f":{int(BASE_LEGENDA * H - alt)}:enable" in filtro)
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 
