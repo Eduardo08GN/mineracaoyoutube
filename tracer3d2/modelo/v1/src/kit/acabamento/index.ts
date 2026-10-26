@@ -1,0 +1,19 @@
+// Acabamento: camada de acabamento em niveis de custo (leve / medio / heroi). Ver <raiz>/ACABAMENTO.md.
+export {Acabamento, BildAcab, perfilAcab, nivelHeroi, nivelMedio} from './cena';
+export type {NivelAcab, OpcAcab, SolAcab, AcabamentoProps, BildAcabProps} from './cena';
+export {CLIMAS, dirSol, rotParaAzimute, solDoClima} from './clima';
+export type {Clima, Nivel, DefClima} from './clima';
+export {lutEpoca} from './epoca';
+export {LookAcab} from './look_acab';
+export type {PerfilAcab} from './look_acab';
+export {CeuFoto} from './ceu';
+export {CHAOS, DetalheNaCena, detalharChao, materialPBR} from './chao';
+export type {NomeChao, OpcChao} from './chao';
+export {SoldadosRig, UNIFORMES, escolherPerto} from './soldados';
+export type {Exercito, FigRig} from './soldados';
+export {Arvores, sortearArvores} from './arvores';
+export type {ArvoresProps, EspecieArv} from './arvores';
+export {Floresta} from './arvores_ez';
+export type {ItemFloresta, PresetEZ} from './arvores_ez';
+export {Fumaca, ATLAS_ACAB} from './fumaca';
+export type {TipoFumaca} from './fumaca';

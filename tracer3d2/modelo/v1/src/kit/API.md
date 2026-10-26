@@ -12,6 +12,7 @@ Todo tempo nas props aceita segundos locais ou âncora na fala: `{"wort": "Grana
 | ui (cartões 2D) | Titel, Liste, Hinweis, Formel, Balken, Vergleich, Zahl, Kurve, Zeitleiste, Foto, Zitat (+ `deko` em todas) | `ui/API.md` |
 | karten (mapas) | Karte, KarteDetail, KarteWelt; ~20 tipos de camada; modelos `_vorlagen` | `karten/API.md` |
 | welt (3D) | Bahn, Globus, Flug, Modell (modelos registrados por vídeo em `welt/modelos.tsx`) | `welt/API.md` |
+| acabamento (camada opcional de acabamento 3D, 3 níveis de custo) | `<BildAcab nivel="leve\|medio\|heroi" clima="nublado\|entardecer\|inverno">`, `<Acabamento>`, `materialPBR('lama')`, `<SoldadosRig>`, `<Arvores>`, `<Fumaca>`; assets em `public/acabamento` (`<raiz>/assets\copiar.py <projeto>`) | `<raiz>/ACABAMENTO.md` |
 
 ## Quando ainda é preciso agente de código
 - Modelo 3D novo: registrar em `welt/modelos.tsx` e usar via `Modell`.

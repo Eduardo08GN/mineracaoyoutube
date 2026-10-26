@@ -1,6 +1,7 @@
 # Tracer3D 2.0
 
 > **Antes de produzir, leia [BADPATHS.md](BADPATHS.md)**: sintoma → causa → regra de cada armadilha já encontrada.
+> **E [ACABAMENTO.md](ACABAMENTO.md)**: a camada de acabamento em níveis de custo (leve / medio / heroi), vinda do Eddie3D.
 > **E [REFERENCIA_TRACER_PROJECT.md](REFERENCIA_TRACER_PROJECT.md)**: a assinatura de edição da referência, a mistura de b-roll obrigatória e o padrão de acabamento.
 
 Pipeline novo, construído **ao lado** do Tracer3D 1.0. Nada em `<tracer3d-1.0>` nem em `tracer3d/` do repo é alterado.
@@ -94,3 +95,14 @@ Batedor sempre · G4 sempre desligada quando ociosa · entrega/ só com mp4 com 
   - Old Standard TT (antiqua) para rótulos.
   - UnifrakturMaguntia (Fraktur) só em títulos.
 - **Novidades do kit no projeto do vídeo 6:** `KruppC64` e `LaHitte` (`registraModelo`), multidões instanciadas (1 figura = 1.000 homens), trem de 1870, balão, neve do Jura.
+
+## Camada de acabamento (decisão de 26/10/2026; detalhes em [ACABAMENTO.md](ACABAMENTO.md))
+- **Origem:** módulos do Eddie3D (céu HDRI com IBL, chão PBR com quebra de repetição, EZ-Tree, fumaça em flipbook, humanos com esqueleto da Quaternius), trazidos para `kit/acabamento/` em três níveis.
+- **Custo medido na rodada 1** (3 batidas do vídeo 6): `leve` de −1% a +4%, `medio` de −2% a +15%, `heroi` de +8% a +23%.
+- **Adotado** (Eduardo e maestro):
+  - `leve` em **toda** cena 3D;
+  - `medio` como padrão das cenas externas, depois da correção do banding do céu;
+  - pinheiros e fumaça do `heroi`.
+  - O `heroi` completo fica em no máximo ~6 batidas por vídeo.
+- **Rodada 2 (em andamento):** correção do banding do céu HDRI e troca real dos bonecos de bloco por soldados com esqueleto em média distância (API `Tropa` com LOD). A regra só vale depois do relatório aprovado.
+- **Assets** binários CC0 ficam em `<raiz>/assets/` (não vão para o repo). O repo leva as licenças e o `copiar.py`, que leva os assets ao `public/acabamento/` de cada projeto.

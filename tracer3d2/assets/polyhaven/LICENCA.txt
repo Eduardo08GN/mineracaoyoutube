@@ -1,0 +1,12 @@
+Poly Haven (https://polyhaven.com) - licenca CC0 1.0 (https://polyhaven.com/license). Uso comercial livre, sem atribuicao obrigatoria.
+Baixado em 2026-10-25 pelo batedor de acabamento do Tracer3D 2.0 (Claude), via API publica api.polyhaven.com. Copia SO do que o modulo usa:
+
+hdri/ (HDRI "puresky" = so ceu, sem chao; <id>_1k.hdr para a luz IBL e <id>_6k.jpg = Tonemapped JPG reduzido a 6144x3072 para o fundo)
+  overcast_soil_puresky       - clima nublado
+  industrial_sunset_puresky   - clima entardecer
+  snow_field_puresky          - clima inverno
+tex/ (PBR; diff 2k, nor_gl 1k, rough 1k, JPG)
+  muddy_tracks           - lama (trilhas de roda)
+  grass_path_2           - grama pisada
+  snow_02                - neve
+  cobblestone_floor_01   - pedra (paralelepipedo)
