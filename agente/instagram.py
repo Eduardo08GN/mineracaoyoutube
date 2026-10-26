@@ -347,6 +347,7 @@ class Instagram:
              "descricao": (descricao or base.get("descricao", "")).strip(),
              "prefixo": (prefixo or base.get("prefixo", "")).strip(),
              "voz": (voz or base.get("voz", "")).strip(), "quem": (quem or base.get("quem", "")).strip(),
+             "bio": base.get("bio", ""),
              "cenas": [{"id": c[0], "nome": c[1], "cena": c[2], "estado": "pendente"} for c in base.get("cenas", [])],
              "usos": {}}
         if not a["prefixo"]: a["prefixo"] = "The same person from the frame, same face, hands, clothes and setting."
@@ -359,7 +360,7 @@ class Instagram:
 
     def editar_avatar(self, aid, campos):
         def f(a):
-            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta", "mundo", "cta_fala"):
+            for k in ("nome", "descricao", "prefixo", "voz", "quem", "cta", "mundo", "cta_fala", "bio"):
                 if k in campos: a[k] = str(campos[k]).strip()
             if "persona" in campos:
                 if campos["persona"] and campos["persona"] not in _rot.PERSONAS: raise ValueError("ficha de avatar desconhecida")
@@ -1392,11 +1393,22 @@ class Instagram:
             legenda += self.midia.alinhar(t["fala"], pals, dur_t, inicio)
             inicio += dur_t
         sem = self.midia.montar(clipes, os.path.join(p, "sem_legenda.mp4"))
+        cta_t = next((t for t in r["takes"] if t.get("cta") and t["n"] in cortes), None)
         if r.get("legenda"):
             cta = r["cta"]["palavra"] if r["cta"]["tipo"] == "palavra" else ""
-            self.midia.queimar_estilo(sem, legenda, os.path.join(p, "final.mp4"), r["legenda"], cta)
+            # ⭐ (26/10, Eduardo) no take do CTA a legenda sai menor e mais baixa (o livro e o cartaz enchem o quadro)
+            self.midia.queimar_estilo(sem, legenda, os.path.join(p, "final.mp4"), r["legenda"], cta,
+                                      cta_ini=cortes[cta_t["n"]]["no_reel"][0] if cta_t else None)
         else:
             self.midia.queimar(sem, self.midia.legenda_ass(legenda), os.path.join(p, "final.mp4"))
+        # ⭐⭐ (26/10, ordem do Eduardo) o CTA queimado no take final: "ME SIGA E COMENTE!", a palavra e as setas
+        if r["cta"]["tipo"] == "palavra" and r["cta"].get("palavra") and cta_t:
+            t0, t1 = cortes[cta_t["n"]]["no_reel"]
+            png = self.midia.cartaz_cta(_midia.CHAMADA_CTA.get(r["idioma"], "COMMENT"), r["cta"]["palavra"].upper(),
+                                        os.path.join(p, "cartaz_cta.png"))
+            final, com = os.path.join(p, "final.mp4"), os.path.join(p, "final_cta.mp4")
+            self.midia.queimar_cartaz(final, png, t0, t1, com)
+            os.replace(com, final)
         if r.get("legenda_post"):
             open(os.path.join(p, "legenda_post.txt"), "w", encoding="utf-8").write(r["legenda_post"] + "\n")
         dur = round(inicio, 1)
@@ -1459,6 +1471,8 @@ def _autoteste():
         legenda_ass = staticmethod(_midia.legenda_ass)
         queimar = staticmethod(_midia.queimar)
         queimar_estilo = staticmethod(_midia.queimar_estilo)
+        cartaz_cta = staticmethod(_midia.cartaz_cta)
+        queimar_cartaz = staticmethod(_midia.queimar_cartaz)
         alinhar = staticmethod(_midia.alinhar)
 
         quadros = []
@@ -1601,6 +1615,9 @@ def _autoteste():
     ass = open(os.path.join(ig._pasta_reel(r1["id"]), "legenda.ass"), encoding="utf-8").read()
     caso("⭐ a legenda queimada usa a fala do roteiro", "Fala 1 da" in ass and "Olá" not in ass)
     caso("legenda do post gravada", open(os.path.join(ig._pasta_reel(r1["id"]), "legenda_post.txt"), encoding="utf-8").read().startswith("Chá"))
+    caso("⭐ (26/10) o cartaz do CTA (COMENTE! + a palavra) queimado no take final",
+         os.path.isfile(os.path.join(ig._pasta_reel(r1["id"]), "cartaz_cta.png"))
+         and not os.path.isfile(os.path.join(ig._pasta_reel(r1["id"]), "final_cta.mp4")))
 
     # ── editor de curadoria (automatica: a pessoa so' aponta) ──
     rid1 = r1["id"]
@@ -1891,7 +1908,13 @@ def _autoteste():
          and any("a mesma do lote" in x["texto"] for x in rw["registro"]))
     pw = [v["prompt"] for v in g.videos[n_vid:] if v["nome"].startswith("take_") and "German" in v["prompt"]]
     caso("⭐ os takes do monge: alemao e no masculino", pw and all("he stays silent, looking at the camera" in x and "She " not in x for x in pw))
-    caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "beppe", "cuca", "wendelin"})
+    caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "beppe", "cuca", "wendelin", "fray"})
+    caso("⭐ (26/10) Fray Tomás: espanhol da Espanha, CTA que pede para seguir e a bio do Instagram",
+         _rot.FRAY["idioma"] == "es-es" and _rot.IDIOMAS["es-es"]["whisper"] == "es"
+         and "Sígueme" in _rot.FRAY["cta_fala"] and "huerta" in _rot.FRAY["cta_fala"]
+         and _rot.FRAY["bio"].startswith("Fray Tomás")
+         # ⛔ no maximo 3 linhas curtas: mais que isso o app corta em "mais" e o link da bio fica escondido
+         and len(_rot.FRAY["bio"].split("\n")[1:]) <= 3 and all(len(l) <= 36 for l in _rot.FRAY["bio"].split("\n")[1:]))
     ig.editar_avatar(w["id"], {"arquivado": True})
     caso("⭐ avatar arquivado sai das sub-abas, e os arquivos e Reels dele ficam",
          all(a["id"] != w["id"] for a in ig.tudo()["avatares"]) and os.path.isdir(ig._pasta_av(w["id"]))

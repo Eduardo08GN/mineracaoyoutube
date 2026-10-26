@@ -23,6 +23,10 @@ RESPIRO_S = 0.15
 #    A base (nao o centro) e' que fica fixa: cartao de 2 linhas cresce para cima, nunca para dentro da faixa do app.
 # ⭐ (26/10, ordem do Eduardo) "um pouco mais baixa": a base desceu de 82% para 85% da altura.
 BASE_LEGENDA = 0.85
+# ⭐ (26/10, ordem do Eduardo) no take do CTA a legenda fica menor e mais baixa: o livro na mao e o cartaz do CTA no alto
+#    ja' enchem o quadro. ⛔ Nao desce mais que isso: abaixo de ~90% entra embaixo do @, da descricao e da musica do app.
+BASE_LEGENDA_CTA = 0.89
+ESCALA_LEGENDA_CTA = 0.75
 # ⭐ (19/10, ordem do Eduardo) cada take entra no Reel a 1,11x, com +-5% de variacao sorteada por take: o ritmo fica
 #    mais vivo e nao soa como o mesmo acelerador aplicado igual no video inteiro.
 VELOCIDADE = 1.11
@@ -215,9 +219,10 @@ def _juntar_cta(pals, cta):
     return saida
 
 
-def queimar_estilo(video, pals, saida, estilo, cta=""):
+def queimar_estilo(video, pals, saida, estilo, cta="", cta_ini=None):
     """A legenda no estilo N do OW Agente: cartoes de ate' 3 palavras, a palavra falada em realce e, na frase do
-    CTA, so' o CTA em destaque. Cada cartao e' um PNG (legendas.png_cartao) posto por cima no tempo da palavra."""
+    CTA, so' o CTA em destaque. Cada cartao e' um PNG (legendas.png_cartao) posto por cima no tempo da palavra.
+    `cta_ini` = o segundo em que comeca o take do CTA: dali em diante o cartao sai menor e mais baixo."""
     leg = _ow_legendas()
     est = leg.POR_NUMERO[int(estilo)]
     pasta = os.path.dirname(os.path.abspath(saida))
@@ -230,11 +235,13 @@ def queimar_estilo(video, pals, saida, estilo, cta=""):
         pecas = [p["w"].strip(",.!?;:") for p in b]
         for j, p in enumerate(b):
             png = os.path.join(sub, f"c{len(fora):03d}.png")
-            w, h = leg.png_cartao(pecas, j, est["alt"] * H, png, W, int(W * 0.88), cta, est)
+            no_cta = cta_ini is not None and b[0]["ini"] >= cta_ini - 0.05
+            escala, base = (ESCALA_LEGENDA_CTA, BASE_LEGENDA_CTA) if no_cta else (1.0, BASE_LEGENDA)
+            w, h = leg.png_cartao(pecas, j, est["alt"] * H * escala, png, W, int(W * 0.88), cta, est)
             x = min(max(int(W / 2 - w / 2), int(W * 0.02)), int(W * 0.98) - w)
             t0 = p["ini"] if j else b[0]["ini"]
             t1 = b[j + 1]["ini"] if j + 1 < len(b) else fim_bloco
-            if t1 > t0: fora.append((os.path.relpath(png, pasta), x, int(BASE_LEGENDA * H - h), t0, t1))
+            if t1 > t0: fora.append((os.path.relpath(png, pasta), x, int(base * H - h), t0, t1))
     if not fora: return queimar(video, legenda_ass(pals), saida)
     cmd, filtros, cur = ["ffmpeg", "-y", "-v", "error", "-i", os.path.abspath(video)], [], "0:v"
     for i, (png, x, y, t0, t1) in enumerate(fora, 1):
@@ -246,6 +253,49 @@ def queimar_estilo(video, pals, saida, estilo, cta=""):
     cmd += ["-filter_complex_script", "cartoes.txt", "-map", f"[{cur}]", "-map", "0:a?", "-c:v", "libx264",
             "-preset", "medium", "-crf", "20", "-c:a", "copy", "-movflags", "+faststart", os.path.abspath(saida)]
     _rodar(cmd, cwd=pasta)
+    return saida
+
+
+# ⭐⭐ (26/10, ordem do Eduardo) o CTA queimado no take final, como no Reel de referencia do canal: a chamada em branco,
+#    a palavra do comentario grande em amarelo e tres setas vermelhas apontando para os comentarios, no alto do quadro
+#    (a legenda fica embaixo, a 85%)
+# ⭐ (26/10, Eduardo) a chamada pede para seguir antes de comentar, como a fala do CTA
+CHAMADA_CTA = {"pt": "ME SIGA E COMENTE!", "es": "¡SÍGUEME Y COMENTA!", "es-es": "¡SÍGUEME Y COMENTA!",
+               "en": "FOLLOW & COMMENT", "fr": "ABONNE-TOI ET COMMENTE !", "de": "FOLGE MIR & KOMMENTIERE!"}
+FONTE_CTA = r"C:\Windows\Fonts\ariblk.ttf"
+TOPO_CTA = 0.04
+
+
+def cartaz_cta(chamada, palavra, saida):
+    """O PNG transparente 1080x1920 do CTA: chamada, palavra e setas. Devolve o caminho."""
+    from PIL import Image, ImageDraw, ImageFont
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    fonte = lambda t: ImageFont.truetype(FONTE_CTA if os.path.isfile(FONTE_CTA) else "arialbd.ttf", t)  # noqa: E731
+    y = int(TOPO_CTA * H)
+    t1 = 64
+    while t1 > 36 and d.textlength(chamada, font=fonte(t1)) > W * 0.9: t1 -= 2     # chamada longa (alemao) encolhe
+    d.text((W // 2, y), chamada, font=fonte(t1), fill="white", anchor="mt", stroke_width=8, stroke_fill="black")
+    y += 84
+    tam = 160
+    while tam > 70 and d.textlength(palavra, font=fonte(tam)) > W * 0.86: tam -= 6
+    d.text((W // 2, y), palavra, font=fonte(tam), fill=(255, 214, 0), anchor="mt", stroke_width=11, stroke_fill="black")
+    y += int(tam * 1.05)
+    for cx in (W // 2 - 260, W // 2, W // 2 + 260):                     # tres setas vermelhas para baixo
+        haste = [(cx - 10, y), (cx + 10, y), (cx + 10, y + 22), (cx - 10, y + 22)]
+        ponta = [(cx - 30, y + 20), (cx + 30, y + 20), (cx, y + 58)]
+        for forma in (haste, ponta): d.polygon(forma, fill=(230, 30, 30), outline="white", width=4)
+    os.makedirs(os.path.dirname(os.path.abspath(saida)), exist_ok=True)
+    im.save(saida)
+    return saida
+
+
+def queimar_cartaz(video, png, t0, t1, saida):
+    """O cartaz do CTA por cima do video, so' entre t0 e t1 (o take do CTA no Reel)."""
+    _rodar(["ffmpeg", "-y", "-v", "error", "-i", os.path.abspath(video), "-i", os.path.abspath(png), "-filter_complex",
+            f"[0:v][1:v]overlay=0:0:enable='between(t,{t0:.3f},{t1:.3f})'[v]", "-map", "[v]", "-map", "0:a?",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "copy", "-movflags", "+faststart",
+            os.path.abspath(saida)])
     return saida
 
 
@@ -312,6 +362,20 @@ def _autoteste():
         from PIL import Image
         alt = Image.open(os.path.join(d, "estilo", "cartoes", "c000.png")).size[1]
         caso("⭐ legenda estilo 2: a base do cartao em 85% da altura", f":{int(BASE_LEGENDA * H - alt)}:enable" in filtro)
+    from PIL import Image
+    png = cartaz_cta(CHAMADA_CTA["pt"], "EU QUERO", os.path.join(d, "cartaz.png"))
+    caixa = Image.open(png).getbbox()
+    caso("⭐ (26/10) cartaz do CTA: transparente, no alto do quadro, longe da legenda",
+         Image.open(png).size == (W, H) and caixa[1] >= int(TOPO_CTA * H) - 20 and caixa[3] < 0.24 * H)
+    fc = queimar_cartaz(f, png, 3.0, 5.0, os.path.join(d, "final_cta.mp4"))
+    if 2 in estilos_legenda():
+        queimar_estilo(m, pals[:5] + cta, os.path.join(d, "estilo_cta", "final.mp4"), 2, "eu quero", cta_ini=2.0)
+        fil = open(os.path.join(d, "estilo_cta", "cartoes.txt"), encoding="utf-8").read().split(";")
+        ys = [int(x.split("overlay=")[1].split(":")[1]) for x in fil]
+        hs = [Image.open(os.path.join(d, "estilo_cta", "cartoes", f"c{i:03d}.png")).size[1] for i in range(len(fil))]
+        caso("⭐ (26/10) no take do CTA a legenda sai menor e mais baixa (base a 89%)",
+             hs[-1] < hs[0] and ys[-1] + hs[-1] == int(BASE_LEGENDA_CTA * H) and ys[0] + hs[0] == int(BASE_LEGENDA * H))
+    caso("⭐ cartaz do CTA queimado so' no fim, com audio", abs(duracao(fc) - duracao(f)) < 0.2)
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 

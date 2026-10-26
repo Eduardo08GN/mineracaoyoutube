@@ -40,12 +40,18 @@ ETAPAS = [
          "faz isso de verdade, com o utensílio e o ingrediente já na mão desde o quadro inicial. Nunca só segurar a "
          "tigela e falar. O Claude vê a sequência de cada take da fonte (início, três quadros do meio e fim), e a "
          "ferramenta devolve ao Claude o take com ação em que ela termina igual começou.",
+         "⭐ (26/10) Fray Tomás (espanhol da Espanha): planta que só existe no Brasil vira a equivalente comum na "
+         "Espanha e nos países hispânicos, com a mesma dica de cuidado, igual na fala e na imagem. Ele narra em "
+         "primeira pessoa o que as mãos dele fazem.",
      ]},
     {"id": "quadros", "nome": "Quadros", "onde": "agente/instagram.py (_quadro_take, _quadro_fim_take) · Flow (imagem)",
      "faz": "Para cada take, o quadro de abertura (com a 2ª passada que reenquadra pela fonte) e o quadro final do "
             "passo, com a Tomiko no lugar da pessoa da fonte.",
      "regras": [
          "⭐ (23/10) A Tomiko aparece SEMPRE: rosto e ombros em todo take, mesmo quando a fonte só mostra mãos ou comida.",
+         "⭐ (26/10) Avatar em PRIMEIRA PESSOA (ficha com \"pov\", o Fray Tomás): a câmera são os olhos dele; só as "
+         "mãos e os antebraços (as mangas do hábito) aparecem, nunca o rosto. No CTA a mão mostra a colheita para a "
+         "câmera.",
          "⭐ (22/10) Ângulo e enquadramento da fonte: a 2ª passada reenquadra pela fonte (close continua close).",
          "⭐ (22/10) Ambiente por Reel (cozinha, varanda, quintal) ou o da fonte, refeito no mundo do avatar.",
          "(20/10) Orientação dos itens e da faca igual à fonte. ⭐ (23/10) Nada flutua: travessa apoiada na mesa.",
@@ -59,6 +65,8 @@ ETAPAS = [
          "⭐ (20/10) O primeiro segundo é silêncio: o Veo não come a primeira palavra.",
          "⭐ (20/10) Objetos não trocam, não aparecem e não somem.",
          "⭐ (22/10) Câmera da fonte (\"fonte\") ou travada (\"fixa\"), escolhida no Reel.",
+         "⭐ (26/10) Avatar em primeira pessoa: a voz narra em off (ninguém fala para a câmera) e as mãos seguem "
+         "trabalhando depois da fala.",
      ]},
     {"id": "curadoria", "nome": "Curadoria", "onde": "editor de curadoria (painel) · agente/instagram.py",
      "faz": "O Eduardo aponta o defeito do take; o Claude corrige e o Veo refaz.",
@@ -73,6 +81,10 @@ ETAPAS = [
          "(19/10) Velocidade 1,11× com ±5% de variação por take.",
          "⭐ (22/10) O corte não pega uma fusão que o Veo faça depois da fala.",
          "⭐ (23/10) Livro na mão no take final quando pedido (capa no avatar, Reel com livro).",
+         "⭐ (26/10) Cartaz do CTA queimado no take final, em todos os avatares: \"ME SIGA E COMENTE!\" (no idioma do Reel), a "
+         "palavra grande em amarelo e três setas vermelhas, no alto do quadro, sem cobrir o rosto.",
+         "⭐ (26/10) No take do CTA a legenda sai menor (75%) e mais baixa (base a 89%): o livro e o cartaz já enchem "
+         "o quadro. Não desce mais que isso, para não entrar embaixo do @ e da descrição do Instagram.",
      ]},
 ]
 

@@ -207,12 +207,12 @@ function NovoAvatar({ avisar, personas, jaTem, cancelar, criado }: {
 
 function FichaAvatar({ a, avisar, recarregar }: { a: AvatarIG; avisar: Avisar; recarregar: () => Promise<void> }) {
   const [aberta, setAberta] = useState(false);
-  const [campos, setCampos] = useState({ descricao: a.descricao, prefixo: a.prefixo, voz: a.voz, quem: a.quem });
+  const [campos, setCampos] = useState({ descricao: a.descricao, prefixo: a.prefixo, voz: a.voz, quem: a.quem, bio: a.bio ?? "" });
   const { rodando, rodar } = useAcao(avisar);
   const inFoto = useRef<HTMLInputElement>(null);
   const inLivro = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { setCampos({ descricao: a.descricao, prefixo: a.prefixo, voz: a.voz, quem: a.quem }); }, [a]);
+  useEffect(() => { setCampos({ descricao: a.descricao, prefixo: a.prefixo, voz: a.voz, quem: a.quem, bio: a.bio ?? "" }); }, [a]);
 
   const subir = (qual: "foto" | "livro", f?: File | null) => f && rodar(qual, async () => {
     await enviar(`/api/instagram/avatares/${a.id}/imagem/${qual}`, { imagem: await lerArquivo(f), ext: extDe(f) });
@@ -256,10 +256,11 @@ function FichaAvatar({ a, avisar, recarregar }: { a: AvatarIG; avisar: Avisar; r
             ["prefixo", "Prefixo do vídeo (curto, sem roupa nem cenário)"],
             ["voz", "Voz ({lingua} vira o idioma do Reel)"],
             ["quem", "Quem é (para o Claude adaptar a fala)"],
+            ["bio", "Bio do Instagram (1ª linha = nome do perfil; o resto, até 150 caracteres)"],
           ] as const).map(([k, rotulo]) => (
             <label key={k} className="campo-grupo">
               <span className="label">{rotulo}</span>
-              <textarea className="campo" rows={k === "descricao" ? 4 : 2} value={campos[k]}
+              <textarea className="campo" rows={k === "descricao" || k === "bio" ? 5 : 2} value={campos[k]}
                         onChange={(e) => setCampos({ ...campos, [k]: e.target.value })} />
             </label>
           ))}

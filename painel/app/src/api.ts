@@ -367,6 +367,7 @@ export type EstadoCena = "pendente" | "pronta" | "aprovada" | "recusada";
 export interface CenaIG { id: string; nome: string; cena: string; estado: EstadoCena; tem: boolean; v: number; na_fila: boolean; usos: number }
 export interface AvatarIG {
   id: string; nome: string; criado: number; descricao: string; prefixo: string; voz: string; quem: string;
+  bio?: string;
   cenas: CenaIG[]; foto: boolean; livro: boolean; aviso?: string;
   persona?: string; idioma: string; cta: string; genero?: string; gerando_retrato?: boolean;
 }
