@@ -371,6 +371,12 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def pipeline_video():
         return _estudio().pipeline()
 
+    @app.get("/api/instagram/pipeline")
+    def pipeline_instagram():
+        """⭐ (23/10) as regras de producao dos Reels (motor/pipeline_instagram.py), para a aba Instagram."""
+        import pipeline_instagram as _pi
+        return _pi.pipeline()
+
     @app.post("/api/videos/{pid}/abrir")
     def abrir_video(pid: str):
         try:
@@ -713,6 +719,9 @@ def _autoteste():
     caso("⛔ QA: Reel que nao existe = 404", c.post("/api/instagram/reels/nao-existe/takes/1/qa", headers=h,
                                                    json={"v": 1, "etiqueta": "fala", "acao": "dispensar"}).status_code == 404
          and c.post("/api/instagram/reels/nao-existe/qa", headers=h).status_code == 404)
+    pi = c.get("/api/instagram/pipeline", headers=h).json()
+    caso("⭐ pipeline dos Reels: as etapas e a regra da frase inteira", [e["id"] for e in pi["etapas"]][:2] == ["fonte", "roteiro"]
+         and any("frases COMPLETAS" in r for e in pi["etapas"] for r in e["regras"]))
     li = c.get("/api/instagram/licoes", headers=h).json()
     caso("licoes respondem", isinstance(li.get("licoes"), list) and "taxas" in li and "pendentes" in li)
     caso("⛔ licoes: licao que nao existe = 404", c.post("/api/instagram/licoes/l-nada", headers=h,

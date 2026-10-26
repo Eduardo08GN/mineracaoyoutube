@@ -42,7 +42,10 @@ FPS_LEITURA = 10            # ⭐ (22/10, Eduardo) a leitura optica a 10 quadros
 #    leitura optica da fonte chama de movimento: zoom e pan/tilt acumulados no trecho, e o balanco da mao
 CAMERA_FONTE = {"zoom_pct": 5.0, "pan_pct": 4.0, "tremor_pct": 0.35}
 RAPIDO_PCT_S = 12.0         # zoom/pan acima disso por segundo e' "rapido" (o zoom de edicao do plano medio ao close)
-CORTE_CENA_PCT = 12.0       # dois quadros seguidos (0,1 s) mais diferentes que isso = corte de cena, nao camera
+CORTE_CENA_PCT = 12.0
+# ⭐ (22/10) so' o movimento FORTE leva o quadro final ao enquadramento do fim da fonte; o fraco (6% de zoom, um tilt
+#    leve) fica so' no texto do prompt (forcar o quadro final cortava o rosto dela no meio da fala)
+CAMERA_FORTE = {"zoom_pct": 15.0, "pan_pct": 10.0}       # dois quadros seguidos (0,1 s) mais diferentes que isso = corte de cena, nao camera
 
 
 def _norm(w):
@@ -130,13 +133,13 @@ def _ler_fps(video, ini=0.0, fim=None, fps=FPS_LEITURA):
     return saida
 
 
-def fim_do_plano(video, ini, fim):
+def fim_do_plano(video, ini, fim, limiar=CORTE_CENA_PCT):
     """⭐ (22/10) o ultimo instante do MESMO plano que comeca em `ini`: o tempo logo antes do primeiro corte de cena
     entre ini e fim (leitura optica a FPS_LEITURA), ou `fim` sem corte. ⛔ O quadro final tirado depois de um corte
     (o forno, outro plano) fazia o Veo fundir as duas cenas no fim do take."""
     fs = _ler_fps(video, ini, fim)
     for (ta, a), (_tb, b) in zip(fs, fs[1:]):
-        if _diferenca(a, b) > CORTE_CENA_PCT: return max(ini, ta - 0.05)
+        if _diferenca(a, b) > limiar: return max(ini, ta - 0.05)
     return fim
 
 
@@ -178,7 +181,10 @@ def camera_da_fonte(video, ini=0.0, fim=None):
     med = {"zoom_pct": round((escala - 1) * 100, 1), "pan_pct": round(dx / w * 100, 1), "tilt_pct": round(dy / h * 100, 1),
            "tremor_pct": round(tremor, 2), "cortes": cortes, "dur_s": round(len(fs) / FPS_LEITURA, 1)}
     # ⛔ trecho picado (2+ cortes de cena) mistura planos diferentes: nao ha um movimento so' para copiar
-    return {**med, "texto": "" if cortes >= 2 else texto_camera(med)}
+    texto = "" if cortes >= 2 else texto_camera(med)
+    forte = bool(texto) and (abs(med["zoom_pct"]) >= CAMERA_FORTE["zoom_pct"] or abs(med["pan_pct"]) >= CAMERA_FORTE["pan_pct"]
+                             or abs(med["tilt_pct"]) >= CAMERA_FORTE["pan_pct"])
+    return {**med, "texto": texto, "forte": forte}
 
 
 def texto_camera(m):
@@ -425,6 +431,8 @@ def _autoteste():
     caso("⭐ fim do plano: o quadro final para antes do corte de cena", 1.7 <= fp <= 2.0 and fim_do_plano(parado, 0.3, 3.8) == 3.8)
     caso("⭐ camera da fonte: o conteudo andando para a esquerda = pan para a direita", "pan to the right" in cm["texto"])
     caso("⭐ camera da fonte: a imagem crescendo = push-in", cz["zoom_pct"] > 10 and "push-in" in cz["texto"])
+    caso("camera forte: o zoom grande leva o quadro final; a parada nao", cz["forte"] is (abs(cz["zoom_pct"]) >= 15)
+         and cp["forte"] is False)
     caso("camera livre: o take que copia o movimento nao leva a flag de camera",
          not any(f["etiqueta"] == "camera" for f in avaliar(fala, ws(fala), 8.0, {"camera_pct": 9.0}, camera_livre=True)["flags"])
          and any(f["etiqueta"] == "camera" for f in avaliar(fala, ws(fala), 8.0, {"camera_pct": 9.0})["flags"]))

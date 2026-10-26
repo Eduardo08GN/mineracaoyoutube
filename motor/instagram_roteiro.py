@@ -52,6 +52,11 @@ ENTRADA_DA_FALA = "For the first second she stays silent, looking at the camera,
 # ⭐ (20/10, Eduardo: "os objetos estao mudando pra outros como magica na mao dela"; o copo virou amassador)
 OBJETOS_FIXOS = ("Every object keeps its identity from the first to the last frame: nothing turns into another object, "
                  "appears from nowhere or disappears.")
+# ⭐⭐ (23/10, Eduardo) ela aparece SEMPRE, mesmo quando a fonte mostra so' as maos ou so' a comida
+SEMPRE_APARECE = "She stays in the frame for the whole shot, her face always visible."
+SEMPRE_NO_QUADRO = ("She ALWAYS appears: her face and shoulders are always inside the frame. When the FIRST reference "
+                    "shows only hands, items or food (no face), keep that framing's angle and the items as the focus, but "
+                    "frame a little wider and higher so her face shows just above or behind the items.")
 # ⭐ o tempo que sobra depois da fala ganha uma acao silenciosa: tempo vazio e' o que o Veo enche repetindo a linha
 FALA_UMA_VEZ = "She says the line once, then stays silent, smiling softly at the camera, until the end of the shot."
 SEM_TEXTO_TELA = "Clean frame: no captions, no subtitles, no on-screen text."
@@ -67,7 +72,11 @@ PROMPT_OBJETO = (
     "Using the FIRST reference image for the person and the place and the SECOND reference image for the object: "
     "the same person, in the same place, with the same lighting, clothing and framing, now holding up that exact "
     "object toward the camera with BOTH HANDS firmly gripping its edges, at chest height, front facing the viewer. "
-    "The object rests in the hands, never floating in front of the person. The object must be the SAME as in the "
+    "The object rests in the hands, never floating in front of the person. If it is a book, it is CLOSED: only its "
+    "front cover shows, never open pages, and there is no other book on the table. The cover reproduces the second "
+    "reference EXACTLY as a printed cover: every element (title, photo, colors, seal, text lines), never simplified "
+    "to plain text. Her hands hold only that object "
+    "(nothing else, no food). The object must be the SAME as in the "
     "second reference: same design, same printed text, same colors, same proportions. The person must be the SAME "
     "person as in the first reference: same face, same hair, same body, same clothes. Vertical 9:16 photo, natural "
     "light, no on-screen text of any kind, no caption, no watermark.")
@@ -325,12 +334,14 @@ def regra_cta(cta, avatar=None):
         regra = ("The call to action is a plain, calm line saying the complete material is at the link in the "
                  "profile. No hype.")
     if cta.get("livro"):
-        # ⛔ o quadro final do CTA mostra o livro erguido: aqui NAO ha' volta a' pose (o texto nao contradiz o quadro)
-        regra += (" In that last take her book lies on the table in front of her: its \"quadro\" names the book, and "
-                  "its \"movimento\" is the whole mechanism, with no return to the starting pose: \"As she speaks, "
-                  "she picks up the book from the table with both hands and raises it to chest height, cover "
-                  "toward the camera, holding it by the edges.\" then \"She holds it steady until the end of the "
-                  "shot.\"")
+        # ⛔⛔ (23/10, Eduardo: "tirou o livro de dentro da pagina do nada, feito magica") o livro na mesa saia aberto
+        #    no quadro de abertura e o Veo fazia a capa brotar das paginas: agora ela JA' segura o livro fechado do
+        #    primeiro ao ultimo quadro, sem pegar nada da mesa e sem nada mais nas maos
+        regra += (" In that last take she ALREADY holds her closed book from the first to the last frame: its "
+                  "\"quadro\" is \"She holds her closed book with both hands at chest height, front cover toward the "
+                  "camera; nothing else is in her hands.\" and its \"movimento\" is \"As she speaks, she holds her "
+                  "closed book steady with both hands at chest height, front cover toward the camera.\" then \"She "
+                  "keeps holding it the same way until the end of the shot.\"")
     return genero(regra, avatar)
 
 
@@ -358,7 +369,12 @@ def regras_take(idioma, extras="", avatar=None):
   any idea, benefit, sentence or persona color that the original line does not have (no "tradition", "grandma",
   "family", "balance", "strengthen" unless the original says it; the only exception is the closing lines described
   below), and do not soften, swap or drop a claim of the
-  original. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Never end a take on
+  original. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Each take is generated
+  and spoken on its own, with a closing intonation: so each "fala" is one or more COMPLETE sentences that sound
+  finished alone and end with a period, an exclamation or a question mark. Never split a sentence or a phrase
+  across two takes ("as bactérias boas" | "do intestino" sounds like two broken sentences); when the original
+  splits mid-sentence, move words between neighbouring takes so every break falls at the end of a sentence. Do
+  not repeat the same verb or word in neighbouring takes (bater, bater): vary it. Never end a take on
   a word that asks for continuation (articles, prepositions, conjunctions). No dash characters of any kind inside the
   line. Numbers in words. Prefer common, easy-to-pronounce words: avoid words with a repeated syllable and word
   pairs where a vowel ending meets a vowel start (the voice merges them).
@@ -448,6 +464,18 @@ JSON format:
  "legenda_post": "..."}}"""
 
 
+def frases_partidas(takes):
+    """⭐ (23/10) os takes cuja fala nao fecha a frase (nao termina em . ! ? ou reticencias) ou cujo seguinte comeca
+    continuando a frase (minuscula). Devolve os numeros dos takes."""
+    ruins = []
+    for i, t in enumerate(takes):
+        fala = (t.get("fala") or "").strip().rstrip('"”»\'')
+        prox = (takes[i + 1].get("fala") or "").strip() if i + 1 < len(takes) else ""
+        if not re.search(r"[.!?…]$", fala) or (prox[:1].islower()):
+            ruins.append(t["n"])
+    return ruins
+
+
 def ler_adaptacao(texto, n_origem):
     """A resposta do Claude -> {"takes": [{"n", "fala", "quadro", "movimento", "cta"}], "legenda_post"} ou None.
     ⭐ (20/10) o CTA da fonte vira o nosso CTA, traduzido: entao vem 1 take por take de origem (os do CTA marcados
@@ -516,6 +544,7 @@ def prompt_video(avatar, idioma, movimento, fala, muda=False, extras=(), camera=
     if fala.strip():
         partes += [genero(f'{ENTRADA_DA_FALA} says in {IDIOMAS[idioma]["lingua"]}, in {voz(avatar, idioma)}: ', avatar)
                    + f'"{fala.strip()}" (no subtitles)', genero(movimento.strip(), avatar), OBJETOS_FIXOS,
+                   genero(SEMPRE_APARECE, avatar),
                    genero(FALA_UMA_VEZ, avatar)]
         if muda: partes.append(MUDANCA_DURANTE_A_FALA)
     else:
@@ -542,9 +571,8 @@ def prompt_quadro(avatar, lugar, quadro, novo_lugar=False):
             f"zoom, the same framing and crop, the person at the SAME size in the frame (a close-up of head, chest and "
             f"hands stays a close-up: never a full-body or wide shot), and the same kind of items in the same places of the frame, as they are "
             f"at the START of the step. ⭐ The framing comes ONLY from the FIRST reference, never from the SECOND: an "
-            f"overhead close-up of a bowl stays an overhead close-up of the bowl with only her hands in it; a tight "
-            f"close-up of the face and the food stays that tight; her face or body is cut or out of the frame exactly "
-            f"as in the FIRST reference. Items "
+            f"overhead close-up of a bowl stays a close shot of the bowl; a tight close-up of the face and the food "
+            f"stays that tight. {SEMPRE_NO_QUADRO} Items "
             f"at the START of the step (nothing being poured yet). Each item and tool keeps the SAME orientation and "
             f"direction as in the FIRST reference (a carrot lying left to right stays left to right, the knife blade "
             f"crosses it at the same angle, a jar handle points the same side), and whatever is already cut or done "
@@ -568,10 +596,11 @@ def prompt_reenquadrar(avatar, quadro=""):
     return genero(f"Reframe the SECOND image so its framing matches the FIRST image exactly: the same camera angle "
                   f"(eye level, overhead or low), the same distance and zoom, the same crop. The framing comes ONLY from "
                   f"the FIRST image, even when it is much closer than the SECOND: an overhead close-up of a bowl becomes "
-                  f"an overhead close-up of the bowl with only her hands; a tight close-up of the face and the food held "
-                  f"near the lens stays that tight; her face or body is cut or out of the frame exactly as in the FIRST "
-                  f"image, and wherever the FIRST image shows the face, her face stays fully visible (the food is held "
-                  f"where the FIRST image holds it, never covering her face). Everything else comes from the SECOND "
+                  f"a close shot of the bowl; a tight close-up of the face and the food held near the lens stays that "
+                  f"tight. {SEMPRE_NO_QUADRO} Her face stays fully visible (the food is held "
+                  f"where the FIRST image holds it, never covering her face). Every dish, bowl and tray keeps resting "
+                  f"on the table or counter exactly as in the FIRST image, with the surface visible under it: nothing "
+                  f"floats in the air. Everything else comes from the SECOND "
                   f"image: the same woman, her face, hair, blouse and apron, the same place and light, the same items. "
                   f"{quadro.strip()} Nothing of the FIRST image's person stays. Vertical 9:16 photo, smartphone UGC "
                   f"style. No text, no captions, no logos, no watermark.", avatar)
@@ -585,8 +614,8 @@ def prompt_quadro_fim(avatar, lugar, quadro_fim, camera=""):
     return genero(f"Recreate the shot of the FIRST reference image, which is the END of the same step: the same camera "
                   f"angle, distance, framing and crop. "
                   + (f"The camera MOVED during this step ({camera.strip()}): the framing comes ONLY from the FIRST "
-                     f"reference, even when it is much closer, wider or shifted than the SECOND and her face or body "
-                     f"leaves the frame (a close-up of the hands stays a close-up of the hands). " if (camera or "").strip() else "")
+                     f"reference, even when it is much closer, wider or shifted than the SECOND. {SEMPRE_NO_QUADRO} "
+                     if (camera or "").strip() else "")
                   + f"Everything else stays exactly as in the SECOND reference image (the "
                   f"opening frame of this same shot): the same person, the same clothes, the same place and light, the same "
                   f"items in the same places, except what the action changed: {quadro_fim.strip()} The person is the "
@@ -628,6 +657,11 @@ def _autoteste():
     caso("⭐ pedido: a fala e' a do original (nada acrescentado) e o CTA da fonte vira o nosso, sem take a mais",
          "sentence by sentence" in ped and "warm closing line" in ped and "add ONE extra take" in ped
          and "Only the wording changes" in ped)
+    caso("⭐ frase partida entre takes: acusa o take que nao fecha e o que continua",
+         frases_partidas([{"n": 1, "fala": "Alimentam as bactérias boas"}, {"n": 2, "fala": "do intestino."},
+                          {"n": 3, "fala": "Fica uma delícia!"}, {"n": 4, "fala": "Quer?"}]) == [1]
+         and frases_partidas([{"n": 1, "fala": "Uma frase."}, {"n": 2, "fala": "outra frase."}]) == [1]
+         and "COMPLETE sentences" in regras_take("pt"))
     caso("⭐ CTA fixo da Tomiko: a frase vai na regra, palavra por palavra",
          cta_fala({"persona": "tomiko"}) == "Escreva eu quero, aqui embaixo e te mando o guia completo."
          and "Escreva eu quero, aqui embaixo e te mando o guia completo." in regra_cta({"tipo": "palavra", "palavra": "eu quero"},
@@ -644,7 +678,8 @@ def _autoteste():
     av = {"quem": TOMIKO["quem"], "prefixo": TOMIKO["prefixo"], "voz": TOMIKO["voz"]}
     ped = pedido_adaptacao(tk, "pt", av, {"tipo": "palavra", "palavra": "Umeboshi", "livro": True})
     caso("pedido: palavra minuscula com virgula", '"umeboshi,"' in ped)
-    caso("pedido: livro no CTA, sem volta a' pose", "picks up the book from the table" in ped and "no return" in ped)
+    caso("⭐ pedido: livro no CTA ja' na mao, fechado, sem pegar da mesa", "ALREADY holds her closed book" in ped
+         and "picks up" not in ped)
     caso("⭐ pedido: fala medida em tempo (pt = 14 palavras, ~5 s)", "At most 14 words, speakable in about 5 seconds" in ped)
     caso("⭐ pedido: fala no idioma popular, com os exemplos do pt-BR", "everyday spoken Brazilian Portuguese" in ped
          and '"arroz deixado de molho", not "arroz demolhado"' in ped

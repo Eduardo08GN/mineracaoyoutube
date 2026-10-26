@@ -172,14 +172,16 @@ def gerar_videos(pedidos, pasta, modelo, diz):
     Retorna {nome: caminho_mp4 | None}."""
     s = _conectar()
     os.makedirs(pasta, exist_ok=True)
-    mod = fh.MODELO_GRATIS if modelo == "gratis" else modelo
+    # ⭐ (23/10, Eduardo: "use o Veo 3.1 Lite exclusivamente para esse caso") "pago" = Veo 3.1 Lite (5 creditos por
+    #    take); so' o Reel marcado "pago" usa, o padrao continua o gratis (Lite Lower Priority)
+    mod = fh.MODELO_GRATIS if modelo == "gratis" else fh.MODELO_VIDEO if modelo == "pago" else modelo
     quadros = {}
     for p in pedidos:
         for k in ("inicio", "fim"):
             c = p[k]
             if c not in quadros:
                 quadros[c] = _upload(c, diz)
-    ops, lancou = {}, time.time()
+    ops, lancou, freio = {}, time.time(), None
     for p in pedidos:
         qi, qf = quadros[p["inicio"]], quadros[p["fim"]]
         saldo = fh.creditos(s)
@@ -187,10 +189,15 @@ def gerar_videos(pedidos, pasta, modelo, diz):
             op_id, rest = fh.gerar_video(s, p["prompt"], qi, qf, flow_ivone.PROJETO, modelo=mod)
         except fh.ErroFlow as e:
             if fh.e_freio(e.detalhe):
-                raise fh.Freio(fh.motivo(e.detalhe)) from e
+                # ⛔ (23/10) o freio no 6o lancamento perdia os 5 ja' lancados: para de lancar e baixa o que saiu
+                if not ops: raise fh.Freio(fh.motivo(e.detalhe)) from e
+                freio = fh.motivo(e.detalhe)
+                diz(f"  ⚠ o Flow freou ({freio}): baixo os {len(ops)} take(s) ja' lancados, o resto fica para depois")
+                break
             raise
         if isinstance(rest, (int, float)) and rest < saldo:
-            raise SystemExit(f"a geração cobrou {saldo - rest} créditos: parei (só grátis)")
+            if modelo == "gratis": raise SystemExit(f"a geração cobrou {saldo - rest} créditos: parei (só grátis)")
+            diz(f"  {p['nome']}: {saldo - rest} crédito(s) (saldo {rest})")
         ops[p["nome"]] = op_id
         diz(f"  {p['nome']} lançado")
     # ⛔ (20/10) um tropeco na ESPERA fazia a segunda chance relancar todos os takes (e cair no reCAPTCHA): agora

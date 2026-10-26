@@ -10,6 +10,7 @@ import type { MIN } from "../estado";
 import { Girando, useAcao } from "../componentes/base";
 import { Atividade } from "./Painel";
 import { LicoesIG } from "./Licoes";
+import { PipelineAtual } from "./Producao";
 import { link } from "../rota";
 
 type Avisar = (t: string, tom?: "ok" | "erro") => void;
@@ -77,6 +78,7 @@ export function Instagram({ m }: { m: MIN }) {
       </div>
 
       <ProducaoIG dados={dados} m={m} />
+      <PipelineAtual m={m} url="/api/instagram/pipeline" titulo="O pipeline de produção dos Reels" aberta="roteiro" />
 
       {!dados.gerador.ok && (
         <div className="panel ig-alerta">
@@ -319,7 +321,7 @@ function Pool({ a, avisar, recarregar, rodando, rodar }: {
         </div>
       )}
       <div className="ig-pool">
-        {a.cenas.map((c) => <CartaoCena key={c.id} a={a} c={c} avisar={avisar} recarregar={recarregar} />)}
+        {a.cenas.map((c) => <CartaoCena key={`${a.id}-${c.id}`} a={a} c={c} avisar={avisar} recarregar={recarregar} />)}
       </div>
     </section>
   );

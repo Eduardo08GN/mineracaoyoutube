@@ -127,7 +127,13 @@ class Instagram:
             ini, fim = os.path.join(p, f"origem_{n:02d}.jpg"), os.path.join(p, f"origem_fim_{n:02d}.jpg")
             try:
                 if not os.path.isfile(ini): self.midia.quadro(fonte, o["ini"] + 0.15 * (o["fim"] - o["ini"]), ini)
-                if not os.path.isfile(fim): self.midia.quadro(fonte, o["fim"] - 0.1 * (o["fim"] - o["ini"]), fim)
+                if not os.path.isfile(fim):            # ⭐ (24/10) o mesmo ponto do _quadro_fim_take: antes do corte de cena
+                    ini_t, fim_t = o["ini"] + 0.15 * (o["fim"] - o["ini"]), o["fim"] - 0.1 * (o["fim"] - o["ini"])
+                    try:
+                        fim_t = _qa.fim_do_plano(fonte, ini_t, fim_t)
+                    except Exception:                                      # noqa: BLE001
+                        pass
+                    self.midia.quadro(fonte, fim_t, fim)
             except Exception:                                              # noqa: BLE001
                 continue
             if os.path.isfile(ini) and os.path.isfile(fim): saida[n] = (ini, fim)
@@ -1117,10 +1123,17 @@ class Instagram:
         pedido = _rot.pedido_adaptacao(r["takes_origem"], r["idioma"], a, r["cta"], _lic.regras_texto(lics, a["id"], r["idioma"]),
                                        quadros)
         self._log(f"instagram: o Claude está adaptando {rid}")
-        lido = None
-        for _ in range(2):                         # ⭐ uma segunda tentativa se vier fora do formato
-            lido = _rot.ler_adaptacao(self._claude(pedido, pastas=(p,) if quadros else ()), len(r["takes_origem"]))
-            if lido: break
+        lido, tentativa = None, pedido
+        for i in range(3):                         # ⭐ outra tentativa se vier fora do formato ou com frase partida
+            lido = _rot.ler_adaptacao(self._claude(tentativa, pastas=(p,) if quadros else ()), len(r["takes_origem"]))
+            if not lido: continue
+            partidas = _rot.frases_partidas(lido["takes"])
+            if not partidas or i == 2: break
+            # ⭐⭐ (23/10) frase partida entre takes muda a entonacao: o Claude refaz com o aviso de quais takes
+            self._log(f"instagram: frase partida nos takes {partidas} de {rid}: o Claude refaz")
+            tentativa = (pedido + f"\n\nYour previous answer split sentences across takes {partidas}: every take must be "
+                         "complete sentences ending with . ! or ?, and the next take must not continue the previous "
+                         "sentence. Move words between neighbouring takes. Answer again with the full JSON.")
         if not lido: raise RuntimeError("a adaptação veio fora do formato")
         # ⭐ o lint das licoes de palavra aprovadas: deterministico, nao depende do Claude ter obedecido a regra
         palavras, trocas = _lic.relevantes(lics, a["id"], r["idioma"], "palavra"), []
@@ -1162,6 +1175,12 @@ class Instagram:
             o["camera"] = cam
             self._alterar_reel(r["id"], lambda x, n=t["n"], c=cam: x["takes_origem"][n - 1].update(camera=c))
         return o["camera"].get("texto", "")
+
+    def _camera_forte(self, r, t):
+        """O movimento da fonte e' forte o bastante para o quadro final ir ao enquadramento do fim do trecho."""
+        if not self._camera_take(r, t): return False
+        cam = (r.get("takes_origem") or [])[t["n"] - 1].get("camera") or {}
+        return bool(cam.get("forte", True))
 
     def _lugar(self, r, a):
         """O lugar dos quadros: o ambiente do Reel (troca o da fonte) ou o mundo do avatar (o da fonte, restilizado)."""
@@ -1211,7 +1230,7 @@ class Instagram:
         qi, qf = " ".join((t.get("quadro") or "").lower().split()), " ".join((t.get("quadro_fim") or "").lower().split())
         pa, p = self._pasta_av(a["id"]), self._pasta_reel(r["id"])
         foto, fonte, origem = self._achar(pa, "foto"), os.path.join(p, "fonte.mp4"), r.get("takes_origem") or []
-        anda = bool(self._camera_take(r, t))
+        anda = self._camera_forte(r, t)
         if (not anda and (not qf or qf == qi)) or not (foto and origem and os.path.isfile(fonte)) or not inicio.startswith(p):
             return inicio
         n = t["n"]
@@ -1229,7 +1248,8 @@ class Instagram:
                 self.midia.quadro(fonte, fim_t, ref)
             lugar, _novo = self._lugar(r, a)
             self._log(f"instagram: gerando o quadro final do take {n} de {r['id']}")
-            g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t.get("quadro_fim") or t.get("quadro", ""), self._camera_take(r, t)),
+            g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t.get("quadro_fim") or t.get("quadro", ""),
+                                                  self._camera_take(r, t) if self._camera_forte(r, t) else ""),
                            [ref, inicio, foto], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro final do take {n}")
         return arq
@@ -1265,6 +1285,8 @@ class Instagram:
         for t in alvos:
             inicio = self._quadro_take(r, a, t, g, novo=t.get("_novo_quadro", False))
             fim = self._fim_take(r, a, t, inicio, g, novo=t.get("_novo_quadro", False))
+            if t["cta"] and r["cta"]["livro"]:
+                inicio = fim                       # ⭐ (23/10) o take do livro vai do livro ao livro: nada brota do nada
             acao = _rot.tipo_acao(t["movimento"])
             # ⭐ as licoes de prompt deste tipo de acao entram no prompt do Veo; a versao guarda todas as que valeram
             #    (palavra, gesto e prompt), para o painel medir o antes e o depois de cada uma
@@ -1335,6 +1357,12 @@ class Instagram:
         for t in r["takes"]:
             pals = self._palavras(t["video"], lingua)
             ate = self.midia.fim_da_fala(pals, self.midia.duracao(t["video"]))
+            # ⛔ (22/10) o Veo as vezes funde para outra cena DEPOIS da fala: o corte nao pode pegar o comeco da fusao
+            if pals and ate > pals[-1]["fim"]:
+                try:
+                    ate = round(min(ate, _qa.fim_do_plano(t["video"], pals[-1]["fim"], ate, limiar=8.0)), 2)
+                except Exception:                                          # noqa: BLE001
+                    pass
             de = min(self.midia.inicio_da_fala(pals), max(0.0, ate - 1.0))
             vel = self.midia.velocidade(f"{rid}-{t['n']}-v{t.get('v', 1)}")
             dur_t = (ate - de) / vel
@@ -1541,12 +1569,13 @@ def _autoteste():
              and not any(x.endswith(".png") and "cenas" in x for x in i[1])
              for i in g.imagens[n0:] if "SECOND reference image for the object" not in i[0]
              and "Reframe the SECOND image" not in i[0])
-         and [os.path.basename(v["inicio"]) for v in vs] == [f"quadro_{i:02d}.png" for i in range(1, len(vs) + 1)])
-    caso("⭐ o CTA termina no quadro do livro", vs[-1]["fim"].endswith("cta.png") and vs[0]["fim"] == vs[0]["inicio"])
-    caso("o quadro do livro parte do quadro do take do CTA, com a capa", g.imagens[-1][1][0] == vs[-1]["inicio"]
-         and g.imagens[-1][1][1].endswith("livro.jpg") and "SECOND reference" in g.imagens[-1][0])
-    caso("⭐ o take do livro pede a mudanca durante a fala", "in step with the speech" in vs[-1]["prompt"]
-         and "in step with the speech" not in vs[0]["prompt"])
+         and [os.path.basename(v["inicio"]) for v in vs[:-1]] == [f"quadro_{i:02d}.png" for i in range(1, len(vs))])
+    caso("⭐ o take do livro vai do livro ao livro (nada brota das paginas)", vs[-1]["fim"].endswith("cta.png")
+         and vs[-1]["inicio"] == vs[-1]["fim"] and vs[0]["fim"] == vs[0]["inicio"])
+    caso("o quadro do livro parte do quadro do take do CTA, com a capa",
+         os.path.basename(g.imagens[-1][1][0]) == f"quadro_{len(vs):02d}.png"
+         and g.imagens[-1][1][1].endswith("livro.jpg") and "SECOND reference" in g.imagens[-1][0] and "CLOSED" in g.imagens[-1][0])
+    caso("o take do livro nao pede mudanca entre quadros", "in step with the speech" not in vs[-1]["prompt"])
     caso("modelo gratis por padrao", all(v["modelo"] == "gratis" for v in vs))
     caso("prompt do take: camera travada e a fala do roteiro", vs[0]["prompt"].startswith(_rot.CAMERA) and '"Fala 1 da Tomiko"' in vs[0]["prompt"])
     ass = open(os.path.join(ig._pasta_reel(r1["id"]), "legenda.ass"), encoding="utf-8").read()
