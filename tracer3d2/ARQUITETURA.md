@@ -1,6 +1,7 @@
 # Tracer3D 2.0
 
 > **Antes de produzir, leia [BADPATHS.md](BADPATHS.md)**: sintoma → causa → regra de cada armadilha já encontrada.
+> **E [REFERENCIA_TRACER_PROJECT.md](REFERENCIA_TRACER_PROJECT.md)**: a assinatura de edição da referência, a mistura de b-roll obrigatória e o padrão de acabamento.
 
 Pipeline novo, construído **ao lado** do Tracer3D 1.0. Nada em `<tracer3d-1.0>` nem em `tracer3d/` do repo é alterado.
 O 1.0 continua funcionando até o 2.0 provar, num vídeo inteiro, que entrega a mesma qualidade com menos tempo e tokens.

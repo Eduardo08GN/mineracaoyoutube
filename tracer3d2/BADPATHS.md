@@ -58,6 +58,7 @@ Agente: se o sintoma aparecer, não investigue de novo; aplique a regra. Encontr
 | 3.11 | `public/bahn.json` e `zahlen.json` eram do vídeo anterior | Cópia do projeto-base | Ao criar o vídeo, copie `fisica/bahn.json` para `public/` (e sincronize) | procedimento |
 | 3.13 | Duelo de artilharia no `Bahn` ilegível: projéteis finos, trajetória rasa | O `Bahn` foi feito para tiros de dezenas de km; a 2 km a escala some | Tiros curtos e comparações lado a lado viram cena inédita | vídeo 6, `INEDITO_waffen` |
 | 3.14 | Geradores dos planejadores quebraram com `KeyError: 'dur'` | O `alinhamento.json` real não tinha `dur`; o provisório tinha | Depois de baixar o alinhamento, grave `dur` (duração do wav) em cada capítulo | procedimento |
+| 3.15 | "Poucos b-rolls" com o mesmo número de cortes da referência (vídeo 6) | 59% mapa, 8% imagem de época e 12 mapas seguidos; inéditas com cara de maquete | Linha MISTURA do `plano.py` (mapa no máximo 35%, 3D pelo menos 25%, época pelo menos 20%, no máximo 3 seguidas) e regras de acabamento | `ferramentas/plano.py`, `REFERENCIA_TRACER_PROJECT.md` |
 | 3.12 | Cenas inéditas fracas (céu vazio, tela cinza, manequins) | Acabamento sob pressão | Revise a folha de contato do vídeo inteiro. Batida fraca pode ser trocada por cena do kit **sem novo agente**: escreva `cena` na batida, porque o kit tem prioridade sobre `BEATS` | `Video.tsx` (ordem kit > beats) |
 
 ## 4. Fatos e legendas na tela

@@ -46,3 +46,15 @@ Você transforma a narração em **batidas visuais**. Onde o kit cobre a cena, e
 
 ## Entrega (curta)
 Contagem de batidas por dono, a lista das batidas `INEDITO_*` (id e uma linha cada), o caminho das folhas de contato e problemas do kit encontrados.
+
+## Mistura de famílias (OBRIGATÓRIO desde 25/10/2026; veja `REFERENCIA_TRACER_PROJECT.md`)
+O vídeo 6 teve 59% de mapa, 8% de imagem de época e 12 mapas seguidos: ficou com "poucos b-rolls". O `plano.py` imprime a linha MISTURA, que precisa terminar em `ok`:
+- **mapa no máximo 35%** do tempo;
+- **3D pelo menos 25%** (`welt` e inéditas);
+- **imagem de época pelo menos 20%**: `Foto` do kit, ou `INEDITO_epoca` para pintura ou gravura em 2.5D com paralaxe;
+- **nunca mais de 3 batidas seguidas da mesma família.**
+
+Padrão de plano forte, como no Tracer Project:
+- legenda-manchete inferior esquerda (frase-chave em caixa-alta e sublinha pequena);
+- KPI contando no canto superior direito;
+- a cada virada da narrativa, troca de família.

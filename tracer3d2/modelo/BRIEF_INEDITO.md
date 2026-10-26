@@ -28,3 +28,11 @@ Você escreve em código as poucas cenas que o kit não cobre. Projeto: `<projet
 
 ## Entrega (curta)
 As batidas feitas, o caminho da folha de contato final e o que ficou aquém, se houver.
+
+## Acabamento (OBRIGATÓRIO desde 25/10/2026; veja `REFERENCIA_TRACER_PROJECT.md`)
+No vídeo 6, as cenas inéditas saíram com cara de maquete: low-poly, material liso, luz chapada.
+- **Figuras e materiais:**
+  - Nada de figura low-poly em close: figuras só a média e longa distância, com luz de recorte e atmosfera. Em close, use silhueta ou pintura de época em 2.5D.
+  - Materiais PBR com textura CC0 (Poly Haven, ambientCG): aço com marcas, bronze com pátina, madeira com veio, terra com normal e rugosidade.
+- **Luz:** em camadas (chave mais preenchimento frio), AO, bloom sutil nos emissivos, neblina de profundidade e fumaça volumétrica (flipbooks adotados).
+- **Revisão:** confira em still de 1080p, não só na folha reduzida. Se parecer brinquedo, refaça antes de entregar.

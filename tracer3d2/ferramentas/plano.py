@@ -53,3 +53,18 @@ ui = [b["dono"] == "ui" for b in beats]; seq = mx = 0
 for u in ui: seq = seq + 1 if u else 0; mx = max(mx, seq)
 pct = 100 * sum(ui) / max(1, len(ui))
 print(f"DINAMISMO: {pct:.0f}% cartoes ui (max 40%), maior sequencia de cartoes {mx} (max 2)" + ("  <-- AJUSTAR" if pct > 40 or mx > 2 else "  ok"))
+
+# mistura de familias (25/10/2026, referencia Tracer Project): mapa <= 35%, 3D >= 25%, imagem de epoca >= 20%, <= 3 seguidas da mesma
+def familia(b):
+    c = cenas.get(b["dono"], {}).get(b["id"], {})
+    if b["dono"] == "ui": return "epoca" if c.get("comp") == "Foto" else "cartao"
+    if b["dono"] == "karten": return "mapa"
+    if b["dono"].startswith("INEDITO_epoca"): return "epoca"
+    return "3d"
+fam = [familia(b) for b in beats]; dur = {}
+for b, x in zip(beats, fam): dur[x] = dur.get(x, 0) + b["e"] - b["s"]
+tot = sum(dur.values()) or 1; pc = {k: round(100 * v / tot) for k, v in dur.items()}
+seq = mx = 0; ult = None
+for x in fam: seq = seq + 1 if x == ult else 1; ult = x; mx = max(mx, seq)
+ok = pc.get("mapa", 0) <= 35 and pc.get("3d", 0) >= 25 and pc.get("epoca", 0) >= 20 and mx <= 3
+print(f"MISTURA (% do tempo): {pc} | maior sequencia da mesma familia {mx} (max 3)" + ("  ok" if ok else "  <-- AJUSTAR (mapa<=35, 3d>=25, epoca>=20)"))
