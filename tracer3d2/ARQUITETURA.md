@@ -104,5 +104,12 @@ Batedor sempre · G4 sempre desligada quando ociosa · entrega/ só com mp4 com 
   - `medio` como padrão das cenas externas, depois da correção do banding do céu;
   - pinheiros e fumaça do `heroi`.
   - O `heroi` completo fica em no máximo ~6 batidas por vídeo.
-- **Rodada 2 (em andamento):** correção do banding do céu HDRI e troca real dos bonecos de bloco por soldados com esqueleto em média distância (API `Tropa` com LOD). A regra só vale depois do relatório aprovado.
+- **Rodada 2 (concluída em 26/10/2026):**
+  - **Céu:** as faixas vinham do panorama com `ClampToEdge`. Agora usa `RepeatWrapping` com `textureGrad` e dither, e o céu fica limpo.
+  - **`Tropa`** (`kit/acabamento/tropa.tsx`): as 150 figuras mais próximas, até 80 m, viram soldados com esqueleto de 1,75 m (prussiano azul-escuro; francês de casaco azul e calça vermelha), em marcha, assalto ou queda. O resto fica em bloco instanciado.
+  - **Custo medido:** `medio` +2–3%; `heroi` com `Tropa` +7–11%.
+- **Regra:** vale a partir do **próximo vídeo**, quando o Eduardo mandar iniciar. Nenhum vídeo entregue é refeito.
+  - `leve` em toda cena 3D e `medio` nas cenas externas.
+  - `heroi` com `Tropa`, EZ-Tree e fumaça em até ~6 batidas.
+  - Bonecos de bloco só ao longe.
 - **Assets** binários CC0 ficam em `<raiz>/assets/` (não vão para o repo). O repo leva as licenças e o `copiar.py`, que leva os assets ao `public/acabamento/` de cada projeto.

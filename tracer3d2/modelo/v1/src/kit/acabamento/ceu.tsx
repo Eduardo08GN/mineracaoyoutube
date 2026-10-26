@@ -13,10 +13,17 @@ import {CLIMAS, Clima} from './clima';
 const FUNDO_VS = `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; gl_Position.z = gl_Position.w; }`;
 const FUNDO_FS = `
 uniform sampler2D uMapa; uniform float uRot; uniform float uExp; uniform float uNevoa; uniform vec3 uCorNevoa; uniform float uSat; varying vec3 vW;
+// ruido de gradiente intercalado (Jimenez): dither fixo por pixel, sem relogio (o grao do Look cuida do resto)
+float ign(vec2 p){ return fract(52.9829189 * fract(dot(p, vec2(0.06711056, 0.00583715)))); }
 void main(){
   vec3 d = normalize(vW - cameraPosition);
   vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5 + uRot, asin(clamp(d.y, -1.0, 1.0)) * 0.31830989 + 0.5);
-  vec3 c = pow(texture2D(uMapa, uv).rgb, vec3(2.2)) * uExp;   // JPG ja em tom de tela -> linear
+  // derivadas SEM a emenda do atan: usa a menor entre u e fract(u + 0.5) (senao uma coluna de pixels cai no mip mais grosso)
+  float ub = fract(uv.x + 0.5) - 0.5;
+  vec2 gx = vec2(abs(dFdx(uv.x)) < abs(dFdx(ub)) ? dFdx(uv.x) : dFdx(ub), dFdx(uv.y));
+  vec2 gy = vec2(abs(dFdy(uv.x)) < abs(dFdy(ub)) ? dFdy(uv.x) : dFdy(ub), dFdy(uv.y));
+  vec3 tx = textureGrad(uMapa, uv, gx, gy).rgb + (ign(gl_FragCoord.xy) - 0.5) / 255.0;   // dither de 1 nivel no JPG de 8 bits
+  vec3 c = pow(max(tx, vec3(0.0)), vec3(2.2)) * uExp;   // JPG ja em tom de tela -> linear
   float l = dot(c, vec3(0.299, 0.587, 0.114));
   c = mix(vec3(l), c, uSat);
   // perto do horizonte o ceu some na nevoa (junta com o chao)
@@ -30,7 +37,7 @@ export const CeuFoto: React.FC<{clima: Clima; rot?: number; exposicao?: number; 
   const {camera, scene, gl} = useThree();
   const fundo = useTexture(staticFile(C.fundo));
   const hdr = useLoader(RGBELoader, staticFile(C.hdr));
-  useMemo(() => { fundo.colorSpace = THREE.NoColorSpace; fundo.anisotropy = 8; fundo.generateMipmaps = true; fundo.needsUpdate = true; }, [fundo]);
+  useMemo(() => { fundo.colorSpace = THREE.NoColorSpace; fundo.wrapS = THREE.RepeatWrapping; fundo.wrapT = THREE.ClampToEdgeWrapping; fundo.anisotropy = 16; fundo.generateMipmaps = true; fundo.needsUpdate = true; }, [fundo]);
   // luz de ambiente (IBL) a partir do .hdr: o PBR dos soldados, arvores e do chao e iluminado pelo ceu fotografado
   const env = useMemo(() => {
     hdr.mapping = THREE.EquirectangularReflectionMapping;

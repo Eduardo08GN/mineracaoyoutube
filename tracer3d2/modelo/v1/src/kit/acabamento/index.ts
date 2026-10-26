@@ -17,3 +17,5 @@ export {Floresta} from './arvores_ez';
 export type {ItemFloresta, PresetEZ} from './arvores_ez';
 export {Fumaca, ATLAS_ACAB} from './fumaca';
 export type {TipoFumaca} from './fumaca';
+export {Tropa, bloco, coluna, linha} from './tropa';
+export type {TropaProps, Acao, Lado, Formacao, FigT, LodTropa, OpcFormacao} from './tropa';
