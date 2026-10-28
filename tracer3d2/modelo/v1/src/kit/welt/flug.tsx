@@ -4,7 +4,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import * as THREE from 'three';
 import {AbsoluteFill, continueRender, delayRender} from 'remotion';
-import {Bild, HIMMEL_TAG} from '../../welt/f_szene';
+import {HIMMEL_TAG} from '../../welt/f_szene';
+import {BildAcab} from '../acabamento';
+import type {Clima, NivelAcab} from '../acabamento';
 import {Bogen3} from '../../welt/f_region';
 import {Blende, Kopf, Legende, Quelle} from '../../welt/f_ui';
 import {Marke, Fussnote} from '../../welt/t_etiketten';
@@ -150,6 +152,9 @@ const Seta3: React.FC<{von: THREE.Vector3; bis: THREE.Vector3; wachs: number; co
   );
 };
 
+// nivel de acabamento padrao de todo Flug (props `acab.nivel` sobrepoe)
+const ACAB_PADRAO: NivelAcab = 'leve';
+
 // ---- cena ------------------------------------------------------------------------------------------------------------------
 export const Flug: React.FC<KitProps<any>> = ({t, d, b, p}) => {
   const prim = pacoteDe(p.terreno?.pacote ?? p.pacote ?? 'loncin');
@@ -186,6 +191,10 @@ export const Flug: React.FC<KitProps<any>> = ({t, d, b, p}) => {
   const wk = trem > 0 ? wackel(t, 0.15 * trem, 0.4) : [0, 0, 0];
   const k: KamDef = {pos: [f.pos[0] + wk[0], f.pos[1] + wk[1], f.pos[2] + wk[2]], ziel: f.ziel as any, fov: f.fov, near: p.near ?? prim.near ?? 5, far: p.far ?? prim.far ?? 100000};
   const luz = resolveLuz(p.luz);
+  // acabamento (props `acab`): padrao `leve` (grao, LUT de epoca, vinheta, bloom so em emissivos) em todo Flug; `medio` = + ceu HDRI, nevoa de perspectiva, luz do clima
+  const acab = p.acab ?? {};
+  const nivelAcab: NivelAcab = acab.nivel ?? ACAB_PADRAO;
+  const climaAcab: Clima = acab.clima ?? (p.luz?.preset === 'entardecer' ? 'entardecer' : p.luz?.preset === 'frio_azul' ? 'inverno' : 'nublado');
 
   // 3D: terreno + marcadores + arcos + vetores
   const mat: GMat = {...prim.mat, ...(p.terreno?.mat ?? {})};
@@ -238,7 +247,7 @@ export const Flug: React.FC<KitProps<any>> = ({t, d, b, p}) => {
 
   return (
     <AbsoluteFill>
-      <Bild kam={k} sonne={luz.sonne} himmel={luz.himmel} hemi={luz.hemi} env={luz.env} perfil={luz.perfil}>
+      <BildAcab nivel={nivelAcab} clima={climaAcab} chao={acab.chao ?? false} ao={acab.ao ?? false} kam={k} sonne={luz.sonne} himmel={luz.himmel} hemi={luz.hemi} env={luz.env} perfil={luz.perfil}>
         <Malha gid={gid} r={R} farbe={farbeFull} seg={prim.seg ?? 512} texG={prim.texG ?? 4096} mat={mat} offsetY={nh ? -0.6 : 0} />
         {nh && nahBox && farbeNah && (() => {
           const bw = bP.east - bP.west, bh = bP.north - bP.south, Bw = nahBox.east - nahBox.west, Bh = nahBox.north - nahBox.south;
@@ -247,7 +256,7 @@ export const Flug: React.FC<KitProps<any>> = ({t, d, b, p}) => {
         })()}
         {horizontes.map((h, i) => <Malha key={h.id} gid={hids[i]} r={R} farbe={h.farbe} seg={p.terreno?.horizonte_seg ?? 420} texG={h.texG ?? 4096} mat={{...h.mat, ...(p.terreno?.horizonte_mat ?? {}), loch}} />)}
         {els}
-      </Bild>
+      </BildAcab>
       {(p.rotulos ?? []).map((r: any, i: number) => <Marke key={'r' + i} k={k} p={pt(r).toArray() as [number, number, number]} t={t} em={z(r.em)} ate={r.ate !== undefined ? z(r.ate) : undefined} text={r.texto} unter={r.sub} cor={r.cor ? ((C as any)[r.cor] ?? r.cor) : C.papier}
         dx={r.dx} dy={r.dy} groesse={r.tam} mitte={r.mitte} />)}
       {p.cabecalho && <Kopf t={t} em={z(p.cabecalho.em, 0.4)} ate={p.cabecalho.ate !== undefined ? z(p.cabecalho.ate) : undefined} titel={p.cabecalho.titulo} zeilen={p.cabecalho.linhas} cor={p.cabecalho.cor ? ((C as any)[p.cabecalho.cor] ?? p.cabecalho.cor) : undefined} />}

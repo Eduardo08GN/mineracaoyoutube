@@ -264,7 +264,7 @@ def garantir(proj):
 
 
 def stills(proj, pasta, segundos, escala="0.5"):
-    fps = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")).get("fps", 30)
+    pl = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")); fps = pl.get("fps", 30)
     garantir(proj)
     sincronizar(proj, ["src"]); t0 = time.time()
     r = req("POST", "/stills", json={"quadros": [round(s * fps) for s in segundos], "escala": float(escala), "tag": pasta}, timeout=1800)
@@ -280,10 +280,11 @@ def stills(proj, pasta, segundos, escala="0.5"):
 
 def render(proj, ini, fim, destino):
     """Render do trecho [ini, fim] (segundos) na G4, sem flicker (vm/render.sh), e download do mp4 MUDO para `destino`."""
-    fps = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")).get("fps", 30)
+    pl = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")); fps = pl.get("fps", 30)
     garantir(proj); raiz, _ = sincronizar(proj)
     for n in ("render.sh", "reparar.py"): subir(os.path.join(AQUI, "vm", n), f"/content/t2/vm/{n}")
     q0, q1 = round(ini * fps), round(fim * fps) - 1; t0 = time.time()
+    if "dauer" in pl: q1 = min(q1, int(pl["dauer"] * fps) - 1)   # 27/10: fim alem da composicao derrubava a ultima faixa (BADPATHS 1.18)
     out = exec_vm(f"bash /content/t2/vm/render.sh {raiz} {q0} {q1}", prazo=7200, estagnacao=900)
     if "RENDER_PRONTO" not in out: raise SystemExit("RENDER_FALHOU: " + out[-1500:])
     log(f"render {q1 - q0 + 1} quadros em {time.time() - t0:.0f} s | " + " ".join(l for l in out.splitlines() if l.startswith(("quadros", "trocados"))))

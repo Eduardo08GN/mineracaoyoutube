@@ -37,7 +37,7 @@ for i, b in enumerate(beats): b["e"] = beats[i + 1]["s"] if i + 1 < len(beats) e
 ruins = [(b["id"], round(b["e"] - b["s"], 2)) for b in beats if b["e"] - b["s"] < 1.5 or b["e"] - b["s"] > 12]
 json.dump({"dauer": dauer, "fps": FPS, "kapitel": kap, "beats": beats, "woerter": woerter},
           open(f"{R}/v1/src/plano.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)
-for fam in ("ui", "karten", "welt"):
+for fam in ("ui", "karten", "welt", "epoca"):
     # _vorlagen (modelos reutilizaveis) ficam em roteiro/vorlagen_<fam>.json, se o planejador criar
     extra = {}
     for vf in sorted(glob.glob(f"{R}/roteiro/vorlagen_{fam}*.json")):
@@ -57,6 +57,7 @@ print(f"DINAMISMO: {pct:.0f}% cartoes ui (max 40%), maior sequencia de cartoes {
 # mistura de familias (25/10/2026, referencia Tracer Project): mapa <= 35%, 3D >= 25%, imagem de epoca >= 20%, <= 3 seguidas da mesma
 def familia(b):
     c = cenas.get(b["dono"], {}).get(b["id"], {})
+    if c.get("comp") == "Gemaelde" or b["dono"] == "epoca": return "epoca"   # cena do kit Gemaelde (pintura 2.5D), em qualquer arquivo de cenas
     if b["dono"] == "ui": return "epoca" if c.get("comp") == "Foto" else "cartao"
     if b["dono"] == "karten": return "mapa"
     if b["dono"].startswith("INEDITO_epoca"): return "epoca"

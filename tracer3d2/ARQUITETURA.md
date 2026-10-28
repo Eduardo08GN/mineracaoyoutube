@@ -113,3 +113,16 @@ Batedor sempre · G4 sempre desligada quando ociosa · entrega/ só com mp4 com 
   - `heroi` com `Tropa`, EZ-Tree e fumaça em até ~6 batidas.
   - Bonecos de bloco só ao longe.
 - **Assets** binários CC0 ficam em `<raiz>/assets/` (não vão para o repo). O repo leva as licenças e o `copiar.py`, que leva os assets ao `public/acabamento/` de cada projeto.
+
+## Vídeo 7 (Sedan, Stunde für Stunde, 27/10/2026): 3 h 18, Sonnet ≈ 2,25 M
+- **Cena do kit `Gemaelde`** (`kit/epoca/`, família época): pintura, gravura ou foto em 2.5D com paralaxe.
+  - Profundidade pelo Depth Anything V2 Small (Apache-2.0), em lote no CPU com `ferramentas/tiefe.py` (~1 s por imagem). Depois roda `ferramentas/epoca_indice.py`.
+  - Os planejadores escrevem em JSON (`dono: "epoca"`). Nenhum agente de código por vídeo.
+  - Foram 68 batidas no vídeo 7. É ela que cumpre a meta de época ≥ 20%.
+- **Contador por hora** (`modelo/opcional/zaehler_stunden.tsx`): série irregular `stunden.json` (`zeit` ISO com hora); o `datum` das batidas aceita `"1870-09-01T14:00"`. Exemplo de série: `opcional/stunden_exemplo_sedan.py`.
+- **`Flug` com `acab`** (padrão `leve`): os pacotes de terreno precisam de `mat.hell` ≈ 1,8 (BADPATHS 3.18).
+- **Lição de escopo** (BADPATHS 3.17):
+  - O agente inédito com 15 cenas 3D variadas (artilharia, cavalaria, aldeia, cidadela, chuva) entregou 13 reprovadas.
+  - Regra: no máximo ~6 batidas inéditas 3D por agente, e só onde o kit e a pintura 2.5D não servem.
+  - Cena fraca vira `Gemaelde` na hora.
+- **Mistura final:** 3D 30%, época 30%, mapa 23%, cartões 17%. No vídeo 6 tinha sido mapa 59% e época 8%.
