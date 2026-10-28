@@ -1166,7 +1166,9 @@ class Instagram:
             trocas += [f"take {t['n']}: {x['de']} → {x['para'] or 'sai'}" for x in tr]
         self._alterar_reel(rid, lambda x: x.update(takes=lido["takes"], legenda_post=lido["legenda_post"]))
         n_cta = sum(1 for t in lido["takes"] if t["cta"])
-        self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - n_cta} + {n_cta} de CTA)")
+        self._registrar(rid, f"roteiro: {len(lido['takes'])} takes ({len(lido['takes']) - n_cta} + {n_cta} de CTA)"
+                        + (f"; o CTA da fonte (take(s) {', '.join(map(str, lido['cta_origem']))}) saiu"
+                           if lido.get("cta_origem") else ""))
         if trocas: self._registrar(rid, "lições no roteiro: " + "; ".join(trocas))
 
     # ── geracao dos takes (o roteiro e a curadoria usam o mesmo caminho) ──
@@ -1183,7 +1185,7 @@ class Instagram:
     def _camera_take(self, r, t):
         """O movimento de camera do take, em texto ("" = travada): o lido na fonte pela leitura optica, se o Reel copia
         a camera da fonte. O take do CTA (sem trecho na fonte) fica travado. ⭐ A leitura fica guardada no takes_origem."""
-        if r.get("camera", "fixa") != "fonte": return ""
+        if r.get("camera", "fixa") != "fonte" or t.get("cta"): return ""
         origem = r.get("takes_origem") or []
         if not 1 <= t["n"] <= len(origem): return ""
         o = origem[t["n"] - 1]
@@ -1204,9 +1206,46 @@ class Instagram:
         return bool(cam.get("forte", True))
 
     def _lugar(self, r, a):
-        """O lugar dos quadros: o ambiente do Reel (troca o da fonte) ou o mundo do avatar (o da fonte, restilizado)."""
-        if r.get("ambiente"): return r["ambiente"], True
+        """O lugar dos quadros: o da FONTE em cada take, restilizado no ambiente do Reel ou no mundo do avatar.
+        ⛔⛔ (27/10, Eduardo: "o Veo tenta encaixar a boca do forno num frame que nem perspectiva tem") o ambiente do
+        Reel trocava o lugar de todos os takes pelo mesmo texto (a mesma janela atras dela): agora e' so' o estilo."""
+        if r.get("ambiente"): return r["ambiente"], False
         return _rot.mundo(a, next((c["cena"] for c in a["cenas"] if c["id"] == r["cena"]), "")), False
+
+    def _identidade(self, a):
+        """⭐⭐ (27/10, Eduardo: "pare de ancorar a Tomiko de forma hardcoded") a referencia de QUEM ela e': um recorte
+        so' do rosto (rosto.png), nunca o retrato inteiro, que dava a pose, o tamanho e o fundo de todos os quadros.
+        Avatar em primeira pessoa usa a foto (as maos e as mangas vem dela)."""
+        pa = self._pasta_av(a["id"])
+        foto = self._achar(pa, "foto")
+        if not foto or _rot.pov(a): return foto
+        # ⭐⭐ (28/10) o painel com varias vistas do rosto (rostos.png, da ficha de personagem) ancora melhor que um
+        #    recorte so': com um recorte, cada take saia uma Tomiko diferente
+        painel = os.path.join(pa, "rostos.png")
+        if os.path.isfile(painel): return painel
+        rosto = os.path.join(pa, "rosto.png")
+        if os.path.isfile(rosto) and os.path.getmtime(rosto) >= os.path.getmtime(foto): return rosto
+        try:
+            from PIL import Image
+            im = Image.open(foto).convert("RGB")
+            larg, alt = im.size
+            caixa = (int(larg * 0.15), 0, int(larg * 0.85), int(alt * 0.45))   # sem rosto achado: o alto do centro
+            try:
+                import cv2, numpy as np
+                cinza = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2GRAY)
+                cas = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+                achados = cas.detectMultiScale(cinza, 1.1, 5, minSize=(max(24, larg // 12), max(24, larg // 12)))
+                if len(achados):                  # o maior rosto, com o cabelo e o pescoco
+                    x, y, w, h = max(achados, key=lambda q: q[2] * q[3])
+                    caixa = (max(0, int(x - 0.45 * w)), max(0, int(y - 0.7 * h)),
+                             min(larg, int(x + 1.45 * w)), min(alt, int(y + 1.35 * h)))
+            except Exception:                                              # noqa: BLE001
+                pass
+            im.crop(caixa).save(rosto)
+            return rosto
+        except Exception as e:                                             # noqa: BLE001
+            self._log(f"  ⚠ não recortei o rosto de {a['id']} ({str(e)[:80]}): vai a foto inteira")
+            return foto
 
     def _quadro_take(self, r, a, t, g, novo=False):
         """O quadro de abertura de um take: o do take (o escolhido), o padrao quadro_NN.png, ou um novo quadro_NN_qK.png
@@ -1231,17 +1270,42 @@ class Instagram:
             if not os.path.isfile(ref): self.midia.quadro(fonte, o["ini"] + 0.15 * (o["fim"] - o["ini"]), ref)
             lugar, novo_lugar = self._lugar(r, a)
             self._log(f"instagram: gerando o quadro do take {n} de {r['id']}")
-            g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", ""), novo_lugar), [ref, foto], arq, self._log)
+            # ⭐⭐ (28/10) a ancora: o quadro de um take anterior ja' feito (a mesma Tomiko em todos os takes)
+            anteriores = [os.path.join(p, f"quadro_{k:02d}.png") for k in range(1, n)]
+            ancora = next((x for x in anteriores if os.path.isfile(x)), "") if not _rot.pov(a) else ""
+            g.gerar_imagem(_rot.prompt_quadro(a, lugar, t.get("quadro", ""), novo_lugar, cta=t.get("cta", False),
+                                              ancora=bool(ancora)),
+                           [ref, self._identidade(a)] + ([ancora] if ancora else []), arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro do take {n}")
             # ⭐⭐ (22/10) 2a passada: reenquadra pela fonte (o close continua close, o "de cima" continua de cima)
             base = arq[:-4] + "_base.png"
             os.replace(arq, base)
             self._log(f"instagram: reenquadrando o quadro do take {n} pela fonte")
             try:
-                g.gerar_imagem(_rot.prompt_reenquadrar(a, t.get("quadro", "")), [ref, base], arq, self._log)
+                ident = self._identidade(a) if not _rot.pov(a) else ""
+                g.gerar_imagem(_rot.prompt_reenquadrar(a, t.get("quadro", ""), cta=t.get("cta", False), rosto=bool(ident)),
+                               [ref, base] + ([ident] if ident else []), arq, self._log)
             except Exception as e:                                         # noqa: BLE001
                 self._log(f"  ⚠ o reenquadramento do take {n} falhou ({str(e)[:80]}): fica o quadro da 1a passada")
             if not os.path.isfile(arq): shutil.copyfile(base, arq)
+            # ⛔⛔ (27/10) o reenquadramento copiou o close de maos da fonte e APAGOU o rosto dela: sem rosto no quadro, o
+            #    Veo inventou outra senhora no take (pao de arroz, take 2). Se a 1a passada tem o rosto e o reenquadrado
+            #    nao, fica a 1a passada (o detector erra para menos: so' troca quando um tem e o outro nao)
+            elif not _rot.pov(a) and _qa.rostos(arq) == 0:
+                if _qa.rostos(base) > 0:
+                    self._log(f"  ⚠ o reenquadramento do take {n} apagou o rosto dela: fica o quadro da 1a passada")
+                    self._registrar(r["id"], f"take {n}: o reenquadramento apagou o rosto da {a['nome']}; ficou o quadro da 1a passada")
+                    shutil.copyfile(base, arq)
+                else:
+                    # ⭐⭐ (27/10) nenhuma das duas mostra o rosto: sem rosto no quadro o Veo inventa outra pessoa;
+                    #    uma passada a mais so' com o rosto dela de frente, mantendo a pose e o enquadramento
+                    self._log(f"  ⚠ o quadro do take {n} saiu sem o rosto dela: gerando de novo com o rosto à mostra")
+                    try:
+                        g.gerar_imagem(_rot.prompt_reenquadrar(a, t.get("quadro", ""), cta=t.get("cta", False), rosto=True)
+                                       + " Her whole face must be clearly visible, turned toward the camera.",
+                                       [ref, arq, self._identidade(a)], arq, self._log)
+                    except Exception as e:                                 # noqa: BLE001
+                        self._log(f"  ⚠ a passada do rosto do take {n} falhou ({str(e)[:80]})")
         return arq
 
     def _quadro_fim_take(self, r, a, t, inicio, g, novo=False):
@@ -1268,11 +1332,29 @@ class Instagram:
                     pass
                 self.midia.quadro(fonte, fim_t, ref)
             lugar, _novo = self._lugar(r, a)
-            self._log(f"instagram: gerando o quadro final do take {n} de {r['id']}")
-            g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t.get("quadro_fim") or t.get("quadro", ""),
-                                                  self._camera_take(r, t) if self._camera_forte(r, t) else ""),
-                           [ref, inicio, foto], arq, self._log)
-            if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro final do take {n}")
+            camera = self._camera_take(r, t) if self._camera_forte(r, t) else ""
+            # ⭐⭐ (27/10) com a camera parada, o quadro final que sair com OUTRO enquadramento (o gerador abriu o plano
+            #    para mostrar a tampa fechada) e' gerado de novo; depois de 3, o take vai do inicio ao inicio (sem
+            #    quadro final): sem fusao, a acao fica so' no prompt
+            for tentativa in range(3):
+                self._log(f"instagram: gerando o quadro final do take {n} de {r['id']}"
+                          + (f" (tentativa {tentativa + 1})" if tentativa else ""))
+                g.gerar_imagem(_rot.prompt_quadro_fim(a, lugar, t.get("quadro_fim") or t.get("quadro", ""), camera),
+                               [ref, inicio, self._identidade(a)], arq, self._log)
+                if not os.path.isfile(arq): raise RuntimeError(f"o gerador não gravou o quadro final do take {n}")
+                if camera: break
+                try:
+                    igual, med = _qa.mesmo_enquadramento(inicio, arq)
+                except Exception:                                          # noqa: BLE001
+                    break
+                if igual: break
+                self._log(f"  ⚠ o quadro final do take {n} mudou de enquadramento ({med['pontos']} pontos em comum, "
+                          f"{med['desloca_px']} px): gerando de novo")
+            else:
+                self._registrar(r["id"], f"take {n}: o quadro final não manteve o enquadramento em 3 tentativas: o take vai "
+                                         f"do quadro inicial ao inicial")
+                os.remove(arq)
+                return inicio
         return arq
 
     def _fim_take(self, r, a, t, inicio, g, novo=False):
@@ -1286,7 +1368,8 @@ class Instagram:
             livro = self._achar(self._pasta_av(a["id"]), "livro")
             if not livro: raise RuntimeError("a capa do livro sumiu: suba de novo")
             self._log(f"instagram: gerando o quadro do livro de {r['id']}")
-            g.gerar_imagem(_rot.PROMPT_OBJETO, [inicio, livro], arq, self._log)
+            # ⭐ (26/10) avatar em primeira pessoa: as maos seguram o livro, sem rosto
+            g.gerar_imagem(_rot.PROMPT_OBJETO_POV if _rot.pov(a) else _rot.PROMPT_OBJETO, [inicio, livro], arq, self._log)
             if not os.path.isfile(arq): raise RuntimeError("o gerador não gravou o quadro do livro")
         return arq
 
@@ -1311,9 +1394,12 @@ class Instagram:
             acao = _rot.tipo_acao(t["movimento"])
             # ⭐ as licoes de prompt deste tipo de acao entram no prompt do Veo; a versao guarda todas as que valeram
             #    (palavra, gesto e prompt), para o painel medir o antes e o depois de cada uma
+            # ⛔⛔ (27/10, Eduardo: "voce nao variou a ancoragem") com o MESMO quadro nas duas pontas, a camera andando
+            #    obrigava o Veo a voltar a' imagem de abertura no fim: ele fazia uma fusao (o pao de arroz, take 5).
+            #    Camera so' com um quadro final proprio; com a mesma imagem nas pontas, camera travada.
             prompt = _rot.prompt_video(a, r["idioma"], t["movimento"], t["fala"], muda=fim != inicio,
                                        extras=_lic.frases_prompt(lics, a["id"], r["idioma"], acao),
-                                       camera=self._camera_take(r, t))
+                                       camera=self._camera_take(r, t) if fim != inicio else "")
             valeram = [l["id"] for l in _lic.relevantes(lics, a["id"], r["idioma"], acao=acao)
                        if l["tipo"] != "prompt" or l["regra"] in prompt]
             for i in range(copias):
@@ -1351,14 +1437,33 @@ class Instagram:
         if not faltam: return
         novas = self._gerar_takes(rid, faltam)
 
-        def f(x):
+        def f(x, novas):
             for t in x["takes"]:
                 for ver in novas.get(t["n"], []):
                     vs = self._migrar(t)
                     # ⭐ take que ja' tinha versao e perdeu o video = editado a mao no cartao do Reel
                     vs.append({**ver, "origem": "manual" if vs else "roteiro", "nota": ""})
                     t.update(video=ver["video"], v=ver["v"], quadro_png=ver["quadro_png"])
-        r = self._alterar_reel(rid, f)
+        r = self._alterar_reel(rid, lambda x: f(x, novas))
+        # ⭐⭐ (27/10, Eduardo: "esse tipo de detalhe nao pode ocorrer") a versao com FUSAO no meio do take (uma coisa
+        #    virando outra) e' gerada de novo uma vez, sozinha (a 1a leva ja' gravada: a nova vira a v seguinte); fica
+        #    a de menor nota no QA
+        com_fusao = [t for t in r["takes"] if any("fusão" in f["motivo"] for v in novas.get(t["n"], [])
+                                                  for f in (v.get("qa") or {}).get("flags", []))]
+        if com_fusao:
+            self._log(f"instagram: fusão nos takes {[t['n'] for t in com_fusao]} de {rid}: gerando de novo")
+            self._registrar(rid, f"fusão no meio do take (passe de mágica) nos takes "
+                                 f"{', '.join(str(t['n']) for t in com_fusao)}: gerados de novo")
+            refeitas = self._gerar_takes(rid, [{k: x for k, x in t.items() if k not in ("video", "v")} for t in com_fusao])
+            todas = {n: novas.get(n, []) + vs for n, vs in refeitas.items()}
+
+            def g(x):
+                f(x, refeitas)
+                for t in x["takes"]:
+                    if t["n"] in todas:                          # ⭐ a melhor das versoes desta geracao fica no Reel
+                        b = min(todas[t["n"]], key=lambda v: _qa.nota(v.get("qa")))
+                        t.update(video=b["video"], v=b["v"], quadro_png=b["quadro_png"])
+            r = self._alterar_reel(rid, g)
         falta = [t["n"] for t in r["takes"] if not (t.get("video") and os.path.isfile(t["video"]))]
         self._registrar(rid, f"geração: {len(faltam) - len(falta)} de {len(faltam)} take(s) prontos")
         if falta: raise RuntimeError(f"take(s) {', '.join(map(str, falta))} falharam: rode a geração de novo")
@@ -1398,16 +1503,26 @@ class Instagram:
             cta = r["cta"]["palavra"] if r["cta"]["tipo"] == "palavra" else ""
             # ⭐ (26/10, Eduardo) no take do CTA a legenda sai menor e mais baixa (o livro e o cartaz enchem o quadro)
             self.midia.queimar_estilo(sem, legenda, os.path.join(p, "final.mp4"), r["legenda"], cta,
-                                      cta_ini=cortes[cta_t["n"]]["no_reel"][0] if cta_t else None)
+                                      cta_ini=cortes[cta_t["n"]]["no_reel"][0] if cta_t else None,
+                                      base_cta=None if _rot.pov(self._avatar(r["avatar"])) else _midia.BASE_LEGENDA_CTA_ROSTO)
         else:
             self.midia.queimar(sem, self.midia.legenda_ass(legenda), os.path.join(p, "final.mp4"))
-        # ⭐⭐ (26/10, ordem do Eduardo) o CTA queimado no take final: "ME SIGA E COMENTE!", a palavra e as setas
+        # ⭐⭐ (26/10, ordem do Eduardo) o CTA queimado: "ME SIGA E COMENTE!", a palavra e as setas
+        # ⭐⭐ (27/10, ordem do Eduardo, pacote de CTA) a faixa "💬 COMENTA <PALAVRA>" do 2o segundo ate' o take de
+        #    fechamento (o penultimo); dali o cartaz (so' a palavra para quem aparece de rosto) e, no take do CTA, o
+        #    cartaz completo com "ou pega no link na bio 👆"
         if r["cta"]["tipo"] == "palavra" and r["cta"].get("palavra") and cta_t:
-            t0, t1 = cortes[cta_t["n"]]["no_reel"]
-            png = self.midia.cartaz_cta(_midia.CHAMADA_CTA.get(r["idioma"], "COMMENT"), r["cta"]["palavra"].upper(),
-                                        os.path.join(p, "cartaz_cta.png"))
+            a = self._avatar(r["avatar"])
+            i_cta = next(i for i, t in enumerate(r["takes"]) if t["n"] == cta_t["n"])
+            t_cta, t_fim = cortes[cta_t["n"]]["no_reel"]
+            fecho = r["takes"][i_cta - 1]["n"] if i_cta else None
+            t_fecho = cortes[fecho]["no_reel"][0] if fecho in cortes else t_cta
+            idi = r["idioma"]
+            textos = {"palavra": r["cta"]["palavra"].upper(), "chamada": _midia.CHAMADA_CTA.get(idi, "COMMENT"),
+                      "comenta": _midia.COMENTA.get(idi, "COMMENT"), "promessa": _rot.promessa(a),
+                      "link": _midia.LINK_BIO.get(idi, "")}
             final, com = os.path.join(p, "final.mp4"), os.path.join(p, "final_cta.mp4")
-            self.midia.queimar_cartaz(final, png, t0, t1, com)
+            self.midia.queimar_cta(final, com, textos, t_fecho, t_cta, t_fim, compacto=not _rot.pov(a))
             os.replace(com, final)
         if r.get("legenda_post"):
             open(os.path.join(p, "legenda_post.txt"), "w", encoding="utf-8").write(r["legenda_post"] + "\n")
@@ -1439,7 +1554,13 @@ def _autoteste():
         nonlocal ok; print(("  OK  " if cond else "  ERRO"), nome); ok &= bool(cond)
 
     base = tempfile.mkdtemp(prefix="min-ig-")
-    png = base64.b64encode(b"\x89PNG\r\n\x1a\n" + b"0" * 500).decode()
+    def _png_real():
+        """⭐ (27/10) uma imagem de verdade: o recorte do rosto (_identidade) abre a foto do avatar"""
+        from PIL import Image
+        import io
+        buf = io.BytesIO(); Image.new("RGB", (90, 160), "tan").save(buf, "PNG")
+        return base64.b64encode(buf.getvalue()).decode()
+    png = _png_real()
 
     class Gerador:
         def __init__(self): self.videos, self.imagens, self.falhar = [], [], set()
@@ -1473,6 +1594,7 @@ def _autoteste():
         queimar_estilo = staticmethod(_midia.queimar_estilo)
         cartaz_cta = staticmethod(_midia.cartaz_cta)
         queimar_cartaz = staticmethod(_midia.queimar_cartaz)
+        queimar_cta = staticmethod(_midia.queimar_cta)
         alinhar = staticmethod(_midia.alinhar)
 
         quadros = []
@@ -1595,7 +1717,8 @@ def _autoteste():
     caso("⭐ as 4 etapas rodam sozinhas", all(v == "pronta" for v in est.values()) and r1["final"])
     caso("fonte: baixou o link e cortou em takes", Midia.baixados == ["https://www.instagram.com/reel/abc/"]
          and len(r1["takes_origem"]) >= 2 and r1["idioma_origem"] == "en")
-    caso("roteiro: pediu em portugues com a palavra do CTA", "Brazilian Portuguese" in pedidos[0] and '"umeboshi,"' in pedidos[0])
+    caso("roteiro: pediu em portugues com a palavra do CTA (27/10: na frase fixa da Tomiko)", "Brazilian Portuguese" in pedidos[0]
+         and "Comenta umeboshi aqui." in pedidos[0])
     caso("roteiro: um take a mais para o CTA", len(r1["takes"]) == len(r1["takes_origem"]) + 1 and r1["takes"][-1]["cta"])
     vs = g.videos
     caso("⭐ o lugar vem do video-fonte, no mundo do avatar (texto); o comodo nunca e' referencia do quadro",
@@ -1818,14 +1941,14 @@ def _autoteste():
     fim1 = g.imagens[n_img + 2]
     reen = g.imagens[n_img + 1]
     caso("⭐ 2a passada: o quadro e' reenquadrado pela fonte (quadro da fonte + o da 1a passada)",
-         [os.path.basename(x) for x in reen[1]] == ["origem_01.jpg", "quadro_01_base.png"] and "Reframe the SECOND image" in reen[0])
-    caso("⭐ quadro final: o fim do trecho de origem, o quadro de abertura e a foto, com o resultado da acao",
+         [os.path.basename(x) for x in reen[1]] == ["origem_01.jpg", "quadro_01_base.png", "rosto.png"] and "Reframe the SECOND image" in reen[0])
+    caso("⭐ quadro final: o fim do trecho de origem, o quadro de abertura e a foto; (27/10) sem camera, o enquadramento da abertura",
          [os.path.basename(x) for x in fim1[1]][:2] == ["origem_fim_01.jpg", "quadro_01.png"]
-         and os.path.basename(fim1[1][2]).startswith("foto.") and "END of the same step" in fim1[0]
+         and os.path.basename(fim1[1][2]) == "rosto.png" and "Keep EXACTLY the camera angle" in fim1[0]
          and "Rice inside the blender, step 1." in fim1[0])
     caso("⭐ o quadro copia o enquadramento do video de origem, com a foto e o comodo em texto", len(g.imagens) == n_img + 3 * len(vs2)
          and [os.path.basename(x) for x in g.imagens[n_img][1]][0] == "origem_01.jpg"
-         and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]).startswith("foto.")
+         and len(g.imagens[n_img][1]) == 2 and os.path.basename(g.imagens[n_img][1][1]) == "rosto.png"
          and "Londrina" in g.imagens[n_img][0] and "bamboo bench" not in g.imagens[n_img][0]
          and "same camera angle" in g.imagens[n_img][0] and "step 1." in g.imagens[n_img][0])
     qs, k = Midia.quadros[nq0:], 2 + QUADROS_MEIO          # por trecho: inicio, fim e os do meio
@@ -1846,13 +1969,13 @@ def _autoteste():
     caso("⭐ refazer a geracao gera so' o take editado", len(g.videos) == n_antes + 1 and ig.reel(r2["id"])["final"])
     caso("refazer a geracao reaproveita os quadros", len(g.imagens) == n_img + 3 * len(vs2))
     g.falhar = {"take_02_v1"}
-    r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/", cta="palavra", palavra=" Eu  Quero ")
-    caso("⭐ CTA de frase curta guardado em minusculas", r3["cta"]["palavra"] == "eu quero")
+    r3 = ig.criar_reel(aid, "pt", url="https://www.instagram.com/reel/ghi/", cta="palavra", palavra=" ReCeitas ")
+    caso("⭐ CTA guardado em minusculas, sem espacos", r3["cta"]["palavra"] == "receitas")
     ig.esperar(120)
     r3 = ig.reel(r3["id"])
-    caso("⭐ roteiro: a frase fixa do CTA da Tomiko vai no pedido e no take do CTA",
-         "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo." in pedidos[-1]
-         and r3["takes"][-1]["cta"] and r3["takes"][-1]["fala"] == "Me segue pra eu poder te mandar. Escreva eu quero, aqui embaixo e te mando o guia completo.")
+    linha = "Me segue, senão eu não consigo te mandar as cento e cinquenta receitas. Comenta receitas aqui."
+    caso("⭐ (27/10) roteiro: a frase fixa do CTA da Tomiko vai no pedido e no take do CTA",
+         linha in pedidos[-1] and r3["takes"][-1]["cta"] and r3["takes"][-1]["fala"] == linha)
     caso("⭐ licao de palavra no roteiro: na regra e no lint", 'Never use the word "Tomiko"' in pedidos[-1]
          and all("Tomiko" not in t["fala"] for t in r3["takes"]) and "Fala 1 da Tomi" in r3["takes"][0]["fala"]
          and any("lições no roteiro" in x["texto"] for x in r3["registro"]))
@@ -1911,7 +2034,7 @@ def _autoteste():
     caso("tudo(): o catalogo das fichas", set(ig.tudo()["personas"]) == {"tomiko", "beppe", "cuca", "wendelin", "fray"})
     caso("⭐ (26/10) Fray Tomás: espanhol da Espanha, CTA que pede para seguir e a bio do Instagram",
          _rot.FRAY["idioma"] == "es-es" and _rot.IDIOMAS["es-es"]["whisper"] == "es"
-         and "Sígueme" in _rot.FRAY["cta_fala"] and "huerta" in _rot.FRAY["cta_fala"]
+         and "Sígueme" in _rot.FRAY["cta_fala"] and "Escribe huerta" in _rot.cta_fala({"persona": "fray"})
          and _rot.FRAY["bio"].startswith("Fray Tomás")
          # ⛔ no maximo 3 linhas curtas: mais que isso o app corta em "mais" e o link da bio fica escondido
          and len(_rot.FRAY["bio"].split("\n")[1:]) <= 3 and all(len(l) <= 36 for l in _rot.FRAY["bio"].split("\n")[1:]))

@@ -46,6 +46,16 @@ CORTE_CENA_PCT = 12.0
 # ⭐ (22/10) so' o movimento FORTE leva o quadro final ao enquadramento do fim da fonte; o fraco (6% de zoom, um tilt
 #    leve) fica so' no texto do prompt (forcar o quadro final cortava o rosto dela no meio da fala)
 CAMERA_FORTE = {"zoom_pct": 15.0, "pan_pct": 10.0}       # dois quadros seguidos (0,1 s) mais diferentes que isso = corte de cena, nao camera
+# ⛔ (27/10) zoom acima disso no trecho (o pao de arroz: 124% em 6 s) e' o zoom de EDICAO da fonte (do plano medio ao
+#    close), nao camera: pedido ao Veo num take so', ele fazia uma fusao no meio da fala. Fica camera travada.
+ZOOM_EDICAO_PCT = 40.0
+# ⭐⭐ (27/10, Eduardo: "do nada, num passe de magica, a bancada se transforma na boca do forno") a FUSAO dentro do
+#    take: no meio dela o quadro e' a MISTURA do antes e do depois. Janela de 0,6 s com o quadro mudando mais que
+#    FUSAO_MUDA_PCT e o quadro do meio mais parecido com a media das pontas do que com qualquer uma delas.
+#    Medido no Reel do pao de arroz: fusoes 0,28 e 0,34; mao e camera andando, 0,55 a 0,85.
+FUSAO_JANELA = 6
+FUSAO_MUDA_PCT = 6.0
+FUSAO_RAZAO = 0.42
 
 
 def _norm(w):
@@ -181,7 +191,7 @@ def camera_da_fonte(video, ini=0.0, fim=None):
     med = {"zoom_pct": round((escala - 1) * 100, 1), "pan_pct": round(dx / w * 100, 1), "tilt_pct": round(dy / h * 100, 1),
            "tremor_pct": round(tremor, 2), "cortes": cortes, "dur_s": round(len(fs) / FPS_LEITURA, 1)}
     # ⛔ trecho picado (2+ cortes de cena) mistura planos diferentes: nao ha um movimento so' para copiar
-    texto = "" if cortes >= 2 else texto_camera(med)
+    texto = "" if cortes >= 2 or abs(med["zoom_pct"]) >= ZOOM_EDICAO_PCT else texto_camera(med)
     forte = bool(texto) and (abs(med["zoom_pct"]) >= CAMERA_FORTE["zoom_pct"] or abs(med["pan_pct"]) >= CAMERA_FORTE["pan_pct"]
                              or abs(med["tilt_pct"]) >= CAMERA_FORTE["pan_pct"])
     return {**med, "texto": texto, "forte": forte}
@@ -217,6 +227,75 @@ def _diferenca(a, b):
     return float(np.mean(np.abs(_pequeno(a) - _pequeno(b)))) / 255 * 100
 
 
+def fusoes(video, ini=0.0, fim=None):
+    """⭐⭐ (27/10) as fusoes (um lugar ou objeto virando outro por dissolve) entre ini e fim, pela leitura optica:
+    [(segundo, razao)] da pior janela de cada fusao. Razao baixa = o quadro do meio e' a mistura das pontas."""
+    import numpy as np
+    fs = _ler_fps(video, ini, fim)
+    pq = [_pequeno(g) for _, g in fs]
+    dif = lambda a, b: float(np.mean(np.abs(a - b))) / 255 * 100                   # noqa: E731
+    k, achadas = FUSAO_JANELA, []
+    for i in range(len(pq) - k):
+        a, m, c = pq[i], pq[i + k // 2], pq[i + k]
+        if dif(a, c) < FUSAO_MUDA_PCT: continue
+        razao = dif(m, (a + c) / 2) / max(0.01, min(dif(m, a), dif(m, c)))
+        if razao >= FUSAO_RAZAO: continue
+        t = fs[i + k // 2][0]
+        if achadas and t - achadas[-1][0] < 1.0:
+            if razao < achadas[-1][1]: achadas[-1] = (t, round(razao, 2))
+        else:
+            achadas.append((t, round(razao, 2)))
+    return achadas
+
+
+# ⭐⭐ (27/10) o quadro final de um take com a camera parada tem de ter o enquadramento do inicial (so' a acao muda).
+#    No pao de arroz, take 2: o gerador nao conseguia mostrar a tampa fechada no close de cima e abriu para um plano
+#    lateral (7 pontos em comum, 895 px de deslocamento): o Veo faria uma fusao. Nos bons, centenas de pontos e ~0 px.
+ENQUADRAMENTO = {"pontos": 60, "desloca_px": 40.0, "escala": 0.1}
+
+
+def mesmo_enquadramento(a, b):
+    """(bool, {"pontos", "desloca_px", "escala"}): as duas imagens (caminhos) tem o mesmo enquadramento? Pontos ORB em
+    comum e a transformacao entre elas (em 360x640): poucos pontos, deslocamento ou zoom grandes = outro enquadramento."""
+    import cv2, numpy as np
+    ler = lambda p: cv2.resize(cv2.imdecode(np.fromfile(p, np.uint8), cv2.IMREAD_GRAYSCALE), (360, 640))   # noqa: E731
+    A, B = ler(a), ler(b)
+    orb = cv2.ORB_create(1500)
+    ka, da = orb.detectAndCompute(A, None)
+    kb, db = orb.detectAndCompute(B, None)
+    med = {"pontos": 0, "desloca_px": None, "escala": None}
+    if da is None or db is None: return False, med
+    pares = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True).match(da, db)
+    if len(pares) < 10: return False, {**med, "pontos": len(pares)}
+    pa = np.float32([ka[x.queryIdx].pt for x in pares])
+    pb = np.float32([kb[x.trainIdx].pt for x in pares])
+    m, inl = cv2.estimateAffinePartial2D(pa, pb, method=cv2.RANSAC, ransacReprojThreshold=4.0)
+    pontos = int(inl.sum()) if inl is not None else 0
+    if m is None: return False, {**med, "pontos": pontos}
+    med = {"pontos": pontos, "desloca_px": round(float(np.hypot(m[0, 2], m[1, 2])), 1),
+           "escala": round(float(np.hypot(m[0, 0], m[1, 0])), 3)}
+    lim = ENQUADRAMENTO
+    ok = pontos >= lim["pontos"] and med["desloca_px"] <= lim["desloca_px"] and abs(med["escala"] - 1) <= lim["escala"]
+    return ok, med
+
+
+def rostos(png):
+    """⭐ (27/10) quantos rostos (de frente ou de perfil) o detector acha numa imagem; -1 se nao abrir (nao julga).
+    Erra para menos (rosto na borda, de lado)."""
+    import cv2, numpy as np
+    try:
+        g = cv2.imdecode(np.fromfile(png, np.uint8), cv2.IMREAD_GRAYSCALE)
+        h, w = g.shape
+    except Exception:                                                      # noqa: BLE001
+        return -1
+    g = cv2.resize(g, (540, max(1, int(540 * h / w))))
+    frente = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    perfil = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_profileface.xml")
+    m = (40, 40)
+    return (len(frente.detectMultiScale(g, 1.1, 5, minSize=m)) + len(perfil.detectMultiScale(g, 1.1, 5, minSize=m))
+            + len(perfil.detectMultiScale(cv2.flip(g, 1), 1.1, 5, minSize=m)))
+
+
 def medir_video(video, dur, corte_s=None, fim_ref=None):
     """{"camera_pct", "corte_pct", "fim_pct"} de uma versao. ⭐ Camera: correlacao de fase da faixa de cima de cada
     amostra contra a do 1o quadro (deslocamento em % da largura, so' com resposta confiavel). Deriva: o quadro no
@@ -241,8 +320,13 @@ def medir_video(video, dur, corte_s=None, fim_ref=None):
     extras = _quadros(video, [x for x in (corte_s, max(0.0, dur - 0.5)) if x is not None])
     corte = _diferenca(ref, extras[0][1]) if corte_s is not None and extras else None
     fim = _diferenca(ref, extras[-1][1]) if extras else None
+    # ⭐⭐ (27/10) fusao so' conta na parte que entra no Reel (ate' o corte da montagem); a leitura vai meio segundo
+    #    alem do corte para pegar a fusao que comeca logo antes dele (o liquidificador fantasma no fim do take 3)
+    ate = max(0.0, dur - 0.2) if corte_s is None else min(max(0.0, dur - 0.2), corte_s + 0.5)
+    fus = [(t, x) for t, x in fusoes(video, 0.0, ate) if corte_s is None or t <= corte_s + 0.1]
     return {"camera_pct": round(cam, 2), "corte_pct": None if corte is None else round(corte, 1),
-            "fim_pct": None if fim is None else round(fim, 1), "acao": acao}
+            "fim_pct": None if fim is None else round(fim, 1), "acao": acao,
+            "fusao_s": [t for t, _r in fus]}
 
 
 def _seg(s):
@@ -283,6 +367,9 @@ def avaliar(fala, palavras, dur, visual=None, camera_livre=False):
                 flag("tempo", "a fala vai até o fim do take: pode ter sido cortada")
     if visual:
         med.update({k: v for k, v in visual.items() if v is not None})
+        if visual.get("fusao_s"):
+            flag("morph", "fusão no meio do take (uma coisa vira outra, passe de mágica) aos "
+                 + ", ".join(_seg(t) for t in visual["fusao_s"][:3]))
         if not camera_livre and visual.get("camera_pct", 0) > LIMITES["camera_pct"]:
             flag("camera", f"o fundo deslocou {visual['camera_pct']:.1f}% da largura: a câmera mexeu")
         if visual.get("acao"):
@@ -436,6 +523,24 @@ def _autoteste():
     caso("camera livre: o take que copia o movimento nao leva a flag de camera",
          not any(f["etiqueta"] == "camera" for f in avaliar(fala, ws(fala), 8.0, {"camera_pct": 9.0}, camera_livre=True)["flags"])
          and any(f["etiqueta"] == "camera" for f in avaliar(fala, ws(fala), 8.0, {"camera_pct": 9.0})["flags"]))
+    fusao = os.path.join(tmp, "fusao.mp4")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", parado, "-f", "lavfi", "-i", "smptebars=s=360x640:d=4:r=24",
+                    "-filter_complex", "[0:v]settb=1/24,format=yuv420p[a];[1:v]settb=1/24,format=yuv420p[b];"
+                    "[a][b]xfade=transition=fade:duration=1:offset=1.5[v]",
+                    "-map", "[v]", "-t", "4", "-c:v", "libx264", "-pix_fmt", "yuv420p", fusao], check=True)
+    fu = fusoes(fusao)
+    caso("⭐⭐ (27/10) fusao: o dissolve de um lugar para outro e' achado (o passe de magica)",
+         len(fu) == 1 and 1.5 <= fu[0][0] <= 2.6 and fusoes(mexe) == [] and fusoes(parado) == [] and fusoes(corte) == [])
+    caso("⭐⭐ (27/10) fusao vira flag de morph", any(f["etiqueta"] == "morph" and "fusão" in f["motivo"]
+                                                    for f in avaliar(fala, ws(fala), 8.0, {"fusao_s": [2.0]})["flags"]))
+    caso("⛔ (27/10) zoom de edicao (>40%) nao vira camera", camera_da_fonte.__doc__ and ZOOM_EDICAO_PCT == 40.0)
+    import cv2 as _cv
+    pa_, pb_, pc_ = (os.path.join(tmp, f"{x}.png") for x in ("e1", "e2", "e3"))
+    cap = _cv.VideoCapture(parado); _o, q1 = cap.read(); cap.release()
+    _cv.imwrite(pa_, q1); _cv.imwrite(pb_, _cv.rectangle(q1.copy(), (40, 300), (160, 420), (0, 0, 255), -1))
+    _cv.imwrite(pc_, _cv.resize(q1[100:400, 60:300], (360, 640)))
+    caso("⭐⭐ (27/10) mesmo enquadramento: a acao muda um objeto = mesmo; o close de outro trecho = outro",
+         mesmo_enquadramento(pa_, pb_)[0] and not mesmo_enquadramento(pa_, pc_)[0])
     print("\nautoteste:", "PASSOU" if ok else "FALHOU")
     return ok
 
