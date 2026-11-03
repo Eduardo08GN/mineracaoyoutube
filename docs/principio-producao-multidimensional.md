@@ -26,9 +26,13 @@ Isso vale em **três escalas**, com a mesma lógica:
 
 | Escala | Dimensões que se cruzam | Exemplo bom | O que fazíamos |
 |---|---|---|---|
-| **Nicho / tema** | história × ciência e engenharia × discurso adaptado ao leigo | 1870 × a engenharia ferroviária do Estado-Maior × "um trem a cada oitenta minutos, dia e noite" | história crua (aula) ou número cru (planilha) |
+| **Nicho / tema** | história × **o espectro técnico do assunto** × discurso adaptado ao leigo | 1870 × a logística ferroviária e a estratégia do Estado-Maior × "um trem a cada oitenta minutos, dia e noite" | história crua (aula) ou número cru (planilha) |
 | **Roteiro** | fato × tradução para o cotidiano × porquê × reação do narrador | "Fast eine Million Mann… Würden sie im Sekundentakt an Ihnen vorbeigehen, stünden Sie über elf Tage am Straßenrand" | 9 números por minuto, falados em fila, sem régua |
 | **Take** | dado técnico × conceito abstrato × ilustração × espaço × tempo × narrativa | avião desenhado dentro da cortina de radar 3D, com a barra "dentro da nuvem · gelo" e a razão de descida ficando vermelha | cartão com número → mapa → 3D mudo, um de cada vez |
+
+**O espectro técnico é amplo e não afunila numa disciplina só** (correção do Eduardo, 03/11):
+- **canal DE:** estratégia, tática militar, logística, inovação de engenharia e tecnologia. Cada vídeo escolhe as que o assunto pede; não é "sempre engenharia";
+- **canal ES:** aerodinâmica, meteorologia, engenharia, procedimentos e investigação, conforme o evento.
 
 **Sozinha, cada dimensão é comum:**
 - história crua é aula;
@@ -294,7 +298,7 @@ A habilidade **acumula**: uma biblioteca nossa de objetos desenhados no mesmo es
 ## 7. Regras verificáveis (resumo para portão de qualidade)
 | Camada | Regra | Medida |
 |---|---|---|
-| Tema | cruza história × ciência/engenharia × discurso adaptado | revisão humana do brief |
+| Tema | cruza história × espectro técnico do assunto (DE: estratégia, tática, logística, engenharia, tecnologia) × discurso adaptado | revisão humana do brief |
 | Roteiro | checklist de 15 itens (§3.3) | script de métricas antes da narração |
 | Roteiro | ≤ 4 números falados por minuto por capítulo | contagem |
 | Roteiro | causa nunca desmentida pelo painel | revisão cruzada fala × painel |
