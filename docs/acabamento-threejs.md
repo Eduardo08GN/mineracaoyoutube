@@ -286,3 +286,46 @@ Este documento faz isso para as camadas de acabamento.
 - Resultado de batedor (custo, régua, nota do juiz) é anotado na linha do pacote, com a data.
 - Pacote aprovado sai de "candidato" para "em uso" e ganha a camada e o preset do canal (§3–§4).
 - Créditos de licença que exigem atribuição vão na descrição do vídeo, nunca na imagem (regra do canal DE).
+
+---
+
+## 8. Preset "explicação AiTelly" e ordem de subida do acabamento (03/11/2026)
+**Decisão do Eduardo:** em todo trecho de **explicação** dos dois canais vale a direção de arte do AiTelly (`docs/plano-qualidade-3d.md` §2a).
+
+**Pela leitura dos 10 vídeos** (`docs/referencia-aitelly.md` §5), a aparência deles é:
+- material **limpo e saturado** (não toon) sob **luz de estúdio suave**;
+- reflexo leve no metal pintado;
+- sombra macia ancorando o objeto;
+- AO nas junções;
+- bloom só no emissivo;
+- palco com chão escuro que reflete;
+- DOF raso no close;
+- motion blur no rápido;
+- volumes no mundo (poeira, nuvem, água turva).
+
+Tudo isso existe no three.js. O contorno + toon (§3.1) fica para objetos pequenos no mapa e no mundo.
+
+### 8.1 O que sobe, com que custo, em que ordem
+| # | Camada | O que fazer no three.js | Desenvolvimento (uma vez) | Custo de G4 no render | Ganho visual |
+|---|---|---|---|---|---|
+| 1 | **Luz de estúdio + IBL + exposição** | `RoomEnvironment` → `PMREMGenerator` como `scene.environment` (reflexo suave em tudo); luz principal direcional com sombra; luz de recorte por trás (`RectAreaLight` ou direcional fraca); tone mapping Neutral/AgX com exposição mais alta e contraste leve | 1–2 h | ~0% | **o maior**: tira a cara de argila |
+| 2 | **Materiais por subsistema** | `MeshPhysicalMaterial`: cor base saturada por subsistema, roughness 0,35–0,6, metalness 0–0,3 (pintado), clearcoat 0,2–0,4; decalques (`DecalGeometry`) para marcas e números | 0,5 h por modelo | ~0% | grande |
+| 3 | **Sombra macia + contato** | VSM ou PCSS (`SoftShadows` do drei / `pcss` do `@pmndrs/vanilla`) + `ContactShadows` sob o objeto; frustum de sombra apertado na ação | 1 h | +3–5% | grande (o objeto para de flutuar) |
+| 4 | **Palcos com chão que reflete** | presets: planta azul com grade, estúdio escuro, grade holográfica, céu liso; chão com `MeshReflectorMaterial` (drei), reflexo borrado e esmaecido | 2–3 h | +10–20% só nos planos de palco | grande (é o "estúdio" do AiTelly) |
+| 5 | **AO afinado para close** | N8AO (já em uso) com raio pequeno (0,2–0,6 m) e intensidade maior nos palcos | 0,5 h | ~+3% | médio |
+| 6 | **Raio X / holograma + bloom seletivo** | casca com Fresnel (`three-custom-shader-material` ou `ShaderMaterial`), arestas com `EdgesGeometry` + `LineSegments2` (linhas grossas), interior emissivo; bloom só acima do limiar | 2 h | ~+5% | grande nas explicações |
+| 7 | **Corte com tampa** | `clippingPlanes` + técnica de tampa por stencil (exemplo oficial "clipping stencil") com cor sólida no plano de corte | 2–3 h | ~+5% | grande (é o "como funciona") |
+| 8 | **DOF + motion blur** | `DepthOfFieldEffect` nos closes; motion blur por **subquadros dentro do quadro** (K instantes no obturador de 180°), só nos movimentos rápidos | 3 h | DOF ~+5%; blur ×K só nos planos rápidos | médio-grande (tira a cara de jogo) |
+| 9 | **Volumes do mundo** | atmosfera e nuvens Takram (céu e sol pela hora e lugar); névoa de altura; poeira e fumaça em flipbook (já em uso); embaixo d'água: névoa colorida + cáusticas por textura animada projetada | 3–4 h | +10–25% nos planos de mundo | médio-grande |
+| 10 | **Textura de chão e ambiente** | ambientCG/Poly Haven com mapeamento triplanar no terreno e nos pisos | 1 h | ~0% | médio |
+
+**Totais:** ~15–20 h de agente, uma vez só, e **+15–30% de G4** no render. Num vídeo de 18 min, ~17,5 → ~21–23 min.
+
+**Ordem:** 1 → 2 → 3 → 4 dão a maior parte do salto em ~5–7 h. Depois 6 → 7 (as explicações), depois 8 → 9 → 10.
+
+**Validação:** como no §6:
+- cena-padrão por canal;
+- coluna por camada;
+- custo, régua, MD5 e juiz calibrado nas referências (`docs/plano-qualidade-3d.md` §3).
+
+O alvo de cor nos trechos de explicação é colorfulness ~30.
