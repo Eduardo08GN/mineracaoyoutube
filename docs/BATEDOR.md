@@ -17,8 +17,17 @@ Vale para three.js/Remotion, Unreal, Blender, UI, áudio e ferramentas. Para thr
      - Mixamo.
 
      Prefira os que trazem **mapa de demonstração já iluminado**: começar dele é o atalho;
-   - **GitHub e npm:** shaders, materiais e ferramentas de cena. Olhe licença, estrelas e atividade recente;
-   - **como os grandes fazem:** o canal de referência (Elapsed, Reconstructed, Tracer…), com leitura óptica de quadros, mais posts, Reddit e fóruns.
+   - **GitHub e npm (obrigatório, não opcional):**
+     - `gh search repos` com **muitas** variações de termo, porque a busca é literal;
+     - grep.app, listas "awesome", npm/PyPI, `extensions.blender.org`.
+
+     Olhe licença, estrelas e atividade recente. Antes, confira o `package.json`: às vezes o pronto já está instalado;
+   - **como os grandes fazem (obrigatório):**
+     - tutoriais e making-ofs pela YouTube API, lendo as legendas com `ferramentas/levantamento/`;
+     - créditos na descrição dos concorrentes (`yt_desc.py`);
+     - leitura óptica de quadros do canal de referência;
+     - posts, Reddit e fóruns.
+   - **Rode em paralelo:** um agente para código e outro para método. Exemplo de saída: `docs/levantamentos/2026-11-03_*`.
 3. **Saída obrigatória:** `LEVANTAMENTO_PRONTOS.md` na pasta do projeto, com uma tabela (elemento | opção pronta | licença e preço | engine e versão | tem demo? | decisão) e os 3 melhores no topo.
 4. **Licença:** pegar asset em loja (aceitar licença na conta do Eduardo) só com a confirmação dele, item por item. Comprar, só com o OK do valor.
 5. **Construir à mão** só o que o levantamento provar que não existe, e registrar o porquê.

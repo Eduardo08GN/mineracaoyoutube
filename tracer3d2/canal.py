@@ -7,10 +7,17 @@
 #   python canal.py render <projeto v1> <ini_s> <fim_s> <destino.mp4>   (mp4 MUDO: nome tem que dizer isso)
 #   python canal.py garantir <projeto v1>       religa/prepara se a G4 caiu (stills chama sozinho)
 #   python canal.py sync <projeto v1> [itens]     sobe o que mudou (ex.: public depois de adicionar dados)
+#   python canal.py corrigir <projeto v1> <ini_s> <fim_s> <video_mudo_inteiro.mp4> <saida.mp4>   re-render so do trecho + concat
 #   python canal.py baixar <remoto> <local> | subir <local> <remoto> | saude | desligar
+# 31/10/2026: reservas pelo porteiro.py (T2_DONO = dono; desligar so com T2_PAPEL=maestro) e medicao em <video>/MEDICAO_auto.jsonl
 import base64, hashlib, io, json, os, subprocess, sys, tarfile, threading, time
 from concurrent.futures import ThreadPoolExecutor
 import requests
+import porteiro, marca as medir
+
+DONO = os.environ.get("T2_DONO", "sessao")   # quem segura as reservas (ex.: kriegsmomente_v12); o maestro de cada video define
+if "T2_DONO" not in os.environ and __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] in ("ligar", "garantir", "preparar", "render", "corrigir", "desligar"):
+    print("AVISO: T2_DONO nao definido; as reservas do porteiro ficam como 'sessao' (defina, ex.: T2_DONO=kriegsmomente_v12)", file=sys.stderr)
 
 COLAB_DIR = os.environ.get("COLAB_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "eddie3d", "ferramentas")); sys.path.insert(0, COLAB_DIR); sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +25,8 @@ TMP = os.environ.get("T2_TMP", "D:/tmp")   # nunca no C: (disco cheio)
 ESTADO = f"{TMP}/t2_canal.json"; CACHE_SHA = f"{TMP}/t2_sha.json"
 G4 = os.environ.get("G4_PY", os.path.join(sys.path[0], "g4.py"))
 PEDACO = 16 << 20
-REMOTO = "/content/t2/proj"
+VM_BASE = os.environ.get("T2_VM_BASE", "/content/t2")   # teste com VM falsa local: outra raiz
+REMOTO = f"{VM_BASE}/proj"
 ITENS = ["src", "public", "package.json", "remotion.config.ts", "tsconfig.json"]
 
 
@@ -35,7 +43,7 @@ def renovar_cookies():
     import colab
     from playwright.sync_api import sync_playwright
     e = _estado()
-    with sync_playwright() as p:
+    with porteiro.reserva("navegador", DONO, 600, prazo=1800, log=log), sync_playwright() as p:
         nb = colab.aba(p); pg = nb.context.new_page()
         try:
             pg.goto(e["url"], timeout=60000)
@@ -81,7 +89,15 @@ def baixar(remoto, local):
     os.makedirs(os.path.dirname(os.path.abspath(local)), exist_ok=True); t0 = time.time()
     with open(local + ".parcial", "wb") as a:
         for o in range(0, tam, PEDACO):
-            a.write(req("GET", "/arq", params={"c": remoto, "o": o, "n": PEDACO}, timeout=600).content)
+            # BADPATHS 1.23 (31/10/2026): o proxy caiu no meio e um /arq voltou CURTO; o mp4 ficou sem moov. Confere cada pedaco
+            n = min(PEDACO, tam - o)
+            for tent in range(5):
+                try: dados = req("GET", "/arq", params={"c": remoto, "o": o, "n": n}, timeout=600).content
+                except SystemExit as e: dados = b""; log(f"ALERTA baixar: pedaco {o} falhou ({str(e)[:60]}); tentando de novo")
+                if len(dados) == n: break
+                log(f"ALERTA baixar: pedaco {o} voltou com {len(dados)} de {n} bytes; tentativa {tent + 2}"); time.sleep(3 * (tent + 1))
+            else: raise SystemExit(f"BAIXAR_PEDACO_CURTO em {o} depois de 5 tentativas")
+            a.write(dados)
             if time.time() - t0 > 60: log(f"BATIMENTO baixar: {o / tam:.0%}"); t0 = time.time()
     os.replace(local + ".parcial", local)
     if os.path.getsize(local) != tam: raise SystemExit("BAIXAR_INCOMPLETO")
@@ -120,10 +136,39 @@ def sincronizar(proj, itens=ITENS):
     rel = {os.path.relpath(f, proj).replace("\\", "/"): h for f, h in sha.items()}
     faltam = req("POST", "/faltam", json={"raiz": raiz, "arquivos": rel}, timeout=300).json()["faltam"]
     mb = sum(os.path.getsize(os.path.join(proj, k)) for k in faltam) / 1e6
-    if faltam: log(f"sincronizar: {len(faltam)} arquivos, {mb:.1f} MB")
-    with ThreadPoolExecutor(4) as ex:
-        list(ex.map(lambda k: subir(os.path.join(proj, k), f"{raiz}/{k}"), faltam))
+    if not faltam: return raiz, 0
+    t0 = time.time()
+    if len(faltam) <= TAR_MIN:
+        with ThreadPoolExecutor(4) as ex:
+            list(ex.map(lambda k: subir(os.path.join(proj, k), f"{raiz}/{k}"), faltam))
+    else:
+        # 31/10/2026: 750 arquivos = 750 PUTs pelo proxy (1-2 s de latencia cada; 22 min no video 10). Um tar so, em pedacos
+        # de 16 MB, e um 'tar -x' na VM pelo /exec: o servidor.py da VM nao muda (compativel com uma VM ja no ar)
+        pacote = sincronizar_tar(proj, raiz, faltam)
+    log(f"sincronizar: {len(faltam)} arquivos, {mb:.1f} MB em {time.time() - t0:.0f} s" + (" (tar)" if len(faltam) > TAR_MIN else ""))
+    medir.gravar(proj, "fim", "sync", seg=round(time.time() - t0), n=len(faltam), mb=round(mb, 1), tar=len(faltam) > TAR_MIN)
     return raiz, len(faltam)
+
+
+TAR_MIN = 20   # ate 20 arquivos (ex.: um src/ editado) o envio arquivo a arquivo e mais rapido que montar o tar
+
+
+def sincronizar_tar(proj, raiz, faltam):
+    nome = hashlib.sha1("".join(sorted(faltam)).encode()).hexdigest()[:10]
+    local = f"{TMP}/sync_{nome}.tar"; remoto = f"{VM_BASE}/up/sync_{nome}.tar"
+    with tarfile.open(local, "w") as t:   # sem compressao: o grosso e jpg/png/mp4; json pequeno nao paga o gzip
+        for k in faltam: t.add(os.path.join(proj, k), arcname=k)
+    tam = os.path.getsize(local)
+    with open(local, "rb") as a:   # o pedaco 0 primeiro (o=0 cria/trunca o arquivo na VM), o resto em paralelo
+        req("PUT", "/arq", params={"c": remoto, "o": 0}, data=a.read(PEDACO), timeout=600)
+    def pedaco(o):
+        with open(local, "rb") as a:
+            a.seek(o); req("PUT", "/arq", params={"c": remoto, "o": o}, data=a.read(PEDACO), timeout=600)
+    with ThreadPoolExecutor(4) as ex: list(ex.map(pedaco, range(PEDACO, tam, PEDACO)))
+    exec_vm(f"test $(stat -c %s {remoto}) -eq {tam} && mkdir -p {raiz} && tar --force-local -xf {remoto} -C {raiz} && rm -f {remoto} && echo TAR_OK",
+            prazo=600, estagnacao=300, marca="TAR_OK")
+    os.remove(local)
+    return remoto
 
 
 # ---------- jobs ----------
@@ -186,6 +231,23 @@ def conectar_runtime():
 
 
 def ligar():
+    with porteiro.reserva("g4_admin", DONO, 1200, log=log), porteiro.reserva("navegador", DONO, 1200, prazo=1800, log=log), \
+            medir.etapa(os.environ.get("T2_PROJ"), "ligar"):
+        _ligar()
+
+
+def reconectar():
+    """G4_FORA pode ser so o proxy (BADPATHS 1.22: VM viva ha 78 min). Renova os cookies e pergunta de novo antes de religar.
+    True = VM viva (nao refazer ligar nem preparar a toa)."""
+    try: saude(); return True
+    except SystemExit: pass
+    try:
+        renovar_cookies(); s = saude(); log(f"proxy reconectado: VM viva ha {s.get('uptime', 0) // 60} min"); return True
+    except (SystemExit, Exception) as e:
+        log(f"VM fora de fato ({str(e)[:80]})"); return False
+
+
+def _ligar():
     import colab
     conectar_runtime()
     arqs = {n: base64.b64encode(open(os.path.join(AQUI, "vm", n), "rb").read()).decode() for n in os.listdir(os.path.join(AQUI, "vm")) if os.path.isfile(os.path.join(AQUI, "vm", n))}
@@ -224,6 +286,10 @@ def ligar():
 
 def preparar(proj):
     """npm na VM em paralelo com a subida do projeto; depois sobe os stills quentes e espera ficarem prontos."""
+    with medir.etapa(proj, "preparar"): _preparar(proj)
+
+
+def _preparar(proj):
     raiz = f"{REMOTO}/{nome_proj(proj)}"
     sincronizar(proj, ["package.json", "remotion.config.ts", "tsconfig.json"])
     npm = {}
@@ -238,34 +304,31 @@ def preparar(proj):
 
 
 def garantir(proj):
-    """G4 caiu ou nao foi preparada? Religa e prepara sozinho (nunca cai para render local). Trava: so um processo mexe
-    no Colab por vez; os outros esperam e reaproveitam."""
+    """G4 caiu ou nao foi preparada? Primeiro reconecta o proxy (pode ser so ele); religa so se a VM morreu e prepara so se o
+    daemon de stills nao for deste projeto. Nunca cai para render local. Um so processo por vez (porteiro g4_admin)."""
     def pronta():
         try: return saude().get("stills")
         except SystemExit: return False
     if pronta(): return
-    trava = f"{TMP}/t2_garantir.lock"
-    t0 = time.time()
-    while True:
-        try: os.mkdir(trava); break
-        except FileExistsError:
-            if time.time() - os.path.getmtime(trava) > 1800: os.rmdir(trava); continue
-            if time.time() - t0 > 60 and int(time.time() - t0) % 60 < 5: log("BATIMENTO garantir: outro processo esta religando a G4")
-            time.sleep(5)
-            if pronta(): return
-    try:
-        if pronta(): return
-        log("ALERTA G4 fora do ar: religando e preparando sozinho")
-        try: saude(); vivo = True
-        except SystemExit: vivo = False
-        if not vivo: ligar()
-        preparar(proj)
-    finally: os.rmdir(trava)
+    with porteiro.reserva("g4_admin", DONO, 1800, log=log):
+        if pronta(): return   # outro processo resolveu enquanto esperavamos
+        with medir.etapa(proj, "garantir"):
+            log("ALERTA G4 fora do ar ou sem stills: reconectando antes de religar")
+            if not reconectar(): ligar()
+            if not pronta(): preparar(proj)
 
 
 def stills(proj, pasta, segundos, escala="0.5"):
     pl = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")); fps = pl.get("fps", 30)
     garantir(proj)
+    # 31/10/2026: o daemon de stills e de UM projeto; o porteiro segura o recurso pelo projeto (outro video espera, nao derruba)
+    porteiro.esperar("stills", nome_proj(proj), 1800, prazo=3600, log=log, pid=0)   # vale 30 min desde a ultima chamada
+    # 30/10/2026: o daemon de stills e de UM projeto; com duas sessoes/videos na mesma G4 ele ficou no video 8 e devolveu
+    # quadros do 8 para o 9 sem erro. Confere o projeto do daemon e repreparar se for outro (BADPATHS 1.x).
+    raiz = f"{REMOTO}/{nome_proj(proj)}"
+    if raiz not in exec_vm("ps aux | grep -v grep | grep stills_quente || true", prazo=60):
+        log("stills: daemon de outro projeto; repreparando para", nome_proj(proj))
+        exec_vm("for p in $(pgrep -f '^node /content/t2/vm/stills_quente'); do kill $p; done; sleep 2", prazo=60); preparar(proj)   # pkill -f casava com o proprio bash -c
     sincronizar(proj, ["src"]); t0 = time.time()
     r = req("POST", "/stills", json={"quadros": [round(s * fps) for s in segundos], "escala": float(escala), "tag": pasta}, timeout=1800)
     destino = os.path.join(proj, "teste", pasta); os.makedirs(destino, exist_ok=True)
@@ -275,11 +338,18 @@ def stills(proj, pasta, segundos, escala="0.5"):
             if m.name.endswith(".jpg"):
                 q = int(m.name[:-4]); open(os.path.join(destino, f"t{q / fps:07.2f}.jpg"), "wb").write(t.extractfile(m).read())
     log(f"G4: {len(res['feitos'])} stills em {time.time() - t0:.1f} s (bundle {res['bundle_s']:.0f} s) -> {destino}")
+    medir.gravar(proj, "fim", "stills", seg=round(time.time() - t0), n=len(res["feitos"]), pasta=pasta, ok=not res["falhas"])
     for f in res["falhas"]: print("FALHOU", f)
 
 
 def render(proj, ini, fim, destino):
-    """Render do trecho [ini, fim] (segundos) na G4, sem flicker (vm/render.sh), e download do mp4 MUDO para `destino`."""
+    """Render do trecho [ini, fim] (segundos) na G4, sem flicker (vm/render.sh), e download do mp4 MUDO para `destino`.
+    Um render por vez na G4 (porteiro 'render'); o trecho serve para correcao: ver juntar() para trocar so ele no video."""
+    with porteiro.reserva("render", DONO, 7200, prazo=7200, log=log), medir.etapa(proj, "render", trecho=f"{ini}-{fim}"):
+        _render(proj, ini, fim, destino)
+
+
+def _render(proj, ini, fim, destino):
     pl = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")); fps = pl.get("fps", 30)
     garantir(proj); raiz, _ = sincronizar(proj)
     for n in ("render.sh", "reparar.py"): subir(os.path.join(AQUI, "vm", n), f"/content/t2/vm/{n}")
@@ -291,7 +361,55 @@ def render(proj, ini, fim, destino):
     baixar(f"{raiz}/out/video_crf.mp4", destino); log("baixado:", destino)
 
 
+def chaves(mp4):
+    """Tempos (s) dos quadros-chave do mp4: so neles da para cortar com -c copy sem recodificar."""
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-skip_frame", "nokey", "-show_entries", "frame=pts_time",
+                        "-of", "csv=p=0", mp4], capture_output=True, text=True)
+    return sorted(float(x.strip(",")) for x in r.stdout.split() if x.strip(","))
+
+
+def janela(mp4, ini, fim):
+    """Amplia [ini, fim] para quadros-chave do video inteiro: k0 <= ini e k1 >= fim (k1 = fim do video se nao houver)."""
+    ks = chaves(mp4); k0 = max([k for k in ks if k <= ini + 1e-6] or [0.0]); k1 = min([k for k in ks if k >= fim - 1e-6] or [None], key=lambda k: k or 1e9)
+    return k0, k1
+
+
+def juntar(inteiro, trecho, k0, k1, saida, fps=30):
+    """Troca [k0, k1) do video inteiro pelo trecho re-renderizado, sem recodificar (concat -c copy). O trecho sai do mesmo
+    render.sh (mesmos parametros do encoder), por isso o concat aceita. k1=None: o trecho vai ate o fim."""
+    tmp = f"{TMP}/juntar"; os.makedirs(tmp, exist_ok=True); partes = []
+    def ff(*a): subprocess.run(["ffmpeg", "-v", "error", "-y", *a], check=True)
+    # corte A por CONTAGEM de quadros, nao por tempo: '-t' com copy levava 2 quadros a mais (B-frames), e o video ficava
+    # dessincronizado da narracao. GOP fechado (x264 padrao): os N primeiros pacotes em ordem de decodificacao = quadros < k0
+    if k0 > 0: ff("-i", inteiro, "-frames:v", str(round(k0 * fps)), "-c", "copy", f"{tmp}/a.mp4"); partes.append(f"{tmp}/a.mp4")
+    partes.append(os.path.abspath(trecho))
+    if k1 is not None: ff("-ss", f"{k1:.6f}", "-i", inteiro, "-c", "copy", f"{tmp}/c.mp4"); partes.append(f"{tmp}/c.mp4")
+    open(f"{tmp}/lista.txt", "w").write("".join("file '" + p.replace("\\", "/") + "'\n" for p in partes))
+    ff("-f", "concat", "-safe", "0", "-i", f"{tmp}/lista.txt", "-c", "copy", saida)
+    log(f"juntado: {saida} ({len(partes)} partes)")
+
+
+def corrigir(proj, ini, fim, inteiro, saida):
+    """Correcao depois do render (BADPATHS 3.21: 14 min no video 10 para 2 cartoes): re-renderiza so a janela de
+    quadros-chave que cobre [ini, fim] e junta no video inteiro, sem render novo nem recodificacao."""
+    k0, k1 = janela(inteiro, ini, fim)
+    fps = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")).get("fps", 30)
+    dauer = json.load(open(os.path.join(proj, "src", "plano.json"), encoding="utf-8")).get("dauer")
+    log(f"corrigir {ini}-{fim} s -> janela {k0:.2f}-{k1 if k1 is not None else 'fim'}")
+    trecho = f"{TMP}/trecho_{int(k0 * fps)}.mp4"
+    render(proj, k0, k1 if k1 is not None else dauer, trecho)
+    juntar(inteiro, trecho, k0, k1, saida, fps)
+
+
 def desligar():
+    ok, motivo = porteiro.pode_desligar(DONO)
+    if not ok: raise SystemExit(f"DESLIGAR_NEGADO: {motivo}")
+    with porteiro.reserva("navegador", DONO, 600, prazo=1800, log=log): _desligar()
+    fora = porteiro.liberar_por(DONO)   # stills deste video: o daemon morreu com a VM (BADPATHS 1.25)
+    if fora: log("porteiro: soltei", fora)
+
+
+def _desligar():
     import colab
     from playwright.sync_api import sync_playwright
     try: req("POST", "/desligar", timeout=15)
@@ -299,9 +417,16 @@ def desligar():
     for _ in range(12):
         time.sleep(5)
         with sync_playwright() as p:
-            if not colab.conectado(colab.aba(p)): log("G4 desligada (verificado)"); break
+            if not colab.conectado(colab.aba(p)): log("aba do Colab desconectada"); break
     else:
         print(subprocess.run([sys.executable, G4, "desligar"], capture_output=True, text=True).stdout[-300:])
+    # 31/10/2026 (teste da migracao): a aba mostra "desconectado" ~40 s antes de a VM parar; a VM ainda respondia /saude.
+    # So vale "verificado" quando o proprio servidor deixa de responder
+    for _ in range(24):
+        try: saude()
+        except SystemExit: log("G4 desligada (verificado: /saude nao responde)"); break
+        time.sleep(5)
+    else: raise SystemExit("DESLIGAR_NAO_CONFIRMADO: a VM segue respondendo /saude depois de 2 min")
     if os.path.exists(ESTADO): os.remove(ESTADO)
 
 
@@ -318,3 +443,4 @@ if __name__ == "__main__":
     elif c == "subir": subir(a[0], a[1])
     elif c == "saude": print(json.dumps(saude(), indent=1))
     elif c == "desligar": desligar()
+    elif c == "corrigir": corrigir(a[0], float(a[1]), float(a[2]), a[3], a[4])
