@@ -81,8 +81,14 @@ Isso substitui a meta de cor por canal da v1 do plano e o "toon de época" como 
 - **Presets de câmera:** dolly num eixo com easing, órbita lenta, travelling lateral, grua, segue-objeto, zoom no detalhe.
 - **Gerador de ângulo** com take único por batida. "Take" conta também a mudança de câmera ou ação dentro da batida (é o que o medidor conta), então ≥ 12/min sai **sem dobrar o número de batidas**.
 
-### M3. Acabamento de desenho integrado ANTES do render
-- Contorno (casca invertida) + toon de 2–3 tons + sombra de contato em todo objeto do kit (`docs/acabamento-threejs.md` §3.1 e §3.4).
+### M3. Acabamento integrado ANTES do render
+- **Nas explicações:** o preset "explicação AiTelly" (`docs/acabamento-threejs.md` §8), em ~5–7 h para o salto principal e +15–30% de G4 no total:
+  1. luz de estúdio + IBL + exposição;
+  2. materiais por subsistema;
+  3. sombra macia e de contato;
+  4. palcos com chão que reflete;
+  5. depois raio X/bloom, corte com tampa, DOF/motion blur, volumes e texturas.
+- **Nos objetos pequenos de mapa e mundo:** contorno (casca invertida) + toon de 2–3 tons + sombra de contato (`docs/acabamento-threejs.md` §3.1 e §3.4).
 - **Regra de processo: nenhum render sem o batedor fechado e integrado ao projeto.**
 
 ### M4. Palco explicativo × mundo
