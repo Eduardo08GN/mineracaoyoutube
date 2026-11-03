@@ -321,6 +321,13 @@ Tudo isso existe no three.js. O contorno + toon (§3.1) fica para objetos pequen
 | 9 | **Volumes do mundo** | atmosfera e nuvens Takram (céu e sol pela hora e lugar); névoa de altura; poeira e fumaça em flipbook (já em uso); embaixo d'água: névoa colorida + cáusticas por textura animada projetada | 3–4 h | +10–25% nos planos de mundo | médio-grande |
 | 10 | **Textura de chão e ambiente** | ambientCG/Poly Haven com mapeamento triplanar no terreno e nos pisos | 1 h | ~0% | médio |
 
+**Além do acabamento:** a lacuna de **detalhe de modelo, desgaste de material, efeitos, personagens e tipografia** está em `docs/rotas-baratas-qualidade-3d.md`:
+- TRELLIS.2 e CadQuery para os modelos;
+- desgaste de borda e decalques nossos;
+- three.quarks para os efeitos;
+- Quaternius + Mixamo para os personagens;
+- sistema de tipo com rótulos sem colisão.
+
 **Totais:** ~15–20 h de agente, uma vez só, e **+15–30% de G4** no render. Num vídeo de 18 min, ~17,5 → ~21–23 min.
 
 **Ordem:** 1 → 2 → 3 → 4 dão a maior parte do salto em ~5–7 h. Depois 6 → 7 (as explicações), depois 8 → 9 → 10.

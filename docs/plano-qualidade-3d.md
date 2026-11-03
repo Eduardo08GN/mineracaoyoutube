@@ -111,6 +111,12 @@ Isso substitui a meta de cor por canal da v1 do plano e o "toon de época" como 
   | ES | cauda em T, tubo de pitot congelando, turbofan em corte (médio), truque de trem descarrilando |
 - **Não dá por código:** figura humana e cavalo (usar os desenhados e rigados prontos), dano e deformação realistas, fumaça e fogo (flipbooks/VDB prontos).
 
+**Modelo com mais detalhe, a custo baixo** (`docs/rotas-baratas-qualidade-3d.md`):
+- pronto CC0/CC-BY recolorido (com OK do Eduardo por caso);
+- **TRELLIS.2** (imagem → 3D, MIT) na G4 para cascas e peças orgânicas;
+- **CadQuery** para o mecanismo com detalhe de engenharia;
+- primitivas no three.js só se nada servir.
+
 ### M6. Instrumento e dado dentro da cena (por demanda do tema)
 - **Painel vivo** (já aprovado): ≤ 3 grandezas + barra amostrada + relógio com compressão.
 - **Vista de instrumento:**
