@@ -256,6 +256,8 @@ O critério é sempre "**isso ajuda a entender?**", nunca "isso parece real?". O
 - **Luz:** mediana de luminância nos planos abertos ≥ 100 (0–255); preservar os acentos de facção mesmo se o mundo for dessaturado.
 - **Vegetação e casas:** prontas e coerentes com o estilo. Árvore em cone é pior que nada.
 
+**Pipeline técnico de acabamento** (bibliotecas, versões, presets por canal, batedor de validação): `docs/acabamento-threejs.md`.
+
 ### 5.6 Habilidade e biblioteca próprias
 A habilidade que vale desenvolver é **desenhar bem e barato, de forma inteligente e harmônica com a ambientação de cada canal**:
 - **canal DE:** paleta e traço de época, como gravura do século XIX animada;
