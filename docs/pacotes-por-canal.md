@@ -27,7 +27,8 @@ Atualizado em 03/11/2026. Regra de origem: portão 1 do `CLAUDE.md` e passo 0 de
 | Árvores estilizadas | **FREE Stylized Forest Sample** (StyleHex Studio) | Fab Standard, grátis | No projeto (77 MB) | Mapas `World_Demo` e `Preview_Scene` |
 | Terreno / chão | **MW Landscape Auto Material** (MAWI United) | Fab Standard, grátis | No projeto (702 MB) | Material automático de paisagem sobre relevo real (DEM) para mapas e campos de batalha |
 | Fumaça, fogo, explosões | **Realistic Starter VFX Pack Vol 2** (FX Cat UA) | Fab, faixa **Personal grátis** (até US$ 100 mil/ano) | No projeto (111 MB) | Salvas de artilharia, pólvora, casas em chamas (Niagara, renderiza na G4) |
-| Relevo real | **Cesium for Unreal** (plugin) | Grátis, código aberto; termos de dados em análise (`D:\unreal3d\LICENCA_CESIUM.md`) | Na biblioteca | **Só o relevo** (Gravelotte, Sedan, Boêmia). Imagem de satélite e cidades 3D de hoje = anacronismo, não usar |
+| Relevo real | **Copernicus DEM GLO-30** (ou DGM/IGN nacional) importado como Landscape + MW Landscape | Copernicus: uso comercial, crédito na descrição | Em uso (GLO-90 nos vídeos) | Gravelotte, Sedan, Boêmia. **Sem Cesium ion** (exige logo na tela) |
+| Ferramenta de geo | **Cesium for Unreal** (plugin; `CesiumForUnreal-58-v2.31.0.zip` já inclui Linux) | Apache 2.0, sem crédito na tela | Na biblioteca | Só como carregador de dados nossos. Nunca com Cesium ion nem com Google Tiles (`D:\unreal3d\LICENCA_CESIUM.md`) |
 | Filtro "pintado" | **UnrealPostProcessingShaders** (GitHub UnrealVFX) | Apache-2.0, grátis | Candidato | Kuwahara (óleo). Opcional, para um toque de pintura de época |
 | Soldados 1870 | Andy Woodhead: Prussian Infantry, French Infantry, Dreyse needle gun (Sketchfab) | CC BY 4.0, crédito na descrição | Em uso | Rig por transferência + animações Mixamo; Dreyse presa ao esqueleto |
 | Animações | Mixamo (Adobe) | Uso comercial em vídeo | Em uso | Marcha, tiro, assalto, mortes |
@@ -56,7 +57,13 @@ Atualizado em 03/11/2026. Regra de origem: portão 1 do `CLAUDE.md` e passo 0 de
 
 | Elemento | Pacote / biblioteca | Licença | Status | Uso |
 |---|---|---|---|---|
-| Cidade e relevo reais | **Cesium for Unreal** + Cesium World Terrain / Google Photorealistic 3D Tiles | Plugin grátis; dados com termos próprios (atribuição na tela? em análise) | Na biblioteca | Local exato do acidente (ex.: Greenacres/Palm Beach), voo sobre o relevo real |
+| Cidade e relevo reais | Relevo Copernicus/LiDAR nacional + prédios do **OpenStreetMap** (ou Catastro, na Espanha) convertidos em modelo nosso; plugin Cesium só como carregador | Copernicus e OSM: crédito na descrição | Candidato | Local exato do acidente |
+
+**Descartados:**
+- **Google Photorealistic 3D Tiles:** só vídeo promocional de até 30 s, logo na tela e proibição de cache.
+- **Cesium ion:** o plano grátis é não comercial. O Commercial (US$ 149/mês) exige logo na tela e tira os vídeos do ar quando a assinatura acaba.
+
+Detalhes em `D:\unreal3d\LICENCA_CESIUM.md`.
 | Fogo e fumaça do impacto | Realistic Starter VFX Pack Vol 2 | Fab Personal grátis | No projeto | Cenas de impacto (plano médio/longo, com respeito) |
 | Nuvens volumétricas (three.js) | **`@takram/three-clouds`** (+ `@takram/three-atmosphere`, já no projeto) | MIT | Candidato | Substitui o shader de nuvem feito à mão em 02/11 (`kit/maquete/ceu.ts`) |
 | Céus de foto | Poly Haven `kloofendal_48d_partly_cloudy_puresky`, `kloofendal_overcast_puresky` (4K) | CC0 | Em uso no batedor Céu 2.0 | |
