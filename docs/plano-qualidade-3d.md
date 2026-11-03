@@ -36,6 +36,21 @@
 
 ---
 
+## 2a. Direção de arte (decisão do Eduardo, 03/11)
+O Eduardo decidiu que o AiTelly é referência também de **direção de arte**. Nas palavras dele, o nosso design nos dois canais "está uma porcaria; nós não somos referência".
+
+**Regra:** em **todo trecho de explicação** do Kriegsmomente e do Segundo a Segundo vale o estilo do AiTelly:
+- **palcos:** planta técnica azul com grade, estúdio escuro com chão e sombra, grade holográfica, céu liso;
+- **uma cor saturada por subsistema;**
+- **corte e raio X;**
+- **rótulo com linha de chamada** preso ao objeto;
+- **colorfulness ~30** como alvo;
+- **materiais limpos e saturados sob luz de estúdio suave** (ver `docs/acabamento-threejs.md`, preset "explicação AiTelly").
+
+O **estilo de época** (gravura, pintura, foto antiga, paleta dessaturada) fica **só onde não há explicação**: contexto, biografia, abertura e fecho.
+
+Isso substitui a meta de cor por canal da v1 do plano e o "toon de época" como estilo geral dos objetos explicativos. O contorno + toon continua válido para objetos pequenos no mapa e no mundo.
+
 ## 2. As mudanças, na ordem de execução
 ### M0. Infraestrutura (antes de tudo; devolve ~1 h por vídeo)
 - **Cache de assets montado na G4** (Drive), para a subida do projeto cair de ~32 min para < 5 min (o Eduardo já pediu).
@@ -109,7 +124,7 @@
 | Takes distintos | ≥ 12/min (rumo a 15), definição anti-jitter | preditiva + final |
 | Repetição | ≤ 5%; take nunca reaproveitado | preditiva (hash) + final |
 | Imagem congelada | 0% | final |
-| Colorfulness | **DE ≥ 18 nos palcos explicativos** (sem meta em época/gravura); **ES ≥ 22** | final |
+| Colorfulness | **~30 nos trechos de explicação dos dois canais** (alvo AiTelly); sem meta só nos trechos de época sem explicação | final |
 | Luz | mediana de luminância ≥ 100 nos planos abertos | batedor |
 | Juiz | **calibrado nas referências:** 12 quadros de AiTelly, Reconstructed e do Short; meta = média delas − 0,5; no máximo 2 rodadas. Se o juiz der < 8 às próprias referências, a meta fixa de 8,5 cai | batedor |
 | Falha em qualquer gate | não entrega sem **OK explícito do Eduardo**, com a lista do que falhou | entrega |
@@ -151,7 +166,7 @@
 | Infraestrutura | não havia | ~1 h 30 perdida no v14b (2 quedas, 32 min de subida, stills travando) | **M0 primeiro**; janela única de G4 para conciliar com a regra de desligar sem job |
 | Régua | só a final, a 24 fps | descobrir 37% de câmera parada custou um render inteiro (17,5 min de G4) | **preditiva no plano** + final como conferência; calibração dos presets acima do limiar do medidor |
 | Causa do v14b | "o planejador escolheu cartão?" | faltava componente (não havia esquema sobre a cena) + erro de processo (render antes do batedor) | **componente M2** + regra "nenhum render sem batedor integrado" |
-| Cor | colorfulness ≥ 22 nos dois | conflita com o estilo DE aprovado (gravura dessaturada, acento só de facção) | **meta por canal e por palco** (DE ≥ 18 nos palcos; ES ≥ 22) |
+| Cor | colorfulness ≥ 22 nos dois | conflita com o estilo DE aprovado (gravura dessaturada, acento só de facção). **Objeção retirada depois, a pedido do Eduardo** | **direção de arte AiTelly em toda explicação dos dois canais** (seção 2a); alvo ~30; estilo de época só onde não há explicação |
 | Juiz | ≥ 8,5 fixo | 3 rodadas no v14b, média 6,4 → 7,0, 1 de 12 passou | **calibrado nas referências**, meta = média − 0,5, máx. 2 rodadas |
 | Takes ≥ 12/min | meta | cabe: G4 independe do número de takes; a definição precisa ser anti-jitter | mantido, com a definição de 1,5 s / 0,93 |
 | Modelo por código | proposto | 2–3 h por modelo; humano, cavalo, dano e fumaça não dão por código | mantido com a lista do que dá e do que não dá |
