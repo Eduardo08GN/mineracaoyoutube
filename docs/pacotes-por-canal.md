@@ -76,6 +76,25 @@ Detalhes em `D:\unreal3d\LICENCA_CESIUM.md`.
 
 ---
 
+## Onde procurar (fontes além do Fab)
+
+| Fonte | O que tem | Licença típica | Para quê |
+|---|---|---|---|
+| **Fab** (fab.com) | Pacotes da Unreal, Megascans, lojas antigas (UE Marketplace, ArtStation, Sketchfab Store) | Fab Standard (Personal/Professional) | Base dos cenários Unreal |
+| **Sketchfab** | A maior vitrine de modelos 3D; muitos grátis baixáveis | CC-BY / CC0 (conferir cada um; NC/ND não servem) | Soldados, armas e objetos de época (os Woodhead vieram daqui) |
+| **Museus no Sketchfab** (Royal Armouries, Musée de l'Armée, DHM, HGM Wien, IWM…) | Escaneamentos de peças reais do séc. XIX | Frequentemente CC-BY | Canhões, armas, capacetes e uniformes reais |
+| **Smithsonian Open Access 3D** | Escaneamentos de acervo | CC0 | Objetos históricos |
+| **Europeana** | Acervo de museus europeus (inclui 3D) | Varia por item | Referência e alguns modelos |
+| **CGTrader / TurboSquid** | Grandes, quase tudo pago | Licença comercial da loja | Veículos, aviões e armas realistas (pagos: só com o OK do Eduardo) |
+| **KitBash3D** | Kits premium de cenário (cidades, vilas) | Comercial, pago (às vezes grátis) | Cenários de nível cinema |
+| **BlenderKit** | Biblioteca integrada ao Blender, com parte grátis | Própria (grátis/paga) | Modelos e materiais via Blender → Unreal |
+| **Poly Haven / ambientCG** | HDRI, texturas PBR, modelos | CC0 | Céus e materiais (em uso) |
+| **Kenney / Quaternius / Poly Pizza** | Low-poly | CC0 | Só reserva (visual "PS2") |
+| **Mixamo** | Animações e personagens | Uso comercial em vídeo | Animações (em uso) |
+| **ActorCore** (Reallusion) | Personagens e captura de movimento | Grátis/pago | Mais variedade de animação militar que o Mixamo |
+
+**Levantamento em andamento:** armas, canhões e objetos de 1866–1871 nesses acervos (`D:\unreal3d\LEVANTAMENTO_ARMAS_1870.md`). Os aprovados entram na tabela do Kriegsmomente acima.
+
 ## Regras de uso
 - **Créditos:** só na descrição, nunca na imagem, salvo se uma licença exigir atribuição na tela. Nesse caso, avaliar antes de usar.
 - **Licença:** aceite na conta do Eduardo, sempre com o OK dele. Compra só com item e valor confirmados.
