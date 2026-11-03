@@ -307,6 +307,8 @@ Este documento faz isso para as camadas de acabamento.
 
 Tudo isso existe no three.js. O contorno + toon (§3.1) fica para objetos pequenos no mapa e no mundo.
 
+> **Atualização (03/11, batedor do Learjet parte 3):** nos objetos explicativos o padrão é o **cartoon técnico**, aprovado pelo Eduardo. São as camadas 1, 3, 4 e 6 da tabela abaixo (luz de estúdio, sombra, palco, raio X) com o **material toon de 2–3 tons** e o **contorno suave** (~1,6 px, cor da peça escurecida, opacidade ~0,8) no lugar do `MeshPhysicalMaterial` brilhante da camada 2. O material físico fica para o que aparece no mundo (o avião, o terreno). Ver `docs/plano-qualidade-3d.md` §2a.
+
 ### 8.1 O que sobe, com que custo, em que ordem
 | # | Camada | O que fazer no three.js | Desenvolvimento (uma vez) | Custo de G4 no render | Ganho visual |
 |---|---|---|---|---|---|
