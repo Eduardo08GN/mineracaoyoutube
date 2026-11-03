@@ -25,3 +25,4 @@ Produção de vídeos para os canais do Eduardo: Kriegsmomente (DE), Segundo a S
 - **Tracer3D 2.0:** `tracer3d2/ARQUITETURA.md`, `tracer3d2/BADPATHS.md`, `tracer3d2/ACABAMENTO.md`.
 - **Batedor (regra geral):** `docs/BATEDOR.md`. Para three.js, veja também `docs/whatif-es/BATEDOR.md`.
 - **Caminhos ruins gerais:** `docs/BADPATHS.md`.
+- **Pacotes prontos por canal:** `docs/pacotes-por-canal.md` (consultar antes de qualquer levantamento novo).
