@@ -47,6 +47,16 @@ O Eduardo decidiu que o AiTelly é referência também de **direção de arte**.
 - **colorfulness ~30** como alvo;
 - **materiais limpos e saturados sob luz de estúdio suave** (ver `docs/acabamento-threejs.md`, preset "explicação AiTelly").
 
+**Estilo do objeto explicativo: CARTOON TÉCNICO** (decisão do Eduardo em 03/11, depois do batedor do Learjet parte 3: "ficou bem melhor, só o contorno que tem que ser mais suave e moderno"):
+- geometria simples (por código ou isolada de um modelo licenciado), sem tentar ser fotorrealista;
+- **contorno suave e moderno:** ~1,6 px em 1080p, na cor da própria peça escurecida, opacidade ~0,8 (nada de preto grosso);
+- **toon de 2–3 tons**, uma cor chapada e saturada por subsistema, traço que identifica exagerado;
+- raio X como casca em contorno claro + interior cheio colorido; corte com tampa sólida; vista explodida com os rótulos acompanhando;
+- palco do AiTelly (grade, sombra de contato, reflexo borrado);
+- paleta madura, sem rostos nem bonecos fofos.
+
+O meio-realismo (superfície lisa e brilhante, vidro) é que reprova; o cartoon técnico, com a mesma geometria simples, passa. Realismo só onde fizer diferença (por exemplo, o avião no mundo).
+
 O **estilo de época** (gravura, pintura, foto antiga, paleta dessaturada) fica **só onde não há explicação**: contexto, biografia, abertura e fecho.
 
 Isso substitui a meta de cor por canal da v1 do plano e o "toon de época" como estilo geral dos objetos explicativos. O contorno + toon continua válido para objetos pequenos no mapa e no mundo.
@@ -110,6 +120,12 @@ Isso substitui a meta de cor por canal da v1 do plano e o "toon de época" como 
   | DE | culatra Krupp, agulha do Dreyse (já feita em corte no v8), Mitrailleuse (v8), telégrafo e receptor de fita, trem de rodagem e bielas (médio), perfil de via e estação |
   | ES | cauda em T, tubo de pitot congelando, turbofan em corte (médio), truque de trem descarrilando |
 - **Não dá por código:** figura humana e cavalo (usar os desenhados e rigados prontos), dano e deformação realistas, fumaça e fogo (flipbooks/VDB prontos).
+
+**Modelo com mais detalhe, a custo baixo** (`docs/rotas-baratas-qualidade-3d.md`):
+- pronto CC0/CC-BY recolorido (com OK do Eduardo por caso);
+- **TRELLIS.2** (imagem → 3D, MIT) na G4 para cascas e peças orgânicas;
+- **CadQuery** para o mecanismo com detalhe de engenharia;
+- primitivas no three.js só se nada servir.
 
 ### M6. Instrumento e dado dentro da cena (por demanda do tema)
 - **Painel vivo** (já aprovado): ≤ 3 grandezas + barra amostrada + relógio com compressão.

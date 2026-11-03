@@ -307,6 +307,8 @@ Este documento faz isso para as camadas de acabamento.
 
 Tudo isso existe no three.js. O contorno + toon (§3.1) fica para objetos pequenos no mapa e no mundo.
 
+> **Atualização (03/11, batedor do Learjet parte 3):** nos objetos explicativos o padrão é o **cartoon técnico**, aprovado pelo Eduardo. São as camadas 1, 3, 4 e 6 da tabela abaixo (luz de estúdio, sombra, palco, raio X) com o **material toon de 2–3 tons** e o **contorno suave** (~1,6 px, cor da peça escurecida, opacidade ~0,8) no lugar do `MeshPhysicalMaterial` brilhante da camada 2. O material físico fica para o que aparece no mundo (o avião, o terreno). Ver `docs/plano-qualidade-3d.md` §2a.
+
 ### 8.1 O que sobe, com que custo, em que ordem
 | # | Camada | O que fazer no three.js | Desenvolvimento (uma vez) | Custo de G4 no render | Ganho visual |
 |---|---|---|---|---|---|
@@ -320,6 +322,13 @@ Tudo isso existe no three.js. O contorno + toon (§3.1) fica para objetos pequen
 | 8 | **DOF + motion blur** | `DepthOfFieldEffect` nos closes; motion blur por **subquadros dentro do quadro** (K instantes no obturador de 180°), só nos movimentos rápidos | 3 h | DOF ~+5%; blur ×K só nos planos rápidos | médio-grande (tira a cara de jogo) |
 | 9 | **Volumes do mundo** | atmosfera e nuvens Takram (céu e sol pela hora e lugar); névoa de altura; poeira e fumaça em flipbook (já em uso); embaixo d'água: névoa colorida + cáusticas por textura animada projetada | 3–4 h | +10–25% nos planos de mundo | médio-grande |
 | 10 | **Textura de chão e ambiente** | ambientCG/Poly Haven com mapeamento triplanar no terreno e nos pisos | 1 h | ~0% | médio |
+
+**Além do acabamento:** a lacuna de **detalhe de modelo, desgaste de material, efeitos, personagens e tipografia** está em `docs/rotas-baratas-qualidade-3d.md`:
+- TRELLIS.2 e CadQuery para os modelos;
+- desgaste de borda e decalques nossos;
+- three.quarks para os efeitos;
+- Quaternius + Mixamo para os personagens;
+- sistema de tipo com rótulos sem colisão.
 
 **Totais:** ~15–20 h de agente, uma vez só, e **+15–30% de G4** no render. Num vídeo de 18 min, ~17,5 → ~21–23 min.
 
