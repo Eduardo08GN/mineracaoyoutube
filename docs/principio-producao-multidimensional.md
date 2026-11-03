@@ -260,8 +260,8 @@ O critério é sempre "**isso ajuda a entender?**", nunca "isso parece real?". O
 
 ### 5.6 Habilidade e biblioteca próprias
 A habilidade que vale desenvolver é **desenhar bem e barato, de forma inteligente e harmônica com a ambientação de cada canal**:
-- **canal DE:** paleta e traço de época, como gravura do século XIX animada;
-- **canal ES:** traço limpo de infográfico de aviação e engenharia.
+- **trechos de explicação (os dois canais):** direção de arte do AiTelly: palco, uma cor saturada por subsistema, luz de estúdio suave, corte e raio X, rótulo com linha de chamada, colorfulness ~30 (`docs/plano-qualidade-3d.md` §2a, decisão do Eduardo em 03/11);
+- **mundo, mapa e contexto:** canal DE com traço e paleta de época (gravura do século XIX animada); canal ES com traço limpo de infográfico de aviação.
 
 A habilidade **acumula**: uma biblioteca nossa de objetos desenhados no mesmo estilo (avião, trem, vagão, canhão, soldado, casa, navio, telégrafo) se reaproveita como **modelo** em todo vídeo novo, com outro ângulo e outra ação. O que nunca se reaproveita é o **take** renderizado (§7). O caminho ultrarrealista cobra o custo cheio toda vez.
 
@@ -311,8 +311,8 @@ A habilidade **acumula**: uma biblioteca nossa de objetos desenhados no mesmo es
 | Take | **nunca reaproveitar o mesmo take de animação no vídeo**: outro trecho, outra velocidade ou espelho do mesmo clipe contam como reaproveitamento | agrupamento de takes por correlação |
 | Objeto | as 4 perguntas (§5.4); estilo coerente; nada de close macro de modelo simples | revisão de still |
 | Imagem | luminância mediana ≥ 100 nos abertos; acentos de facção preservados | régua de luz e cor |
-| Qualidade | juiz separado dá nota de 0 a 10 aos stills-chave contra a referência; segue só com ≥ 8,5 | relatório do juiz |
-| Áudio | nunca áudio real de controle de tráfego ou caixa-preta; música ~20 dB abaixo da voz no canal DE | mixagem medida em LU |
+| Qualidade | juiz separado dá nota de 0 a 10 aos stills-chave contra a referência; segue só com a meta calibrado nas referências: nota média do juiz em 12 quadros de AiTelly, Reconstructed e do Short − 0,5, no máximo 2 rodadas (`docs/plano-qualidade-3d.md` §3) | relatório do juiz |
+| Áudio | nunca áudio real de controle de tráfego ou caixa-preta; **sem música no canal DE** (decisão do Eduardo em 03/11: só voz e efeitos pontuais) | mixagem medida em LU |
 | Custo | minutos de G4 anotados por take; nenhum take caro sem ganho visível | plano de batidas |
 
 ---
@@ -339,7 +339,7 @@ A habilidade **acumula**: uma biblioteca nossa de objetos desenhados no mesmo es
 2. **Antes do render em escala:**
    - batedor curto só dos elementos novos;
    - folha de stills lado a lado com a referência e com a versão anterior;
-   - nota do juiz ≥ 8,5;
+   - nota do juiz na meta calibrada nas referências (média − 0,5, máx. 2 rodadas);
    - medidor de câmera (% parado, % congelado);
    - régua de luz e cor.
 3. **Antes de entregar:**

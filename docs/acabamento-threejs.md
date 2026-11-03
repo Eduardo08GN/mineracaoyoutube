@@ -118,7 +118,7 @@ Este documento faz isso para as camadas de acabamento.
 | Sombreamento em faixas | `MeshToonMaterial` + `gradientMap` de 3–4 texels (`NearestFilter`) | MIT (three) | os dois | **recomendado** |
 | Material custom sobre o padrão (toon + PBR leve) | `three-custom-shader-material` 6.4.0 | MIT | os dois | candidato, se o toon puro ficar pobre |
 
-**Paleta por canal:**
+**Paleta por canal** (vale para **mundo, mapa e contexto**; nos trechos de **explicação** dos dois canais vale o preset "explicação AiTelly" do §8, decisão do Eduardo em 03/11):
 - **DE:** traço e paleta de **gravura do século XIX animada**:
   - azul prussiano × vermelho garance;
   - ferro escuro, latão, madeira;
@@ -204,6 +204,8 @@ Este documento faz isso para as camadas de acabamento.
 
 ## 4. Presets por canal (ponto de partida para o batedor)
 
+> **Atenção (03/11):** os presets abaixo valem para **mundo, mapa e contexto**. Nos trechos de **explicação** dos dois canais vale o preset "explicação AiTelly" (§8).
+
 ### 4.1 DE: "gravura animada"
 | Camada | Preset |
 |---|---|
@@ -213,7 +215,7 @@ Este documento faz isso para as camadas de acabamento.
 | Sombra | PCSS (`SoftShadows`) + sombra de contato em cada objeto |
 | Oclusão | N8AO (desligado com `far` enorme) |
 | Atmosfera | névoa na cor do clima; fumaça de pólvora em flipbook |
-| Câmera | dolly contínuo; motion blur só em movimento rápido |
+| Câmera | dolly contínuo com velocidade mínima acima do limiar do medidor (zoom ≥ ~0,1% por quadro; `docs/plano-qualidade-3d.md` M1); motion blur só em movimento rápido |
 | Cor | AgX + LUT de época + grão + vinheta; acentos de facção preservados |
 
 ### 4.2 ES: "infográfico de aviação"
@@ -264,7 +266,7 @@ Este documento faz isso para as camadas de acabamento.
 1. **custo na G4:** segundos de parede da batida, contra `off`, e ms por quadro;
 2. **régua de imagem:** luminância p10/p50/p90, contraste, colorfulness, detalhe (Sobel p90), comparadas com a referência do canal;
 3. **determinismo:** o mesmo quadro renderizado 2× tem o mesmo MD5;
-4. **juiz separado:** nota de 0 a 10 aos stills contra a referência; entra só o que leva o conjunto a **≥ 8,5**;
+4. **juiz separado:** nota de 0 a 10 aos stills contra a referência; entra só o que leva o conjunto à **meta calibrada nas referências** (média do juiz em 12 quadros de AiTelly, Reconstructed e do Short − 0,5; máx. 2 rodadas);
 5. **folha lado a lado:** referência | atual | com a camada.
 
 **Critério de entrada:** o ganho aparece **no tamanho em que o objeto vai estar na tela** e cabe no alvo de custo (§2.6). Se só aparece em close ampliado, não entra.
