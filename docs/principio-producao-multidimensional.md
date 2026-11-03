@@ -359,6 +359,7 @@ A habilidade **acumula**: uma biblioteca nossa de objetos desenhados no mesmo es
 | Reconstrução de acidente aéreo com roteiro "últimos 60 s" (1,24 mi em 1 dia), transcrição | 0 casos paralelos; 7,4 ressalvas por mil palavras; tripé confirmado/reportado/desconhecido | arquitetura de roteiro de uma espinha só |
 | Tutorial de shorts 3D realistas feitos com IA + Blender, leitura a 24 fps + transcrição | Short de referência de 31 s sem corte, 4,8% parado | método: medir a referência com o mesmo medidor do nosso render, juiz com nota, engenharia de render; "perfeito demais = falso" |
 | Aviões e Músicas, Manual do Mundo e Space Today (9 vídeos, legendas) | 0,6–2,9 números/min; 14–18 palavras/frase; 0,9–4,3 falas ao espectador/min | checklist do roteiro agregador |
+| Canal AiTelly (2,03 mi de inscritos; 10 vídeos lidos a 24 fps + bastidores), `docs/referencia-aitelly.md` | ~17 takes distintos/min, 4,5% repetidos, 5% de câmera parada; Blender EEVEE + After Effects; 7 animadores + 1 roteirista, 10 min em 12 h | o objeto que abre (corte, vista explodida, raio X), cor por subsistema, palco explicativo × mundo, gráfico dentro da cena |
 | Nossos vídeos (vídeo 14 v1 DE; reconstrução parte 2 ES) | ver §2, §3.2 e §8 | o que não fazer |
 
 ---
