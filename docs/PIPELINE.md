@@ -6,6 +6,13 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 
 ---
 
+## ★ DESIGN SYSTEM DO KRIEGSMOMENTE (canal alemão) — decisão do Eduardo, 04/11/2026
+- **Tema CREME**, nunca o escuro. O viewport tem fundo creme/bege de papel antigo (~`#e7ddca`), com sombras suaves.
+- **A escrita do take do telégrafo do K15** ("Ems – Berlin, den 13. Juli 1870"): serifa itálica de época escrita progressivamente na tela, rótulos com linha-guia fina terminada em ponto e gráficos traçados a tinta.
+- Vale para mapa, modelos/teardown e textos. O K16 (Seekrieg) saiu escuro por exceção: já tinha começado assim, e não é o padrão.
+
+---
+
 ## 0. Princípios (valem mais que qualquer ferramenta)
 - **O produto é a compreensão do espectador.** A ordem é: roteiro > desenho da informação > animação > acabamento. A pergunta de corte é "ajuda a entender?" (`docs/principio-producao-multidimensional.md`).
 - **Recurso barato e inteligente sempre.** Antes de construir, perguntar: "qual o recurso mais barato que já temos e que dá a mesma leitura?" (`docs/stack-producao-3d.md`).
