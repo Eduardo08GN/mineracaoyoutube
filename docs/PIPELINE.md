@@ -13,6 +13,61 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 
 ---
 
+## ★ DIRETIVA DO PRÓXIMO VÍDEO (lições da leitura óptica do K16, 04/11; o K16 foi publicado sem retroagir)
+
+**Medição do K16 contra o AiTelly** (diferença entre quadros a 24 fps, mesma régua):
+
+| Métrica | K16 | AiTelly |
+|---|---|---|
+| Movimento médio por quadro | 1,68 | 4,24 |
+| Quadros quase parados | 26% | 15% |
+| Mediana de duração do plano | 7,0 s | 4,4 s |
+| Movimento nos planos do navio | ~0,55 | — |
+
+**Os planos do modelo foram os mais mortos do vídeo.**
+
+0. **Design system: CREME + a escrita do telégrafo do K15** (seção acima). Nada de tema escuro.
+1. **Usar a SKILL teardown inteira, não só o motor de render** (`D:/pesquisa_nichos/teardown/SKILL.md`):
+   - referência real primeiro, comparada quadro a quadro;
+   - números reais de uma fonte só, e uma entrada move tudo;
+   - **a peça que trabalha se abre** (isolar, cortar, raio-X): uma câmera que entra vale mais que dez órbitas;
+   - estúdio claro com um acento;
+   - máquina em 60–70% do quadro e rótulo ≥ 34 px;
+   - nada morto (um elemento sempre vivo);
+   - easing de entrada `cubic-bezier(0.16,1,0.3,1)` e de saída `cubic-bezier(0.6,0,0.9,0.35)`;
+   - ciclo de revisão `--stills beats` + `sheet.mjs` até uma passada não achar nada.
+2. **Modelo/objeto vivo:**
+   - câmera sempre andando (passagem, aproximação, órbita, entrar);
+   - nada abaixo de 15% da altura do quadro por mais de 3 s;
+   - o objeto se recorta contra o claro.
+   - No caso de navio: vergas perpendiculares ao mastro e linha d'água opaca (água translúcida só no corte).
+   - **Meta de movimento:** média ≥ 3 na régua de diferença entre quadros, e nenhum plano parado por mais de 3 s.
+3. **O take do mecanismo explica com os DOIS números lado a lado:**
+   - exemplo: o calado do navio ao lado da profundidade da água, com fonte;
+   - cada grandeza com cor/forma própria (calado ≠ carvão);
+   - texto nunca vaza da caixa;
+   - o corte planejado no batedor tem que aparecer no vídeo;
+   - mecanismo com raio-X, passos numerados, setas, como no AiTelly.
+4. **Abertura:** 3D em movimento nos primeiros 5 s, e o gancho do título no mesmo quadro (ex.: 49 vs 5 lado a lado).
+5. **Repetição:**
+   - escrita/lápis no máximo 3–4 vezes;
+   - **nenhuma gravura repetida**;
+   - multidões entram em contagem (não clones parados) e não são reaproveitadas.
+6. **Uma linguagem visual só:** a do design system creme. Nada de papel com textura realista.
+7. **Mapa: voltar ao kit/karten do Tracer3D** (Karte via `cenas/karten.json`):
+   - `grund: "auto"` com relevo;
+   - territórios com `geojson`/`flaeche`;
+   - nomes de região com `gebiet`;
+   - movimento com `pfeil`, `linie`, `front`, `lineal` (com contador), `zahl` com `zaehlt`, `datum` e `zeitleiste`;
+   - câmera **sempre** com `drift` ou voo por keyframes (nenhum mapa parado);
+   - rótulos sem sobreposição;
+   - lugares como Paris e Cherbourg sobre terra visível.
+8. **Legendas:** cortadas por frase, no mínimo 1,5 s na tela, nenhuma palavra órfã ("Bundes.", "Hause.").
+9. **Título coerente com o vídeo:** nada de absoluto que o próprio vídeo desmente (o K16 dizia "nie an" e mostrava Havana).
+10. **Técnico:** entregar em H.264 **8 bits** com grão (ou HEVC/AV1 em 10 bits). O H.264 de 10 bits não abre em vários players/editores.
+
+---
+
 ## 0. Princípios (valem mais que qualquer ferramenta)
 - **O produto é a compreensão do espectador.** A ordem é: roteiro > desenho da informação > animação > acabamento. A pergunta de corte é "ajuda a entender?" (`docs/principio-producao-multidimensional.md`).
 - **Recurso barato e inteligente sempre.** Antes de construir, perguntar: "qual o recurso mais barato que já temos e que dá a mesma leitura?" (`docs/stack-producao-3d.md`).
@@ -136,3 +191,4 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | regra de fato: número na tela só do dossiê ("1.500 Kanonen?" removido) |
 | 04/11 | render final K16: 12 min em 5,4 min (24 fatias); GPU com média de 58% de utilização e 35% de VRAM. Prioridade = mais tarefas simultâneas, não resolução (fica em 1440p) |
 | 04/11 | **K16 entregue** (`D:/kriegschronik/k16_seekrieg/entrega/`). Medição e lições em `producao3d/k16/MEDICAO.md`; miniaturas por `ferramentas/miniaturas_k16.py` (o objeto do título + 2–4 palavras que acrescentam, sem repetir o título) |
+| 04/11 | leitura óptica do K16 → DIRETIVA DO PRÓXIMO VÍDEO (topo do documento): creme, skill teardown inteira, objeto vivo, mecanismo com 2 números, kit/karten nos mapas, sem repetição, legendas por frase, título coerente, 8 bits |
