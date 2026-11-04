@@ -10,6 +10,7 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 - **Tema CREME**, nunca o escuro. O viewport tem fundo creme/bege de papel antigo (~`#e7ddca`), com sombras suaves.
 - **A escrita do take do telégrafo do K15** ("Ems – Berlin, den 13. Juli 1870"): serifa itálica de época escrita progressivamente na tela, rótulos com linha-guia fina terminada em ponto e gráficos traçados a tinta.
 - Vale para mapa, modelos/teardown e textos. O K16 (Seekrieg) saiu escuro por exceção: já tinha começado assim, e não é o padrão.
+- **Implementação de referência (ponto de partida obrigatório):** `D:/kriegschronik/tracer3d_15_emser/teardown/morse_1870/` (`takes.js`, `beats.js`). É a cena do telégrafo, feita com a SKILL teardown completa. O próximo vídeo parte dela, não do zero.
 
 ---
 
@@ -192,3 +193,4 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | render final K16: 12 min em 5,4 min (24 fatias); GPU com média de 58% de utilização e 35% de VRAM. Prioridade = mais tarefas simultâneas, não resolução (fica em 1440p) |
 | 04/11 | **K16 entregue** (`D:/kriegschronik/k16_seekrieg/entrega/`). Medição e lições em `producao3d/k16/MEDICAO.md`; miniaturas por `ferramentas/miniaturas_k16.py` (o objeto do título + 2–4 palavras que acrescentam, sem repetir o título) |
 | 04/11 | leitura óptica do K16 → DIRETIVA DO PRÓXIMO VÍDEO (topo do documento): creme, skill teardown inteira, objeto vivo, mecanismo com 2 números, kit/karten nos mapas, sem repetição, legendas por frase, título coerente, 8 bits |
+| 04/11 | referência do design system = `tracer3d_15_emser/teardown/morse_1870` (telégrafo do K15, SKILL teardown completa) |
