@@ -3,6 +3,12 @@
 O modelo está congelado: Learjet 45 simples, atlas de duas cores, janela em disco. Toda a energia vai para estes planos.
 Stack: teardown (three.js r186) + GSAP na G4. HUD e números entram no próprio quadro. Fala: `07_greenacres_p3/voz`.
 
+## Regra do take explicativo (04/11): tornar visível o abstrato
+Cada batida responde: **"o que a frase diz que é abstrato, e como este take faz o espectador ver isso, ligado ao objeto, ao tempo e ao efeito?"**
+- O dado mora **no objeto ou no lugar**, nunca num cartão ao lado.
+- No mesmo take, ≥ 2–3 dimensões **conectadas**: objeto/lugar, ação, dado, tempo e causa → efeito.
+- **Erro a evitar:** lugar num plano, número num cartão, efeito em outro plano. O espectador teria de montar a relação sozinho.
+
 ## Biblioteca de enquadramentos (10)
 Cada plano usa um destes, com lente e movimento próprios. O mesmo enquadramento não aparece duas vezes seguidas.
 
@@ -47,7 +53,7 @@ Cada plano usa um destes, com lente e movimento próprios. O mesmo enquadramento
 | "El timón de profundidad es la parte móvil…" | E4: órbita, a superfície move ±10°, o nariz de um avião-fantasma sobe e desce | o que a peça faz |
 | "Esos pedazos no estaban en el cráter." | E7: a câmera sobe da cratera (fumaça) | contraste |
 | "Estaban a entre dos y seis kilómetros." | E7: o anel tracejado nasce da cratera, com régua de km | distância |
-| "…todavía no saben si esa pieza hizo caer el avión…" | E8: duas setas alternadas ("pieza → caída" / "caída → pieza") | a dúvida |
+| "…todavía no saben si esa pieza hizo caer el avión…" | E3: o mesmo trecho da queda passa duas vezes no mesmo take, com um relógio em comum. Na 1ª, a peça se solta **antes** do mergulho e o avião cai; na 2ª, o avião mergulha e a peça se solta **durante**. O relógio marca o segundo da soltura em cada versão | a dúvida vira duas ordens de eventos visíveis (objeto + tempo + causa → efeito) |
 | "…fuimos a buscar los datos completos del vuelo." | E3: o avião no céu, com os pontos ADS-B aparecendo atrás dele | o método |
 
 ### 03. El vuelo (≈ 60 s) e 04. El segundo a segundo (bloco contínuo)
@@ -61,14 +67,14 @@ Cada plano usa um destes, com lente e movimento próprios. O mesmo enquadramento
 ### 05. El número (≈ 25 s, 3 planos)
 | Frase | Plano | O que demonstra |
 |---|---|---|
-| "…unos doscientos metros cada segundo." | E8: régua vertical de 200 m com relógio de 1 s | a taxa |
-| "Es la Torre Latinoamericana…" | E6 adaptado: a torre (modelo pronto, chapado) ao lado da régua; o avião passa a altura dela em 1 s | escala conhecida |
+| "…unos doscientos metros cada segundo." | E1 de lado: o avião caindo, com uma marca de altitude a cada segundo deixada no ar atrás dele (traços de 200 m) e o relógio contando | a taxa vista na própria queda (objeto + dado + tempo) |
+| "Es la Torre Latinoamericana…" | E6 adaptado: a torre (modelo pronto, chapado) entra ao lado da trilha de marcas; o avião passa do topo à base dela em 1 s de relógio | escala conhecida, ligada à mesma queda |
 | "…más del noventa por ciento de la velocidad del sonido." | E2: passagem rasante com linhas de velocidade no máximo e o número 0,9 Mach | sensação |
 
 ### 06. Cómo puede pasar (≈ 75 s, mecanismo: 3 takes de física sem anunciar "física")
 | Frase | Plano | O que demonstra |
 |---|---|---|
-| "rincón del ataúd" | E8: duas curvas (estol e Mach) que se fecham com a altitude, e o avião como cursor | a margem que estreita |
+| "rincón del ataúd" | E1: o avião subindo; na faixa de velocidade colada ao avião, as marcas de "lento demais" e "rápido demais" se aproximam a cada mil pés, até sobrar uma fresta | a margem estreita no próprio avião, enquanto ele sobe (objeto + ação + dado + causa) |
 | "el aire se acelera hasta superar la velocidad del sonido en una zona" | E8: corte da asa em flecha, com a zona supersônica em cor sobre o extradorso | onde nasce |
 | "el punto donde el ala empuja… se desplaza hacia atrás" | E8: seta de sustentação deslizando para trás; o nariz baixa sozinho | Mach tuck |
 | "compensador de Mach" | E4: o estabilizador corrige; contador "auto" | a defesa |
@@ -78,7 +84,7 @@ Cada plano usa um destes, com lente e movimento próprios. O mesmo enquadramento
 ### 07. El entorno (≈ 35 s, 4 planos)
 | Frase | Plano | O que demonstra |
 |---|---|---|
-| "el globo sonda que se lanza desde Miami" | E10: balão subindo com o perfil de temperatura ao lado | dado do dia |
+| "el globo sonda que se lanza desde Miami" | E10: o balão sobe e deixa um rastro colorido pela temperatura medida; na altitude do avião, o rastro fica mais quente que o normal | o dado medido no lugar e na altura onde importa |
 | "una línea de tormentas…con cimas más altas que el avión" | E10: a cortina do radar (NEXRAD) como volume translúcido | escala da tormenta |
 | "El avión vuela dentro de la zona…" | E3: o avião pequeno dentro da cortina | dentro, não acima |
 | "ese viento importa…" | E7: setas de vento do oeste por altitude | gancho para o 08 |
@@ -96,7 +102,7 @@ Cada plano usa um destes, com lente e movimento próprios. O mesmo enquadramento
 ### 09. Cierre (≈ 45 s, 4 planos)
 | Frase | Plano | O que demonstra |
 |---|---|---|
-| "Confirmado / Calculado / Desconocido" | E8: três colunas que surgem sobre um fundo de céu desfocado; cada item acende quando é falado | recapitulação |
+| "Confirmado / Calculado / Desconocido" | E7: a câmera refaz a trilha no mapa; cada item acende **no ponto da trilha onde aconteceu** (Mach no início da queda, VMO a 30 mil pés, transponder travado, peça a 2–6 km), com a cor do status (confirmado / calculado / desconocido) | a recapitulação vira um lugar e um tempo, sem cartão |
 | "el número que se queda quieto en la pantalla…" | o HUD congela o 32.640 e a câmera continua caindo | a lição |
 | "murieron nueve personas" | E3: o céu vazio, sem o avião, depois a luz da manhã | respeito |
 | "el vídeo anterior está aquí" | tela final | gancho |
