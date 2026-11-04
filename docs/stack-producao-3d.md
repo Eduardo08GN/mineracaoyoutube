@@ -67,6 +67,13 @@ roteiro (frase por frase) ──► plano de tomadas (1 ângulo novo por frase, 
 
 ## 4. Luz, céu e atmosfera
 
+**Céu em camadas 2.5D (04/11, rota escolhida pelo Eduardo pelo custo e eficiência).** O fundo das tomadas de céu não é mais o HDRI desfocado, que virava um degradê de estúdio sem horizonte. É o domo do `stage.js` (`SKY_FRAG`, `camadas: true` no clima), com três camadas pintadas por direção no mesmo shader:
+1. **Deck de nuvens 3 km abaixo:** um plano infinito em perspectiva. Dá o horizonte, a atitude do avião (nivelado, inclinado, mergulhando) e as listras de velocidade, porque corre contra o voo com `uRun` (metros voados).
+2. **Teto escuro 1,8 km acima:** corre a 0,6× (paralaxe) e dá a escala do céu.
+3. **Faixa clara no horizonte, atrás do avião** (`uGlow` = direção câmera→avião): o avião se recorta contra o claro, como no Reconstructed.
+
+A névoa da cena usa a cor do horizonte e costura o avião às camadas. O HDRI de tempestade fica só no reflexo (`environment`). Custo: zero asset novo, um shader e nenhuma nuvem volumétrica. Skills prontas avaliadas e descartadas: atmosfera em WebGPU/TSL, que não roda no nosso WebGL; nuvens em raymarching, realistas demais e caras; Ghibli, cartoon demais.
+
 | Item | Receita | Por quê |
 |---|---|---|
 | Tonemap | `ACESFilmicToneMapping`, exposição 0,85 | contraste de cinema, sem estourar |
@@ -147,3 +154,4 @@ O modelo do juiz fica em `/content/modelos/qwen3vl8b` na VM, com cópia no Drive
 | 04/11 | olho da G4 (régua + Qwen3-VL-8B) | verificação dentro da G4 em JSON curto |
 | 04/11 | regra: energia na composição, orçamento de detalhe | próximo: biblioteca de tomadas e cena da cratera |
 | 04/11 | troca para o modelo simples (29 mil faces) + atlas chapado de duas cores (janela = disco) | aprovado; modelo congelado. Composição: `producao3d/learjet_prova/COMPOSICAO_P3.md` (10 enquadramentos, planos por frase) |
+| 04/11 | céu em camadas 2.5D no domo: deck de nuvens correndo (horizonte e velocidade), teto escuro em paralaxe, faixa clara atrás do avião, névoa na cor do horizonte | em teste na G4 (A/B contra `ref/`) |

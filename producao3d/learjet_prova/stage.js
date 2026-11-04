@@ -15,13 +15,14 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 // céu por clima: alto, horizonte, baixo; força e escala das listras; neblina (só cidade)
 export const CLIMA = {
-  cruzeiro: {hdriFundo: 'storm', fundoInt: 0.3, envInt: 1.0, fogCeu: [0.006, '#8e959c'], giro: 0.012, grade: [0.35, 1.12, [0.96, 0.99, 1.04]], top: '#a1a7ad', hor: '#b9bec3', bot: '#959ba2', streak: 0.15, fog: 0},
-  tormenta: {hdriFundo: 'storm', fundoInt: 0.32, envInt: 0.9, fogCeu: [0.005, '#4d545b'], giro: 0.05, blur: 0.3, grade: [0.25, 1.18, [0.94, 0.98, 1.05]], top: '#59616a', hor: '#7a838b', bot: '#454c53', streak: 0.22, fog: 0},
+  cruzeiro: {hdriFundo: 'storm', camadas: true, fundoInt: 0.3, envInt: 1.0, fogCeu: [0.006, '#c4c9cd'], giro: 0.012, grade: [0.35, 1.12, [0.96, 0.99, 1.04]], top: '#6c747c', hor: '#c4c9cd', bot: '#a2a9af', streak: 0.15, fog: 0},
+  tormenta: {hdriFundo: 'storm', camadas: true, fundoInt: 0.32, envInt: 0.9, fogCeu: [0.005, '#848d95'], giro: 0.05, blur: 0.3, grade: [0.25, 1.18, [0.94, 0.98, 1.05]], top: '#3b4249', hor: '#848d95', bot: '#59616a', streak: 0.22, fog: 0},
   cidade: {grade: [0.85, 1.08, [1.02, 1.0, 0.97]], top: '#a9afb5', hor: '#bcc1c6', bot: '#bcc1c6', streak: 0.0, fog: 0.00016},
 };
 
 const SKY_VERT = /* glsl */ `varying vec3 vD; void main(){ vD = normalize(position); vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position = p.xyww; }`;
 const SKY_FRAG = /* glsl */ `uniform vec3 uTop; uniform vec3 uHor; uniform vec3 uBot; uniform float uStreak; uniform float uOff; varying vec3 vD;
+  uniform float uLay; uniform float uRun; uniform vec3 uGlow;
   float h1(float n){ return fract(sin(n) * 43758.5453); }
   float h2(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   float n2(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
@@ -40,6 +41,24 @@ const SKY_FRAG = /* glsl */ `uniform vec3 uTop; uniform vec3 uHor; uniform vec3 
     float band = 1.0 - smoothstep(0.15, 0.85, abs(y));
     float big = fbm(vec2(d.x * 0.08 + uOff * 0.3, ang * 2.2)) - 0.5;
     c *= 1.0 + uStreak * s * 2.0 * (0.4 + 0.6 * band) + uStreak * 2.2 * big;
+    if (uLay > 0.5) {
+      // céu em camadas (2.5D, como o Reconstructed): deck de nuvens 3 km abaixo e teto escuro 1,8 km acima, cada um
+      // um plano infinito visto em perspectiva; correm contra o voo (-x) e dão horizonte, escala e velocidade
+      if (y < 0.0) {
+        vec2 p = d.xz * (3000.0 / max(-y, 0.004)); p.x -= uRun;
+        float n = 0.7 * fbm(vec2(p.x / 5200.0, p.y / 1300.0)) + 0.3 * fbm(vec2(p.x / 900.0, p.y / 260.0) + 5.0);
+        vec3 deck = mix(uBot * 0.72, uBot * 1.1, smoothstep(0.38, 0.72, n));
+        c = mix(uHor, deck, smoothstep(0.0, 0.16, -y));
+      } else {
+        vec2 p = d.xz * (1800.0 / max(y, 0.004)); p.x -= uRun * 0.6;
+        float n = fbm(vec2(p.x / 6000.0, p.y / 2500.0));
+        vec3 teto = mix(uTop * 1.18, uTop * 0.72, smoothstep(0.4, 0.7, n));
+        c = mix(uHor, teto, smoothstep(0.0, 0.32, y));
+      }
+      // faixa clara do horizonte atrás do avião: o avião se recorta contra o claro
+      vec2 az = normalize(d.xz + 1e-5), g = normalize(uGlow.xz + 1e-5);
+      c += uHor * 0.32 * exp(-abs(y) * 12.0) * pow(max(dot(az, g), 0.0), 3.0);
+    }
     gl_FragColor = vec4(c, 1.0);
   }`;
 
@@ -69,7 +88,8 @@ export async function createStage({canvas}) {
   const skyMat = new THREE.ShaderMaterial({
     vertexShader: SKY_VERT,
     fragmentShader: SKY_FRAG,
-    uniforms: {uTop: {value: new THREE.Color()}, uHor: {value: new THREE.Color()}, uBot: {value: new THREE.Color()}, uStreak: {value: 0}, uOff: {value: 0}},
+    uniforms: {uTop: {value: new THREE.Color()}, uHor: {value: new THREE.Color()}, uBot: {value: new THREE.Color()}, uStreak: {value: 0}, uOff: {value: 0},
+      uLay: {value: 0}, uRun: {value: 0}, uGlow: {value: new THREE.Vector3(-1, 0, 0)}},
     side: THREE.BackSide,
     depthWrite: false,
     fog: false,
@@ -128,8 +148,10 @@ export async function createStage({canvas}) {
     skyMat.uniforms.uBot.value.set(C.bot);
     skyMat.uniforms.uStreak.value = C.streak;
     const F = C.hdriFundo ? FUNDOS[C.hdriFundo] : null;
-    sky.visible = !F;
-    scene.background = F ? F[0] : null;
+    sky.visible = !F || !!C.camadas;
+    scene.background = F && !C.camadas ? F[0] : null;
+    skyMat.uniforms.uLay.value = C.camadas ? 1 : 0;
+    skyMat.uniforms.uRun.value = run;
     scene.environment = F ? F[1] : envSky;
     scene.backgroundBlurriness = C.blur ?? 0.12;
     scene.backgroundRotation.set(C.giro ? t * C.giro * 0.6 : 0, C.giro ? t * C.giro : 0, 0);
@@ -141,7 +163,7 @@ export async function createStage({canvas}) {
     grade.uniforms.uCon.value = gc;
     grade.uniforms.uTint.value.set(...gt);
     skyMat.uniforms.uOff.value = run * 0.004;
-    scene.fog.color.set(C.fogCeu ? C.fogCeu[1] : C.hor);
+    scene.fog.color.set(C.camadas ? C.hor : C.fogCeu ? C.fogCeu[1] : C.hor);
     scene.fog.density = C.fogCeu ? C.fogCeu[0] : C.fog;
     n8.configuration.intensity = ao ? 2.4 : 0.0;
     n8.setSize(size.w * renderer.getPixelRatio(), size.h * renderer.getPixelRatio());
@@ -158,6 +180,7 @@ export async function createStage({canvas}) {
     key.position.copy(key.target.position).addScaledVector(KEY, 60);
     key.target.updateMatrixWorld();
     const fwd = new THREE.Vector3(...foco).sub(camera.position).normalize();
+    skyMat.uniforms.uGlow.value.copy(fwd);
     rim.intensity = C.hdriFundo ? 0.5 : 0;
     rim.target.position.set(...foco);
     rim.position.set(...foco).addScaledVector(fwd, 60).add(new THREE.Vector3(0, 25, 0));
