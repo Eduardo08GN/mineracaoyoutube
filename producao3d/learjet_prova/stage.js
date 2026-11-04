@@ -15,8 +15,8 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 // céu por clima: alto, horizonte, baixo; força e escala das listras; neblina (só cidade)
 export const CLIMA = {
-  cruzeiro: {hdriFundo: 'storm', camadas: true, fundoInt: 0.3, envInt: 1.0, fogCeu: [0.006, '#c4c9cd'], giro: 0.012, grade: [0.35, 1.12, [0.96, 0.99, 1.04]], top: '#6c747c', hor: '#c4c9cd', bot: '#a2a9af', streak: 0.15, fog: 0},
-  tormenta: {hdriFundo: 'storm', camadas: true, fundoInt: 0.32, envInt: 0.9, fogCeu: [0.005, '#848d95'], giro: 0.05, blur: 0.3, grade: [0.25, 1.18, [0.94, 0.98, 1.05]], top: '#3b4249', hor: '#848d95', bot: '#59616a', streak: 0.22, fog: 0},
+  cruzeiro: {hdriFundo: 'storm', camadas: true, fundoInt: 0.3, envInt: 1.0, fogCeu: [0.0035, '#c4c9cd'], giro: 0.012, grade: [0.35, 1.12, [0.96, 0.99, 1.04]], top: '#5e666e', hor: '#c4c9cd', bot: '#737b83', streak: 0.15, fog: 0},
+  tormenta: {hdriFundo: 'storm', camadas: true, fundoInt: 0.32, envInt: 0.9, fogCeu: [0.003, '#848d95'], giro: 0.05, blur: 0.3, grade: [0.25, 1.18, [0.94, 0.98, 1.05]], top: '#3b4249', hor: '#848d95', bot: '#454c54', streak: 0.22, fog: 0},
   cidade: {grade: [0.85, 1.08, [1.02, 1.0, 0.97]], top: '#a9afb5', hor: '#bcc1c6', bot: '#bcc1c6', streak: 0.0, fog: 0.00016},
 };
 

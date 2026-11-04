@@ -72,6 +72,13 @@ roteiro (frase por frase) ──► plano de tomadas (1 ângulo novo por frase, 
 2. **Teto escuro 1,8 km acima:** corre a 0,6× (paralaxe) e dá a escala do céu.
 3. **Faixa clara no horizonte, atrás do avião** (`uGlow` = direção câmera→avião): o avião se recorta contra o claro, como no Reconstructed.
 
+**Estrutura de valor (aprovada, v2):** o deck é mais escuro do que o avião, para o avião branco se recortar contra ele; a faixa do horizonte é a parte mais clara; o teto é escuro. A névoa fica fina (densidade 0,003–0,0035), senão apaga o avião no plano pequeno.
+
+| Clima | Teto | Horizonte | Deck | Névoa |
+|---|---|---|---|---|
+| cruzeiro | #5e666e | #c4c9cd | #737b83 | 0,0035 |
+| tormenta | #3b4249 | #848d95 | #454c54 | 0,003 |
+
 A névoa da cena usa a cor do horizonte e costura o avião às camadas. O HDRI de tempestade fica só no reflexo (`environment`). Custo: zero asset novo, um shader e nenhuma nuvem volumétrica. Skills prontas avaliadas e descartadas: atmosfera em WebGPU/TSL, que não roda no nosso WebGL; nuvens em raymarching, realistas demais e caras; Ghibli, cartoon demais.
 
 | Item | Receita | Por quê |
@@ -154,4 +161,5 @@ O modelo do juiz fica em `/content/modelos/qwen3vl8b` na VM, com cópia no Drive
 | 04/11 | olho da G4 (régua + Qwen3-VL-8B) | verificação dentro da G4 em JSON curto |
 | 04/11 | regra: energia na composição, orçamento de detalhe | próximo: biblioteca de tomadas e cena da cratera |
 | 04/11 | troca para o modelo simples (29 mil faces) + atlas chapado de duas cores (janela = disco) | aprovado; modelo congelado. Composição: `producao3d/learjet_prova/COMPOSICAO_P3.md` (10 enquadramentos, planos por frase) |
-| 04/11 | céu em camadas 2.5D no domo: deck de nuvens correndo (horizonte e velocidade), teto escuro em paralaxe, faixa clara atrás do avião, névoa na cor do horizonte | em teste na G4 (A/B contra `ref/`) |
+| 04/11 | céu em camadas 2.5D no domo: deck de nuvens correndo (horizonte e velocidade), teto escuro em paralaxe, faixa clara atrás do avião, névoa na cor do horizonte | v1: deck claro demais, o avião some |
+| 04/11 | céu v2: deck escurecido, névoa fina | **aprovado pelo Eduardo** ("já melhorou bastante"): o avião se recorta, horizonte e velocidade legíveis |
