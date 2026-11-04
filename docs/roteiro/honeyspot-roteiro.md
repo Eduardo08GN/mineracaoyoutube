@@ -6,11 +6,11 @@
 
 | Canal | O que ele faz melhor | O que levamos |
 |---|---|---|
-| **Reconstructed** (EN, 3D) | conduz pelo relógio, com frase curta e um gancho por minuto | a espinha: cena fria, índice-enigma, cronologia, "o que se sabe / o que não se sabe" |
-| **AiTelly** (EN, 3D) | explica a máquina em ordem espacial, frase = ação na tela | o passeio pelas peças e os passos numerados |
-| **Aviões e Músicas** (Lito) | narra em tempo real e explica o sistema só quando ele decide | a pausa técnica curta, "mais um elo" e o fecho com lição |
-| **Manual do Mundo** (Iberê) | dá o mapa antes do detalhe, analogia caseira e lacuna a cada 60–90 s | a ordem por peça e a reabertura no último terço |
-| **Space Today** (Sacani) | ensina o pré-requisito, descreve antes de nomear e faz a causa andar por perguntas | o sanduíche, "como sabemos" e o mito corrigido |
+| **Reconstructed** (EN, 3D) | conduz pelo relógio, com frase curta e um gancho por minuto | o tempo como espinha, a pergunta visual e a honestidade sobre o que se sabe |
+| **AiTelly** (EN, 3D) | explica a máquina em ordem espacial, frase = ação na tela | mostrar a peça antes de ela importar, na ordem em que a câmera passa |
+| **Aviões e Músicas** (Lito) | narra em tempo real e explica o sistema só quando ele decide | explicar só quando o sistema decide algo |
+| **Manual do Mundo** (Iberê) | dá o mapa antes do detalhe, analogia caseira e lacuna a cada 60–90 s | sempre uma lacuna aberta e o mapa antes do detalhe |
+| **Space Today** (Sacani) | ensina o pré-requisito, descreve antes de nomear e faz a causa andar por perguntas | o pré-requisito antes do dado e o "como sabemos" |
 
 **A lacuna que justifica o cruzamento:**
 - Os dois canais 3D dizem **o que** acontece, mas quase nunca **por quê**. No AiTelly, analogia e porquê são cerca de 0,1 por minuto.
@@ -31,17 +31,29 @@
 
 \* Legenda automática sem pontuação. Na P3 os números são falados por extenso para a TTS, então o regex de números não os conta.
 
-## 3. O molde (vídeo de 9 a 12 min, reconstrução de evento com máquina)
+## 3. A espinha: 8 princípios (filosofia, não literalidade)
 
-| Tempo | Bloco | Como (fonte) |
-|---|---|---|
-| 0:00–0:15 | **Cena fria dentro da máquina, no segundo da falha** | Lugar, hora, quantas pessoas, um número, e uma pessoa nomeada com a fala dela (citada da imprensa). Uma virada atribuída: "Y entonces, dice X…". (RC 7/7, AM 6/7) |
-| 0:15–0:45 | **Paradoxo + pergunta física** | Uma pergunta que a animação consegue **mostrar** ("¿por qué perdió esa pieza en el aire?"), não uma abstrata. "Nadie sabe todavía por qué" antes de 1:00. (RC, MM, ST) |
-| 0:45–1:30 | **Índice-enigma = a promessa** | "Esta es la historia de A, de B y de C", cada item como enigma, mais a segunda pergunta (de causa ou sistêmica). É a promessa pelo objeto, nunca "vas a entender". (RC 7/7, AT 7/7) |
-| 1:30–3:00 | **Volta ao dia normal + a máquina antes de falhar** | Contexto em até 2 min. A ficha: 3–4 números e uma comparação do dia a dia. O passeio pelas peças em ordem espacial, com a peça da história mostrada **antes** de falhar. (AM, AT, RC) |
-| 3:00–7:30 | **Cronologia no relógio (40–60% do vídeo)** | Uma hora em cada fato. Toda explicação é uma **pausa técnica de 15–40 s**, quando o sistema decide algo: termo → "normalmente…" → "pero en este vuelo…" → consequência (AM 7/7). Descrever antes de nomear (ST 7/7). A causa anda por "¿Por qué X? Porque Y". Um re-gancho a cada 60–90 s; "un eslabón más" quando o erro se forma. |
-| 7:30–9:00 | **Último terço: a mesma pergunta mais fundo** | Contagem regressiva. A segunda metade aprofunda **o mesmo mecanismo** (nos virais do RC), sem saltar para estatística ou geopolítica. No máximo um caso anterior parecido. Reabertura: "en la práctica fue peor", o número que estava errado, um último dado. (MM 7/7) |
-| 9:00–10:00 | **Como se sabe + fecho** | O instrumento que prova (ADS-B, radar, destroço) (ST). "A [fecha]: confirmado / calculado / desconocido" (RC 7/7). Lição sem culpado único (AM 6/7). A frase da cena fria volta como **refrão** (RC, AM). Sair em até 1 min. Puxar o vídeo anterior: só nós; o RC não faz. |
+**Correção do Eduardo (04/11):** não é para copiar o recurso literal de nenhum canal ("pessoa com a fala dela na abertura" não cabe no Kriegsmomente nem no Segundo a Segundo). O que se tira de cada canal é **por que** o recurso funciona. Cada princípio abaixo traz o porquê e a tradução para os nossos dois formatos.
+
+| # | Princípio | Por que funciona | Kriegsmomente (DE, 1866/1870–71) | Segundo a Segundo (ES, reconstrução) |
+|---|---|---|---|---|
+| 1 | **Abrir no momento decisivo, com uma pergunta que a imagem consegue responder** | o espectador entra com tensão concreta e já sabe o que vai procurar na tela | a decisão, o tiro ou a manobra que mudou a guerra, e o paradoxo do título ("obwohl…") | o segundo da falha e a pergunta física ("¿por qué se soltó esa pieza?") |
+| 2 | **Prometer pelo caminho, não pela aula** | dizer por onde vamos passar cria curiosidade sem soar escolar | as 2–3 peças da explicação (a máquina, o terreno, a decisão), ditas como enigma | as 2–3 perguntas que o vídeo vai fechar, ditas como enigma |
+| 3 | **Mostrar a peça antes de ela importar** | quando a falha chega, o espectador já conhece o que falhou (preparação e retorno) | o canhão Krupp, a ferrovia ou o telégrafo apresentados antes da batalha | a cauda em T e o profundor apresentados antes da queda |
+| 4 | **O tempo é a espinha** | um relógio que avança dá ritmo e uma sensação de inevitável | dias, horas e ordens: a sequência das decisões | o relógio segundo a segundo dos dados |
+| 5 | **Explicar só quando o sistema decide algo** | a explicação chega no instante em que o espectador quer saber, e não antes | a doutrina ou o mecanismo entra quando muda o rumo da batalha | o Mach, a pressão e a cauda entram quando mudam o voo |
+| 6 | **Sempre uma lacuna aberta** | a curiosidade administrada segura a retenção | uma pergunta em aberto a cada 60–90 s | idem |
+| 7 | **Aprofundar a mesma pergunta, não ampliar** | nos virais, a segunda metade cava o mesmo mecanismo, sem desviar para estatística ou geopolítica | a mesma inovação vista de outro ângulo, não uma lista de batalhas | a mesma peça e a mesma física, no máximo um caso anterior |
+| 8 | **Honestidade sobre o que se sabe e fechar na pergunta do início** | a confiança vem de separar fato, cálculo e dúvida; o fim responde ao começo | fonte e cálculo separados; o paradoxo do título resolvido | confirmado / calculado / desconocido, e a pergunta do início respondida |
+
+**Recursos dos canais que NÃO entram literalmente:**
+- a pessoa com a fala dela na abertura;
+- a frase "esta es la historia de…";
+- a frase da abertura repetida como refrão;
+- o "mais um elo" dito em voz;
+- o "você" de conversa.
+
+Cada um vale só como ilustração do princípio, e a forma de executar sai do nosso estilo.
 
 ## 4. Textura (regras de frase)
 
@@ -66,32 +78,27 @@
 - **Final sem síntese** (AT) e terminar no clímax (MM).
 - **Leitura de ficha e de matrícula em voz;** número de artigo sem tradução.
 
-## 6. A P3 do Learjet contra o molde
+## 6. A P3 do Learjet contra os princípios
 
-| Item | P3 | Ação no próximo vídeo |
+| Princípio | P3 | Próximo vídeo |
 |---|---|---|
-| Cena fria + pergunta física em até 30 s | ✅ (35.000 pies…; "¿por qué perdió esa pieza?") | manter |
-| Pessoa nomeada com fala na cena fria | ❌ | entrar com uma fala da imprensa (testemunha, junta ou familiar) |
-| Índice-enigma "esta es la historia de…" | ❌ (vai direto a "lo nuevo") | criar entre 0:45 e 1:30 |
-| A máquina mostrada antes de falhar, em ordem espacial | parcial (a cauda só no bloco 06) | puxar o passeio pela cauda para antes da cronologia |
-| Cronologia no relógio com pausa técnica | ✅ (bloco 04, "Mach es…") | manter; medir os re-ganchos |
-| Mito corrigido | ✅ (transponder) | manter |
-| Analogias do cotidiano | ✅ (ascensor, velocímetro, Torre Latinoamericana) | manter |
-| Reabertura no último terço | ❌ | um dado que muda a leitura antes do fecho |
-| "Confirmado / calculado / desconocido" | ✅ (bloco 09) | manter, com a data |
-| Frase da abertura volta como refrão | ❌ | fechar com a frase da cena fria |
+| 1. Momento decisivo + pergunta visual | ✅ | manter |
+| 2. Prometer pelo caminho | parcial (vai direto a "lo nuevo") | dizer as 2–3 perguntas que o vídeo vai fechar |
+| 3. Peça antes de importar | parcial (a cauda só no bloco 06) | apresentar a cauda antes da cronologia |
+| 4. Tempo como espinha | ✅ (bloco 04) | manter |
+| 5. Explicar quando o sistema decide | ✅ (Mach no instante em que cruza) | manter |
+| 6. Lacuna aberta | a medir | medir no roteiro |
+| 7. Mesma pergunta mais fundo | ✅ (Mach → cauda → pressão) | manter |
+| 8. Sabido / calculado / desconhecido + fechar na pergunta | ✅ / parcial | o fim responde explicitamente à pergunta do início |
 
-## 7. Checklist (substitui o de 15 itens de 03/11 nos vídeos de reconstrução)
+## 7. Checklist (princípios; vale para o Segundo a Segundo e o Kriegsmomente)
 
-1. Cena fria com lugar, hora, número e uma pessoa com fala, em até 15 s.
-2. Pergunta física e visual em até 45 s; "nadie sabe todavía" antes de 1:00.
-3. Índice-enigma com 2–3 itens até 1:30; promessa pelo objeto.
-4. A máquina mostrada antes de falhar: ficha com 3–4 números + 1 comparação.
-5. Cronologia com hora em cada fato, ocupando 40–60% do vídeo.
-6. Toda explicação é uma pausa de 15–40 s, na ordem termo → normalmente → pero en este vuelo → consequência.
-7. Re-gancho a cada 60–90 s (medido no roteiro: pergunta aberta, "pero", "un eslabón más").
-8. A segunda metade aprofunda o mesmo mecanismo; no máximo um caso anterior.
-9. Reabertura no último terço.
-10. "Cómo se sabe" com o instrumento na tela.
-11. Fecho: confirmado / calculado / desconocido com data, lição sem culpado, refrão da abertura, saída em até 1 min.
-12. Textura: frase de 10–14 palavras com fragmentos, ≤ 3,5 números/min, termo definido na hora, ≥ 1 mito, ≥ 1 dúvida antecipada, frase = ação na tela.
+1. A abertura está no momento decisivo e traz uma pergunta que a imagem responde?
+2. A promessa diz o caminho (2–3 perguntas), sem anunciar aula?
+3. A peça que vai importar aparece antes de importar?
+4. O tempo (relógio ou sequência de decisões) conduz o vídeo?
+5. Cada explicação entra no instante em que o sistema decide algo?
+6. Há sempre uma pergunta em aberto (uma a cada 60–90 s)?
+7. A segunda metade aprofunda a mesma pergunta, com no máximo um caso paralelo?
+8. O fim separa sabido, calculado e desconhecido e responde à pergunta do início?
+9. Textura: frase curta com fragmentos, poucos números, termo definido na hora, frase = ação na tela, sem opinião.
