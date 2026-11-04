@@ -77,7 +77,11 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 - **Filosofia, não literalidade.** Das referências (AiTelly, Reconstructed, agregadores BR) tira-se o princípio, não o recurso.
 - **Energia na composição, não no modelo nem no ambiente.** Nada de hiperfoco em modelo ultrarrealista. Nada de cena de objeto interagindo com física de ambiente (oceano, tempestade simulada): o 3D mostra a anatomia da máquina, e o clima vem das imagens de época 2.5D e do mapa.
 
-## 1. Tema e título (canal alemão Kriegsmomente)
+## 1. Tema e título
+- **Não trabalhamos com POLÍTICA** (Eduardo, 04/11): eleições, partidos e governos ficam fora da mineração e da pauta, mesmo quando são o evento mais quente.
+- O que vende é o **evento quente no pico, com ângulo novo**: o 2º vídeo do Learjet no Segundo a Segundo flopou repetindo o ângulo depois do pico, enquanto o 1º fez 1,8 mi.
+
+### Canal alemão (Kriegsmomente)
 - Radar de temas pela API (demanda EN × oferta DE, lacunas, outliers, corrida do ouro em 90 dias): `docs/pipeline-temas-kriegsmomente.md` (branch `docs/pipeline-temas-kriegsmomente`).
 - Varredura de virais EN/DE em 12 meses: `radar_virais_0411.py` (local, D:). Mede views/inscritos e a corrida de 90 dias.
 - **Título.** A recomendação do sócio de **forçar** o nome da guerra e o duelo Preußen×Frankreich em todo título **foi abandonada** (04/11). O título nasce do paradoxo verdadeiro do tema, como o viral "Warum verlor Frankreich 1870 – obwohl es das bessere Gewehr hatte?".
@@ -194,3 +198,4 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | **K16 entregue** (`D:/kriegschronik/k16_seekrieg/entrega/`). Medição e lições em `producao3d/k16/MEDICAO.md`; miniaturas por `ferramentas/miniaturas_k16.py` (o objeto do título + 2–4 palavras que acrescentam, sem repetir o título) |
 | 04/11 | leitura óptica do K16 → DIRETIVA DO PRÓXIMO VÍDEO (topo do documento): creme, skill teardown inteira, objeto vivo, mecanismo com 2 números, kit/karten nos mapas, sem repetição, legendas por frase, título coerente, 8 bits |
 | 04/11 | referência do design system = `tracer3d_15_emser/teardown/morse_1870` (telégrafo do K15, SKILL teardown completa) |
+| 04/11 | **sem política**; evento quente no pico com ângulo novo (Learjet: 1º fez 1,8 mi, o 2º flopou no mesmo ângulo) |
