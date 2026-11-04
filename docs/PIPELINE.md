@@ -135,3 +135,4 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | render final: `g4_prod.py video 24` = 24 fatias em paralelo, 1440p (dpr 1.6), 6 subquadros, 10 bits; o mudo vai para RENDER_MUDO_NAO_PUBLICAR |
 | 04/11 | regra de fato: número na tela só do dossiê ("1.500 Kanonen?" removido) |
 | 04/11 | render final K16: 12 min em 5,4 min (24 fatias); GPU com média de 58% de utilização e 35% de VRAM. Prioridade = mais tarefas simultâneas, não resolução (fica em 1440p) |
+| 04/11 | **K16 entregue** (`D:/kriegschronik/k16_seekrieg/entrega/`). Medição e lições em `producao3d/k16/MEDICAO.md`; miniaturas por `ferramentas/miniaturas_k16.py` (o objeto do título + 2–4 palavras que acrescentam, sem repetir o título) |
