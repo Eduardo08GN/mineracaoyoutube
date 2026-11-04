@@ -269,7 +269,7 @@
     "doc": "lista",
     "linhas": [
      "49 Panzerschiffe",
-     "1.500 Kanonen?"
+     "470 Schiffe"
     ],
     "riscar": true
    },
@@ -964,7 +964,8 @@
    "t1": 215.53,
    "fam": "epoca",
    "take": {
-    "img": "bouet"
+    "img": "bouet",
+    "foco": "rosto"
    },
    "muda": "retrato de Bouët-Willaumez; zoom no rosto",
    "dims": "época·pessoa",

@@ -123,3 +123,7 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | **toda decisão de pipeline é documentada aqui e sobe para o GitHub na hora** |
 | 04/11 | modelos/teardown: estrutura do K15 (viewport creme, serifa itálica escrita progressivamente, linha-guia com ponto, gráfico a tinta) |
 | 04/11 | creme = design system do Kriegsmomente (prioridade); o K16 termina no escuro, por exceção |
+| 04/11 | 4 famílias integradas no motor (`producao.js`): anat, mapa (`mapa_vistas.js`: 43 vistas; fora de 47–60° N vira seta com rótulo), época 2.5D, lápis |
+| 04/11 | fila: `set -o pipefail` (um `| tail` escondia falha de captura); build minificada → para depurar, `SIMS_DEBUG=1` |
+| 04/11 | render final: `g4_prod.py video 24` = 24 fatias em paralelo, 1440p (dpr 1.6), 6 subquadros, 10 bits; o mudo vai para RENDER_MUDO_NAO_PUBLICAR |
+| 04/11 | regra de fato: número na tela só do dossiê ("1.500 Kanonen?" removido) |

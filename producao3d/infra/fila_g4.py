@@ -11,7 +11,8 @@ import canal
 
 FAIXAS = {"3d": 10, "ia": 2, "video": 4}   # 04/11 (Eduardo): placa de 96 GB com >= 80% em uso nas janelas de produção
 META_USO = 0.80
-EGL = ("mkdir -p /usr/share/glvnd/egl_vendor.d && echo '{\"file_format_version\":\"1.0.0\",\"ICD\":{\"library_path\":\"/usr/lib64-nvidia/libEGL_nvidia.so.0\"}}' > /usr/share/glvnd/egl_vendor.d/10_nvidia.json && "
+# set -o pipefail: um "| tail" no fim não esconde mais a falha do comando (04/11: stills "ok" que não gravaram nada)
+EGL = ("set -o pipefail; mkdir -p /usr/share/glvnd/egl_vendor.d && echo '{\"file_format_version\":\"1.0.0\",\"ICD\":{\"library_path\":\"/usr/lib64-nvidia/libEGL_nvidia.so.0\"}}' > /usr/share/glvnd/egl_vendor.d/10_nvidia.json && "
        "rm -f /usr/share/glvnd/egl_vendor.d/50_mesa.json && export LD_LIBRARY_PATH=/usr/lib64-nvidia:$LD_LIBRARY_PATH")
 
 

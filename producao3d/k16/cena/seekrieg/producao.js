@@ -11,9 +11,14 @@ import PLANO from './plano.json';
 import {buildEpoca} from './epoca.js';
 import {buildLapis} from './lapis.js';
 import {FONTE, FUNDOS, IMAGENS} from './epoca_assets.js';
+import {CLIMA_MAPA, buildMapa} from './mapa.js';
+import {MAPA_ASSETS} from './mapa_assets.js';
+import {contextoMapa, estadoVista} from './mapa_vistas.js';
+import {CLIMA} from './stage.js';
+CLIMA.mapa = CLIMA_MAPA;
 
 // recortes de foco nas imagens (u0, v0, u1, v1; v de cima para baixo). Padrão: o miolo da imagem.
-const FOCO = {mastros: [0.0, 0.3, 0.44, 0.8], caldeira: [0.25, 0.35, 0.7, 0.85], fila: [0.1, 0.35, 0.9, 0.75]};
+const FOCO = {rosto: [0.25, 0.02, 0.75, 0.5], mastros: [0.0, 0.3, 0.44, 0.8], caldeira: [0.25, 0.35, 0.7, 0.85], fila: [0.1, 0.35, 0.9, 0.75]};
 // documento do lápis → fundo
 const DOC = {carta_ordens: 'carta', comissao: 'papel', chevalier: 'papel', calculo: 'papel', efetivos: 'papel', plano_nota: 'papel', regra_24h: 'papel', lista: 'papel', diario_carvao: 'diario', calendario: 'diario'};
 
@@ -25,8 +30,20 @@ export async function producao({stage, casco, navio, linhaDagua, el, CF}) {
   const ep = buildEpoca(stage.scene, IMAGENS);
   const lp = buildLapis(stage.scene, {fonte: FONTE, fundos: FUNDOS});
   await Promise.all([ep.pronto, lp.pronto]);
+  const mapa = await buildMapa(stage.scene, MAPA_ASSETS, {largura: 1600, altura: 900});
+  const ctxMapa = contextoMapa(mapa, MAPA_ASSETS);
   let lado = 1;
   const familias = {
+    mapa: {
+      esconder: () => mapa.set(0, null),
+      set: (t, u, dur, take, accOpts) => {
+        stage.renderer.toneMapping = THREE.NoToneMapping;   // cores do mapa exatas (só nas tomadas de mapa)
+        const est = estadoVista(take.vista, u, dur, {...ctxMapa, take, id: take._id, vazia: ['01_07', '12_09'].includes(take._id)});
+        const {cam} = mapa.set(t, est);
+        stage.frame(cam, 'mapa', cam.tgt, {run: 0, ao: false, t, ...accOpts});
+        return {};
+      },
+    },
     epoca: {
       esconder: () => ep.set(0, null),
       set: (t, u, dur, take, accOpts) => {
@@ -57,19 +74,20 @@ export async function producao({stage, casco, navio, linhaDagua, el, CF}) {
   svg.setAttribute('viewBox', '0 0 1600 900');
   svg.style.cssText = 'position:absolute;inset:0;width:1600px;height:900px;pointer-events:none';
   el.append(svg);
-  const FONTE = 'font-family="Barlow Condensed, Oswald, Arial Narrow, sans-serif" font-weight="600" letter-spacing="2"';
-  const txt = (x, y, s, tam, cor, o, anc = 'start') => `<text x="${x}" y="${y}" fill="${cor}" opacity="${o.toFixed(3)}" ${FONTE} font-size="${tam}" text-anchor="${anc}">${s}</text>`;
+  const FONTE_SVG = 'font-family="Barlow Condensed, Oswald, Arial Narrow, sans-serif" font-weight="600" letter-spacing="2"';
+  const txt = (x, y, s, tam, cor, o, anc = 'start') => `<text x="${x}" y="${y}" fill="${cor}" opacity="${o.toFixed(3)}" ${FONTE_SVG} font-size="${tam}" text-anchor="${anc}">${s}</text>`;
   const lin = (a, b, cor = '#f1efe9', w = 2, o = 1) => `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${cor}" stroke-width="${w}" opacity="${o.toFixed(3)}"/>`;
   const proj = (p) => stage.project(new THREE.Vector3(...p));
 
   const desenhar3d = (b, t, u, dur, accOpts) => {
+    stage.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     const outros = ['mapa', 'epoca', 'lapis'];
     for (const f of outros) familias[f]?.esconder?.();
     anat.grupo.visible = b.fam === 'anat';
     if (b.fam === 'anat') return anat.set(t, u, dur, b.take, accOpts, nevoa);
     casco.visible = false;
     const F = familias[b.fam];
-    if (F) return F.set(t, u, dur, b.take, accOpts, nevoa) || {};
+    if (F) return F.set(t, u, dur, {...b.take, _id: b.id}, accOpts, nevoa) || {};
     // espaço reservado: palco vazio, para conferir ritmo
     stage.frame({pos: [Math.cos(u * 0.2) * 120, 20, Math.sin(u * 0.2) * 120], tgt: [0, 0, 0], fov: 30}, 'palco', [0, 0, 0], {run: 0, ao: false, t, ...accOpts, antes: (c) => nevoa.set(c, t, 0.4, '#5d6873')});
     return {reservado: true};

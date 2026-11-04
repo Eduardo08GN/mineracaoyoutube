@@ -29,7 +29,7 @@ P = {
  "01_10": M("helgoland_cherbourg", "trilha de volta a Cherbourg; datas 11.08 → 12.09", "lugar·tempo", mk=[{"tipo": "trilha", "estilo": "solida", "palavra": "Monat"}]),
  # 02 Drei Dinge
  "02_01": A("orbita", "câmera orbita o couraçado lentamente", "objeto·narrativa"),
- "02_02": L("lista", "lista de navios e canhões se escreve e é riscada", "dado·narrativa", linhas=["49 Panzerschiffe", "1.500 Kanonen?"], riscar=True),
+ "02_02": L("lista", "lista de navios e canhões se escreve e é riscada", "dado·narrativa", linhas=["49 Panzerschiffe", "470 Schiffe"], riscar=True),
  "02_03": M("cherbourg", "ícone de regimento em Cherbourg sai em direção à terra", "lugar·causa", mk=[{"tipo": "rotulo", "txt": "SOLDATEN", "palavra": "Soldaten"}]),
  "02_04": M("jade_faixas", "faixas de profundidade do Jade aparecem", "lugar·dado", faixasJade=True, mk=[{"tipo": "rotulo", "txt": "WASSER", "palavra": "Wasser"}]),
  "02_05": A("bunker", "o bunker de carvão acende", "objeto·dado", destaque="bunker", mk=[{"tipo": "rotulo", "txt": "KOHLE", "palavra": "Kohle"}]),
@@ -66,7 +66,7 @@ P = {
  # 06 Sieben statt vierzehn
  "06_01": A("orbita_escura", "a câmera para no casco escuro", "narrativa"),
  "06_02": L("calendario", "datas escritas: 14. Juli · 19. Juli Krieg", "tempo·dado", linhas=["14. Juli – Vorbereitung", "19. Juli – Kriegserklärung"]),
- "06_03": E("bouet", "retrato de Bouët-Willaumez; zoom no rosto", "época·pessoa", mk=[{"tipo": "rotulo", "txt": "BOUËT-WILLAUMEZ", "palavra": "Bouët-Willaumez"}]),
+ "06_03": E("bouet", "retrato de Bouët-Willaumez; zoom no rosto", "época·pessoa", foco="rosto", mk=[{"tipo": "rotulo", "txt": "BOUËT-WILLAUMEZ", "palavra": "Bouët-Willaumez"}]),
  "06_04": A("contorno14", "14 contornos tracejados de navios no palco", "dado·plano", mk=[{"tipo": "contador", "de": 0, "ate": 14, "palavra": "vierzehn"}]),
  "06_05": L("calendario", "'3 Schiffe · 16.000 Matrosen fehlen' escrito e sublinhado", "dado", linhas=["vorhanden: 3 Schiffe", "es fehlen: 16.000 Matrosen"]),
  "06_06": A("sai", "o couraçado sai do palco; 7 dos 14 contornos se preenchem", "objeto·dado·ação", sai=True),
