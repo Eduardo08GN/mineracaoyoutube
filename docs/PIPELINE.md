@@ -91,7 +91,7 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
   - faixas 3d=10, ia=2, video=4, com dependências entre jobs;
   - `fatias()` faz o render fatiado (provado quadro a quadro, 384 = 384);
   - um medidor de VRAM e utilização roda por lote.
-- **Meta: ≥ 80% da placa em uso nas janelas de produção.**
+- **Meta: ≥ 80% da placa em uso nas janelas de produção, PELO NÚMERO DE TAREFAS SIMULTÂNEAS, não pela resolução** (Eduardo, 04/11: resolução não faz o canal viralizar; o interesse é velocidade). Resolução fixa em 1440p. A sobra da placa vai para mais jobs em paralelo: mais fatias, IA, batedores e stills de checagem juntos.
 - Stills isolados quase não usam GPU (o custo é carregar a página). A carga real é o render final: muitas fatias em paralelo e qualidade alta (dpr 2, mais subquadros).
 - O Chromium usa a GPU NVIDIA: `--use-gl=angle --use-angle=gl-egl` + o vendor EGL da NVIDIA (renderizador conferido: "ANGLE (NVIDIA … RTX PRO 6000 …)").
 - Ligar a G4 só com job e desligar no fim, conferindo. Nunca desligar com job de outra sessão (`T2_DONO`).
@@ -127,3 +127,4 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | fila: `set -o pipefail` (um `| tail` escondia falha de captura); build minificada → para depurar, `SIMS_DEBUG=1` |
 | 04/11 | render final: `g4_prod.py video 24` = 24 fatias em paralelo, 1440p (dpr 1.6), 6 subquadros, 10 bits; o mudo vai para RENDER_MUDO_NAO_PUBLICAR |
 | 04/11 | regra de fato: número na tela só do dossiê ("1.500 Kanonen?" removido) |
+| 04/11 | render final K16: 12 min em 5,4 min (24 fatias); GPU com média de 58% de utilização e 35% de VRAM. Prioridade = mais tarefas simultâneas, não resolução (fica em 1440p) |
