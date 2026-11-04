@@ -71,6 +71,7 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
   - rótulos com **linha-guia fina terminada em ponto** até a peça;
   - **gráficos traçados a tinta** (ex.: "Strom in der Leitung" an/aus).
 
+  **O creme é o DESIGN SYSTEM do canal alemão** e tem prioridade em todo vídeo. O K16 termina no tema escuro porque já começou nele (decisão do Eduardo, 04/11).
   O "lápis" que o Eduardo quer é ESTE: a escrita que vai acontecendo na tela + os traços desenhados. Vale para todo modelo a partir de agora. O K16 (navio) saiu no palco escuro, um esquecimento.
 - **Plano de batidas** (`roteiro/plano.json`), gerado por `ferramentas/plano_k16.py`:
   - frase → batida, e frase longa (> 7 s) vira duas;
@@ -121,3 +122,4 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | lápis: o K16 vai com a fonte manuscrita; o padrão a partir do próximo vídeo é o traço à mão laranja do K15 (riscar, sublinhar, ✓, circular) |
 | 04/11 | **toda decisão de pipeline é documentada aqui e sobe para o GitHub na hora** |
 | 04/11 | modelos/teardown: estrutura do K15 (viewport creme, serifa itálica escrita progressivamente, linha-guia com ponto, gráfico a tinta) |
+| 04/11 | creme = design system do Kriegsmomente (prioridade); o K16 termina no escuro, por exceção |
