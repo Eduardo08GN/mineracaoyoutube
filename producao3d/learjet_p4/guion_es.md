@@ -25,7 +25,7 @@ Para responder, hay que contestar tres cosas. ¿Qué tan rápido llegó al suelo
 
 ## 03. La cola, antes de que importe
 
-Empecemos por la cola. El Learjet sesenta tiene la cola en T: una aleta vertical y, arriba de todo, un ala pequeña horizontal, el estabilizador. Detrás de él va el timón de profundidad, una superficie móvil sujeta con tres bisagras de cada lado. Fíjate en lo que pasa cuando el piloto tira de la columna. Unos cables suben por dentro de la aleta y levantan el borde de atrás. La cola baja. El morro sube. Así se controla el cabeceo: el sube y baja del avión.
+Empecemos por la cola. Un avión en vuelo es como una balanza: las alas lo sostienen, y la cola hace de contrapeso. El Learjet sesenta tiene la cola en T: una aleta vertical y, arriba de todo, un ala pequeña horizontal, el estabilizador. Detrás de él va el timón de profundidad, una superficie móvil sujeta con tres bisagras de cada lado. Fíjate en lo que pasa cuando el piloto tira de la columna. Unos cables suben por dentro de la aleta y levantan el borde de atrás. La cola baja. El morro sube. Así se controla el cabeceo: el sube y baja del avión.
 
 Pero en este avión, el estabilizador también se mueve. Entero. Gira sobre un perno, atrás, y delante lo empuja un actuador de husillo: un tornillo largo con dos motores eléctricos. Ese giro es la compensación. Deja el avión equilibrado sin que el piloto tenga que sostener la fuerza.
 
@@ -63,7 +63,7 @@ Entonces, ¿cómo llegaron tres pedazos de la cola a kilómetros de ahí?
 
 Esta semana, la junta confirmó el hallazgo del timón de profundidad izquierdo, en tres pedazos, a entre dos y seis kilómetros del cráter. Y su investigador fue claro: sin esa pieza, no había forma de sacar el avión del picado. Y a esas velocidades, quizá ni con ella.
 
-Entonces surgió la pregunta: ¿se soltó arriba o abajo? Algunos ex investigadores miraron la altitud en los sitios de rastreo y vieron algo. Cerca de ocho mil pies, la línea se queda plana unos ocho segundos. Como si el avión se hubiera nivelado. Y propusieron que el tirón para nivelarlo arrancó la pieza.
+Entonces surgió la pregunta que todos se hacen: ¿esa pieza fue la causa, o la consecuencia? ¿Se soltó arriba, o abajo? Algunos ex investigadores miraron la altitud en los sitios de rastreo y vieron algo. Cerca de ocho mil pies, la línea se queda plana unos ocho segundos. Como si el avión se hubiera nivelado. Y propusieron que el tirón para nivelarlo arrancó la pieza.
 
 Nosotros fuimos al dato crudo. El transpondedor de este avión manda dos altitudes: una barométrica, que sale de la presión del aire, y otra por GPS. Mira las dos, lado a lado. A las doce y cuarenta y nueve con veintitrés, la barométrica se congela en ocho mil setecientos cincuenta pies. Y no se mueve más, hasta el último dato. En esos mismos diez segundos, la altitud por GPS sigue cayendo: de casi nueve mil quinientos a trescientos pies. El avión no se niveló. Lo que se detuvo fue un número.
 

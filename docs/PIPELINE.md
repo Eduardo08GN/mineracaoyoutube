@@ -204,3 +204,5 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | estúdio **creme** também no ES para o take de mecanismo (`CLIMA.estudio`); céu 2.5D continua nas tomadas de voo |
 | 04/11 | batedor P4 na G4: 15 stills + 5 clipes + folha num lote só (`g4_p4.py batedor`, faixa 3d com todos os jobs ao mesmo tempo) |
 | 04/11 | lição de operação: nunca `grep` no transcript .jsonl da sessão (centenas de MB); travou o disco D: por minutos |
+| 04/11 | batedor P4 (6 rodadas): a cauda em corte entra no Learjet 60 por código (sem a empenagem dele) para ler como avião; ângulo pequeno real (+4,5°) fica visível com **linha neutra tracejada × linha atual laranja + graus** sobre a peça; números com ponto de milhar à mão (`es-ES` não agrupa 4 dígitos); mapa precisa de clima sem neblina (`CLIMA.mapa`); rótulos presos dentro da tela |
+| 04/11 | G4 no batedor: 21 jobs de ~20 s deixam a placa em 7–14% de uso médio (pico ~55%). Batedor curto não enche a placa; os 80% ficam para o render fatiado da produção |

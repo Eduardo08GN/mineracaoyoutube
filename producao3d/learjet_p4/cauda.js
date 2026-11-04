@@ -14,13 +14,13 @@ const PSPAN = 2.18, PCR = 0.41, PCT = 0.18;
 export const PINO_X = 1.0; // pino a 1,0 m do bordo de ataque da raiz (viga traseira, à frente do profundor)
 export const ATU_X = 0.18; // atuador sob o bordo de ataque
 
-export function buildCauda() {
+export function buildCauda({comDeriva = true} = {}) {
   const root = new THREE.Group();
   root.name = 'cauda';
   const pele = new THREE.MeshStandardMaterial({color: '#d4d2cc', roughness: 0.62, metalness: 0.05, transparent: true, side: THREE.DoubleSide});
   const metal = new THREE.MeshStandardMaterial({color: '#7d848b', roughness: 0.35, metalness: 0.8});
   const escuro = new THREE.MeshStandardMaterial({color: '#2c3238', roughness: 0.5, metalness: 0.3});
-  const destaque = new THREE.MeshStandardMaterial({color: '#d4d2cc', roughness: 0.55, metalness: 0.05, emissive: new THREE.Color('#ff3a12'), emissiveIntensity: 0});
+  const destaque = new THREE.MeshStandardMaterial({color: '#d4d2cc', roughness: 0.55, metalness: 0.05, emissive: new THREE.Color('#ff6a1a'), emissiveIntensity: 0});
   const mesh = (g, m) => {
     const o = new THREE.Mesh(g, m);
     o.castShadow = o.receiveShadow = true;
@@ -31,7 +31,7 @@ export function buildCauda() {
   const fs = (y, x, chord) => ({le: [x - PINO_X, y, 0], chord, t: 0.09});
   const deriva = mesh(loftChord([fs(-1.6, -1.15, 2.35), fs(0.0, 0.0, 1.45)], {th: [0, 0, 1]}), pele.clone());
   deriva.name = 'deriva';
-  root.add(deriva);
+  if (comDeriva) root.add(deriva);
 
   // o estabilizador gira inteiro em volta do pino (eixo z)
   const estab = new THREE.Group();
@@ -73,7 +73,7 @@ export function buildCauda() {
       estab.add(piv);
       lado.push(piv);
       // dobradiça: 3 por lado (interna, central, externa) = uma em cada pedaço
-      const dob = mesh(new THREE.BoxGeometry(0.08, 0.1, 0.03), metal);
+      const dob = mesh(new THREE.BoxGeometry(0.05, 0.05, 0.02), pele);
       dob.position.copy(hinge).add(new THREE.Vector3(-0.03, -0.06, 0));
       estab.add(dob);
     }
@@ -99,9 +99,9 @@ export function buildCauda() {
   const porca = mesh(new THREE.BoxGeometry(0.12, 0.09, 0.12), escuro);
   atu.add(porca);
   const motores = [0.09, -0.09].map((z, i) => {
-    const mo = mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.2, 24), escuro);
+    const mo = mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.16, 24), escuro);
     mo.rotation.x = Math.PI / 2;
-    mo.position.set(0, -0.98, z * 1.6);
+    mo.position.set(0, -0.98, z * 0.5);
     atu.add(mo);
     return mo;
   });
@@ -127,7 +127,8 @@ export function buildCauda() {
     for (const o of estab.children) if (o.name?.startsWith('estab')) o.material.opacity = 1 - 0.35 * raiox;
     porca.position.y = -(incid - 6.5) * 0.04; // a porca anda no fuso: 4 cm por grau (desenho; o curso real não é público)
     rosca.rotation.y = roscaGiro;
-    destaque.emissiveIntensity = brilho * 2.2;
+    destaque.emissiveIntensity = brilho * 0.9;
+    destaque.color.set(brilho > 0.01 ? '#ff7a1f' : '#d4d2cc');
     fantasma.material.opacity = fant * 0.55;
     elevs.forEach((p, i) => {
       const v = Math.max(0, solta - i * 0.15);
@@ -137,7 +138,9 @@ export function buildCauda() {
     });
   };
   set();
+  const corda = (a, L) => [-L, L].map((x) => root.localToWorld(new THREE.Vector3(x * Math.cos(a), 0.02 + x * Math.sin(a), 0.05)));
   const anchors = {
+    corda: (L = 1.6) => ({atual: corda(estab.rotation.z, L), neutra: corda(0, L)}),
     profundor: () => elevs[1].localToWorld(new THREE.Vector3(0.1, 0, 0)),
     pino: () => pino.localToWorld(new THREE.Vector3()),
     atuador: () => porca.localToWorld(new THREE.Vector3()),

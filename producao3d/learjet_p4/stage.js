@@ -20,6 +20,7 @@ export const CLIMA = {
   tormenta: {hdriFundo: 'storm', camadas: true, fundoInt: 0.32, envInt: 0.9, fogCeu: [0.003, '#848d95'], giro: 0.05, blur: 0.3, grade: [0.25, 1.18, [0.94, 0.98, 1.05]], top: '#3b4249', hor: '#848d95', bot: '#454c54', streak: 0.22, fog: 0},
   // estúdio claro creme (design system 04/11; SKILL teardown: fundo claro, uma cor de acento): a peça que trabalha, aberta
   estudio: {grade: [0.95, 1.03, [1.02, 1.0, 0.97]], top: '#ece4d4', hor: '#f4eee2', bot: '#e2d8c5', streak: 0.0, fog: 0, envInt: 0.85},
+  mapa: {grade: [0.9, 1.05, [1.0, 1.0, 1.0]], top: '#8d969e', hor: '#b9bfc4', bot: '#b9bfc4', streak: 0.0, fog: 0},
   cidade: {grade: [0.85, 1.08, [1.02, 1.0, 0.97]], top: '#a9afb5', hor: '#bcc1c6', bot: '#bcc1c6', streak: 0.0, fog: 0.00016},
 };
 

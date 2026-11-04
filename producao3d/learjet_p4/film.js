@@ -23,6 +23,7 @@ import cidadeB64 from './assets/cidade.glb';
 import jetB64 from './assets/learjet.glb';
 import {PTS} from './adsb.js';
 import {buildCauda} from './cauda.js';
+import {buildLearjet60} from './learjet60.js';
 import {ALT, SERIE} from './dados_p4.js';
 import {createStage} from './stage.js';
 import {buildWorld, loadGlb} from './world.js';
@@ -31,7 +32,7 @@ const D2R = Math.PI / 180;
 const ss = (a, b, t) => easeInOutCubic(clamp01((t - a) / (b - a)));
 const ent = (a, b, t) => E_IN(clamp01((t - a) / (b - a)));
 const sai = (a, b, t) => E_OUT(clamp01((t - a) / (b - a)));
-const fmt = (n) => Math.round(n).toLocaleString('es-ES').replace(/ /g, '.');
+const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // 8.750 (o es-ES não agrupa 4 dígitos)
 const lerpSerie = (S, tt, j) => {
   let i = 0;
   while (i < S.length - 2 && S[i + 1][0] <= tt) i++;
@@ -44,13 +45,13 @@ const COR = {baro: '#ff7a1f', gps: '#2f6fd6', tinta: '#1d2329', creme: '#f4eee2'
 export const TAKES = [
   {
     id: 'C1_raiox', dur: 5.0, clima: 'estudio', mode: 'estudio',
-    cam: [[0, {pos: [5.2, 1.3, 4.6], tgt: [-0.2, -0.45, 0.4], fov: 30}], [5.0, {pos: [3.0, 0.9, 5.3], tgt: [-0.35, -0.5, 0.2], fov: 28}]],
+    cam: [[0, {pos: [13.2, 4.6, 6.6], tgt: [7.4, 2.3, 0.3], fov: 32}], [5.0, {pos: [10.2, 3.9, 3.8], tgt: [7.6, 2.6, 0.1], fov: 30}]],
     cauda: (u) => ({raiox: ent(0.6, 2.0, u), roscaGiro: u * 2}),
-    rotulos: [['pino', 'PERNO (EJE DEL GIRO)', 2.0, [150, -120]], ['atuador', 'ACTUADOR DE HUSILLO', 2.6, [-430, -150]], ['motor', '2 MOTORES ELÉCTRICOS', 3.2, [-430, 90]]],
+    rotulos: [['pino', 'PERNO (EJE DEL GIRO)', 2.0, [160, -140]], ['atuador', 'ACTUADOR DE HUSILLO', 2.6, [-220, -170]], ['motor', '2 MOTORES ELÉCTRICOS', 3.2, [-240, 120]]],
   },
   {
     id: 'C2_trim', dur: 6.0, clima: 'estudio', mode: 'estudio',
-    cam: [[0, {pos: [0.4, 0.35, 6.4], tgt: [-0.2, -0.2, 0.0], fov: 30}], [6.0, {pos: [1.4, 0.55, 6.1], tgt: [-0.1, -0.2, 0.0], fov: 29}]],
+    cam: [[0, {pos: [7.4, 3.5, 7.4], tgt: [8.7, 2.6, 0.0], fov: 26}], [6.0, {pos: [7.8, 3.6, 6.9], tgt: [8.8, 2.65, 0.0], fov: 25}]],
     // Mach sobe de 0,70 a 0,81 (dado do voo: 12:47:51 → 12:48:27); o Mach trim leva o indicador de 6,5 para o lado N UP
     mach: (u) => 0.66 + 0.15 * ss(0.6, 5.0, u),
     cauda: (u) => {
@@ -61,7 +62,7 @@ export const TAKES = [
   },
   {
     id: 'C3_profundor', dur: 6.0, clima: 'estudio', mode: 'estudio',
-    cam: [[0, {pos: [4.6, 2.2, 3.8], tgt: [0.6, -0.1, 1.0], fov: 28}], [6.0, {pos: [5.4, 1.7, 2.6], tgt: [1.2, -0.2, 1.3], fov: 30}]],
+    cam: [[0, {pos: [13.6, 4.6, 5.6], tgt: [8.3, 2.8, 1.0], fov: 28}], [6.0, {pos: [14.4, 3.9, 3.8], tgt: [8.8, 2.8, 1.4], fov: 30}]],
     cauda: (u) => ({raiox: 0.3, prof: 16 * Math.sin(Math.min(u, 2.4) * 2.6) * (1 - ss(2.0, 2.4, u)), brilho: ss(2.4, 3.0, u), solta: Math.max(0, u - 3.6) * 1.1}),
     rotulos: [['profundor', 'TIMÓN DE PROFUNDIDAD IZQUIERDO', 2.6, [140, -150]]],
     nota: [3.8, 'Hallado en tres pedazos, a entre 2 y 6 km del cráter'],
@@ -70,13 +71,13 @@ export const TAKES = [
     // 12:49:20 → 12:49:33 EST (t = 137,2 → 150): o mergulho final, no ritmo real
     id: 'A1_altimetros', dur: 6.5, clima: 'tormenta', mode: 'ceu', alt: 3000, speed: 160, sink: 260, rain: true, turb: [1.8, 1.2, 0.22],
     pose: (u) => ({pitch: 52 + 3 * u, roll: 58 + 4 * u, yaw: 0}),
-    cam: [[0, {pos: [19, 13, -13], tgt: [0, -1.2, 0], fov: 38}], [6.5, {pos: [15, 11, -15], tgt: [0, -1.6, 0], fov: 38}]],
+    cam: [[0, {pos: [30, 20, -20], tgt: [0, 1, -9], fov: 36}], [6.5, {pos: [26, 18, -23], tgt: [0, 1, -9], fov: 36}]],
     altim: {from: 137.2, rate: 1.97},
   },
   {
-    id: 'M1_faixa', dur: 6.5, clima: 'cidade', mode: 'mapa',
-    cam: [[0, {pos: [-14500, 15500, 15500], tgt: [-2500, 0, -1200], fov: 36, near: 20, far: 2e6}], [6.5, {pos: [-11500, 12500, 13500], tgt: [-1800, 0, -900], fov: 36, near: 20, far: 2e6}]],
-    route: [0.0, 4.5],
+    id: 'M1_faixa', dur: 6.5, clima: 'mapa', mode: 'mapa',
+    cam: [[0, {pos: [-9000, 13500, 12500], tgt: [-3000, 0, -600], fov: 38, near: 20, far: 2e6}], [6.5, {pos: [-6500, 11500, 11500], tgt: [-1800, 0, -500], fov: 38, near: 20, far: 2e6}]],
+    route: [0.0, 3.0],
     faixa: true,
   },
 ];
@@ -137,7 +138,7 @@ function createOverlay(app) {
       const [ax, ay] = L.at, lx = ax + L.off[0], ly = ay + L.off[1];
       lab.textContent = L.txt;
       const esq = L.off[0] < 0;
-      lab.style.left = `${esq ? lx - 12 - lab.offsetWidth : lx + 12}px`;
+      lab.style.left = `${Math.min(1600 - 24 - lab.offsetWidth, Math.max(24, esq ? lx - 12 - lab.offsetWidth : lx + 12))}px`;
       lab.style.top = `${ly - 24}px`;
       svg.insertAdjacentHTML('beforeend', `<g opacity="${L.o}"><line x1="${ax}" y1="${ay}" x2="${lx}" y2="${ly}" stroke="${tinta}" stroke-width="2.2"/><circle cx="${ax}" cy="${ay}" r="7" fill="none" stroke="${COR.baro}" stroke-width="3"/></g>`);
     });
@@ -160,14 +161,21 @@ function createOverlay(app) {
       g += `<line x1="${m0x}" y1="${m0y}" x2="${m1x}" y2="${m1y}" stroke="${COR.baro}" stroke-width="4"/>`;
       const [nx, ny] = P(incid, R - 14);
       g += `<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="${COR.baro}" stroke-width="7" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="12" fill="${COR.tinta}"/>`;
-      g += `<text x="${cx}" y="${cy + 74}" font-size="26" font-weight="800" letter-spacing="3" text-anchor="middle" fill="${COR.tinta}">PITCH TRIM</text>`;
-      g += `<text x="${cx - 130}" y="${cy + 120}" font-size="24" font-weight="700" fill="${COR.tinta}">N DN</text><text x="${cx + 130}" y="${cy + 120}" font-size="24" font-weight="700" text-anchor="end" fill="${COR.tinta}">N UP</text>`;
+      g += `<text x="${cx}" y="${cy + R + 70}" font-size="30" font-weight="800" letter-spacing="3" text-anchor="middle" fill="${COR.tinta}">PITCH TRIM</text>`;
+      g += `<text x="${cx - 46}" y="${cy + 112}" font-size="22" font-weight="700" text-anchor="middle" fill="${COR.tinta}">N DN</text><text x="${cx + 46}" y="${cy + 112}" font-size="22" font-weight="700" text-anchor="middle" fill="${COR.tinta}">N UP</text>`;
       // régua de Mach: 0,60 a 0,90, marcas 0,70 (entra o Mach trim), 0,77 (limite sem Mach trim) e 0,81 (Mmo)
-      const x0 = 1080, x1 = 1520, yr = 560, X = (m) => x0 + ((m - 0.6) / 0.3) * (x1 - x0);
+      const x0 = 1040, x1 = 1540, yr = 640, X = (m) => x0 + ((m - 0.6) / 0.3) * (x1 - x0);
       g += `<rect x="${x0}" y="${yr - 10}" width="${x1 - x0}" height="20" rx="10" fill="#d9cfbb"/><rect x="${x0}" y="${yr - 10}" width="${X(mach) - x0}" height="20" rx="10" fill="${COR.baro}"/>`;
-      for (const [m, t] of [[0.7, '0,70'], [0.77, '0,77'], [0.81, '0,81']]) g += `<line x1="${X(m)}" y1="${yr - 26}" x2="${X(m)}" y2="${yr + 26}" stroke="${COR.tinta}" stroke-width="3"/><text x="${X(m)}" y="${yr + 62}" font-size="28" font-weight="700" text-anchor="middle" fill="${COR.tinta}">${t}</text>`;
+      for (const [m, t, dy, an] of [[0.7, '0,70', 62, 'middle'], [0.77, '0,77', 62, 'end'], [0.81, '0,81', 62, 'start']]) g += `<line x1="${X(m)}" y1="${yr - 26}" x2="${X(m)}" y2="${yr + 26}" stroke="${COR.tinta}" stroke-width="3"/><text x="${X(m) + (an === 'end' ? -4 : an === 'start' ? 4 : 0)}" y="${yr + dy}" font-size="28" font-weight="700" text-anchor="${an}" fill="${COR.tinta}">${t}</text>`;
       g += `<text x="${x0}" y="${yr - 42}" font-size="30" font-weight="800" fill="${COR.tinta}">MACH ${mach.toFixed(2).replace('.', ',')}</text></g>`;
       svg.insertAdjacentHTML('beforeend', g);
+    }
+    if (s.angulo) {
+      const {n, a, graus, o} = s.angulo;
+      svg.insertAdjacentHTML('beforeend', `<g opacity="${o}"><line x1="${n[0][0]}" y1="${n[0][1]}" x2="${n[1][0]}" y2="${n[1][1]}" stroke="${COR.tinta}" stroke-width="2.5" stroke-dasharray="10 8"/>
+        <line x1="${a[0][0]}" y1="${a[0][1]}" x2="${a[1][0]}" y2="${a[1][1]}" stroke="${COR.baro}" stroke-width="5"/>
+        <text x="${a[1][0] + 12}" y="${a[1][1] - 14}" font-size="40" font-weight="800" fill="${COR.baro}" text-anchor="start">${graus >= 0 ? '+' : '−'}${Math.abs(graus).toFixed(1).replace('.', ',')}°</text>
+        <text x="${n[1][0] + 12}" y="${n[1][1] + 30}" font-size="28" font-weight="700" fill="${COR.tinta}">neutro</text></g>`);
     }
     // dois altímetros lado a lado + o perfil das duas curvas embaixo (o "nivelamento" é a barométrica parada)
     q('.alt').style.opacity = s.alt ? 1 : 0;
@@ -178,7 +186,7 @@ function createOverlay(app) {
       q('.sb').textContent = trava > 0 ? `sin cambio hace ${trava.toFixed(1).replace('.', ',')} s` : '';
       q('.sg').textContent = trava > 0 ? 'sigue cayendo' : '';
       q('.b').style.outline = trava > 0 ? `4px solid ${COR.baro}` : 'none';
-      const gx = 300, gy = 620, gw = 1000, gh = 230, T0 = 120, T1 = 150.5, A1 = 22000;
+      const gx = 860, gy = 600, gw = 660, gh = 230, T0 = 120, T1 = 150.5, A1 = 22000;
       const X = (t) => gx + ((t - T0) / (T1 - T0)) * gw, Y = (a) => gy + gh - (a / A1) * gh;
       cv.fillStyle = 'rgba(14,18,22,.55)';
       cv.fillRect(gx - 20, gy - 20, gw + 40, gh + 50);
@@ -224,13 +232,22 @@ export const run = () =>
     const W = buildWorld({cidadeGltf, chaoGltf, jetGltf});
     stage.scene.add(W.root);
     // a cauda em corte vive longe do mundo (estúdio próprio, chão de sombra)
-    const CA = buildCauda();
+    // estúdio: o Learjet 60 por código (o mesmo da prova) sem a empenagem horizontal dele; a cauda em corte entra no topo da
+    // deriva (bordo de ataque da raiz em x 6,86, y 3,02; o pino fica 1,0 m atrás). A deriva dele é a pele que vira raio-x.
+    const LJ = buildLearjet60();
+    LJ.root.traverse((o) => { if (/^(estabE|estabD|profD)$/.test(o.name)) o.visible = false; });
+    LJ.elev.forEach((p) => (p.visible = false));
+    const derivaLJ = LJ.root.getObjectByName('deriva');
+    derivaLJ.material = derivaLJ.material.clone();
+    derivaLJ.material.transparent = true;
+    const CA = buildCauda({comDeriva: false});
+    CA.root.position.set(6.86 + 1.0, 3.02, 0);
     const ESTUDIO = new THREE.Group();
     ESTUDIO.position.set(0, 50000, 0);
-    ESTUDIO.add(CA.root);
-    const piso = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.ShadowMaterial({opacity: 0.16}));
+    ESTUDIO.add(LJ.root, CA.root);
+    const piso = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.ShadowMaterial({opacity: 0.16}));
     piso.rotation.x = -Math.PI / 2;
-    piso.position.y = -1.75;
+    piso.position.y = -1.4;
     piso.receiveShadow = true;
     ESTUDIO.add(piso);
     stage.scene.add(ESTUDIO);
@@ -269,7 +286,7 @@ export const run = () =>
       faixa.visible = marca.visible = mapa && !!k.faixa;
       bordas.forEach((b) => (b.visible = faixa.visible));
       if (k.faixa) {
-        faixa.material.opacity = 0.24 * ss(2.0, 3.0, u);
+        faixa.material.opacity = 0.15 * ss(2.0, 3.0, u);
         bordas.forEach((b) => (b.material.opacity = ss(2.0, 3.0, u)));
         marca.scale.setScalar(ss(4.0, 4.6, u) + 1e-3);
       }
@@ -286,7 +303,10 @@ export const run = () =>
         cam = {...cam, pos: add(P, cam.pos), tgt: add(P, cam.tgt)};
       }
       if (est) {
-        CA.set(k.cauda(u));
+        const c = k.cauda(u);
+        CA.set(c);
+        derivaLJ.material.opacity = 1 - 0.8 * (c.raiox || 0);
+        derivaLJ.material.depthWrite = (c.raiox || 0) < 0.5;
         P = [0, 50000, 0];
         cam = {...cam, pos: add(P, cam.pos), tgt: add(P, cam.tgt), near: 0.05, far: 500};
       }
@@ -319,6 +339,9 @@ export const run = () =>
         if (k.gauge) {
           const c = k.cauda(u);
           s.gauge = {incid: c.incid, mach: k.mach(u), o: ent(0.2, 0.8, u)};
+          const cd = CA.anchors.corda(1.7), pr = (v) => stage.project(v);
+          const A = cd.atual.map(pr), N = cd.neutra.map(pr);
+          if (A.every(Boolean) && N.every(Boolean)) s.angulo = {a: A, n: N, graus: c.incid - 6.5, o: ent(0.4, 1.0, u)};
         }
         if (k.altim) {
           const tt = k.altim.from + u * k.altim.rate;
