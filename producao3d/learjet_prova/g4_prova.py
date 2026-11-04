@@ -1,7 +1,7 @@
 # Prova da stack nova do avião (teardown) NA G4; o PC só orquestra.
 # 1) prepara o teardown na VM (uma vez por VM); 2) sobe os prontos brutos e roda prep.mjs (gltf-transform) lá;
 # 3) sobe a cena (learjet/), builda e captura a folha das 6 tomadas, 6 quadros cheios 1920x1080 e o filme; 4) baixa.
-# Uso: python -I g4_prova.py [--sem-filme] [--sem-prep]
+# Uso: python -I g4_prova.py [--sem-filme] [--sem-prep] [--acabamento]
 import json, os, sys, tarfile
 os.environ.setdefault("T2_DONO", "prova_lj"); os.environ.setdefault("TEMP", "D:/tmp")
 sys.path.insert(0, r"D:\tracer3d2"); import canal
@@ -59,11 +59,27 @@ caps = " && ".join(f"node sims/capture.mjs learjet --size 1600x900 --dpr 1.2 --s
 # teste A/B: as mesmas tomadas com o Learjet 45 do Sketchfab (o do Reconstructed) na receita nova
 caps_sf = " && ".join(f"node sims/capture.mjs learjet --config maquinas/learjet/cfg_sf.json --size 1600x900 --dpr 1.2 --still {s} --out teardown-out/lj_sf_{s}.png 2>&1 | tail -1" for s in (2.2, 6.7, 24.5))
 filme = "" if "--sem-filme" in sys.argv else " && node sims/capture.mjs learjet --size 1600x900 --dpr 1.2 --out teardown-out/lj_filme.mp4 2>&1 | tail -3"
+# batedor de acabamento (04/11): ANTES = o atual (60 fps, 1 amostra, 8 bits); DEPOIS = 24 fps, obturador de 180° com
+# 12 subquadros (motion blur + supersampling), grão fino, vinheta leve, x264 10 bits. Trechos: mergulho e soltura do profundor.
+if "--acabamento" in sys.argv:
+    CA = "--config maquinas/learjet/cfg_acab.json --fps 24 --pixfmt yuv420p10le --crf 14"
+    pares = []
+    for nome, a0, a1 in (("mergulho", 9.0, 13.5), ("profundor", 13.5, 17.5)):
+        pares.append(f"node sims/capture.mjs learjet --size 1600x900 --dpr 1.2 --from {a0} --to {a1} --out teardown-out/lj_acab_{nome}_antes.mp4 2>&1 | tail -1")
+        pares.append(f"node sims/capture.mjs learjet {CA} --size 1600x900 --dpr 1.2 --from {a0} --to {a1} --out teardown-out/lj_acab_{nome}_depois.mp4 2>&1 | tail -1")
+        # lado a lado (antes | depois) em 24 fps, para o Eduardo ver
+        pares.append(f"ffmpeg -loglevel error -y -i teardown-out/lj_acab_{nome}_antes.mp4 -i teardown-out/lj_acab_{nome}_depois.mp4 -filter_complex "
+                     f"\"[0:v]fps=24,scale=960:-2[a];[1:v]scale=960:-2[b];[a][b]hstack\" -c:v libx264 -crf 16 -pix_fmt yuv420p teardown-out/lj_acab_{nome}_lado.mp4")
+    for st in (11.4, 15.3):
+        pares.append(f"node sims/capture.mjs learjet --size 1600x900 --dpr 1.2 --still {st} --out teardown-out/lj_acab_{st}_antes.png 2>&1 | tail -1")
+        pares.append(f"node sims/capture.mjs learjet --config maquinas/learjet/cfg_acab.json --size 1600x900 --dpr 1.2 --still {st} --out teardown-out/lj_acab_{st}_depois.png 2>&1 | tail -1")
+    caps, caps_sf, filme = " && ".join(pares), "true", ""
+    TS = [11.4]
 cmd = (f"cd {V} && mkdir -p maquinas teardown-out && rm -rf maquinas/learjet && tar -xf maq_learjet.tar -C maquinas && mkdir -p maquinas/learjet/assets && "
        f"cp /content/lj_assets/*.glb /content/lj_assets/*.hdr maquinas/learjet/assets/ && mkdir -p /usr/share/glvnd/egl_vendor.d && echo '{{\"file_format_version\":\"1.0.0\",\"ICD\":{{\"library_path\":\"/usr/lib64-nvidia/libEGL_nvidia.so.0\"}}}}' > /usr/share/glvnd/egl_vendor.d/10_nvidia.json && rm -f /usr/share/glvnd/egl_vendor.d/50_mesa.json && export LD_LIBRARY_PATH=/usr/lib64-nvidia:$LD_LIBRARY_PATH && "
        f"node sims/build.mjs ./maquinas/learjet 2>&1 | tail -3 && "
        f"node sims/capture.mjs learjet --size 1600x900 --dpr 0.6 --stills {','.join(map(str, TS))} --cols 3 --out teardown-out/lj_folha.png 2>&1 | tail -3 && {caps} && {caps_sf}{filme}; "
-       f"cd teardown-out && ls -la lj_* && tar -cf /content/teardown/res_lj.tar lj_*.png $(ls lj_filme.mp4 2>/dev/null) && echo FEITO")
+       f"cd teardown-out && ls -la lj_* && tar -cf /content/teardown/res_lj.tar lj_*.png $(ls lj_filme.mp4 lj_acab_*.mp4 2>/dev/null) && echo FEITO")
 out = canal.exec_vm(cmd, prazo=3600, estagnacao=900); print(out[-2500:])
 if "FEITO" not in out: raise SystemExit("CAPTURA_FALHOU")
 dest = os.path.join(AQ, "out"); os.makedirs(dest, exist_ok=True); t = os.path.join(TMP, "lj_res.tar")

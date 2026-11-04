@@ -188,39 +188,53 @@ export const run = () =>
         .fromTo(SH, {p: 0}, {p: ap, duration: k.dur, ease: 'turbP', immediateRender: false}, k.t0)
         .fromTo(SH, {y: 0}, {y: ay, duration: k.dur, ease: 'turbY', immediateRender: false}, k.t0);
     }
+    const cena3d = (k, t, u, acc) => {
+      const ceu = k.mode === 'ceu';
+      W.jet.visible = ceu;
+      W.chao.visible = W.cidade.visible = !ceu;
+      let P = [0, 0, 0];
+      let cam = camAt(k, u);
+      if (ceu) {
+        const p = k.pose(u);
+        P = [-k.speed * (k.t0 + u), k.alt - (k.sink ?? 0) * u, 0];
+        W.jet.position.set(...P);
+        tl.seek(t, false);
+        W.jet.position.y += SH.y;
+        W.jet.rotation.set((p.roll + SH.r) * D2R, p.yaw * D2R, (p.pitch + SH.p) * D2R);
+        cam = {...cam, pos: add(P, cam.pos), tgt: add(P, cam.tgt)};
+      }
+      // profundor: acende, se solta em 3 pedaços que ficam para trás e caem girando (só na tomada D)
+      const E = k.elev;
+      W.elevMat.emissiveIntensity = E ? ss(E.glow[0], E.glow[1], u) * (0.85 + 0.15 * Math.sin(u * 6)) : 0;
+      W.elev.forEach((m, i) => {
+        m.visible = !!E || !!m.userData.sempre; // peça do próprio modelo fica sempre; peça extra só na tomada D
+        const h = m.userData.home;
+        const v = E ? Math.max(0, u - E.solta - i * 0.12) : 0;
+        const vib = E ? 0.12 * ss(E.glow[1], E.solta, u) * Math.sin(u * 38 + i) * (v > 0 ? 0 : 1) : 0;
+        m.position.set(h.x + 4.9 * v * v, h.y - 2.2 * v * v + 0.2 * v, h.z + (i - 1) * 3.5 * v);
+        m.rotation.set(v * (2.2 + i), v * (1.1 - i * 0.7), -vib + v * (1.6 - i * 0.5));
+      });
+      W.setSmoke(t, k.mode === 'cidade');
+      const r = W.setRoute(k.route ? ss(k.route[0], k.route[1], u) : 0, k.mode === 'mapa');
+      stage.frame(cam, k.clima, P, {run: ceu ? k.speed * (k.t0 + u) : 0, ao: ceu, t, ...acc});
+      return {r, P};
+    };
     return {
       resize,
       render(t) {
         const k = takeAt(t);
         const u = t - k.t0;
         const ceu = k.mode === 'ceu';
-        W.jet.visible = ceu;
-        W.chao.visible = W.cidade.visible = !ceu;
-        let P = [0, 0, 0];
-        let cam = camAt(k, u);
-        if (ceu) {
-          const p = k.pose(u);
-          P = [-k.speed * (k.t0 + u), k.alt - (k.sink ?? 0) * u, 0];
-          W.jet.position.set(...P);
-          tl.seek(t, false);
-          W.jet.position.y += SH.y;
-          W.jet.rotation.set((p.roll + SH.r) * D2R, p.yaw * D2R, (p.pitch + SH.p) * D2R);
-          cam = {...cam, pos: add(P, cam.pos), tgt: add(P, cam.tgt)};
+        // acabamento (batedor 04/11): N subquadros dentro do obturador de 180° e média no stage (motion blur + supersampling).
+        // O último subquadro é o instante central, para o 2D (rótulos, ponto de fuga) projetar no lugar certo.
+        const CF = window.__SIM_CONFIG || {};
+        const N = CF.sub || 1, obt = (CF.obturador ?? 0.5) / (CF.fps || 24);
+        let r = null, P = [0, 0, 0];
+        for (let i = 0; i < N; i++) {
+          const d = N === 1 || i === N - 1 ? 0 : ((i + 0.5) / (N - 1) - 0.5) * obt;
+          const ts = Math.min(Math.max(t + d, k.t0), k.t0 + k.dur - 1e-4); // nunca atravessa o corte
+          ({r, P} = cena3d(k, ts, ts - k.t0, {sub: i, subN: N, t}));
         }
-        // profundor: acende, se solta em 3 pedaços que ficam para trás e caem girando (só na tomada D)
-        const E = k.elev;
-        W.elevMat.emissiveIntensity = E ? ss(E.glow[0], E.glow[1], u) * (0.85 + 0.15 * Math.sin(u * 6)) : 0;
-        W.elev.forEach((m, i) => {
-          m.visible = !!E || !!m.userData.sempre; // peça do próprio modelo fica sempre; peça extra só na tomada D
-          const h = m.userData.home;
-          const v = E ? Math.max(0, u - E.solta - i * 0.12) : 0;
-          const vib = E ? 0.12 * ss(E.glow[1], E.solta, u) * Math.sin(u * 38 + i) * (v > 0 ? 0 : 1) : 0;
-          m.position.set(h.x + 4.9 * v * v, h.y - 2.2 * v * v + 0.2 * v, h.z + (i - 1) * 3.5 * v);
-          m.rotation.set(v * (2.2 + i), v * (1.1 - i * 0.7), -vib + v * (1.6 - i * 0.5));
-        });
-        W.setSmoke(t, k.mode === 'cidade');
-        const r = W.setRoute(k.route ? ss(k.route[0], k.route[1], u) : 0, k.mode === 'mapa');
-        stage.frame(cam, k.clima, P, {run: ceu ? k.speed * (k.t0 + u) : 0, ao: ceu, t});
         // ponto de fuga do voo: um ponto bem à frente do avião na direção do voo (-x), projetado na tela
         const vp = ceu ? stage.project(new THREE.Vector3(P[0] - 1e5, P[1] - (k.sink ?? 0) * 400, P[2])) : null;
         // 2D
@@ -234,6 +248,7 @@ export const run = () =>
           s.hud = {v1: `${fmt(a.alt)} pies`, l2: 'DESCENSO', v2: `${fmt(a.vz)} pies/min`};
         }
         if (k.mode === 'mapa' && r) s.hud = {v1: `${fmt(r.altFt)} pies`, l2: 'HORA (ESTE DE EE. UU.)', v2: clockET(r.tt)};
+        const E = k.elev;
         if (E && u > E.label) {
           const at = stage.project(W.anchors.elev());
           if (at) s.lab = {at, to: [at[0] + 140, at[1] - 130], txt: 'TIMÓN DE PROFUNDIDAD IZQUIERDO', o: ss(E.label, E.label + 0.4, u) * (1 - ss(E.solta + 1.6, E.solta + 2.0, u))};

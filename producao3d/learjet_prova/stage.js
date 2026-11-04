@@ -12,6 +12,7 @@ import {N8AOPass} from 'n8ao';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {SMAAPass} from 'three/addons/postprocessing/SMAAPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
 
 // céu por clima: alto, horizonte, baixo; força e escala das listras; neblina (só cidade)
 export const CLIMA = {
@@ -128,6 +129,19 @@ export async function createStage({canvas}) {
   composer.addPass(grade);
   const smaa = new SMAAPass();
   composer.addPass(smaa);
+  composer.renderToScreen = false;
+  // acabamento (batedor 04/11): média dos subquadros do obturador (motion blur + supersampling) e, no fim, vinheta leve
+  // e grão fino determinístico (quebra o banding do céu cinza na recompressão do YouTube)
+  const VS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+  const acc = [0, 1].map(() => new THREE.WebGLRenderTarget(4, 4, {type: THREE.HalfFloatType}));
+  const accQ = new FullScreenQuad(new THREE.ShaderMaterial({uniforms: {tA: {value: null}, tN: {value: null}, uW: {value: 1}}, vertexShader: VS,
+    fragmentShader: 'uniform sampler2D tA; uniform sampler2D tN; uniform float uW; varying vec2 vUv; void main(){ gl_FragColor = mix(texture2D(tA, vUv), texture2D(tN, vUv), uW); }'}));
+  const finQ = new FullScreenQuad(new THREE.ShaderMaterial({uniforms: {tA: {value: null}, uGrao: {value: 0}, uVin: {value: 0}, uT: {value: 0}}, vertexShader: VS,
+    fragmentShader: `uniform sampler2D tA; uniform float uGrao; uniform float uVin; uniform float uT; varying vec2 vUv;
+      void main(){ vec4 c = texture2D(tA, vUv);
+        c.rgb *= 1.0 - uVin * smoothstep(0.55, 1.05, length(vUv - 0.5) * 1.414);
+        float n = fract(sin(dot(gl_FragCoord.xy + fract(uT * 7.13) * vec2(97.0, 57.0), vec2(12.9898, 78.233))) * 43758.5453) - 0.5;
+        gl_FragColor = vec4(clamp(c.rgb + n * uGrao, 0.0, 1.0), 1.0); }`}));
 
   const size = {w: 1600, h: 900};
   const resize = (w, h, pr) => {
@@ -137,11 +151,12 @@ export async function createStage({canvas}) {
     renderer.setSize(w, h, false);
     composer.setPixelRatio(pr);
     composer.setSize(w, h);
+    for (const r of acc) r.setSize(Math.round(w * pr), Math.round(h * pr));
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   };
   // cam: {pos, tgt, fov, near, far}; climaK: chave de CLIMA; foco: centro da sombra (o avião); run: metros voados (listras)
-  const frame = (cam, climaK, foco = [0, 0, 0], {run = 0, ao = true, t = 0} = {}) => {
+  const frame = (cam, climaK, foco = [0, 0, 0], {run = 0, ao = true, t = 0, sub = 0, subN = 1} = {}) => {
     const C = CLIMA[climaK];
     skyMat.uniforms.uTop.value.set(C.top);
     skyMat.uniforms.uHor.value.set(C.hor);
@@ -186,6 +201,21 @@ export async function createStage({canvas}) {
     rim.position.set(...foco).addScaledVector(fwd, 60).add(new THREE.Vector3(0, 25, 0));
     rim.target.updateMatrixWorld();
     composer.render();
+    accQ.material.uniforms.tA.value = acc[0].texture;
+    accQ.material.uniforms.tN.value = composer.readBuffer.texture;
+    accQ.material.uniforms.uW.value = 1 / (sub + 1);   // média corrida: o subquadro i pesa 1/(i+1)
+    renderer.setRenderTarget(acc[1]);
+    accQ.render(renderer);
+    acc.reverse();
+    if (sub < subN - 1) return;
+    const CF = window.__SIM_CONFIG || {};
+    const fm = finQ.material.uniforms;
+    fm.tA.value = acc[0].texture;
+    fm.uGrao.value = CF.grao ?? 0;
+    fm.uVin.value = CF.vinheta ?? 0;
+    fm.uT.value = t;
+    renderer.setRenderTarget(null);
+    finQ.render(renderer);
   };
   const pv = new THREE.Vector3();
   const project = (p) => {

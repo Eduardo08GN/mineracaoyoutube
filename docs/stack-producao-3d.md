@@ -107,6 +107,17 @@ A névoa da cena usa a cor do horizonte e costura o avião às camadas. O HDRI d
 
 ---
 
+## 5b. Acabamento (batedor 04/11, aprovado no A/B)
+
+Técnica no lugar de asset, com custo só de tempo na G4:
+- **24 fps com obturador de 180°.** São 12 subquadros por quadro, com a média feita no `stage.js` (ping-pong em HalfFloat). Isso dá motion blur de verdade e supersampling, e acaba com o tremido das bordas finas. O último subquadro é o instante central, então os rótulos projetam no lugar certo.
+- **O 2D fica fora da média.** HUD, linhas de velocidade e rótulos são desenhados uma vez, nítidos. Borrar a captura inteira borraria os números.
+- **Grão fino determinístico (0,012)** e **vinheta leve (0,18)** no último passe. O grão quebra o banding do céu cinza.
+- **Saída em 10 bits:** `--pixfmt yuv420p10le --crf 14` (opção nova do `capture.mjs` do teardown, desligada por padrão para não mexer nas outras simulações).
+- **Configuração:** `producao3d/learjet_prova/cfg_acab.json` (`sub`, `obturador`, `fps`, `grao`, `vinheta`), passada com `--config`. Teste: `g4_prova.py --acabamento`, que gera antes e depois lado a lado.
+- **Pendente:** upload de teste não listado em 1440p, para confirmar se o YouTube dá mais bitrate (prática de criador, não regra documentada).
+- **Descartado:** aberração cromática, que briga com a harmonia chapada. Profundidade de campo só no close da peça, se o A/B provar ganho.
+
 ## 6. Verificação: o olho da G4
 
 `producao3d/olho_g4/olho_g4.py`. Roda dentro da G4 e devolve **um JSON curto** por render, em vez de imagens.
@@ -163,3 +174,4 @@ O modelo do juiz fica em `/content/modelos/qwen3vl8b` na VM, com cópia no Drive
 | 04/11 | troca para o modelo simples (29 mil faces) + atlas chapado de duas cores (janela = disco) | aprovado; modelo congelado. Composição: `producao3d/learjet_prova/COMPOSICAO_P3.md` (10 enquadramentos, planos por frase) |
 | 04/11 | céu em camadas 2.5D no domo: deck de nuvens correndo (horizonte e velocidade), teto escuro em paralaxe, faixa clara atrás do avião, névoa na cor do horizonte | v1: deck claro demais, o avião some |
 | 04/11 | céu v2: deck escurecido, névoa fina | **aprovado pelo Eduardo** ("já melhorou bastante"): o avião se recorta, horizonte e velocidade legíveis |
+| 04/11 | acabamento: 24 fps + obturador 180° (12 subquadros) + grão + vinheta + 10 bits | A/B feito na G4; HUD nítido, borrão só no 3D |
