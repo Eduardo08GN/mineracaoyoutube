@@ -211,7 +211,7 @@ export const run = () =>
         const E = k.elev;
         W.elevMat.emissiveIntensity = E ? ss(E.glow[0], E.glow[1], u) * (0.85 + 0.15 * Math.sin(u * 6)) : 0;
         W.elev.forEach((m, i) => {
-          m.visible = !!E;
+          m.visible = !!E || !!m.userData.sempre; // peça do próprio modelo fica sempre; peça extra só na tomada D
           const h = m.userData.home;
           const v = E ? Math.max(0, u - E.solta - i * 0.12) : 0;
           const vib = E ? 0.12 * ss(E.glow[1], E.solta, u) * Math.sin(u * 38 + i) * (v > 0 ? 0 : 1) : 0;

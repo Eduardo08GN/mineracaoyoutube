@@ -45,18 +45,23 @@ roteiro (frase por frase) ──► plano de tomadas (1 ângulo novo por frase, 
 
 ## 3. O avião (e qualquer objeto-herói)
 
-**Modelo pronto, grátis, carregado por GLTF.** No Learjet usamos o **"Bombardier Learjet 45" do Sketchfab (KarimFatatry, CC-BY 4.0)**, o mesmo que o Reconstructed usa. O crédito ao autor vai na descrição do vídeo. Comprar não é necessário.
+**Regra-mãe: o modelo pronto MAIS SIMPLES, chapado, congelado.** O modelo não é o que agrega ao vídeo; a composição é. No Learjet, o **"Bombardier Learjet 45" do Sketchfab (rammgraffic, ~29 mil faces, CC-BY)** é o que o Reconstructed credita (o de 917 mil faces da KarimFatatry foi um erro nosso). O crédito ao autor vai na descrição do vídeo. Comprar não é necessário.
 
-**Preparo (`prep.mjs`, gltf-transform, na G4):**
-- Remover o interior (bancos, cabine de passageiros, toalete) e o trem de pouso. **Manter as portas do trem**: sem elas a barriga mostra um buraco. Manter a cabine de comando, que aparece pelo para-brisa.
-- **Manter a textura de cor da fuselagem**, porque o para-brisa é a área transparente dela. No shader, usar **só o alfa**: onde é transparente, vira vidro escuro liso; a cor original (faixas da pintura) é descartada.
-- Remover as outras texturas e deduplicar. **Cuidado:** o dedup funde materiais iguais e apaga o nome deles. Identifique as peças pelo **nome do nó**, nunca pelo nome do material.
+**Atlas chapado (`producao3d/learjet_prova/atlas_chapado.py`):** a textura vira duas cores, a pintura e um cinza-escuro.
+- **Janela = disco cinza liso**: sem moldura, gradiente, letreiro, faixa ou rebite.
+- O para-brisa, a entrada do motor e o fan viram cinza chapado.
+- A paleta harmoniza com o ambiente do vídeo. Aprovado pelo Eduardo em 04/11: vale para todo objeto pronto de todo canal.
 
-**Material (receita atual, acetinado perolado):** `MeshStandardMaterial({color: '#c3c1bd', metalness: 0.35, roughness: 0.45, envMapIntensity: 1.1})`. Vidro: `{color: '#07090c', roughness: 0.06, envMapIntensity: 1.0}`.
+**Preparo (`prep.mjs`, na G4):**
+- O modelo simples vai inteiro, só com `prune`. **Sem `dedup`**, que funde os materiais do atlas e apaga os nomes.
+- No `world.js`, o trem baixado e as portas abertas são escondidos pelo nome do material.
+- A orientação sai do estabilizador horizontal (`ala_cola_*`), com o nariz em −x, e a escala é o comprimento real (17,68 m).
+
+**Material:** `MeshStandardMaterial({metalness: 0.35, roughness: 0.45, envMapIntensity: 1.1})`, com a cor vinda toda do atlas (pintura RGB 172,172,170, um tom abaixo do branco para não estourar no céu de tempestade).
 
 **Luzes de navegação:** pontos emissivos nas pontas das asas (vermelha à esquerda, verde à direita), achados no próprio modelo pelo vértice de |z| máximo. É o detalhe barato que vende realismo.
 
-**A peça da história** (no Learjet, o profundor esquerdo): peça nossa por cima do modelo, em 3 pedaços com pivô na articulação. Acende em vermelho (emissivo) quando é nomeada e se solta caindo, sincronizada com a fala.
+**A peça da história** (no Learjet, o profundor esquerdo): a própria peça do modelo (o estabilizador do lado +z), presa num pivô no centro dela. Acende em vermelho (emissivo) quando é nomeada e se solta caindo, sincronizada com a fala.
 
 ---
 
@@ -126,6 +131,7 @@ O modelo do juiz fica em `/content/modelos/qwen3vl8b` na VM, com cópia no Drive
 | Chuva 2D vertical | não tem relação com o movimento da câmera |
 | Mapa de rota 3D sobre NAIP | quebrou; o Reconstructed usa 2D escuro com a rota azul |
 | Diorama/mesa de comando low-poly (Kriegsmomente) | "amador", ilustra sem explicar |
+| Modelo de 917 mil faces com mapa normal, vidro e portas | "você foi no modelo mais complexo": hiperfoco no modelo, energia no lugar errado |
 
 ---
 
@@ -140,3 +146,4 @@ O modelo do juiz fica em `/content/modelos/qwen3vl8b` na VM, com cópia no Drive
 | 04/11 | turbulência GSAP + linhas de velocidade + HUD de 5 números | trecho de dinamismo do Reconstructed reproduzido |
 | 04/11 | olho da G4 (régua + Qwen3-VL-8B) | verificação dentro da G4 em JSON curto |
 | 04/11 | regra: energia na composição, orçamento de detalhe | próximo: biblioteca de tomadas e cena da cratera |
+| 04/11 | troca para o modelo simples (29 mil faces) + atlas chapado de duas cores (janela = disco) | aprovado; modelo congelado. Composição: `producao3d/learjet_prova/COMPOSICAO_P3.md` (10 enquadramentos, planos por frase) |

@@ -25,7 +25,7 @@ else:
 if "--sem-prep" not in sys.argv:
     tar = os.path.join(TMP, "lj_brutos.tar")
     with tarfile.open(tar, "w") as t:
-        t.add(r"D:\reconstruccion\assets\sketchfab\bombardier_learjet_45_6dff41", arcname="learjet")
+        t.add(r"D:\reconstruccion\assets\sketchfab\learjet45_chapado", arcname="learjet")   # Learjet 45 do Reconstructed (rammgraffic, CC-BY) com atlas chapado
         t.add(r"D:\reconstruccion\06_greenacres_p2\blender\assets\greenacres_2km.glb", arcname="greenacres_2km.glb")
         t.add(r"D:\reconstruccion\06_greenacres_p2\blender\assets\naip_greenacres_3km.jpg", arcname="naip_greenacres_3km.jpg")
         t.add(r"D:\reconstruccion\07_greenacres_p3\dados\naip\naip_queda.jpg", arcname="naip_queda.jpg")

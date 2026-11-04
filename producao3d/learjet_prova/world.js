@@ -24,70 +24,62 @@ export function buildWorld({cidadeGltf, chaoGltf, jetGltf = null}) {
   jet.rotation.order = 'YZX'; // rolagem (x) primeiro, depois arfagem (z), depois proa (y)
   let model, elev = [], elevMat = new THREE.MeshStandardMaterial();
   if (jetGltf) {
-    // teste A/B: o Learjet 45 do Sketchfab (KarimFatatry, CC-BY 4.0), o mesmo do Reconstructed, com a receita nova
-    model = jetGltf.scene;
-    model.scale.setScalar(8.84);
-    const paint = new THREE.MeshStandardMaterial({color: '#c3c1bd', metalness: 0.35, roughness: 0.45, envMapIntensity: 1.1}); // acetinado perolado, sem estouro (2ª análise do sócio, 04/11)
-    const glass = new THREE.MeshStandardMaterial({color: '#07090c', metalness: 0.0, roughness: 0.06, envMapIntensity: 1.0}); // vidro escuro que reflete o céu
-    model.traverse((o) => {
+    // Learjet 45 SIMPLES (rammgraffic, CC-BY; o mesmo que o Reconstructed credita). Sem ajuste fino: orienta, escala,
+    // esconde o trem baixado e pinta liso; atlas chapado de duas cores (janela = disco cinza).
+    const raw = jetGltf.scene;
+    const TREM = /^(rueda|eje_ruedas|base_suspension|cable_l|point\.01[23]|suspension|cubierta_tren)/i; // trem baixado e portas abertas
+    const paint = new THREE.MeshStandardMaterial({color: '#c3c1bd', metalness: 0.35, roughness: 0.45, envMapIntensity: 1.1});
+    raw.traverse((o) => {
       if (!o.isMesh) return;
-      let a = o;
-      while (a && !/_low$/.test(a.name || '')) a = a.parent;
-      const n = (a?.name || '').replace(/_low$/, '');
+      const n = o.material?.name || '';
+      if (TREM.test(n)) { o.visible = false; return; }
+      const m = paint.clone();
+      m.userData.nome = n;
+      // atlas chapado (assets/learjet45_chapado): pintura + cinza-escuro, janela = disco; cor vem toda da textura
+      if (o.material.map) { m.map = o.material.map; m.color.set('#ffffff'); }
+      if (/^led/.test(n)) m.emissive = new THREE.Color('#ff2a1a').multiplyScalar(1.5);
+      o.material = m;
       o.castShadow = o.receiveShadow = true;
-      if (n === 'Airplane') {
-        const m = paint.clone();
-        m.normalMap = o.material.normalMap;
-        // a textura original da fuselagem traz o para-brisa escuro e as linhas; a cor cinza quente tinge por cima
-        // da textura original usa-se SÓ o alfa: o para-brisa é transparente nela e deixa ver a cabine preta;
-        // a cor (com as faixas da pintura original) é descartada, fica o cinza quente
-        if (o.material.map) {
-          m.map = o.material.map;
-          // onde a textura é transparente (para-brisa), vira vidro escuro e liso, com reflexo — o preto do Reconstructed
-          m.onBeforeCompile = (sh) => {
-            sh.fragmentShader = sh.fragmentShader
-              .replace('#include <map_fragment>', 'float ta = texture2D( map, vMapUv ).a;\ndiffuseColor.rgb = mix(vec3(0.02, 0.025, 0.032), diffuseColor.rgb, smoothstep(0.35, 0.65, ta));')
-              .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor = mix(0.05, roughnessFactor, smoothstep(0.35, 0.65, ta));');
-          };
-        }
-        o.material = m;
-      } else o.material = n === 'Windows' || n === 'WindowsGlass' || /^Cockpit|^WallToCockpit/.test(n) ? glass : paint;
     });
+    // orientar: comprimento no eixo x, nariz para -x (estabilizador horizontal 'ala_cola' em +x), comprimento real 17,68 m
+    const caixa = (obj) => { // só malhas visíveis (o trem escondido não entra no centro)
+      const b = new THREE.Box3();
+      obj.traverse((o) => { if (o.isMesh && o.visible) b.expandByObject(o); });
+      return b;
+    };
+    const holder = new THREE.Group();
+    holder.add(raw);
+    holder.updateMatrixWorld(true);
+    const sz = caixa(holder).getSize(new THREE.Vector3());
+    if (sz.z > sz.x) holder.rotation.y = Math.PI / 2;
+    holder.updateMatrixWorld(true);
+    const estab = [];
+    raw.traverse((o) => { if (o.isMesh && /^ala_cola/i.test(o.material.userData.nome || '')) estab.push(o); });
+    const cx = caixa(holder).getCenter(new THREE.Vector3()).x;
+    if (estab.length && caixa(estab[0]).getCenter(new THREE.Vector3()).x < cx) holder.rotation.y += Math.PI;
+    holder.updateMatrixWorld(true);
+    const bb3 = caixa(holder), L = bb3.getSize(new THREE.Vector3()).x;
+    model = new THREE.Group();
+    model.add(holder);
+    model.scale.setScalar(17.68 / L);
+    const c3 = bb3.getCenter(new THREE.Vector3());
+    holder.position.set(-c3.x, -c3.y, -c3.z);
     jet.add(model);
-    {
-      let wings = null;
-      model.traverse((o) => { if (o.isMesh && /^Wings/.test(o.parent?.name || '')) wings = o; });
-      if (wings) {
-        const p = wings.geometry.attributes.position;
-        let zl = -1e9, zr = 1e9, tl = null, tr = null;
-        for (let i = 0; i < p.count; i++) {
-          const z = p.getZ(i);
-          if (z > zl) (zl = z), (tl = [p.getX(i), p.getY(i), z]);
-          if (z < zr) (zr = z), (tr = [p.getX(i), p.getY(i), z]);
-        }
-        for (const [c, at] of [['#ff2a1a', tl], ['#1aff5a', tr]]) {
-          const m = new THREE.Mesh(new THREE.SphereGeometry(0.006, 12, 8), new THREE.MeshBasicMaterial({color: new THREE.Color(c).multiplyScalar(1.6)}));
-          m.position.set(...at);
-          model.add(m);
-        }
-      }
-    }
-    // profundor esquerdo: bordo de fuga do estabilizador medido no modelo (x 0,953 em z 0,10 -> 0,986 em z 0,28; y 0,237)
-    elevMat = paint.clone();
-    elevMat.emissive = new THREE.Color('#ff1a0e').multiplyScalar(3.0);
-    elevMat.emissiveIntensity = 0;
-    const xte = (z) => 0.953 + ((0.986 - 0.953) * (z - 0.1)) / 0.18, sweep = Math.atan((0.986 - 0.953) / 0.18), Z = [0.035, 0.12, 0.205, 0.29];
-    for (let i = 0; i < 3; i++) {
-      const zc = (Z[i] + Z[i + 1]) / 2;
-      const m = new THREE.Mesh(new THREE.BoxGeometry(0.042, 0.0055, (Z[i + 1] - Z[i]) / Math.cos(sweep) - 0.002), elevMat);
+    // profundor esquerdo = o estabilizador do lado esquerdo do piloto (+z com o nariz em -x): acende e se solta na tomada D
+    jet.updateMatrixWorld(true);
+    const esq = estab.sort((a, b) => caixa(b).getCenter(new THREE.Vector3()).z - caixa(a).getCenter(new THREE.Vector3()).z)[0];
+    if (esq) {
       const piv = new THREE.Group();
-      piv.position.set((xte(zc) - 0.021) * 8.84, 0.2375 * 8.84, zc * 8.84);
-      piv.rotation.y = sweep;
-      m.scale.setScalar(8.84);
-      piv.add(m);
-      piv.userData.home = piv.position.clone();
+      piv.position.copy(jet.worldToLocal(caixa(esq).getCenter(new THREE.Vector3())));
       jet.add(piv);
-      elev.push(piv);
+      piv.updateMatrixWorld(true);
+      piv.attach(esq);
+      elevMat = esq.material;
+      elevMat.emissive = new THREE.Color('#ff1a0e').multiplyScalar(3.0);
+      elevMat.emissiveIntensity = 0;
+      piv.userData.sempre = true;
+      piv.userData.home = piv.position.clone();
+      elev = [piv];
     }
   } else {
     const LJ = buildLearjet60();
@@ -235,6 +227,6 @@ export function buildWorld({cidadeGltf, chaoGltf, jetGltf = null}) {
     return {tt, altFt: mix(4), vz: mix(5), pos: p};
   };
 
-  const anchors = {elev: () => (elev[1] ? elev[1].localToWorld(new THREE.Vector3(0.25, 0, 0)) : jet.localToWorld(new THREE.Vector3(7.6, 2.6, 1.2))), crater: () => new THREE.Vector3(0, 0, 0)};
+  const anchors = {elev: () => (elev[1] ? elev[1].localToWorld(new THREE.Vector3(0.25, 0, 0)) : elev[0] ? elev[0].localToWorld(new THREE.Vector3()) : jet.localToWorld(new THREE.Vector3(7.6, 2.6, 1.2))), crater: () => new THREE.Vector3(0, 0, 0)};
   return {root, jet, model, elev, elevMat, chao, cidade, setSmoke, setRoute, anchors};
 }

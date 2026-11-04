@@ -18,17 +18,19 @@ const kill = (n) => {
 // ---------------------------------------------------------------- Learjet
 {
   const doc = await io.read(`${SRC}/learjet/scene.gltf`);
+  // modelo simples do Reconstructed (atlas único, material 'cuerpo'): vai inteiro; o trem baixado é escondido no world.js
+  const simples = doc.getRoot().listMaterials().some((m) => m.getName() === 'cuerpo');
   const KEEP = /^(Airplane|Wings|Turbine|Fins|Rudder|Windows|WindowsGlass|DoorsUnderpart|DoorsUpperpart|Cockpit|CockpitWall|WallToCockpit|GearFlapBottomLeft|GearFlapBottomRight|GearFlapLeft|GearFlapRight|NoseGearFlapLeft|NoseGearFlapRight)_low$/; // portas do trem fechadas: sem elas a barriga mostra o buraco
   for (const n of doc.getRoot().listNodes()) {
     const nm = n.getName() || '';
-    if (/_low$/.test(nm) && !KEEP.test(nm)) kill(n);
+    if (!simples && /_low$/.test(nm) && !KEEP.test(nm)) kill(n);
   }
-  for (const m of doc.getRoot().listMaterials()) {
+  if (!simples) for (const m of doc.getRoot().listMaterials()) {
     // 04/11: a fuselagem MANTÉM a textura de cor (o para-brisa escuro e as linhas estão pintados nela)
     if (m.getName() !== 'Body') m.setBaseColorTexture(null).setNormalTexture(null);
     m.setMetallicRoughnessTexture(null).setEmissiveTexture(null).setOcclusionTexture(null);
   }
-  await doc.transform(prune(), dedup());
+  await doc.transform(...(simples ? [prune()] : [prune(), dedup()])); // dedup fundiria os materiais do atlas e apagaria os nomes (rueda, cola, led)
   await io.write(`${OUT}/learjet.glb`, doc);
 }
 
