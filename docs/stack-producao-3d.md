@@ -175,3 +175,4 @@ O modelo do juiz fica em `/content/modelos/qwen3vl8b` na VM, com cópia no Drive
 | 04/11 | céu em camadas 2.5D no domo: deck de nuvens correndo (horizonte e velocidade), teto escuro em paralaxe, faixa clara atrás do avião, névoa na cor do horizonte | v1: deck claro demais, o avião some |
 | 04/11 | céu v2: deck escurecido, névoa fina | **aprovado pelo Eduardo** ("já melhorou bastante"): o avião se recorta, horizonte e velocidade legíveis |
 | 04/11 | acabamento: 24 fps + obturador 180° (12 subquadros) + grão + vinheta + 10 bits | A/B feito na G4; HUD nítido, borrão só no 3D |
+| 04/11 | pipeline oficial de marcadores, textos e destaques (8 tipos, autoria por JSON na palavra, 3D depois do motion blur) | aprovada; doc em `docs/marcadores.md`; batedor pendente |
