@@ -199,3 +199,8 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 04/11 | leitura óptica do K16 → DIRETIVA DO PRÓXIMO VÍDEO (topo do documento): creme, skill teardown inteira, objeto vivo, mecanismo com 2 números, kit/karten nos mapas, sem repetição, legendas por frase, título coerente, 8 bits |
 | 04/11 | referência do design system = `tracer3d_15_emser/teardown/morse_1870` (telégrafo do K15, SKILL teardown completa) |
 | 04/11 | **sem política**; evento quente no pico com ângulo novo (Learjet: 1º fez 1,8 mi, o 2º flopou no mesmo ângulo) |
+| 04/11 | **Learjet P4 (ES)**: ângulo "¿Por qué no quedó casi nada del avión?" + take inédito das **duas altitudes do mesmo transponder** (barométrica congela em 8.750 ft por 9,7 s; GPS cai de 9.475 a 325 ft): o "nivelamento a 8.000 ft" citado por ex-investigadores não está nos dados. Formular como pergunta, sem nomear quem leu errado |
+| 04/11 | mecanismo da P4 = **cauda em T por código** (`producao3d/learjet_p4/cauda.js`): o modelo pronto não separa o profundor. Pino atrás + atuador de fuso com 2 motores + profundor de 3 dobradiças; uma entrada (escala PITCH TRIM 1–12 e graus do profundor) move peça, indicador e régua de Mach. Medidas da empenagem do LJ35 (foi para o 60), rótulo "aprox." |
+| 04/11 | estúdio **creme** também no ES para o take de mecanismo (`CLIMA.estudio`); céu 2.5D continua nas tomadas de voo |
+| 04/11 | batedor P4 na G4: 15 stills + 5 clipes + folha num lote só (`g4_p4.py batedor`, faixa 3d com todos os jobs ao mesmo tempo) |
+| 04/11 | lição de operação: nunca `grep` no transcript .jsonl da sessão (centenas de MB); travou o disco D: por minutos |
