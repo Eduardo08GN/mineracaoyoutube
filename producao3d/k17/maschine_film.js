@@ -14,7 +14,18 @@ import {TAKES} from './takes.js';
 
 const q = new URLSearchParams(location.search);
 export const TAKE = (window.__SIM_CONFIG && window.__SIM_CONFIG.take) || q.get('take') || 'brueckenschlag';
-const spec = TAKES[TAKE];
+const CF0 = window.__SIM_CONFIG || {};
+// take inteiro por JSON (produção): âncora como texto "nome:i", formato do contador por nome
+const FMT = {kg: (v) => `${Math.round(v).toLocaleString('de-DE')} kg`, m1: (v) => `${v.toFixed(1).replace('.', ',')} m`, ms2: (v) => `${v.toFixed(2).replace('.', ',')} m/s`,
+  min: (v) => `${Math.round(v)} min`, d1: (v) => v.toFixed(1).replace('.', ','), n: (v) => String(Math.round(v)), t: (v) => `${(v / 1000).toFixed(1).replace('.', ',')} t`};
+const deJSON = (sp) => ({...sp, notes: () => (sp.notes || []).map((it) => {
+  const o = {...it};
+  if (typeof it.a === 'string') { const [n, i] = it.a.split(':'); o.a = (A) => (i === undefined ? A[n]() : A[n](+i)); }
+  if (typeof it.fmt === 'string') o.fmt = FMT[it.fmt];
+  if (it.acc === true) o.acc = () => true;
+  return o;
+})});
+const spec = CF0.spec ? deJSON(CF0.spec) : TAKES[TAKE];
 const track = (keys, t, def = 0) => (keys ? keyed(keys, t, easeInOutCubic) : def);
 
 async function loadFonts() {

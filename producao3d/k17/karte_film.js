@@ -38,6 +38,8 @@ const TAKES = [
   {id: 'maas', dur: 6, data: '31. August 1870', pfeil: [{de: 'saar', t: [-9, -8], larg: 0.32}, {de: 'maas', t: [0.5, 4.2], larg: 0.32}], bruecke: {at: DON, t: [3.6, 5.4], esc: 3.0},
     cam: [[0, {pos: [DON[0] + 46, 58, DON[1] + 56], tgt: [DON[0] + 22, 0, DON[1] + 18], fov: 32}], [6, {pos: [DON[0] + 26, 38, DON[1] + 40], tgt: [DON[0] + 8, 0, DON[1] + 8], fov: 30}]]},
 ];
+const CFG = window.__SIM_CONFIG || {};
+if (CFG.spec) TAKES.splice(0, TAKES.length, CFG.spec);
 let acc = 0;
 for (const k of TAKES) (k.t0 = acc), (acc += k.dur);
 export const DURATION = acc;
@@ -174,6 +176,7 @@ export const run = () =>
     }
     // setas
     const setas = {};
+    for (const k of TAKES) for (const pf of k.pfeil || []) if (pf.pts) ROTAS[pf.de] = pf.pts;
     for (const [id, r] of Object.entries(ROTAS)) {
       const curva = new THREE.CatmullRomCurve3(r.map(([lo, la]) => V(lo, la, 0)));
       const pts = curva.getSpacedPoints(160).map((p) => new THREE.Vector3(p.x, alt(p.x, p.z), p.z));
@@ -200,7 +203,7 @@ export const run = () =>
     const st = document.createElement('style');
     st.textContent = `.kl{position:absolute;white-space:nowrap;color:${INK};text-shadow:0 0 4px ${PAPIER},0 0 8px ${PAPIER},0 0 12px ${PAPIER};pointer-events:none}
       .kl.fl{font:italic 30px 'IM Fell',serif;letter-spacing:4px;color:#3b5566} .kl.st{font:28px 'IM Fell Roman',serif;letter-spacing:1px} .kl.st::before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;background:${INK};margin-right:8px;vertical-align:middle}
-      .kl.ac{color:${ACC};font:italic 40px 'IM Fell',serif} .kl.tr{font:italic 34px 'IM Fell',serif;letter-spacing:10px;color:rgba(42,38,34,.62)}
+      .kl.ac{color:${ACC};font:italic 40px 'IM Fell',serif} .kl.tr{font:italic 34px 'IM Fell',serif;letter-spacing:10px;color:rgba(42,38,34,.62)} .kl.st2{font:italic 32px 'IM Fell',serif}
       #dat{position:absolute;left:70px;top:64px;font:italic 64px 'IM Fell',serif;color:${INK};white-space:nowrap;overflow:hidden}
       #pap{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(ellipse 78% 72% at 50% 48%, rgba(0,0,0,0) 60%, rgba(120,86,44,.30) 100%)}
       #grain{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.14;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .36 0 0 0 0 .25 0 0 0 .55 0'/></filter><rect width='400' height='400' filter='url(%23f)'/></svg>")}`;
@@ -214,6 +217,49 @@ export const run = () =>
       {txt: 'F R A N K R E I C H', cls: 'fl tr', at: () => V(5.25, 49.05), pri: 4}, {txt: 'P R E U S S E N', cls: 'fl tr', at: () => V(6.75, 49.55), pri: 4},
     ];
     const els = ROT.map((r) => { const d = document.createElement('div'); d.className = `kl ${r.cls}`; d.textContent = r.txt; lay.appendChild(d); return d; });
+    const svgM = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svgM.setAttribute('viewBox', '0 0 1600 900');
+    svgM.style.cssText = 'position:absolute;inset:0;width:1600px;height:900px;pointer-events:none'; lay.appendChild(svgM);
+    const uhr = document.createElement('div'); uhr.className = 'kl'; uhr.style.cssText += ";right:70px;top:66px;font:italic 54px 'IM Fell',serif;text-align:right"; lay.appendChild(uhr);
+    const marcTxt = []; const txtEl = (i) => (marcTxt[i] ??= (() => { const d = document.createElement('div'); d.className = 'kl st2'; lay.appendChild(d); return d; })());
+    const esquema = (k, u) => {
+      let g = ''; uhr.style.opacity = 0; marcTxt.forEach((d) => (d.style.opacity = 0));
+      const pr = (ll) => proj(V(ll[0], ll[1], 0.1));
+      (k.marcas || []).forEach((m, i) => {
+        const o = ss(m.t ?? 0, (m.t ?? 0) + 0.5, u);
+        if (o <= 0) return;
+        if (m.tipo === 'ok' || m.tipo === 'x') {
+          const p = pr(m.at); if (!p) return;
+          const c = m.tipo === 'x' ? ACC : INK;
+          g += `<g opacity="${o}"><circle cx="${p[0]}" cy="${p[1]}" r="17" fill="${PAPIER}" stroke="${c}" stroke-width="2.6"/>` +
+            (m.tipo === 'ok' ? `<path d="M${p[0] - 8} ${p[1]} l6 7 l11 -14" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/>` : `<path d="M${p[0] - 8} ${p[1] - 8} l16 16 M${p[0] + 8} ${p[1] - 8} l-16 16" stroke="${c}" stroke-width="3.6" stroke-linecap="round"/>`) + '</g>';
+          if (m.txt) { const d = txtEl(i); d.textContent = m.txt; d.style.opacity = o; d.style.left = `${p[0] + 24}px`; d.style.top = `${p[1] - 18}px`; d.style.color = c; }
+        }
+        if (m.tipo === 'linie' || m.tipo === 'zug') {
+          const pts = m.pts.map(pr).filter(Boolean); if (pts.length < 2) return;
+          const kk = m.tipo === 'zug' ? 1 : ss(m.t ?? 0, (m.t ?? 0) + (m.dur ?? 1.5), u);
+          g += `<polyline points="${pts.map((p) => p.join(',')).join(' ')}" fill="none" stroke="${INK}" stroke-width="${m.tipo === 'zug' ? 3 : 2.4}" stroke-dasharray="${m.tipo === 'zug' ? '12 5 2 5' : '10 7'}" opacity="${o * (m.tipo === 'zug' ? 0.7 : kk)}"/>`;
+          if (m.tipo === 'zug') {
+            // a locomotiva anda pela linha entre m.t e m.t + m.dur (com parada opcional em m.halt = [s0, s1] na fração da linha)
+            const kz = ss(m.t ?? 0, (m.t ?? 0) + (m.dur ?? 3), u), segs = []; let L = 0;
+            for (let j = 1; j < pts.length; j++) { const l = Math.hypot(pts[j][0] - pts[j - 1][0], pts[j][1] - pts[j - 1][1]); segs.push(l); L += l; }
+            let rest = L * kz, j = 1; while (j < pts.length && rest > segs[j - 1]) { rest -= segs[j - 1]; j++; }
+            j = Math.min(j, pts.length - 1); const f = Math.min(1, rest / (segs[j - 1] || 1));
+            const x = pts[j - 1][0] + (pts[j][0] - pts[j - 1][0]) * f, y = pts[j - 1][1] + (pts[j][1] - pts[j - 1][1]) * f;
+            g += `<g opacity="${o}" transform="translate(${x} ${y})"><rect x="-20" y="-11" width="40" height="18" rx="3" fill="${INK}"/><circle cx="-11" cy="10" r="5" fill="${INK}"/><circle cx="11" cy="10" r="5" fill="${INK}"/>` +
+              (m.fass ? `<g transform="translate(0 -26)"><ellipse rx="10" ry="13" fill="${ACC}"/><line x1="-10" y1="-4" x2="10" y2="-4" stroke="${PAPIER}" stroke-width="2"/><line x1="-10" y1="4" x2="10" y2="4" stroke="${PAPIER}" stroke-width="2"/></g>` : '') + '</g>';
+          }
+          if (m.txt) { const mid = pts[Math.floor(pts.length / 2)]; const d = txtEl(i); d.textContent = m.txt; d.style.opacity = o * kk; d.style.left = `${mid[0] + 14}px`; d.style.top = `${mid[1] - 42}px`; d.style.color = INK; }
+        }
+        if (m.tipo === 'ring') {
+          const c0 = pr(m.at); if (!c0) return;
+          const kk = ss(m.t ?? 0, (m.t ?? 0) + (m.dur ?? 2.5), u), n = 72, pts = [];
+          for (let j = 0; j <= Math.floor(n * kk); j++) { const a = (j / n) * Math.PI * 2; const ll = [m.at[0] + (m.r / (KX)) * Math.cos(a), m.at[1] + (m.r / KY) * Math.sin(a)]; const p = pr(ll); if (p) pts.push(p); }
+          if (pts.length > 1) g += `<polyline points="${pts.map((p) => p.join(',')).join(' ')}" fill="none" stroke="${PREUSSEN}" stroke-width="6" stroke-linecap="round" opacity="${o * 0.85}"/>`;
+        }
+        if (m.tipo === 'uhr') { uhr.textContent = m.txt; uhr.style.opacity = o; }
+      });
+      svgM.innerHTML = g;
+    };
     const lblPonte = document.createElement('div'); lblPonte.className = 'kl ac'; lblPonte.textContent = 'Pontonbrücke'; lay.appendChild(lblPonte);
     const proj = (v) => { const p = v.clone().project(camera); return p.z > 1 ? null : [(p.x * 0.5 + 0.5) * 1600, (-p.y * 0.5 + 0.5) * 900]; };
     const frame = (k, u) => { const c = camAt(k, u); camera.position.set(...c.pos); camera.fov = c.fov; camera.updateProjectionMatrix(); camera.lookAt(...c.tgt); camera.updateMatrixWorld(); };
@@ -223,6 +269,7 @@ export const run = () =>
       const ocup = [], res = [];
       const ord = ROT.map((r, i) => i).sort((a, b) => ROT[b].pri - ROT[a].pri);
       for (const i of ord) {
+        if (k.cidades && ROT[i].cls === 'st' && !k.cidades.includes(ROT[i].txt)) { res[i] = null; continue; }
         const p = proj(ROT[i].at()); const w = els[i].offsetWidth, h = els[i].offsetHeight;
         if (!p) { res[i] = null; continue; }
         const cands = [[12, -h / 2], [-w - 12, -h / 2], [-w / 2, -h - 10], [-w / 2, 10]];
@@ -277,10 +324,12 @@ export const run = () =>
         // rótulos (posição escolhida no meio do take) e entrada suave
         const lug = cacheLug.get(k.id);
         ROT.forEach((r, i) => {
+          if (k.cidades && r.cls === 'st' && !k.cidades.includes(r.txt)) { els[i].style.opacity = 0; return; }
           const p = proj(r.at()), L = lug[i];
           els[i].style.opacity = p && L ? ss(0.3 + i * 0.05, 0.9 + i * 0.05, u) : 0;
           if (p && L) { els[i].style.left = `${p[0] + L[0]}px`; els[i].style.top = `${p[1] + L[1]}px`; }
         });
+        esquema(k, u);
         // data escrita da esquerda para a direita (máscara)
         const dat = document.getElementById('dat');
         dat.textContent = k.data;
