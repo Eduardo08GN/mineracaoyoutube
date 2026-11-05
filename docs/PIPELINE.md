@@ -8,7 +8,7 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 
 ## ★ PIPELINE FAB + SIMULAÇÃO + G4 (What If ES narrado), o "salto de qualidade" de 05/11/2026
 O mapa completo está em **`docs/pipeline-fab-g4.md`**: os 5 insights, a arquitetura, o benchmark da G4, o levantamento, as fraquezas e a projeção de tempo. Código em `producao3d/whatif_es_07/`, `producao3d/fab/` e `producao3d/infra/`.
-- **Cenário:** biblioteca pronta do Fab (199 GLBs catalogados), nada modelado à mão. Todo batedor roda a **Frente Fab autônoma** (`docs/BATEDOR.md`, passo 0): grátis sem pedir, pago com o OK do Eduardo.
+- **Cenário:** biblioteca pronta do Fab (199 GLBs catalogados) + stacks leves de three.js do GitHub, nada modelado à mão. Todo batedor roda as **frentes autônomas Fab e GitHub three.js** (`docs/BATEDOR.md`, passo 0): grátis sem pedir, pago com o OK do Eduardo.
 - **Antes de construir:** a referência de dinamismo é medida a 24 fps (What If Sim: mov 2,11 e 24% parados). O Elapsed fica só como referência visual.
 - **Simulação:** o mundo muda dentro do plano, e um parâmetro (`p`) gera o mundo, os números do HUD e a frase, por função pura de (t, p).
 - **G4:** o padrão é P=48 com partida a cada 0,3 s (96 s → 67 s por minuto de vídeo). Próximos passos: NVENC, captura crua, jobs simultâneos e ilhas WebGPU (WebGPU já provado na G4).
@@ -242,3 +242,4 @@ O mapa completo está em **`docs/pipeline-fab-g4.md`**: os 5 insights, a arquite
 | 05/11 | **G4:** WebGPU NVIDIA provado no headless (Vulkan). Benchmark: o gargalo era a partida de 2 s entre Chromes; o novo padrão do `render.sh` é P=48 com 0,3 s. A GPU média fica em 25%, então o próximo passo é NVENC, captura crua e jobs simultâneos. | 96 s → 67 s por minuto de vídeo |
 | 05/11 | **Batedor 07** (malecón, maré, multidão, HUD com odômetro, comparação dourada, rótulos 3D, frase cinética). Elogiado pelo Eduardo como "salto de qualidade gigantesco". | mov 4,13, 0% parados, 420 quadros em 42 s |
 | 05/11 | **Frente Fab autônoma** em todo batedor (`docs/BATEDOR.md`) e documento-mapa `docs/pipeline-fab-g4.md`, com a projeção de −55% de tempo por vídeo | — |
+| 05/11 | **Frente GitHub three.js autônoma** no batedor: buscar sem pedir stacks leves de modelagem e efeitos por código (procedural, instancing, shaders, HUD); MIT/Apache/BSD/CC0 sem pedir, GPL/AGPL/NC vetados; instalar no projeto do batedor e só promover à stack depois de provado | — |

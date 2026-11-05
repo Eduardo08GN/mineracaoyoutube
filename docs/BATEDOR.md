@@ -54,6 +54,36 @@ O salto do batedor 07 do What If ES veio de trocar modelagem por biblioteca pron
    - **arquivo bruto nunca vai para o repositório público** (o Fab Standard proíbe redistribuir).
 5. **Registrar no `LEVANTAMENTO_PRONTOS.md` do batedor:** o que entrou, de onde, a licença e o que melhorou na folha.
 
+### Frente GitHub three.js autônoma (Eduardo, 05/11): também roda sem pedir
+Além do Fab, todo batedor procura **stacks de modelagem inteligentes e leves em three.js**: peças por código que geram o objeto ou o mundo em vez de modelar à mão. Exemplos:
+- geradores procedurais (árvore, cidade, terreno, prédio, estrada, onda);
+- instanciamento e multidão;
+- materiais e shaders estilizados;
+- efeitos (água, nuvem, godrays, partículas);
+- HUD, texto e marcadores;
+- utilitários de cena (LOD, merge, rótulo em 3D).
+
+1. **Buscar:**
+   - `gh search repos` e `gh search code` com **muitas** variações de termo (three procedural X, r3f X, threejs generator X, tsl X, webgpu X);
+   - npm, grep.app e listas "awesome-threejs"/"awesome-r3f";
+   - skills e repositórios de exemplos;
+   - antes de tudo, o `package.json` e `D:/tmp/skills_threejs/`, porque às vezes o pronto já está instalado.
+2. **Critério de "leve e inteligente":**
+   - roda em three 0.180 (ou tem ilha WebGPU);
+   - é determinístico (seed ou função de t, para o render paralelo);
+   - pesa pouco (sem engine inteira por trás);
+   - tem demo;
+   - teve commit no último ano.
+3. **Licença:**
+   - **MIT, Apache 2.0, BSD, ISC e CC0** entram sem pedir;
+   - CC-BY entra com crédito na descrição;
+   - **GPL, AGPL e NC (não comercial) estão vetados** no código do vídeo; servem só como leitura de método, sem copiar.
+4. **Trazer:**
+   - instalar no projeto do batedor (nunca direto na stack travada: só sobe para `D:/whatif_es/stack` depois de provado);
+   - provar em still na G4;
+   - fixar a versão exata.
+5. **Limite:** até 30 min de busca por elemento. Registrar no `LEVANTAMENTO_PRONTOS.md` (repo, licença, estrelas, último commit, decisão) e, se adotado, em `docs/pacotes-por-canal.md`.
+
 ## Passo 1: prova curta
 - Monte a cena **a partir da demonstração do pacote** escolhido, com o mínimo de customização, e renderize 2 a 6 stills.
 - **Compare lado a lado** com quadros da referência (mesmo tipo de plano). Liste as disparidades: luz, sombra, textura, câmera, cor, pós.
