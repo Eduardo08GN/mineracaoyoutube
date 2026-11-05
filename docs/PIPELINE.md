@@ -6,6 +6,17 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 
 ---
 
+## ★ PIPELINE FAB + SIMULAÇÃO + G4 (What If ES narrado), o "salto de qualidade" de 05/11/2026
+O mapa completo está em **`docs/pipeline-fab-g4.md`**: os 5 insights, a arquitetura, o benchmark da G4, o levantamento, as fraquezas e a projeção de tempo. Código em `producao3d/whatif_es_07/`, `producao3d/fab/` e `producao3d/infra/`.
+- **Cenário:** biblioteca pronta do Fab (199 GLBs catalogados), nada modelado à mão. Todo batedor roda a **Frente Fab autônoma** (`docs/BATEDOR.md`, passo 0): grátis sem pedir, pago com o OK do Eduardo.
+- **Antes de construir:** a referência de dinamismo é medida a 24 fps (What If Sim: mov 2,11 e 24% parados). O Elapsed fica só como referência visual.
+- **Simulação:** o mundo muda dentro do plano, e um parâmetro (`p`) gera o mundo, os números do HUD e a frase, por função pura de (t, p).
+- **G4:** o padrão é P=48 com partida a cada 0,3 s (96 s → 67 s por minuto de vídeo). Próximos passos: NVENC, captura crua, jobs simultâneos e ilhas WebGPU (WebGPU já provado na G4).
+- **Batedor 07:** movimento 4,13 e 0% de quadros parados, 420 quadros em 42 s.
+- **Projeção:** cerca de −55% de tempo por vídeo (~5 h → ~2,3 h). O render (−30%) está medido; o resto se confirma no vídeo 1.
+
+---
+
 ## ★ DESIGN SYSTEM DO KRIEGSMOMENTE (canal alemão) — decisão do Eduardo, 04/11/2026
 - **Tema CREME**, nunca o escuro. O viewport tem fundo creme/bege de papel antigo (~`#e7ddca`), com sombras suaves.
 - **A escrita do take do telégrafo do K15** ("Ems – Berlin, den 13. Juli 1870"): serifa itálica de época escrita progressivamente na tela, rótulos com linha-guia fina terminada em ponto e gráficos traçados a tinta.
@@ -226,3 +237,8 @@ Branch: `producao/stack-3d-baseline`. Repositório público: nada de chave, toke
 | 05/11 | **mapas HD por região** (Copernicus a ~9 m/px na Maas e na Mosela) por cima do raster regional, com borda suave. Rótulos em coordenadas de tela quando a câmera dá zoom. A régua `lineal` vai sem contador quando o número do roteiro é arredondado. | os closes em 44 m/px ficavam borrados; o contador mostrava 51 km contra 52 km |
 | 05/11 | **som por ação** (`ton.py`): efeitos do MOSS-SoundEffect v2.0 gerados na G4 (o `uv` da VM ignora o venv, por isso `--python`), presos às palavras e aos eventos dos takes, mais um tom de sala a -50 LUFS. Sem música e sem cama audível; mix a -14 LUFS (`g4_mix.py`). | a v1 tinha 30 buracos de silêncio digital |
 | 05/11 | **cartão vivo**: `grundBild` (mapa da região sob o papel, em deriva limitada pela margem do zoom). Não use o nome `unter`: o `Titel` já tem essa prop, e a colisão travou o render (erro React #31 dentro do delayRender). Régua final: mov 1,31 e 46% parados (v1: 0,53 e 73%); cartões ainda 69% parados. É o próximo alvo. | pkill na VM com padrão que não casa consigo mesmo (`[r]emotion`); trava órfã: apagar `.render.lock` |
+| 05/11 | **What If ES vira molde What If Sim (dinamismo) narrado em ES.** O Elapsed fica só como referência visual. Stack corrigida pelo Eduardo: bibliotecas prontas do Fab + skills, não Blender à mão (`docs/referencias/whatifsim-24fps.md`, `elapsed-24fps.md`). | mov 2,11/24% × 0,99/44% |
+| 05/11 | **Biblioteca Fab:** Epic Launcher → `FabLibrary` → `producao3d/fab/fbx_para_glb.py` + `otimizar.mjs` → 199 GLBs com `catalogo.json`. Os arquivos brutos nunca entram no repositório (Fab Standard). | ingestão única |
+| 05/11 | **G4:** WebGPU NVIDIA provado no headless (Vulkan). Benchmark: o gargalo era a partida de 2 s entre Chromes; o novo padrão do `render.sh` é P=48 com 0,3 s. A GPU média fica em 25%, então o próximo passo é NVENC, captura crua e jobs simultâneos. | 96 s → 67 s por minuto de vídeo |
+| 05/11 | **Batedor 07** (malecón, maré, multidão, HUD com odômetro, comparação dourada, rótulos 3D, frase cinética). Elogiado pelo Eduardo como "salto de qualidade gigantesco". | mov 4,13, 0% parados, 420 quadros em 42 s |
+| 05/11 | **Frente Fab autônoma** em todo batedor (`docs/BATEDOR.md`) e documento-mapa `docs/pipeline-fab-g4.md`, com a projeção de −55% de tempo por vídeo | — |
