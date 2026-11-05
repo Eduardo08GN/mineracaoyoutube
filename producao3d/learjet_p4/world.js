@@ -228,5 +228,5 @@ export function buildWorld({cidadeGltf, chaoGltf, jetGltf = null}) {
   };
 
   const anchors = {elev: () => (elev[1] ? elev[1].localToWorld(new THREE.Vector3(0.25, 0, 0)) : elev[0] ? elev[0].localToWorld(new THREE.Vector3()) : jet.localToWorld(new THREE.Vector3(7.6, 2.6, 1.2))), crater: () => new THREE.Vector3(0, 0, 0)};
-  return {root, jet, model, elev, elevMat, chao, cidade, setSmoke, setRoute, anchors};
+  return {root, jet, model, elev, elevMat, chao, cidade, setSmoke, setRoute, anchors, crater};
 }
