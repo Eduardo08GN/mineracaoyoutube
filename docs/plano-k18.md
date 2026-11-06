@@ -25,7 +25,7 @@ O "PowerPoint" vinha da arquitetura: cada batida era um slide (cartão, foto, ma
    - a câmera leva o olho até o rótulo;
    - a gramática varia entre batidas.
    - Escrita do K15: serifa itálica de época que se escreve, linha-guia com ponto, gráfico a tinta.
-5. **Take eureka obrigatório**, com o mecanismo acontecendo e números vivos. Exemplo de molde: a peça que trabalha se abre no teardown e dois números ficam lado a lado (cadência, alcance, tempo de recarga), e a consequência aparece no mapa no mesmo take.
+5. **Take eureka obrigatório, no padrão EXPLICAÇÃO CIENTÍFICA REVELADORA** (checklist de 6 pontos: fenômeno pouco conhecido, mecanismo inesperado, como e por quê em detalhe, analogia/conta/demonstração visual, conexão com algo maior, conhecimento real; narrativa de fascínio), com o mecanismo acontecendo e números vivos. Exemplo de molde: a peça que trabalha se abre no teardown e dois números ficam lado a lado (cadência, alcance, tempo de recarga), e a consequência aparece no mapa no mesmo take.
 6. **Lugares que voltam piores.** De 2 a 4 locais da batalha em 3D (aldeia, bosque, ponte), com prontos do Fab e relevo real, visitados de novo a cada hora: fumaça, ruína, multidão em contagem.
 7. **Gente em cena.** Na frente Fab/GitHub autônoma, buscar pacotes grátis de soldados do século XIX ou low poly com uniforme; multidão por instancing e número visível ("12.000 Mann").
 8. **Som:** sem música (regra do canal). Voz + efeitos pontuais do MOSS presos aos eventos (salva de artilharia, sino da hora, galope) e tom de sala a −50 LUFS. Nada de silêncio digital.
