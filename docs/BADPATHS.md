@@ -69,3 +69,8 @@ Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam
 - **Causa:** envelope da voz (duck) com `np.convolve(x, np.ones(12000)/12000)` sobre ~42 mi de amostras. É convolução direta, O(N·K), ~5×10¹¹ operações.
 - **Correção:** média móvel em O(N) com `scipy.ndimage.uniform_filter1d(x, K)` (ou soma cumulativa): a mix inteira em 1,5 min.
 - **Regra:** em áudio de vídeo inteiro, janela > ~100 amostras nunca vai para `np.convolve`; use `uniform_filter1d` ou `scipy.signal.fftconvolve`.
+
+## Ligar a G4 com a narração do AI Studio rodando no mesmo navegador (05/11, What If ES 08)
+- **Sintoma:** o `canal.ligar` deu `CANAL_SEM_URL`, e o AI Studio baixou WAV vazio (0 bytes) no mesmo capítulo, várias vezes seguidas.
+- **Causa:** os dois scripts usam o mesmo Dolphin (Ivone) por CDP. O Colab e o AI Studio disputam o foco e o download.
+- **Regra:** nunca rodar ao mesmo tempo nada que dirija o navegador (ligar/reconectar a G4, narração, Flow). O que roda NA G4 depois de ligada não usa o navegador e pode ir em paralelo à vontade. Ordem: narrar → ligar G4 → lote paralelo na G4.

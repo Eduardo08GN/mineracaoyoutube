@@ -1,0 +1,120 @@
+{
+ "musica": [
+  {
+   "id": "m01",
+   "s": 0.6,
+   "e": 28.2,
+   "caption": "instrumental cinematic documentary film score, gentle piano ostinato, warm strings, curious and hopeful, slow build, 90 bpm"
+  },
+  {
+   "id": "m02",
+   "s": 28.9,
+   "e": 58.14,
+   "caption": "instrumental cinematic documentary film score, piano ostinato, warm strings, light percussion pulse, rising tension, 92 bpm"
+  },
+  {
+   "id": "m03",
+   "s": 58.84,
+   "e": 82.2,
+   "caption": "instrumental cinematic documentary film score, orchestral strings, steady pulse, piano motif, growing tension, 95 bpm"
+  },
+  {
+   "id": "m04",
+   "s": 82.9,
+   "e": 141.58,
+   "caption": "instrumental cinematic documentary film score, ambient pads, glassy textures, sparse piano, cold and mysterious atmosphere, slow"
+  },
+  {
+   "id": "m05",
+   "s": 142.28,
+   "e": 187.0,
+   "caption": "instrumental cinematic documentary film score, driving strings, ticking percussion, building momentum, 100 bpm"
+  },
+  {
+   "id": "m06",
+   "s": 187.7,
+   "e": 225.06,
+   "caption": "instrumental cinematic documentary film score, epic orchestral build, low brass, timpani, determined, 100 bpm"
+  },
+  {
+   "id": "m07",
+   "s": 225.76,
+   "e": 258.08,
+   "caption": "instrumental cinematic documentary film score, orchestral strings, marching percussion, intense and dramatic, 104 bpm"
+  },
+  {
+   "id": "m08",
+   "s": 258.78,
+   "e": 285.98,
+   "caption": "instrumental cinematic documentary film score, tense string ostinato, pulsing synth bass, competitive energy, 108 bpm"
+  },
+  {
+   "id": "m09",
+   "s": 286.68,
+   "e": 337.76,
+   "caption": "instrumental cinematic documentary film score, warm ambient score, soft marimba, airy pads, quena flute melody, gentle wonder, 84 bpm"
+  },
+  {
+   "id": "m10",
+   "s": 338.46,
+   "e": 387.94,
+   "caption": "instrumental cinematic documentary film score, climactic orchestral, charango and quena flute, big drums, triumphant tension, 100 bpm"
+  },
+  {
+   "id": "m11",
+   "s": 388.64,
+   "e": 418.12,
+   "caption": "instrumental cinematic documentary film score, majestic slow orchestral, sustained strings, piano, awe and resolution, 80 bpm"
+  },
+  {
+   "id": "m12",
+   "s": 418.82,
+   "e": 441.46,
+   "caption": "instrumental cinematic documentary film score, calm reflective piano and strings, hopeful outro, 76 bpm"
+  }
+ ],
+ "efeitos": [
+  {
+   "id": "ondas",
+   "s": 0,
+   "e": 28,
+   "prompt": "small ocean waves washing over a concrete seawall, gentle splashes, distant seagulls"
+  },
+  {
+   "id": "rua_alaga",
+   "s": 0,
+   "e": 16,
+   "prompt": "flood water rushing through a wide city avenue, water gushing between buildings"
+  },
+  {
+   "id": "vento_alto",
+   "s": 0,
+   "e": 22,
+   "prompt": "cold high mountain wind blowing over a wide plateau"
+  },
+  {
+   "id": "gelo",
+   "s": 0,
+   "e": 14,
+   "prompt": "ice cracking and a glacier calving, deep groaning ice"
+  },
+  {
+   "id": "cai_pais",
+   "dur": 2.2,
+   "variantes": 6,
+   "prompt": "soft deep underwater boom with a water splash tail"
+  },
+  {
+   "id": "tique",
+   "dur": 0.5,
+   "variantes": 4,
+   "prompt": "short soft clean digital tick"
+  },
+  {
+   "id": "ar_sobe",
+   "dur": 3.0,
+   "variantes": 3,
+   "prompt": "airy whoosh rising upward, gentle wind swirl"
+  }
+ ]
+}
