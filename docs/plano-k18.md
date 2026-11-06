@@ -39,6 +39,15 @@ O "PowerPoint" vinha da arquitetura: cada batida era um slide (cartão, foto, ma
     - **Regras de operação:** narração no AI Studio (voz alemã Riko) nunca junto com o `ligar` da G4; `garantir` em vez de um segundo `preparar`.
     - **Régua antes de entregar:** movimento, % de quadros parados, picos de piscar, movimento por família e folha a cada 10 s.
 
+## 2b. Duração (Eduardo, 06/11)
+- **15–20 min, sempre**, no Kriegsmomente. O K17 v2 saiu com 7:42; os que renderam têm 15–18 min.
+- **Alvo do K18: ~17 min.**
+  - roteiro de ~2.300 palavras em alemão (TTS a ~135 palavras/min);
+  - ~160 batidas com take próprio;
+  - 2 takes eureka: Dreyse × Lorenz e por que a artilharia melhor não bastou;
+  - 3 a 4 lugares recorrentes.
+- Conferir a duração no roteiro, antes da narração.
+
 ## 3. Tema e título (radar antes de escrever)
 
 - **Escopo:** 65% 1870–71 e 35% 1866. Só 1 dos 12 vídeos foi de 1866, então o 1866 está atrasado na proporção.
