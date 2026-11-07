@@ -159,6 +159,17 @@ Na dúvida, o nível de cima (memória `feedback-sonnet-tarefas-simples`).
 - **Lição:** no K19/K20 a divisão funcionou: um batedor único da stack e duas sessões usando a mesma receita.
 - **Regra:** o que é comum aos vídeos (voz, receita, kit) se resolve uma vez; o que é próprio de cada vídeo fica em paralelo.
 
+### C6. Over-engineering por precisão (07/11, terreno)
+- **O que houve:** para o terreno, propus relevo com exatidão (DEM real, tiles, `3d-tiles-renderer`, 6–10 h). O Eduardo cortou: precisão de relevo é ultrarrealismo e não é o 80/20; o público não percebe.
+- **Resultado:** a rota simples (three.js nativo, ~150 linhas, mapa de época real sobre relevo **aproximado**, linguagem de cinema) ficou **melhor** que a complexa, com custo mínimo.
+- **Regra:** antes de propor, perguntar: "o espectador nota a diferença e entende melhor por causa disso?" Se não, aproximar e investir no que é visível.
+
+### Filosofia (Eduardo): atalho inteligente antes de força bruta
+1. Usar algo **real e pronto** (dado público, mapa de época, obra, modelo existente) antes de criar.
+2. Recurso **nativo e simples** (three.js puro, Remotion) antes de pacote pesado ou G4.
+3. **Linguagem de cinema** (enquadramento, lente, luz, névoa, ritmo) antes de caprichar em asset.
+4. Só então, se faltar, o pacote ou a G4.
+
 ---
 
 ## Checklist antes de mudar um pipeline (ou abrir um canal)
@@ -166,5 +177,5 @@ Na dúvida, o nível de cima (memória `feedback-sonnet-tarefas-simples`).
 2. Existe pronto (levantamento das 4 fontes)?
 3. Licença comercial ok?
 4. Quanto custa por minuto de vídeo, em G4 e em tokens? Há critério de parada?
-5. Ela ajuda o espectador a entender? (princípio de produção)
+5. Ela ajuda o espectador a entender? O espectador nota a diferença? (sem over-engineering por precisão)
 6. O vídeo vai rodar numa conversa nova e curta, com o modelo por nível, sem fork e sem ler imagens?
