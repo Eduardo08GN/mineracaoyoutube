@@ -45,7 +45,7 @@ Baixados sem login com yt-dlp (a listagem da página pede login; o link de cada 
 | Reel | Data | Duração | Views (título do FB) | Cortes/min | Plano mediano | Câmera parada | Takes/min | Texto na tela |
 |---|---|---|---|---|---|---|---|---|
 | Jato que caiu perto da casa do Trump, P1 (**quente**) | 02/11 | 1:44 | **477 mil** | 12,7 | 4,6 s | **21%** | 19,6 | 100% |
-| A garota que caiu do céu, P1 | 30/10 | 2:00 | **1,1 mi** | 13,0 | 4,0 s | **19%** | 17,6 | sim |
+| A garota que caiu do céu, P1 | 30/10 | 2:00 | **1,1 mi** | 13,0 | 4,0 s | **19%** | 17,6 | 100% |
 | Presos a 480 metros, P1 | 01/11 | 1:51 | 127 mil | 8,7 | 5,8 s | 32% | 20,1 | 100% |
 | "Vamos bater no chão", P2 | 02/11 | 1:51 | 122 mil | 12,5 | 4,6 s | 36% | 18,5 | 100% |
 | Preso numa bolha de ar, P1 | 04/11 | 1:33 | 36 mil | 9,7 | 4,9 s | 36% | 31,7 | 100% |
@@ -54,6 +54,7 @@ Baixados sem login com yt-dlp (a listagem da página pede login; o link de cada 
 
 **O que os números dizem:**
 - **Os dois virais são os mais rápidos e os que menos param:** ~13 cortes/min, plano de ~4 s e só ~20% de câmera parada. O mais lento (4,5 cortes/min, 48% parado) é o pior. A régua de dinamismo do nosso reel vem daqui: **≥ 12 cortes/min, plano mediano ≤ 5 s, câmera parada ≤ 20%, repetição ≤ 5%**.
+- **Narração (Whisper): 221–304 palavras por reel**, ~150–170 palavras/min, coerente com o molde de ~250 palavras.
 - **Texto na tela 100% do tempo:** rótulo de lugar e data, nome + idade, HUD e legenda. O reel funciona sem som.
 - **Duração real de 1:31 a 2:00; os virais têm 1:44–2:00.** O nosso alvo é **~1:40 (1:30–1:50)**.
 - **O caso quente (jato da Flórida, o mesmo nosso Learjet) é o 2º mais visto:** confirma que notícia quente + molde de caso real é o motor, também para eles.
