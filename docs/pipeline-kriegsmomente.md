@@ -16,7 +16,7 @@ Decisão do Eduardo de 07/11/2026: o K19 (Krupp 1870) e o K20 (Mars-la-Tour) sã
 | Esquema a tinta | ~13% | Kit tinta (linha-guia com ponto, serifa itálica de época) |
 | Época 2,5D | ~10% | Obra real em domínio público, créditos só na descrição |
 | Cartão | ≤ 5% | Número em destaque |
-| Terreno 3D | poucas batidas | Rodada 2 do batedor: sol baixo, sombra encaixada, N8AO e capim. **Sem repintura** |
+| Terreno | dentro da fatia de mapa | **Mapa de época sobre relevo** (ver §1.1), com miniaturas 3D quando convier. Substitui o terreno procedural da rodada 2 |
 
 - **Voz:** a voz **A** do Qwen3-TTS, clonada da referência fixa do canal, com melhor de 3 por frase. O QA usa Whisper com o áudio em array de 16 kHz, mais o UTMOS.
 - **Áudio:** só voz e efeitos pontuais, **sem música**, −14 LUFS.
@@ -35,6 +35,29 @@ Decisão do Eduardo de 07/11/2026: o K19 (Krupp 1870) e o K20 (Mars-la-Tour) sã
 Antes de mudar qualquer etapa: `docs/BADPATHS-custo.md`.
 
 Receita técnica de cada peça: `docs/receita-k19-stack.md`. Projetos de referência: `D:/kriegschronik/k19_krupp/v1/` e `D:/kriegschronik/k20_marslatour/v1/`.
+
+### 1.1 Terreno = mapa de época sobre relevo (desde 07/11)
+- **Base:**
+  - three.js nativo, sem biblioteca de terreno: `PlaneGeometry` segmentado (512×512) + `MeshStandardMaterial` com `map` = mapa de época e altura vinda de um tile de relevo, e normais recalculadas;
+  - relevo aproximado basta, com exagero vertical ~5× para ler;
+  - ~150 linhas de código. Protótipo em `D:/kriegschronik/batedor_mapa_real/`.
+- **Mapa:**
+  - Carte d'état-major do IGN (WMTS aberto, camada `GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40`, Licence Ouverte 2.0), que cobre Metz, Mars-la-Tour e Sedan;
+  - para Königgrätz e outras regiões, conferir a licença antes;
+  - David Rumsey só com permissão escrita.
+- **Relevo:** AWS Terrain Tiles (terrarium). Créditos ao IGN e aos dados de relevo só na descrição.
+- **Linguagem de cinema** (o Eduardo reprovou a "maquete vazada"):
+  1. a borda do terreno **nunca** aparece: área maior que o quadro e borda dissolvida em névoa creme (perspectiva aérea);
+  2. lente longa (FOV ~20–25°), câmera mais longe e mais baixa (~20–25°); o horizonte se perde na névoa, sem linha dura de céu;
+  3. profundidade de campo suave (nítido na rota), vinheta e grão de papel;
+  4. rótulos em serifa itálica de época, pequenos, com linha-guia fina e ponto, sem contorno grosso;
+  5. a câmera sempre em movimento lento (avanço ou panorâmica), nunca parada mais de 4 s.
+- **Miniaturas 3D:** quando convier, nos momentos-chave (bateria abrindo fogo, carga, coluna em recuo):
+  - estilo "mesa de guerra", em escala exagerada (~150–300 m de altura aparente), de pé sobre o mapa e com sombra;
+  - formações instanciadas, material fosco (Prússia azul-escuro, França azul e vermelho);
+  - reaproveitar os GLB do K18 ao K20 antes de modelar;
+  - o plano aberto fica sem miniaturas.
+- **Status:** o still v1 foi aprovado ("muito bom"). A v2 (cinema + miniaturas) está em validação. Virar componente do Remotion: ~3–4 h. Levantamento em `docs/levantamentos/terreno-mapa-real.md`.
 
 ## 2. Fluxo do vídeo
 | # | Etapa | Modelo | Saída |
