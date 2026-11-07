@@ -152,7 +152,7 @@ Na dúvida, o nível de cima (memória `feedback-sonnet-tarefas-simples`).
   - o piloto mede isso em 1 take, antes de instalar o resto.
 
 ### C4. Perseguir fidelidade onde não aumenta a compreensão
-- **O que houve:** horas em detalhe de modelo, acabamento de terreno e repintura. O Eduardo aprovou o vídeo com o terreno simples.
+- **O que houve:** horas em detalhe de modelo, acabamento de terreno e repintura. O Eduardo aprovou o vídeo com o terreno simples. E no terreno de mapa de época (07/11), segundo ele, **~80% do ganho de qualidade veio da linguagem de cinema** (sem borda da maquete, lente longa, névoa, profundidade de campo, rótulos de época), não de asset nem de modelo: técnica de enquadramento custa quase nada.
 - **Regra:** o princípio do canal vale para o orçamento. Investir na ordem roteiro → desenho da informação → animação → acabamento, e o acabamento só até ajudar a entender.
 
 ### C5. Duplicar o trabalho em paralelo sem dividir o que é comum

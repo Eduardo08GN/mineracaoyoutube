@@ -57,7 +57,7 @@ Receita técnica de cada peça: `docs/receita-k19-stack.md`. Projetos de referê
   - formações instanciadas, material fosco (Prússia azul-escuro, França azul e vermelho);
   - reaproveitar os GLB do K18 ao K20 antes de modelar;
   - o plano aberto fica sem miniaturas.
-- **Status:** o still v1 foi aprovado ("muito bom"). A v2 (cinema + miniaturas) está em validação. Virar componente do Remotion: ~3–4 h. Levantamento em `docs/levantamentos/terreno-mapa-real.md`.
+- **Status:** a v2 foi **aprovada** em 07/11 ("sensacional, espetacular o plano fechado"). As miniaturas procedurais atuais estão aprovadas (o canhão pode virar o Krupp GLB do K14b; melhorar não é prioridade). Virar componente do Remotion: ~3–4 h. Levantamento em `docs/levantamentos/terreno-mapa-real.md`.
 
 ## 2. Fluxo do vídeo
 | # | Etapa | Modelo | Saída |
