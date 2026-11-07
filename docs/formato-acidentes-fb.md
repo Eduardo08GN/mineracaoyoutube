@@ -1,6 +1,6 @@
 # Formato "acidente com pessoa": reels do FB + coletânea longa no YouTube (Segundo a Segundo)
 
-Criado em 07/11/2026. Frente nova: reels de ~1:20–1:30 de reconstrução 3D animada de acidente ou sobrevivência com pessoa (preso numa caverna, no mar, num poço), no molde da página que apareceu ao Eduardo como "crescendo rápido". Nossa dimensão a mais: **o tema vem do radar de notícia quente**, que é o que funcionou na página (Learjet 625 mil + 398 mil + 246 mil; evergreen 2–3 mil).
+Criado em 07/11/2026. Frente nova: reels de ~1:40 (1:30–1:50) de reconstrução 3D animada de acidente ou sobrevivência com pessoa (preso numa caverna, no mar, num poço), no molde da página que apareceu ao Eduardo como "crescendo rápido". Nossa dimensão a mais: **o tema vem do radar de notícia quente**, que é o que funcionou na página (Learjet 625 mil + 398 mil + 246 mil; evergreen 2–3 mil).
 
 **Status: PIPELINE OFICIAL desde 07/11/2026** (aprovado pelo Eduardo: rota híbrida da seção 5, molde da seção 3, coletânea da seção 8). Ele considerou o ponto ideal de custo-benefício entre tempo, G4 e tokens. O reel tem que ser **inteligente e dinâmico**.
 
@@ -55,24 +55,24 @@ Baixados sem login com yt-dlp (a listagem da página pede login; o link de cada 
 **O que os números dizem:**
 - **Os dois virais são os mais rápidos e os que menos param:** ~13 cortes/min, plano de ~4 s e só ~20% de câmera parada. O mais lento (4,5 cortes/min, 48% parado) é o pior. A régua de dinamismo do nosso reel vem daqui: **≥ 12 cortes/min, plano mediano ≤ 5 s, câmera parada ≤ 20%, repetição ≤ 5%**.
 - **Texto na tela 100% do tempo:** rótulo de lugar e data, nome + idade, HUD e legenda. O reel funciona sem som.
-- **Duração real de 1:31 a 2:00.** O nosso alvo fica em 1:20–1:30, no corte de baixo (mais denso).
+- **Duração real de 1:31 a 2:00; os virais têm 1:44–2:00.** O nosso alvo é **~1:40 (1:30–1:50)**.
 - **O caso quente (jato da Flórida, o mesmo nosso Learjet) é o 2º mais visto:** confirma que notícia quente + molde de caso real é o motor, também para eles.
 - **Série PARTE 1 / PARTE 2:** cada caso vira 2 reels com corte no pior ponto e "comenta PARTE 2". Funciona hoje, mas o FB rebaixa isca de engajamento (ver a seção 3, final).
 - Selo "AI content" do FB nos reels deles, sem efeito visível no alcance.
 
-## 3. Molde por segundo do reel (~85 s, ES, ~150 palavras/min ≈ 210 palavras)
+## 3. Molde por segundo do reel (~100 s, ES, ~150 palavras/min ≈ 250 palavras)
 
-Espinha do Toonverso (pior momento → quem → mecanismo → luta com contador → virada → pergunta), ritmo dos virais medidos e o checklist de fraquezas do Scenario. Uma batida a cada 3–5 s; cada batida traz um número, uma revelação ou uma mudança visível.
+Espinha do Toonverso (pior momento → quem → mecanismo → luta com contador → virada → pergunta), ritmo dos virais medidos e o checklist de fraquezas do Scenario. Uma batida a cada 3–5 s; cada batida traz um número, uma revelação ou uma mudança visível. ~25 planos de ~4 s.
 
-| t (s) | Batida | Fala/legenda (exemplo: espeleólogo preso) | Imagem | HUD |
+| t (s) | Batida | Fala/legenda (exemplo: espeleólogo preso) | Imagem | HUD e marcadores |
 |---|---|---|---|---|
 | 0–3 | **Gancho no pior momento** | "Atrapado a 400 metros bajo tierra. El agua sube *20 cm por hora*." | clímax já animado (IA) | contador já correndo |
-| 3–7 | **Promessa + reviravolta** | "Y el agua no era lo peor." | corte para o herói (IA) | — |
-| 7–18 | **Quem, onde, quando** | nome, idade, um traço; lugar e data | entrada da caverna (IA) + mapa 2 s (código) | rótulo `NOMBRE · 34 AÑOS`, `LUGAR · FECHA` |
-| 18–40 | **Mecanismo** (por que ficou preso) | 2 fatos de ciência para leigo, cada número traduzido ("40 cm: menos que una maleta") | **corte da caverna em código** (nível exato da água) + 1–2 planos IA | troca para o contador do mecanismo (profundidade, nível) |
-| 40–62 | **Luta com contador** | recurso que acaba, tentativa que falha, decisão com custo | planos IA, um a cada 3–4 s | contador principal (ar, horas, metros) que **nunca morre** |
-| 62–75 | **Virada** | o resgate ou a descoberta; o número do gancho é pago | IA (luzes, mergulhadores) + código se houver medida | contador congela / inverte |
-| 75–85 | **Fecho + pergunta** | 1 frase do que veio depois + pergunta que a pessoa responde pela própria vida ("¿Tú habrías esperado o nadado?") + "Síguenos para el próximo caso" | plano final calmo (IA) | cartão final com a pergunta |
+| 3–8 | **Promessa + reviravolta** | "Y el agua no era lo peor." | corte para o herói (IA) | — |
+| 8–20 | **Quem, onde, quando** | nome, idade, um traço; lugar e data | entrada da caverna (IA) + mapa 2 s (Remotion) | rótulos `NOMBRE · 34 AÑOS`, `LUGAR · FECHA` |
+| 20–45 | **Mecanismo** (por que ficou preso) | 2–3 fatos de ciência para leigo, cada número traduzido ("40 cm: menos que una maleta") | **imagem de corte gerada pela IA no mesmo estilo** + 1–2 planos IA | **marcadores por cima em Remotion:** linha do nível da água subindo, régua, seta, cota |
+| 45–72 | **Luta com contador** | recurso que acaba, tentativa que falha, decisão com custo | planos IA, um a cada 3–4 s | contador principal (ar, horas, metros) que **nunca morre** |
+| 72–88 | **Virada** | o resgate ou a descoberta; o número do gancho é pago | IA (luzes, mergulhadores) + marcador se houver medida | contador congela ou inverte |
+| 88–100 | **Fecho + pergunta** | 1 frase do que veio depois + pergunta que a pessoa responde pela própria vida ("¿Tú habrías esperado o nadado?") + "Síguenos para el próximo caso" | plano final calmo (IA) | cartão final com a pergunta |
 
 **Regras do roteiro:**
 - Gatilho (o problema) até 8 s. Número na 1ª frase.
@@ -133,7 +133,7 @@ A skill do Scenario MCP (pago) é **só referência**; ela não substitui o noss
 | Fixo por sessão: instalar (1 min) + baixar Qwen (4 min) + carregar Edit (~9 min, disco frio) + carregar Wan (4–7 min) | ~25 min |
 | three.js, still 1080×1920 (no PC) | 2–6 s |
 
-### Comparação (reel de ~85 s ≈ 20 planos de 4 s)
+### Comparação (batedor; medida para ~20 planos de 4 s)
 | Critério | (a) IA: Qwen + Wan | (b) three.js por código |
 |---|---|---|
 | G4 por reel | ~30 min em 480p (13 edições + 9 Wan + ~30% refação); ~50 min em 720p | ~5–10 min |
@@ -144,23 +144,22 @@ A skill do Scenario MCP (pago) é **só referência**; ela não substitui o noss
 
 ### Decisão: HÍBRIDO POR BATIDA, com a rota (a) como base
 - **IA (a) faz ~80% dos planos:** atmosfera e movimento orgânico num lugar (entrar, rastejar, água, mergulhadores, reação).
-- **Código faz as 2–3 batidas de mecanismo por reel**, onde alucinação seria fatal: corte com nível exato, mapa, trajetória, contador. Peças reaproveitáveis entre casos (kit `corte`, `mapa`, `nivel`).
-- **480p + upscale barato** por padrão; 720p só se o 480p ficar mole no celular. O upscale ainda não foi testado.
+- **Mecanismo = imagem da IA + camada de dado em código.** A IA gera também a imagem-chave de corte (no mesmo estilo, o que garante consistência). Por cima, o Remotion anima só o que precisa ser exato: linha do nível da água, régua, seta, trajetória, cota, contador (pipeline de marcadores, 8 tipos, `docs/marcadores.md`). Nada de cenário three.js por caso; three.js só se uma batida exigir rotação 3D real. (Ajuste da auditoria de 07/11: construir a caverna em código a cada caso sai caro em Sonnet e destoa do look.)
+- **480p + upscale Real-ESRGAN** (anime ou general; low-poly aguenta bem) por padrão; 720p só se o 480p ficar mole no celular. O upscale entra no batedor curto antes do 1º lote (seção 7).
+- **Qwen-Image e Edit com a LoRA Lightning de 8 passos** (`lightx2v/Qwen-Image-Lightning`, Apache-2.0) no lugar dos 30 passos: edição de ~40 s para ~10 s. Adotar depois de 1 still lado a lado (critério: o olho não distingue no celular).
 - **Personagem:** K1 = quadro de estilo com o herói de uma cor; todo plano seguinte é edição do K1. Sem LoRA.
-- **Métrica a medir no 1º reel:** taxa de refação da IA. Critério de parada: > 50% de planos refeitos = rever a divisão IA × código.
+- **Fiscal dentro do lote:** o Qwen3-VL avalia cada imagem-chave e cada clipe (quadros 0, meio e fim) logo depois de gerar, com 1 refação automática (como no K19). A taxa de refação sai daí, sem agente. Critério de parada: > 50% de planos refeitos = rever a divisão IA × marcador.
 
-### Pipeline oficial de um reel
+### Pipeline oficial de um reel (agente só antes e depois da G4)
 | # | Etapa | Quem (modelo) | Ferramenta | Saída |
 |---|---|---|---|---|
-| 1 | Pauta | Opus (julgamento) | radar `caso_real` + Trends ES/MX/AR/CO (seção 6) | caso + ângulo |
-| 2 | Dossiê: 1 fato e 1 fonte por batida | Sonnet | busca dirigida | `dossie.md` |
-| 3 | Roteiro ES no molde da seção 3 + `logic.md` (1 frase por segundo) | Opus | | `roteiro.md`, `logic.md` |
-| 4 | Prompts: K1 + edições + movimento, cada batida com a ferramenta (IA ou código) | Sonnet | `prompts.json` | |
-| 5 | Narração por batida | G4 | Qwen3-TTS, voz fixa ES, best-of-N + Whisper/UTMOS | `vo/*.wav` |
-| 6 | Imagens-chave + clipes | G4 | `img_a.py` (Qwen-Image, Edit-2509), `vid_a.py` (Wan 2.2 + lightx2v), `rife.py`. Scripts do batedor em `D:/pesquisa_nichos/acidentes_fb/batedor/a_ia/vm/` | `clips/` |
-| 7 | Batidas de mecanismo em código | Sonnet | three.js/Remotion (kit) | `clips/` |
-| 8 | Montagem: HUD, contador, legenda, zona segura, mix | Sonnet | Remotion; música só instrumental e baixa | mp4 1080×1920 |
-| 9 | Auditoria: régua 24 fps (≥ 12 cortes/min, parado ≤ 20%) + olho da G4 nos quadros a 2 fps + `logic.md` dos quadros + ffprobe | Haiku (medição) + Opus (veredito) | `regua24.py`, Qwen3-VL | `entrega/` |
+| 1 | Pauta dos 4 casos do lote | Opus | radar `caso_real` + Trends ES/MX/AR/CO (seção 6) | casos + ângulos |
+| 2 | Dossiês (1 fato e 1 fonte por batida) **e** `prompts.json` dos 4 reels, numa chamada só | 1 Sonnet | busca dirigida | `dossie.md`, `prompts.json` |
+| 3 | Os 4 roteiros ES de uma vez, no molde da seção 3, com `logic.md` | 1 Opus | | `roteiro.md`, `logic.md`, `lote.json` |
+| 4 | **Tudo na G4 por um script, zero agente:** `produzir_lote.py lote.json` com retomada por etapa e download por bloco: TTS → K1 → edições → fiscal Qwen3-VL (+1 refação) → Wan → RIFE → upscale → Remotion → régua 24 fps → ffprobe | script | Qwen3-TTS (voz ES fixa), Qwen-Image/Edit + Lightning, Qwen3-VL, Wan 2.2 + lightx2v, RIFE, Real-ESRGAN, Remotion `Reel.tsx` **congelado** (só lê JSON; nenhum código novo por reel) | mp4 1080×1920 + `relatorio.json` |
+| 5 | Leitura do relatório + veredito | Opus (curto) | régua (≥ 12 cortes/min, parado ≤ 20%), fiscal, ffprobe | `entrega/` |
+
+`produzir_lote.py` e `Reel.tsx` ainda não existem: são a primeira peça a construir, depois do batedor curto da seção 7. Os scripts do batedor (`ferramentas/acidentes_fb/vm/`) são a base.
 
 **Entrega do reel em duas peças**, para a coletânea reaproveitar sem refazer: `reel_<caso>.mp4` (com o cartão final "Síguenos…") e `reel_<caso>_corpo.mp4` (sem o cartão final), mais `reel_<caso>.json` com caso, lugar, data, gancho e fontes.
 
@@ -197,24 +196,31 @@ A dimensão a mais em relação ao Toonverso: **o caso é o da semana, não o de
 - **Processo 4 (montagem):** Remotion dos reels cujos clipes já chegaram.
 - Os pesos ficam na imagem `.sqfs` do Drive (BADPATHS-custo B5) para cortar os ~25 min fixos.
 
-**Estimativa:**
+**Antes do 1º lote (batedor único e curto, em sessão própria):**
+1. Voz ES fixa do Qwen3-TTS: 3 candidatas, o Eduardo escolhe 1 e ela vira a referência fixa.
+2. Upscale 480p → 1080: Real-ESRGAN anime × general num clipe do batedor.
+3. Lightning: 1 still de 8 passos lado a lado com o de 30.
+4. Biblioteca de SFX CC0 por tema: água, eco de caverna, rádio sem fala, respiração.
+5. Imagem `.sqfs` no Drive da conta 2 com Qwen-Image/Edit/Lightning, Wan + LoRAs, Qwen3-TTS, Qwen3-VL, RIFE e Real-ESRGAN, para cortar os ~25 min fixos da sessão.
+
+**Estimativa (com Lightning, script único e roteiros em lote; reel de ~100 s ≈ 25 planos):**
 | Item | Por reel | Lote de 4 |
 |---|---|---|
-| G4 (480p) | ~30 min + ~5 min de Remotion | ~25 min fixos + ~2 h 20 ≈ **2,5 h** de G4 |
-| Tokens | ~250 mil (Opus ~40 mil roteiro e veredito; Sonnet ~150 mil dossiê, prompts, Remotion; Haiku ~50 mil medição) | ~1 mi |
-| Relógio (do radar ao mp4) | ~2–3 h no primeiro; ~1,5 h depois do kit | um lote por sessão de produção |
+| G4 | ~25 min de placa: edições ~4 min, Wan 480p ~11 min, ~20% de refação ~3 min, fiscal ~2 min, TTS ~2 min, RIFE + upscale ~2 min, Remotion ~4 min. Em paralelo na placa de 96 GB, ~20 min de relógio | fixo ~8 min com `.sqfs` (~25 sem) + 4 × ~20 ≈ **~1 h 30** |
+| Tokens | **≤ 80 mil**: Opus ~25 mil (¼ da pauta e dos roteiros + veredito), Sonnet ~40 mil (¼ dos dossiês e prompts), lote.json e relatório ~10 mil | ~300 mil |
+| Relógio (do radar ao mp4) | ~1–1,5 h por lote de 4, depois do batedor curto | |
 
 **Sessão de produção:** conversa nova e curta por lote, aberta com este doc + os casos; nada de fork; sem ler imagens no contexto (folhas vão ao Eduardo por SendUserFile).
 
 ## 8. Coletânea longa para o YouTube (a cada 12 reels)
 
-O canal do YouTube Segundo a Segundo só publica vídeo longo. A cada **12 reels prontos**, uma coletânea de ~20 min:
+O canal do YouTube Segundo a Segundo só publica vídeo longo. A cada **12 reels prontos**, uma coletânea de ~23 min:
 
 | Bloco | Duração | O que é |
 |---|---|---|
 | Abertura | 20–30 s | montagem rápida dos 12 ganchos (1–2 s cada) + título da coletânea |
 | Para cada caso: **vinheta documental** | 12–15 s | cartão "Caso 03 · La cueva de [lugar] · [fecha]", mapa com o ponto (código), narração curta ES de contexto ("Tailandia, 23 de junio de 2018. Doce chicos entran en una cueva…") e transição que costura o caso anterior no próximo, **sem corte seco** |
-| Corpo do caso | ~80 s | o `reel_<caso>_corpo.mp4` (sem o cartão "Síguenos") |
+| Corpo do caso | ~95 s | o `reel_<caso>_corpo.mp4` (sem o cartão "Síguenos") |
 | Fecho | 15–20 s | pergunta para os comentários + chamada para inscrever |
 
 **Adaptação 9:16 → 16:9, sem refazer a G4:** o reel vertical fica no centro e o HUD **muda de layout** em Remotion (contador e rótulos numa coluna lateral; legenda na outra, com o mapa e a data do caso). Como o texto já é código, isso sai sem gerar imagem nova. Gerar tudo de novo em 16:9 só se a retenção pedir.
@@ -222,7 +228,7 @@ O canal do YouTube Segundo a Segundo só publica vídeo longo. A cada **12 reels
 **Produção:** composição Remotion `Coletanea` que lê uma lista JSON (12 × `reel_<caso>.json` + corpo), gera as 12 vinhetas (TTS na G4) e renderiza na G4 (~20–30 min de render). Título pelo caso mais forte + número ("12 rescates imposibles…"); capítulos na descrição; créditos e fontes só na descrição. Custo estimado: ~150 mil tokens + ~45 min de G4.
 
 ## 9. Infra: armadilhas desta frente (07/11)
-- **G4-2 com `CANAL_SEM_URL` e célula vazia rodando em 0 s:** um tooltip do Colab (`colab-callout[opened]`, "Executar célula") fica por cima da célula e engole o clique, então o código nunca é digitado. Contorno: `nb.add_style_tag(content="colab-callout{pointer-events:none !important}")` depois do `colab.aba(p)`; o estilo vale até a página recarregar. Outra causa conhecida do mesmo sintoma: runtime em CPU (`docs/pipeline-kriegsmomente.md` §4).
+- **G4-2 com `CANAL_SEM_URL` e célula vazia rodando em 0 s:** um tooltip do Colab (`colab-callout[opened]`) engolia o clique. **Já corrigido no `D:/prehistoria/colab.py`, dentro do `aba()`** (07/11). Se o sintoma voltar, a outra causa conhecida é o runtime em CPU (`docs/pipeline-kriegsmomente.md` §4).
 - **`canal.py subir` falhando calado no Git Bash:** `/content/...` vira caminho do Windows. Usar `MSYS_NO_PATHCONV=1`.
 - **`desligar` com ReadTimeout no fim:** é a VM caindo durante a verificação. Confirmar com `canal.py saude` (G4_FORA) + `colab.conectado` = False.
 - **Página do FB sem login:** a listagem de reels pede login no yt-dlp, mas o navegador de automação sem login mostra os links dos reels e cada link baixa com yt-dlp sem cookies.
