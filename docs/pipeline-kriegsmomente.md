@@ -32,6 +32,8 @@ Decisão do Eduardo de 07/11/2026: o K19 (Krupp 1870) e o K20 (Mars-la-Tour) sã
   - 3 miniaturas de tipos diferentes.
 - **Títulos:** no vetor do canal ("Warum … – obwohl …?" com um detalhe técnico, "Preußen + número + verbo" e "Deutsch-Französischer Krieg 1870: …"). O gancho vai nos **primeiros ~60 caracteres**, porque a página inicial do celular corta o resto.
 
+Antes de mudar qualquer etapa: `docs/BADPATHS-custo.md`.
+
 Receita técnica de cada peça: `docs/receita-k19-stack.md`. Projetos de referência: `D:/kriegschronik/k19_krupp/v1/` e `D:/kriegschronik/k20_marslatour/v1/`.
 
 ## 2. Fluxo do vídeo
