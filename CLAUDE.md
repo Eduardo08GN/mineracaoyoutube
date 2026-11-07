@@ -20,6 +20,21 @@ Produção de vídeos para os canais do Eduardo: Kriegsmomente (DE), Segundo a S
 - **Publicação:** é manual, do Eduardo. Respostas no YouTube só com o texto aprovado.
 - **Áudio:** música só instrumental. No Kriegsmomente, a música fica ~20 dB abaixo da voz e não há ambiente contínuo.
 
+## Delegação e tokens (07/11, ver `docs/BADPATHS-custo.md`)
+- **Modelo por nível:**
+
+| Nível | Usar para |
+|---|---|
+| Haiku | Mecânico e conferível por script (baixar, extrair quadros, transcrever, medir, folha de contato, ffprobe) |
+| Sonnet | Execução com contrato (dossiê, varredura de pauta, cenas e código a partir do kit) |
+| Opus | Só julgamento (pauta final, roteiro, crítica, veredito) |
+
+- **Agente novo, nunca fork:** cada agente recebe um prompt autocontido e curto (objetivo, arquivos a ler, saída num arquivo e resposta em ≤ 15 linhas). Fork só quando o contexto inteiro for indispensável, e nunca a partir de conversa longa.
+- **Uma conversa nova e curta por vídeo ou lote:** mineração, testes e infraestrutura ficam em conversas separadas. Outra sessão recebe o contrato no doc e, por mensagem, só o delta.
+- **Avisos:** job longo avisa uma vez, no fim. Aviso sem ação não ganha resposta longa.
+- **Imagens:** o agente não lê imagens no contexto. Folhas vão ao Eduardo por SendUserFile; o veredito visual é do fiscal Qwen3-VL na G4 e do Eduardo.
+- **G4 sem agente:** o lote roda por script único com retomada (`produzir_lote.py`); o agente só escreve o JSON do lote e lê o relatório.
+
 ## Onde está cada coisa
 - **Stack do Segundo a Segundo:** `docs/segundo-a-segundo-stack.md`.
 - **Tracer3D 2.0:** `tracer3d2/ARQUITETURA.md`, `tracer3d2/BADPATHS.md`, `tracer3d2/ACABAMENTO.md`.
