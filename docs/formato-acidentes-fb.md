@@ -194,8 +194,8 @@ A dimensão a mais em relação ao Toonverso: **o caso é o da semana, não o de
 | Fase | Residentes na placa | VRAM |
 |---|---|---|
 | Início do lote | TTS de todos os reels (~4 GB) → Qwen-Image base gera os K1 de todos (~58 GB) e **sai da placa** | ≤ 62 GB |
-| O lote inteiro | **Wan em fp8** (2 experts, ~28 GB) + **Qwen-Image-Edit-2509 bf16** (~41 GB) + **Qwen3-VL-8B** (~17 GB) | ≈ 86 GB |
-| Na CPU (176 GB de RAM), em paralelo | Remotion, RIFE, upscale, downloads | — |
+| O lote inteiro | **Wan em fp8** (2 experts, ~28 GB) + **Qwen-Image-Edit-2509 bf16** (~41 GB) + **Qwen3-VL-8B** (~17 GB) + RIFE e Real-ESRGAN (~1–3 GB, nos ~10 GB livres) | ≈ 89 GB |
+| Na CPU (176 GB de RAM), em paralelo | só Remotion e downloads (RIFE e upscale na CPU levariam minutos por clipe) | — |
 
 - **Pipeline entre reels:** enquanto o Wan anima os clipes do reel N, o Edit gera as imagens do reel N+1 e o fiscal confere o que acabou de sair.
 - **Troca rápida:** o que precisar sair da placa vai para a RAM da CPU (offload fixado), nunca para o disco; a recarga leva segundos.
@@ -215,7 +215,7 @@ A dimensão a mais em relação ao Toonverso: **o caso é o da semana, não o de
 **Estimativa (com Lightning, script único e roteiros em lote; reel de ~100 s ≈ 25 planos):**
 | Item | Por reel | Lote de 4 |
 |---|---|---|
-| G4 | ~25 min de placa em sequência: edições ~4 min, Wan 480p ~11 min, ~20% de refação ~3 min, fiscal ~2 min, TTS ~2 min. RIFE, upscale e Remotion vão na CPU, em paralelo. Com o pipeline entre reels (ganho de 1,3–1,5×), dá **~17–19 min por reel** | fixo ~8 min com `.sqfs` (~25 sem) + 4 × ~18 ≈ **~1 h 20** (de 1 h 15 a 1 h 25) |
+| G4 | ~25 min de placa em sequência: edições ~4 min, Wan 480p ~11 min, ~20% de refação ~3 min, fiscal ~2 min, TTS ~2 min, RIFE + upscale na GPU ~2 min. Só o Remotion vai na CPU, em paralelo. Com o pipeline entre reels (ganho de 1,3–1,5×), dá **~17–19 min por reel** | fixo ~8 min com `.sqfs` (~25 sem) + 4 × ~18 ≈ **~1 h 20** (de 1 h 15 a 1 h 25) |
 | Tokens | **≤ 80 mil**: Opus ~25 mil (¼ da pauta e dos roteiros + veredito), Sonnet ~40 mil (¼ dos dossiês e prompts), lote.json e relatório ~10 mil | ~300 mil |
 | Relógio (do radar ao mp4) | ~1–1,5 h por lote de 4, depois do batedor curto | |
 
