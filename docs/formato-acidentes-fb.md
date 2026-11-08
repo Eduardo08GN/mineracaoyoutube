@@ -1,5 +1,7 @@
 # Formato "acidente com pessoa": reels do FB + coletânea longa no YouTube (Segundo a Segundo)
 
+> **PAUSADO em 08/11/2026 (decisão do Eduardo):** custo de tokens e de tempo alto demais para uma página ainda não monetizada. O que existe fica congelado como referência: molde de roteiro, bíblia Polyfork e cena de Tempe aprovada. Para voltar, primeiro uma stack mais barata, com custo por reel medido e um teto definido antes do batedor.
+
 Criado em 07/11/2026. Frente nova: reels de ~1:40 (1:30–1:50) de reconstrução 3D animada de acidente ou sobrevivência com pessoa (preso numa caverna, no mar, num poço), no molde da página que apareceu ao Eduardo como "crescendo rápido". Nossa dimensão a mais: **o tema vem do radar de notícia quente**, que é o que funcionou na página (Learjet 625 mil + 398 mil + 246 mil; evergreen 2–3 mil).
 
 **Status (08/11):** molde de roteiro, ritmo e pauta oficiais; a produção passou a ser 100% código (seção 5).

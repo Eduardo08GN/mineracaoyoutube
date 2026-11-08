@@ -165,6 +165,12 @@ Na dúvida, o nível de cima (memória `feedback-sonnet-tarefas-simples`).
 - **Resultado:** a rota simples (three.js nativo, ~150 linhas, mapa de época real sobre relevo **aproximado**, linguagem de cinema) ficou **melhor** que a complexa, com custo mínimo.
 - **Regra:** antes de propor, perguntar: "o espectador nota a diferença e entende melhor por causa disso?" Se não, aproximar e investir no que é visível.
 
+### C7. Formato novo sem teto de custo numa página sem receita (08/11, reels do FB)
+- **O que houve:** os reels de acidente da página do FB, que ainda não é monetizada, passaram por três rotas em dois dias: IA por plano, código low-poly e o kit Polyfork. Cada rota teve o seu batedor, além de um lote de 4 reprovado inteiro. O custo de tokens e de tempo ficou alto demais para o retorno, e o formato foi pausado.
+- **Regra:**
+  - antes do batedor de um formato novo, defina o **teto de custo por peça** (tokens + G4 + horas) e o **retorno esperado** (monetização, audiência);
+  - em canal ou página sem receita, só entra stack que já existe e é barata. Nada de stack nova até o canal dar sinal de retorno.
+
 ### Filosofia (Eduardo): atalho inteligente antes de força bruta
 1. Usar algo **real e pronto** (dado público, mapa de época, obra, modelo existente) antes de criar.
 2. Recurso **nativo e simples** (three.js puro, Remotion) antes de pacote pesado ou G4.

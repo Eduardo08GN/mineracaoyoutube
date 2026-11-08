@@ -19,7 +19,7 @@ Leitura obrigatória antes do primeiro passo. São ~5 minutos, que poupam horas.
 | Kriegsmomente (DE), vídeo longo | `docs/pipeline-kriegsmomente.md`, `docs/receita-k19-stack.md`, `docs/PIPELINE.md` | `tracer3d2/` | `tracer3d2/BADPATHS.md` |
 | What If ES (Eddie3D) | `docs/whatif-es/STACK.md`, `docs/whatif-es/BATEDOR.md` | `eddie3d/` | `docs/whatif-es/erros-pipeline.md` |
 | Segundo a Segundo (ES) | `docs/segundo-a-segundo-stack.md` | `spanish3d/` | `docs/BADPATHS.md` |
-| FB ¿Qué Pasaría Si? 3D, reels de notícia/acidente | `docs/formato-acidentes-fb.md` + `docs/canais/fb_que_pasaria_si/reels_noticia.md` (bíblia: Polyfork, modo barato, água/chuva, HUD) | Remotion + R3F | `docs/BADPATHS.md` #5–7 |
+| FB ¿Qué Pasaría Si? 3D, reels de notícia/acidente (**PAUSADO 08/11 por custo**) | `docs/formato-acidentes-fb.md` + `docs/canais/fb_que_pasaria_si/reels_noticia.md` (bíblia: Polyfork, modo barato, água/chuva, HUD) | Remotion + R3F | `docs/BADPATHS.md` #5–7 |
 | Tema e título do Kriegsmomente | `docs/pipeline-temas-kriegsmomente.md` | `ferramentas/radar_kriegsmomente/` | — |
 | Mineração / radar de notícias | `docs/radar-noticias-quentes.md` | `ferramentas/radar_noticias/` | — |
 | Organização por canal | `docs/arquitetura-tenants.md` | `D:/producao/<canal>/formatos/<formato>/` | — |
