@@ -41,6 +41,7 @@ Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte ess
 - As receitas de skills que já foram baixadas valem antes de qualquer shader próprio (ex.: `threejs-water-optics`). *(08/11: 10 rodadas de água à mão; a receita só entrou na 14ª.)*
 
 **Qualidade e entrega ao Eduardo**
+- **Direção de arte antes de asset.** Primeiro a bíblia de estilo: referência aprovada, paleta, traço, luz e proporção do personagem. Só depois o levantamento, e cada asset entra só se combinar com ela. Nunca recomende um asset só porque é grátis ou popular. Personagem cru tipo Quaternius ou KayKit está **vetado** (cara de "PS2 mal feito"). *(08/11: recomendei Quaternius de novo, já reprovado no lote 1.)*
 - **Batedor curto (~20 s), lado a lado com a referência**, antes de qualquer lote. O lote só sai com o OK do Eduardo. *(08/11: lote de 4 reels reprovado inteiro.)*
 - **Nada reprovado pelo revisor interno vai para o Eduardo.** O construtor confere o arquivo final (abre, `ffprobe`, quadro do trecho corrigido) antes de dizer "corrigido". *(08/11: a rodada 15 disse que tinha corrigido, e a imagem mostrava outra coisa.)*
 - **Revisores em paralelo**, não em série (construtor → revisor → construtor esperando um pelo outro).
