@@ -100,3 +100,10 @@ Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam
 ## 7. Tudo misturado entre canais
 - **Até 08/11:** os reels do FB moravam dentro da pasta de mineração, e os pipelines tinham nome de ferramenta, não de canal.
 - **Regra:** separe por tenant, canal → formato (ver `docs/arquitetura-tenants.md`).
+
+## Troca de personagem (v2v) que altera objetos fora da pessoa (06/11, piloto Tomiko com Wan 2.2 Animate)
+- **O que houve:** no modo replacement, o Wan trocou a Cida pela Tomiko com perfeição, mas também alterou a cena. A tigela de vidro virou um pote com esponja, o fio de água do copo sumiu e o rótulo do bicarbonato quebrou.
+- **Regra (etapa obrigatória do script, não manual):**
+  - depois de gerar, compor a saída sobre o quadro ORIGINAL com a máscara da pessoa, dilatada e com borda suave. Fora da máscara volta o original (mesa, objetos, água, fundo);
+  - a máscara cobre só o corpo, as luvas e os braços, nunca os objetos da mesa.
+- **Portão automático de QA:** diferença média entre a saída e o original fora da máscara acima de ~2/255 reprova o take, que é refeito.

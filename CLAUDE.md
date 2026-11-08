@@ -1,5 +1,7 @@
 # Regras fixas deste repositório (lidas em toda sessão)
 
+> **Sessão ou agente novo: antes do primeiro passo, leia `docs/LEIA-PRIMEIRO.md`** (mapa formato → doc → código e as regras que mais foram quebradas). Depois, diga em 3 linhas o que vai reaproveitar antes de construir qualquer coisa. Quem abre um agente põe essa leitura no prompt dele.
+
 Produção de vídeos para os canais do Eduardo: Kriegsmomente (DE), Segundo a Segundo (ES), Chroniques (FR) e outros. Pipelines: `tracer3d2/`, `eddie3d/`, `spanish3d/`, unreal3d (em `D:\unreal3d`) e `motor/`.
 
 ## Princípio (Eduardo, 03/11)
@@ -40,7 +42,7 @@ Critério: "ajuda a entender?", nunca "parece real?". Cada take de mecanismo cru
 ## Design system do Kriegsmomente (canal alemão), decisão do Eduardo de 04/11
 - **Tema CREME** (fundo de papel antigo), nunca o escuro.
 - **A escrita do take do telégrafo do K15:** serifa itálica de época escrita na tela, linha-guia com ponto, gráficos a tinta.
-- Vale para mapa, modelos e textos. Pipeline completa: `docs/PIPELINE.md` (branch `producao/stack-3d-baseline`). Leia antes de produzir.
+- Vale para mapa, modelos e textos. Pipeline completa: `docs/PIPELINE.md`. Leia antes de produzir.
 
 ## Delegação e tokens (07/11, ver `docs/BADPATHS-custo.md`)
 - **Modelo por nível:**
@@ -58,6 +60,7 @@ Critério: "ajuda a entender?", nunca "parece real?". Cada take de mecanismo cru
 - **G4 sem agente:** o lote roda por script único com retomada (`produzir_lote.py`); o agente só escreve o JSON do lote e lê o relatório.
 
 ## Onde está cada coisa
+- **Começo de toda sessão:** `docs/LEIA-PRIMEIRO.md`.
 - **Stack do Segundo a Segundo:** `docs/segundo-a-segundo-stack.md`.
 - **Reels de acidente (FB) + coletânea de 12 no YouTube do Segundo a Segundo:** `docs/formato-acidentes-fb.md` (molde e pauta). Visual 100% por código em three.js, sem IA de imagem ou vídeo (08/11).
 - **Tracer3D 2.0:** `tracer3d2/ARQUITETURA.md`, `tracer3d2/BADPATHS.md`, `tracer3d2/ACABAMENTO.md`.

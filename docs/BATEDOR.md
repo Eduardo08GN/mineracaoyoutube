@@ -14,7 +14,8 @@ Vale para three.js/Remotion, Unreal, Blender, UI, áudio e ferramentas. Para thr
      - Fab, Megascans;
      - CC0: Poly Haven, ambientCG, Kenney;
      - Sketchfab CC-BY;
-     - Mixamo.
+     - Mixamo;
+     - **Hugging Face (datasets e Spaces):** GLB e cenas prontas para three.js/WebGPU. Exemplo: corpos de 117 partes em GLB, a partir de tomografias reais, em 20 MB. Busque em `huggingface.co/datasets?search=glb` e `?search=three.js`, e também `huggingface_hub.list_datasets(search=...)`. Confira a licença de cada dataset (incluído em 07/11, a pedido do Eduardo).
 
      Prefira os que trazem **mapa de demonstração já iluminado**: começar dele é o atalho;
    - **GitHub e npm (obrigatório, não opcional):**
