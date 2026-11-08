@@ -40,6 +40,9 @@ python canal.py coletar               # baixa o .sqfs para D:/t2_stacks/<canal>/
 - A montagem a partir da imagem numa VM nova ainda não foi medida. Ela depende da imagem estar no Drive Ultra e do link de leitura.
 - Um defeito apareceu no teste: o `preparar` subiu um segundo daemon de stills e deu `EADDRINUSE` na porta 8766 quando já havia um no ar. O daemon existente seguiu funcionando, mas o `preparar` precisa reaproveitar o daemon que já está rodando.
 
+## Estado em 08/11 (congelado)
+A imagem `node_849f29b4e40c.sqfs` (381 MB) está só no PC, em `D:/t2_stacks/fb_que_pasaria_si/reels_noticia/`. Ela não foi subida ao Drive Ultra porque os reels foram encerrados. As pendências abaixo valem quando a regra for aplicada aos outros formatos.
+
 ## Pendências
 1. Subir `node_849f29b4e40c.sqfs` ao Drive Ultra, em `t2_stacks/fb_que_pasaria_si/reels_noticia/`, pela G4-1 ou à mão.
 2. O Eduardo compartilha a pasta `t2_stacks` como "qualquer pessoa com o link: leitor", e o ID vai para o `.env`.

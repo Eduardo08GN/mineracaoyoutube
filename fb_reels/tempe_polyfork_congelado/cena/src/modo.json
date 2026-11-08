@@ -1,0 +1,1 @@
+{"gi": "barato", "spp": 16, "bounces": 5, "tiles": 2, "comentario": "gi = pt (three-gpu-pathtracer 0.0.24) | barato (plano B: raster + AccumulativeShadows/ContactShadows + n8ao). spp = amostras por quadro."}
