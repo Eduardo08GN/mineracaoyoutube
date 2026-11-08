@@ -22,7 +22,7 @@ Produção de vídeos para os canais do Eduardo: Kriegsmomente (DE), Segundo a S
 
 ## Onde está cada coisa
 - **Stack do Segundo a Segundo:** `docs/segundo-a-segundo-stack.md`.
-- **Reels de acidente (FB) + coletânea de 12 no YouTube do Segundo a Segundo:** `docs/formato-acidentes-fb.md` (pipeline oficial desde 07/11).
+- **Reels de acidente (FB) + coletânea de 12 no YouTube do Segundo a Segundo:** `docs/formato-acidentes-fb.md` (molde e pauta). Visual 100% por código em three.js, sem IA de imagem ou vídeo (08/11).
 - **Tracer3D 2.0:** `tracer3d2/ARQUITETURA.md`, `tracer3d2/BADPATHS.md`, `tracer3d2/ACABAMENTO.md`.
 - **Batedor (regra geral):** `docs/BATEDOR.md`. Para three.js, veja também `docs/whatif-es/BATEDOR.md`.
 - **Caminhos ruins gerais:** `docs/BADPATHS.md`.

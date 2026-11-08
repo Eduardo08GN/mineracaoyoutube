@@ -2,11 +2,11 @@
 
 Criado em 07/11/2026. Frente nova: reels de ~1:40 (1:30–1:50) de reconstrução 3D animada de acidente ou sobrevivência com pessoa (preso numa caverna, no mar, num poço), no molde da página que apareceu ao Eduardo como "crescendo rápido". Nossa dimensão a mais: **o tema vem do radar de notícia quente**, que é o que funcionou na página (Learjet 625 mil + 398 mil + 246 mil; evergreen 2–3 mil).
 
-**Status: PIPELINE OFICIAL desde 07/11/2026** (aprovado pelo Eduardo: rota híbrida da seção 5, molde da seção 3, coletânea da seção 8). Ele considerou o ponto ideal de custo-benefício entre tempo, G4 e tokens. O reel tem que ser **inteligente e dinâmico**.
+**Status (08/11):** molde de roteiro, ritmo e pauta oficiais; a produção passou a ser 100% código (seção 5).
 
 **Fluxo:** cada reel vai para a página do FB do Segundo a Segundo ("¿Qué Pasaría Si? 3D"); a cada **12 reels prontos**, uma coletânea longa com vinhetas documentais vai para o canal do YouTube Segundo a Segundo, que só publica vídeo longo.
 
-Scripts no repositório: `ferramentas/acidentes_fb/` (G4: `img_a.py`, `vid_a.py`, `rife.py`, `run.sh`; PC: `ocr_texto.py`, `folha_estilo.py`). Material bruto, fora do repositório: `D:/pesquisa_nichos/acidentes_fb/` (`yt/`, `fb/`, `ref_noair/`, `batedor/`). A leitura anterior do mesmo nicho (06/11) está em `D:/pesquisa_nichos/toonverso_0611/leitura/ANALISE.md`.
+Material bruto, fora do repositório: `D:/pesquisa_nichos/acidentes_fb/` (`yt/`, `fb/`, `ref_noair/`, `lote1/`). A leitura anterior do mesmo nicho (06/11) está em `D:/pesquisa_nichos/toonverso_0611/leitura/ANALISE.md`.
 
 ## 1. Nicho (YouTube @Toonverso33, últimos 7 vídeos, lidos em 07/11)
 
@@ -67,18 +67,18 @@ Espinha do Toonverso (pior momento → quem → mecanismo → luta com contador 
 
 | t (s) | Batida | Fala/legenda (exemplo: espeleólogo preso) | Imagem | HUD e marcadores |
 |---|---|---|---|---|
-| 0–3 | **Gancho no pior momento** | "Atrapado a 400 metros bajo tierra. El agua sube *20 cm por hora*." | clímax já animado (IA) | contador já correndo |
-| 3–8 | **Promessa + reviravolta** | "Y el agua no era lo peor." | corte para o herói (IA) | — |
-| 8–20 | **Quem, onde, quando** | nome, idade, um traço; lugar e data | entrada da caverna (IA) + mapa 2 s (Remotion) | rótulos `NOMBRE · 34 AÑOS`, `LUGAR · FECHA` |
-| 20–45 | **Mecanismo** (por que ficou preso) | 2–3 fatos de ciência para leigo, cada número traduzido ("40 cm: menos que una maleta") | **imagem de corte gerada pela IA no mesmo estilo** + 1–2 planos IA | **marcadores por cima em Remotion:** linha do nível da água subindo, régua, seta, cota |
-| 45–72 | **Luta com contador** | recurso que acaba, tentativa que falha, decisão com custo | planos IA, um a cada 3–4 s | contador principal (ar, horas, metros) que **nunca morre** |
-| 72–88 | **Virada** | o resgate ou a descoberta; o número do gancho é pago | IA (luzes, mergulhadores) + marcador se houver medida | contador congela ou inverte |
-| 88–100 | **Fecho + pergunta** | 1 frase do que veio depois + pergunta que a pessoa responde pela própria vida ("¿Tú habrías esperado o nadado?") + "Síguenos para el próximo caso" | plano final calmo (IA) | cartão final com a pergunta |
+| 0–3 | **Gancho no pior momento** | "Atrapado a 400 metros bajo tierra. El agua sube *20 cm por hora*." | clímax já animado (cena) | contador já correndo |
+| 3–8 | **Promessa + reviravolta** | "Y el agua no era lo peor." | close no herói (cena) | — |
+| 8–20 | **Quem, onde, quando** | nome, idade, um traço; lugar e data | entrada da caverna (cena) + mapa 2 s (Remotion) | rótulos `NOMBRE · 34 AÑOS`, `LUGAR · FECHA` |
+| 20–45 | **Mecanismo** (por que ficou preso) | 2–3 fatos de ciência para leigo, cada número traduzido ("40 cm: menos que una maleta") | **corte em seção da cena** (nível exato vindo do `cena.json`) + 1–2 planos | **marcadores por cima em Remotion:** linha do nível da água subindo, régua, seta, cota |
+| 45–72 | **Luta com contador** | recurso que acaba, tentativa que falha, decisão com custo | planos de câmera diferentes, um a cada 3–4 s | contador principal (ar, horas, metros) que **nunca morre** |
+| 72–88 | **Virada** | o resgate ou a descoberta; o número do gancho é pago | cena (luzes, mergulhadores) + marcador se houver medida | contador congela ou inverte |
+| 88–100 | **Fecho + pergunta** | 1 frase do que veio depois + pergunta que a pessoa responde pela própria vida ("¿Tú habrías esperado o nadado?") + "Síguenos para el próximo caso" | plano final calmo (cena) | cartão final com a pergunta |
 
 **Regras do roteiro:**
 - Gatilho (o problema) até 8 s. Número na 1ª frase.
 - Frases de 4–12 palavras; data, lugar ou número em toda virada.
-- Um herói de **uma cor** (jaqueta, capacete) em todo plano: âncora de identidade para a IA e para o olho.
+- Um herói de **uma cor** (jaqueta, capacete) em todo plano: âncora de identidade para o olho.
 - Fato com fonte (notícia do dia + uma fonte primária). Caso quente em andamento: dizer só o confirmado ("según los rescatistas…").
 - **Pergunta genuína em vez de "comenta PARTE 2".** Parte 2 só quando a própria notícia avança (o resgate, a causa), igual ao Learjet: **um reel por ângulo**.
 - Fora: política, gore, vítima ferida em close, áudio real de rádio ou caixa-preta.
@@ -109,62 +109,15 @@ Espinha do Toonverso (pior momento → quem → mecanismo → luta com contador 
 ### Insights do Scenario (só o que a skill acrescenta)
 A skill do Scenario MCP (pago) é **só referência**; ela não substitui o nosso pipeline. Lida em `D:/pesquisa_nichos/acidentes_fb/skill_scenario_extraida/`, só os `.md`; nenhum script dela foi executado. O que vale trazer:
 1. **Log de uma frase por segundo** (`logic.md`), escrito do plano e de novo dos quadros finais. Frase absurda = falha de lógica; frase que não acrescenta = segundo morto.
-2. **Regras de lógica para imagem→vídeo:** nada reaparece depois de sair (apagar o objeto das imagens-chave seguintes); sem morph (troca de lugar é corte ou movimento visível); causa antes do efeito; palavra e número na tela no mesmo segundo em que são ditos; identidade do herói fixa (uma cor só).
-3. **Ferramenta por batida:** medida, contador, nível exato, trajetória e pessoa indo de um lugar a outro se constroem por código; o modelo de vídeo só faz movimento orgânico num lugar (água, poeira, gesto, luz).
-4. **Imagens-chave encadeadas:** K1 é o quadro de estilo com o herói; as seguintes são **edições do K1** ("mesmo mundo, mesmo estilo, depois…"). Isso segura o personagem sem LoRA.
-5. **Texto nunca vem do modelo:** todo prompt termina com "no text, no letters, no numbers, no UI, no logos"; troca de texto seca, sem crossfade (o "Signedd" de 1 quadro).
+2. **Regras de lógica:** nada reaparece depois de sair; sem morph (troca de lugar é corte ou movimento visível); causa antes do efeito; palavra e número na tela no mesmo segundo em que são ditos; identidade do herói fixa (uma cor só).
+5. **Troca de texto seca,** sem crossfade (o "Signedd" de 1 quadro).
 6. **Zona segura de Reels (1080×1920):** texto dentro de x 65–1015, y 269–1248, e nada em x ≥ 853 abaixo de y 1152.
 7. **Sincronia voz × legenda:** cortar a voz só em silêncio medido, com corte seco; cada palavra a ≤ 0,04 s da legenda.
 8. **Checklist de fraquezas do formato:** gatilho até 8 s; contador que nunca morre (passa a outro quando o primeiro acaba); um herói de uma cor; número traduzido para algo conhecido; final com pergunta que a pessoa responde pela própria vida.
 
-## 5. Estilo e rota de produção (batedor de 07/11, OFICIAL)
+## 5. Produção: 100% código (three.js na G4), zero IA visual (08/11)
 
-**Look ("No Air" do Scenario como referência de estilo, só em palavras):** low-poly estilizado, facetas suaves, céu escuro, paleta contida com **uma cor de acento no herói**, HUD monoespaçado com contador, legenda serifada com palavra em destaque. O "No Air" (30 s, 4 planos, 12 takes/min) é imagem-chave + vídeo gerados por IA, com texto e HUD em código.
-
-**Batedor:** o mesmo caso ilustrativo (espeleólogo preso, 4 planos: entrada, passagem, corte, resgate) nas duas rotas, com HUD e legenda em código, lado a lado com o No Air e com o reel de referência. Arquivos em `D:/pesquisa_nichos/acidentes_fb/batedor/` (`folha_estilo.jpg`, `batedor_a_movimento_MUDO.mp4`, `a_ia/`, `b_threejs/`).
-
-### Tempos medidos na G4-2 (RTX PRO 6000 Blackwell, 96 GB)
-| Passo | Tempo |
-|---|---|
-| Qwen-Image, imagem-chave 720×1280, 30 passos | ~15 s |
-| Qwen-Image-Edit-2509, edição do K1 (personagem mantido), 30 passos | ~40 s |
-| Wan 2.2 I2V A14B + LoRAs lightx2v 4 passos, 480×832, 65 quadros (4 s) | **~26 s** por clipe |
-| idem, 720×1280 | ~78 s por clipe (3×) |
-| RIFE 16 → 30 fps | ~1 s por clipe |
-| Fixo por sessão: instalar (1 min) + baixar Qwen (4 min) + carregar Edit (~9 min, disco frio) + carregar Wan (4–7 min) | ~25 min |
-| three.js, still 1080×1920 (no PC) | 2–6 s |
-
-### Comparação (batedor; medida para ~20 planos de 4 s)
-| Critério | (a) IA: Qwen + Wan | (b) three.js por código |
-|---|---|---|
-| G4 por reel | ~30 min em 480p (13 edições + 9 Wan + ~30% refação); ~50 min em 720p | ~5–10 min |
-| Tokens e tempo humano por reel | baixo (~20 prompts + Remotion) | alto: cenário novo em código por caso, até existir kit |
-| Agilidade para notícia quente | melhor: trocar o caso = trocar prompts | pior no começo |
-| Controle e alucinação | risco (morph, objeto que reaparece, identidade, mãos); mitigado por K1 + edições, portão de lógica e olho da G4 | zero, por construção |
-| Riqueza visual | maior (água, poeira e luz orgânicas) | menor (bonecos de primitivas) |
-
-### Decisão: HÍBRIDO POR BATIDA, com a rota (a) como base
-- **IA (a) faz ~80% dos planos:** atmosfera e movimento orgânico num lugar (entrar, rastejar, água, mergulhadores, reação).
-- **Mecanismo = imagem da IA + camada de dado em código.** A IA gera também a imagem-chave de corte (no mesmo estilo, o que garante consistência). Por cima, o Remotion anima só o que precisa ser exato: linha do nível da água, régua, seta, trajetória, cota, contador (pipeline de marcadores, 8 tipos, `docs/marcadores.md`). Nada de cenário three.js por caso; three.js só se uma batida exigir rotação 3D real. (Ajuste da auditoria de 07/11: construir a caverna em código a cada caso sai caro em Sonnet e destoa do look.)
-- **480p + upscale Real-ESRGAN** (anime ou general; low-poly aguenta bem) por padrão; 720p só se o 480p ficar mole no celular. O upscale entra no batedor curto antes do 1º lote (seção 7).
-- **Qwen-Image e Edit com a LoRA Lightning de 8 passos** (`lightx2v/Qwen-Image-Lightning`, Apache-2.0) no lugar dos 30 passos: edição de ~40 s para ~10 s. Adotar depois de 1 still lado a lado (critério: o olho não distingue no celular).
-- **Personagem:** K1 = quadro de estilo com o herói de uma cor; todo plano seguinte é edição do K1. Sem LoRA.
-- **Fiscal dentro do lote:** o Qwen3-VL avalia cada imagem-chave e cada clipe (quadros 0, meio e fim) logo depois de gerar, com 1 refação automática (como no K19). A taxa de refação sai daí, sem agente. Critério de parada: > 50% de planos refeitos = rever a divisão IA × marcador.
-
-### Pipeline oficial de um reel (agente só antes e depois da G4)
-| # | Etapa | Quem (modelo) | Ferramenta | Saída |
-|---|---|---|---|---|
-| 1 | Pauta dos 4 casos do lote | Opus | radar `caso_real` + Trends ES/MX/AR/CO (seção 6) | casos + ângulos |
-| 2 | Dossiês (1 fato e 1 fonte por batida) **e** `prompts.json` dos 4 reels, numa chamada só | 1 Sonnet | busca dirigida | `dossie.md`, `prompts.json` |
-| 3 | Os 4 roteiros ES de uma vez, no molde da seção 3, com `logic.md` | 1 Opus | | `roteiro.md`, `logic.md`, `lote.json` |
-| 4 | **Tudo na G4 por um script, zero agente:** `produzir_lote.py lote.json` com retomada por etapa e download por bloco: TTS → K1 → edições → fiscal Qwen3-VL (+1 refação) → Wan → RIFE → upscale → Remotion → régua 24 fps → ffprobe | script | Qwen3-TTS (voz ES fixa), Qwen-Image/Edit + Lightning, Qwen3-VL, Wan 2.2 + lightx2v, RIFE, Real-ESRGAN, Remotion `Reel.tsx` **congelado** (só lê JSON; nenhum código novo por reel) | mp4 1080×1920 + `relatorio.json` |
-| 5 | Leitura do relatório + veredito | Opus (curto) | régua (≥ 12 cortes/min, parado ≤ 20%), fiscal, ffprobe | `entrega/` |
-
-`produzir_lote.py` e `Reel.tsx` ainda não existem: são a primeira peça a construir, depois do batedor curto da seção 7. Os scripts do batedor (`ferramentas/acidentes_fb/vm/`) são a base.
-
-**Entrega do reel em duas peças**, para a coletânea reaproveitar sem refazer: `reel_<caso>.mp4` (com o cartão final "Síguenos…") e `reel_<caso>_corpo.mp4` (sem o cartão final), mais `reel_<caso>.json` com caso, lugar, data, gancho e fontes.
-
-
+Decisão do Eduardo de 08/11: o visual dos reels é feito **só por código**. Cena em three.js low-poly com kits CC0, um `cena.json` único que dirige a cena e o HUD, gramática de câmera, render com acabamento na G4. Nenhuma IA generativa de imagem ou vídeo, nem em fundo, textura ou miniatura. A IA fica só na voz (Qwen3-TTS) e na conferência dos quadros contra o `cena.json`. Arquitetura e números: `docs/pipeline-reels-codigo.md` (em batedor).
 
 ## 6. Fontes de tema quente
 
@@ -186,41 +139,9 @@ A dimensão a mais em relação ao Toonverso: **o caso é o da semana, não o de
 - filtro: fora política, crime violento e gore; morte só com foco no mecanismo e não no sofrimento; sem áudio real de rádio ou caixa-preta; a vítima não é ridicularizada nem mostrada ferida.
 - **Reserva evergreen:** quando o radar não tiver caso, refazer em espanhol um caso antigo forte (Tham Luang 2018, os 33 de Atacama 2010), mas só como complemento: a meta de seguidores vem do quente.
 
-## 7. Produção em lote (vários reels por sessão de G4)
+## 7. Produção em lote
 
-**Regra:** preparar tudo no PC antes de ligar (roteiros, narração em texto, `prompts.json` de cada reel); ligar a G4-2 só com o lote pronto; G4 ≥ 70% em uso; um aviso só, no fim; baixar cada bloco ao PC no marcador.
-
-**Orçamento de VRAM (96 GB), regra do `produzir_lote.py`:** em bf16, Edit (~41 GB) + Wan A14B (2 experts, ~56 GB) + Qwen3-VL-8B (~17 GB) + TTS (~4 GB) ≈ 118 GB não cabem. No batedor, só o Wan 480p já ocupou 75 GB. Por isso:
-
-| Fase | Residentes na placa | VRAM |
-|---|---|---|
-| Início do lote | TTS de todos os reels (~4 GB) → Qwen-Image base gera os K1 de todos (~58 GB) e **sai da placa** | ≤ 62 GB |
-| O lote inteiro | **Wan em fp8** (2 experts, ~28 GB) + **Qwen-Image-Edit-2509 bf16** (~41 GB) + **Qwen3-VL-8B** (~17 GB) + RIFE e Real-ESRGAN (~1–3 GB, nos ~10 GB livres) | ≈ 89 GB |
-| Na CPU (176 GB de RAM), em paralelo | só Remotion e downloads (RIFE e upscale na CPU levariam minutos por clipe) | — |
-
-- **Pipeline entre reels:** enquanto o Wan anima os clipes do reel N, o Edit gera as imagens do reel N+1 e o fiscal confere o que acabou de sair.
-- **Troca rápida:** o que precisar sair da placa vai para a RAM da CPU (offload fixado), nunca para o disco; a recarga leva segundos.
-- **Ganho honesto:** dois difusores na mesma placa dividem os núcleos. O ganho real é ~1,3–1,5× (some a carga, a descarga e a espera), não 2×.
-- **Medição no 1º lote:** `nvidia-smi` a cada 30 s num log, sem avisar o agente. Meta: VRAM ≥ 80% e GPU ≥ 70% durante o lote.
-- **Prova antes do lote:** Wan fp8 × bf16 no mesmo clipe, lado a lado para o Eduardo (entra no batedor curto abaixo).
-- Os pesos ficam na imagem `.sqfs` do Drive (BADPATHS-custo B5).
-
-**Antes do 1º lote (batedor único e curto, em sessão própria):**
-1. Voz ES fixa do Qwen3-TTS: 3 candidatas, o Eduardo escolhe 1 e ela vira a referência fixa.
-2. Upscale 480p → 1080: Real-ESRGAN anime × general num clipe do batedor.
-3. Lightning: 1 still de 8 passos lado a lado com o de 30.
-4. Wan fp8 × bf16 no mesmo clipe, lado a lado.
-5. Biblioteca de SFX CC0 por tema: água, eco de caverna, rádio sem fala, respiração.
-6. Imagem `.sqfs` no Drive da conta 2 com Qwen-Image/Edit/Lightning, Wan + LoRAs, Qwen3-TTS, Qwen3-VL, RIFE e Real-ESRGAN, para cortar os ~25 min fixos da sessão.
-
-**Estimativa (com Lightning, script único e roteiros em lote; reel de ~100 s ≈ 25 planos):**
-| Item | Por reel | Lote de 4 |
-|---|---|---|
-| G4 | ~25 min de placa em sequência: edições ~4 min, Wan 480p ~11 min, ~20% de refação ~3 min, fiscal ~2 min, TTS ~2 min, RIFE + upscale na GPU ~2 min. Só o Remotion vai na CPU, em paralelo. Com o pipeline entre reels (ganho de 1,3–1,5×), dá **~17–19 min por reel** | fixo ~8 min com `.sqfs` (~25 sem) + 4 × ~18 ≈ **~1 h 20** (de 1 h 15 a 1 h 25) |
-| Tokens | **≤ 80 mil**: Opus ~25 mil (¼ da pauta e dos roteiros + veredito), Sonnet ~40 mil (¼ dos dossiês e prompts), lote.json e relatório ~10 mil | ~300 mil |
-| Relógio (do radar ao mp4) | ~1–1,5 h por lote de 4, depois do batedor curto | |
-
-**Sessão de produção:** conversa nova e curta por lote, aberta com este doc + os casos; nada de fork; sem ler imagens no contexto (folhas vão ao Eduardo por SendUserFile).
+Ver `docs/pipeline-reels-codigo.md`. Regras que continuam: preparar no PC antes de ligar a G4; sentinela sempre (emite só na mudança de estado); um aviso no fim; baixar cada bloco ao PC; modelo por nível; conversa nova e curta por lote.
 
 ## 8. Coletânea longa para o YouTube (a cada 12 reels)
 
