@@ -93,6 +93,19 @@ Detalhes em `D:\unreal3d\LICENCA_CESIUM.md`.
 | Máquina como prancha de gravura (reserva) | **Kalem / Levha** (leodavincs/kalem; clone em `D:/pesquisa_nichos/kalem`) | MIT | NA G4. Gravura sem Codex: SDXL + ControlNet NA G4 |
 | **Máquina e objeto (PADRÃO do Kriegsmomente, Eduardo 04/11)** | **teardown** (elvarofficial/teardown, base whaleyxbt/claude-motion: captura quadro a quadro + som sincronizado) e machine-skill | MIT | vídeo de máquina moderna ou página interativa; lição: 1 imagem de referência por máquina, 1 entrada move tudo, gráfico que anda com a peça |
 
+## Página FB ¿Qué Pasaría Si? 3D — reels de notícia (Remotion + R3F, modo barato)
+Detalhes em `docs/canais/fb_que_pasaria_si/reels_noticia.md`.
+
+| Elemento | Pacote | Licença / preço | Status | Uso |
+|---|---|---|---|---|
+| Kit-base de arte | **Polyfork** (polyfork.dev), kits `roadside-americana`, `frontier-town`, `campground-lake` | Grátis, uso comercial; GLB sem conta; `.mjs` com chave grátis (não redistribuir) | **Em uso** (batedor Tempe aprovado em 08/11) | Paleta e escala únicas por kit. Começar por `/api/kits` + `/api/assets/{id}/matching` |
+| Receitas de acabamento three.js | **Threejs-Awesome-Graphics-Agent-Skills** (GitHub scottstts) | Ver LICENSE do repositório | Em uso | `threejs-water-optics` (rio, espuma), `threejs-precipitation-surfaces` (chuva, respingos), `threejs-exposure-color-grading` |
+| Sombra suave | drei `AccumulativeShadows` / `RandomizedLight` / `ContactShadows` + `n8ao` | MIT / CC0 | **Padrão** ("modo barato") | Luz rebatida aproximada e sombra de contato |
+| Luz global | `three-gpu-pathtracer@0.0.24` | MIT | **Fora** (decisão do Eduardo, 08/11) | Trava headless acima de 16 spp |
+| Céu e nuvens | `@takram/three-atmosphere`, `@takram/three-clouds` | MIT | Candidato | Ainda não testado no formato |
+| Fontes do HUD | Playfair Display / Playfair Display SC / Fraunces | OFL | Em uso | HUD editorial em etapas |
+| Polyspoon (clone aberto do Polyfork) | GitHub DITlieD/polyspoon | Apache-2.0 | Fora | Só 14 famílias de modelos |
+
 ## Onde procurar (fontes além do Fab)
 
 | Fonte | O que tem | Licença típica | Para quê |
