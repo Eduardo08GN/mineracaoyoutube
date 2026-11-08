@@ -1,0 +1,2899 @@
+{
+ "fps": 24,
+ "dur": 726.25,
+ "batidas": [
+  {
+   "id": "01_01",
+   "frase": "01_01",
+   "texto": "Elfter August achtzehnhundertsiebzig, in der Nordsee vor der Insel Helgoland.",
+   "t0": 0.34,
+   "t1": 5.86,
+   "fam": "mapa",
+   "take": {
+    "vista": "europa_helgoland"
+   },
+   "muda": "zoom da Europa até Helgoland; data 11.08.1870 escrita no mar",
+   "dims": "lugar·tempo",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "11. AUGUST 1870",
+     "t": 0.68,
+     "palavra": "August"
+    }
+   ],
+   "v0": 0.0,
+   "v1": 7.4
+  },
+  {
+   "id": "01_02",
+   "frase": "01_02",
+   "texto": "Sieben französische Panzerschiffe und vier leichtere Kriegsschiffe gehen vor Anker.",
+   "t0": 7.48,
+   "t1": 12.66,
+   "fam": "mapa",
+   "take": {
+    "vista": "helgoland"
+   },
+   "muda": "7 + 4 ícones franceses fundeiam um a um",
+   "dims": "lugar·dado·ação",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 0,
+     "ate": 11,
+     "t": 7.48,
+     "palavra": "Sieben"
+    }
+   ],
+   "v0": 7.4,
+   "v1": 13.92
+  },
+  {
+   "id": "01_03",
+   "frase": "01_03",
+   "texto": "Keine achtzig Kilometer weiter südlich, hinter Sandbänken und Prielen, liegt Wilhelmshaven, der neue Kriegshafen Preußens, gerade vierzehn Monate alt.",
+   "t0": 14.0,
+   "t1": 19.08,
+   "fam": "mapa",
+   "take": {
+    "vista": "helgoland_jade",
+    "faixasJade": true
+   },
+   "muda": "linha Helgoland→Wilhelmshaven se desenha; Watt aparece",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "cota",
+     "txt": "80 km",
+     "t": 14.7,
+     "palavra": "Kilometer"
+    }
+   ],
+   "v0": 13.92,
+   "v1": 19.0
+  },
+  {
+   "id": "01_03B",
+   "frase": "01_03",
+   "texto": "Keine achtzig Kilometer weiter südlich, hinter Sandbänken und Prielen, liegt Wilhelmshaven, der neue Kriegshafen Preußens, gerade vierzehn Monate alt.",
+   "t0": 19.08,
+   "t1": 24.4,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_wilhelmshaven"
+   },
+   "muda": "zoom até Wilhelmshaven; anel no porto",
+   "dims": "lugar·tempo",
+   "mk": [
+    {
+     "tipo": "anel",
+     "lugar": "Wilhelmshaven",
+     "t": 19.08,
+     "palavra": "Wilhelmshaven"
+    }
+   ],
+   "v0": 19.0,
+   "v1": 25.84
+  },
+  {
+   "id": "01_04",
+   "frase": "01_04",
+   "texto": "Darin liegt die gesamte Panzerflotte des Norddeutschen Bundes.",
+   "t0": 25.92,
+   "t1": 29.26,
+   "fam": "epoca",
+   "take": {
+    "img": "wilhelmshaven_1869"
+   },
+   "muda": "porto de Wilhelmshaven em paralaxe; os 5 navios",
+   "dims": "época·lugar",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "WILHELMSHAVEN · 1869",
+     "t": 27.4,
+     "palavra": "Panzerflotte"
+    }
+   ],
+   "v0": 25.84,
+   "v1": 29.92
+  },
+  {
+   "id": "01_05",
+   "frase": "01_05",
+   "texto": "Es sind fünf Schiffe.",
+   "t0": 30.0,
+   "t1": 30.98,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_wilhelmshaven"
+   },
+   "muda": "corte seco: '5' gigante no mar",
+   "dims": "dado",
+   "mk": [
+    {
+     "tipo": "numero",
+     "txt": "5",
+     "t": 30.26,
+     "palavra": "fünf"
+    }
+   ],
+   "v0": 29.92,
+   "v1": 32.12
+  },
+  {
+   "id": "01_06",
+   "frase": "01_06",
+   "texto": "Frankreich besitzt an diesem Tag neunundvierzig Panzerschiffe aller Art, rund zehnmal so viele.",
+   "t0": 32.2,
+   "t1": 38.08,
+   "fam": "mapa",
+   "take": {
+    "vista": "nordsee_contagem"
+   },
+   "muda": "49 ícones franceses enchem o mar ao lado dos 5",
+   "dims": "dado·comparação",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 5,
+     "ate": 49,
+     "t": 33.64,
+     "palavra": "neunundvierzig"
+    }
+   ],
+   "v0": 32.12,
+   "v1": 38.76
+  },
+  {
+   "id": "01_07",
+   "frase": "01_07",
+   "texto": "Und trotzdem wird in diesem ganzen Krieg kein einziges französisches Schiff Wilhelmshaven angreifen.",
+   "t0": 38.84,
+   "t1": 44.8,
+   "fam": "anat",
+   "take": {
+    "cam": "frota49_5",
+    "frota": [
+     49,
+     5
+    ]
+   },
+   "muda": "as 49 silhuetas ficam paradas, viradas para longe dos 5",
+   "dims": "objeto·dado·narrativa",
+   "mk": [],
+   "v0": 38.76,
+   "v1": 46.0
+  },
+  {
+   "id": "01_08",
+   "frase": "01_08",
+   "texto": "Keine Seeschlacht.",
+   "t0": 46.08,
+   "t1": 46.9,
+   "fam": "anat",
+   "take": {
+    "cam": "chega",
+    "chega": true
+   },
+   "muda": "o couraçado chega e para no palco",
+   "dims": "objeto·ação",
+   "mk": [],
+   "v0": 46.0,
+   "v1": 47.46
+  },
+  {
+   "id": "01_09",
+   "frase": "01_09",
+   "texto": "Keine Landung.",
+   "t0": 47.54,
+   "t1": 48.18,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil"
+   },
+   "muda": "corte seco para o perfil parado",
+   "dims": "objeto",
+   "mk": [],
+   "v0": 47.46,
+   "v1": 48.9
+  },
+  {
+   "id": "01_10",
+   "frase": "01_10",
+   "texto": "Einen Monat später ist die Flotte wieder zu Hause.",
+   "t0": 48.98,
+   "t1": 51.62,
+   "fam": "mapa",
+   "take": {
+    "vista": "helgoland_cherbourg"
+   },
+   "muda": "trilha de volta a Cherbourg; datas 11.08 → 12.09",
+   "dims": "lugar·tempo",
+   "mk": [
+    {
+     "tipo": "trilha",
+     "estilo": "solida",
+     "t": 49.2,
+     "palavra": "Monat"
+    }
+   ],
+   "v0": 48.9,
+   "v1": 52.87
+  },
+  {
+   "id": "02_01",
+   "frase": "02_01",
+   "texto": "Wie kann die zweitgrößte Flotte der Welt einen Gegner, der zehnmal schwächer ist, einen ganzen Krieg lang nicht angreifen?",
+   "t0": 52.95,
+   "t1": 60.29,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita"
+   },
+   "muda": "câmera orbita o couraçado lentamente",
+   "dims": "objeto·narrativa",
+   "mk": [],
+   "v0": 52.87,
+   "v1": 61.29
+  },
+  {
+   "id": "02_02",
+   "frase": "02_02",
+   "texto": "Die Antwort steht auf keiner Liste mit Schiffen und Kanonen.",
+   "t0": 61.37,
+   "t1": 64.21,
+   "fam": "lapis",
+   "take": {
+    "doc": "lista",
+    "linhas": [
+     "49 Panzerschiffe",
+     "470 Schiffe"
+    ],
+    "riscar": true
+   },
+   "muda": "lista de navios e canhões se escreve e é riscada",
+   "dims": "dado·narrativa",
+   "mk": [],
+   "v0": 61.29,
+   "v1": 65.37
+  },
+  {
+   "id": "02_03",
+   "frase": "02_03",
+   "texto": "Sie steckt in drei Dingen: in Soldaten, die plötzlich woanders gebraucht wurden.",
+   "t0": 65.45,
+   "t1": 70.13,
+   "fam": "mapa",
+   "take": {
+    "vista": "cherbourg"
+   },
+   "muda": "ícone de regimento em Cherbourg sai em direção à terra",
+   "dims": "lugar·causa",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "SOLDATEN",
+     "t": 67.75,
+     "palavra": "Soldaten"
+    }
+   ],
+   "v0": 65.37,
+   "v1": 71.07
+  },
+  {
+   "id": "02_04",
+   "frase": "02_04",
+   "texto": "In Wasser, das zu flach war.",
+   "t0": 71.15,
+   "t1": 72.55,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_faixas",
+    "faixasJade": true
+   },
+   "muda": "faixas de profundidade do Jade aparecem",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "WASSER",
+     "t": 71.25,
+     "palavra": "Wasser"
+    }
+   ],
+   "v0": 71.07,
+   "v1": 73.55
+  },
+  {
+   "id": "02_05",
+   "frase": "02_05",
+   "texto": "Und in Kohle, die ausging.",
+   "t0": 73.63,
+   "t1": 75.07,
+   "fam": "anat",
+   "take": {
+    "cam": "bunker",
+    "destaque": "bunker"
+   },
+   "muda": "o bunker de carvão acende",
+   "dims": "objeto·dado",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "KOHLE",
+     "t": 73.87,
+     "palavra": "Kohle"
+    }
+   ],
+   "v0": 73.55,
+   "v1": 76.27
+  },
+  {
+   "id": "02_06",
+   "frase": "02_06",
+   "texto": "Genau diesen drei Dingen folgen wir jetzt, Woche für Woche.",
+   "t0": 76.35,
+   "t1": 79.85,
+   "fam": "mapa",
+   "take": {
+    "vista": "tres_simbolos"
+   },
+   "muda": "os três símbolos acendem nos seus lugares; semanas correm",
+   "dims": "lugar·tempo·narrativa",
+   "mk": [],
+   "v0": 76.27,
+   "v1": 80.88
+  },
+  {
+   "id": "03_01",
+   "frase": "03_01",
+   "texto": "Auf dem Papier war das kein Wettkampf.",
+   "t0": 80.96,
+   "t1": 83.15,
+   "fam": "epoca",
+   "take": {
+    "img": "frota_francesa",
+    "foco": "fila"
+   },
+   "muda": "zoom lento na fila de navios franceses",
+   "dims": "época·objeto",
+   "mk": [],
+   "v0": 80.88,
+   "v1": 84.08
+  },
+  {
+   "id": "03_02",
+   "frase": "03_02",
+   "texto": "Frankreich besaß die zweitgrößte Flotte der Welt, nach der britischen, mit neunundvierzig Panzerschiffen.",
+   "t0": 84.16,
+   "t1": 90.78,
+   "fam": "anat",
+   "take": {
+    "cam": "frota49",
+    "frota": [
+     49,
+     0
+    ]
+   },
+   "muda": "49 couraçados em fila enchem o palco",
+   "dims": "objeto·dado",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 0,
+     "ate": 49,
+     "t": 88.92,
+     "palavra": "neunundvierzig"
+    }
+   ],
+   "v0": 84.08,
+   "v1": 92.1
+  },
+  {
+   "id": "03_03",
+   "frase": "03_03",
+   "texto": "Der Norddeutsche Bund hatte fünf.",
+   "t0": 92.18,
+   "t1": 94.2,
+   "fam": "anat",
+   "take": {
+    "cam": "frota49_5",
+    "frota": [
+     49,
+     5
+    ]
+   },
+   "muda": "do outro lado, só 5",
+   "dims": "objeto·dado·comparação",
+   "mk": [
+    {
+     "tipo": "numero",
+     "txt": "5",
+     "t": 94.1,
+     "palavra": "fünf"
+    }
+   ],
+   "v0": 92.1,
+   "v1": 95.38
+  },
+  {
+   "id": "03_04",
+   "frase": "03_04",
+   "texto": "Und keines davon war in Deutschland gebaut.",
+   "t0": 95.46,
+   "t1": 97.44,
+   "fam": "mapa",
+   "take": {
+    "vista": "estaleiros"
+   },
+   "muda": "cinco trilhas saem dos estaleiros, nenhuma da Alemanha",
+   "dims": "lugar·causa",
+   "mk": [],
+   "v0": 95.38,
+   "v1": 98.4
+  },
+  {
+   "id": "03_05",
+   "frase": "03_05",
+   "texto": "Die König Wilhelm kam von der Themse, bestellt eigentlich vom Osmanischen Reich.",
+   "t0": 98.48,
+   "t1": 103.46,
+   "fam": "epoca",
+   "take": {
+    "img": "koenig_wilhelm"
+   },
+   "muda": "paralaxe na foto do König Wilhelm; rótulo Themse",
+   "dims": "época·objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "THEMSE · LONDON",
+     "t": 100.36,
+     "palavra": "Themse"
+    }
+   ],
+   "v0": 98.4,
+   "v1": 104.3
+  },
+  {
+   "id": "03_06",
+   "frase": "03_06",
+   "texto": "Die Kronprinz und die Arminius kamen ebenfalls aus London.",
+   "t0": 104.38,
+   "t1": 107.36,
+   "fam": "epoca",
+   "take": {
+    "img": "kronprinz"
+   },
+   "muda": "foto do Kronprinz; rótulo London",
+   "dims": "época·objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "LONDON",
+     "t": 107.14,
+     "palavra": "London"
+    }
+   ],
+   "v0": 104.3,
+   "v1": 107.77
+  },
+  {
+   "id": "03_07",
+   "frase": "03_07",
+   "texto": "Und die anderen beiden, die Friedrich Carl und die Prinz Adalbert, liefen in Frankreich vom Stapel, in La Seyne und in Bordeaux.",
+   "t0": 107.85,
+   "t1": 111.54,
+   "fam": "epoca",
+   "take": {
+    "img": "friedrich_carl"
+   },
+   "muda": "foto do Friedrich Carl; rótulo La Seyne",
+   "dims": "época·objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "LA SEYNE · FRANKREICH",
+     "t": 113.26,
+     "palavra": "Frankreich"
+    }
+   ],
+   "v0": 107.77,
+   "v1": 111.46
+  },
+  {
+   "id": "03_07B",
+   "frase": "03_07",
+   "texto": "Und die anderen beiden, die Friedrich Carl und die Prinz Adalbert, liefen in Frankreich vom Stapel, in La Seyne und in Bordeaux.",
+   "t0": 111.54,
+   "t1": 116.4,
+   "fam": "mapa",
+   "take": {
+    "vista": "estaleiros_franca"
+   },
+   "muda": "trilhas de La Seyne e Bordeaux até o Jade",
+   "dims": "lugar·ironia",
+   "mk": [],
+   "v0": 111.46,
+   "v1": 117.43
+  },
+  {
+   "id": "04_01",
+   "frase": "04_01",
+   "texto": "Um zu verstehen, was dann passiert, muss man eines dieser Schiffe kennen.",
+   "t0": 117.51,
+   "t1": 122.53,
+   "fam": "anat",
+   "take": {
+    "cam": "chega",
+    "chega": true
+   },
+   "muda": "o couraçado chega ao palco",
+   "dims": "objeto·ação",
+   "mk": [],
+   "v0": 117.43,
+   "v1": 123.09
+  },
+  {
+   "id": "04_02",
+   "frase": "04_02",
+   "texto": "Nehmen wir die Provence, das Rückgrat der französischen Flotte.",
+   "t0": 123.17,
+   "t1": 126.61,
+   "fam": "anat",
+   "take": {
+    "cam": "tres_quartos"
+   },
+   "muda": "rótulo PROVENCE-KLASSE",
+   "dims": "objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "PROVENCE-KLASSE",
+     "t": 123.67,
+     "palavra": "Provence"
+    }
+   ],
+   "v0": 123.09,
+   "v1": 127.49
+  },
+  {
+   "id": "04_03",
+   "frase": "04_03",
+   "texto": "Ein Rumpf aus Holz, und darauf ein Gürtel aus Eisen, so dick wie eine Handbreite.",
+   "t0": 127.57,
+   "t1": 132.53,
+   "fam": "anat",
+   "take": {
+    "cam": "cinta",
+    "destaque": "cinta",
+    "fatia": true
+   },
+   "muda": "zoom até a cinta laranja; fatia com a mão como escala",
+   "dims": "objeto·dado·conceito",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "PANZERGÜRTEL",
+     "t": 129.99,
+     "palavra": "Gürtel"
+    }
+   ],
+   "v0": 127.49,
+   "v1": 133.55
+  },
+  {
+   "id": "04_04",
+   "frase": "04_04",
+   "texto": "Dahinter eine Reihe schwerer Kanonen.",
+   "t0": 133.63,
+   "t1": 135.69,
+   "fam": "anat",
+   "take": {
+    "cam": "bateria",
+    "destaque": "bateria"
+   },
+   "muda": "a fileira de canhões acende",
+   "dims": "objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "BATTERIE",
+     "t": 135.25,
+     "palavra": "Kanonen"
+    }
+   ],
+   "v0": 133.55,
+   "v1": 136.27
+  },
+  {
+   "id": "04_05",
+   "frase": "04_05",
+   "texto": "Unten eine Dampfmaschine.",
+   "t0": 136.35,
+   "t1": 137.93,
+   "fam": "anat",
+   "take": {
+    "cam": "maquina",
+    "destaque": "maquina"
+   },
+   "muda": "a casa de máquinas acende no corte",
+   "dims": "objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "DAMPFMASCHINE",
+     "t": 136.99,
+     "palavra": "Dampfmaschine"
+    }
+   ],
+   "v0": 136.27,
+   "v1": 138.45
+  },
+  {
+   "id": "04_06",
+   "frase": "04_06",
+   "texto": "Oben trotzdem drei Masten mit Segeln.",
+   "t0": 138.53,
+   "t1": 140.63,
+   "fam": "anat",
+   "take": {
+    "cam": "mastros"
+   },
+   "muda": "câmera sobe pelos mastros com vergas",
+   "dims": "objeto·ação",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "3 MASTEN",
+     "t": 139.59,
+     "palavra": "Masten"
+    }
+   ],
+   "v0": 138.45,
+   "v1": 141.25
+  },
+  {
+   "id": "04_07",
+   "frase": "04_07",
+   "texto": "Ein Schiff zwischen zwei Zeitaltern.",
+   "t0": 141.33,
+   "t1": 143.25,
+   "fam": "epoca",
+   "take": {
+    "img": "couracado_frances"
+   },
+   "muda": "foto de época de um couraçado francês: vapor e velas",
+   "dims": "época·objeto·tempo",
+   "mk": [],
+   "v0": 141.25,
+   "v1": 144.83
+  },
+  {
+   "id": "04_08",
+   "frase": "04_08",
+   "texto": "Merken Sie sich von diesem Schiff zwei Zahlen.",
+   "t0": 144.91,
+   "t1": 146.85,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil_lento2"
+   },
+   "muda": "câmera desce para a linha d'água",
+   "dims": "objeto·narrativa",
+   "mk": [],
+   "v0": 144.83,
+   "v1": 147.63
+  },
+  {
+   "id": "04_09",
+   "frase": "04_09",
+   "texto": "Es liegt über acht Meter tief im Wasser.",
+   "t0": 147.71,
+   "t1": 149.73,
+   "fam": "anat",
+   "take": {
+    "cam": "calado",
+    "destaque": "vivas",
+    "regua": true
+   },
+   "muda": "régua de 8,4 m se desenha abaixo d'água",
+   "dims": "objeto·dado",
+   "mk": [
+    {
+     "tipo": "regua",
+     "txt": "8,4 m",
+     "t": 148.23,
+     "palavra": "acht"
+    }
+   ],
+   "v0": 147.63,
+   "v1": 150.45
+  },
+  {
+   "id": "04_10",
+   "frase": "04_10",
+   "texto": "Und es kann rund sechshundert Tonnen Kohle laden.",
+   "t0": 150.53,
+   "t1": 152.93,
+   "fam": "anat",
+   "take": {
+    "cam": "bunker",
+    "destaque": "bunker"
+   },
+   "muda": "bunker acende; 600 t",
+   "dims": "objeto·dado",
+   "mk": [
+    {
+     "tipo": "numero",
+     "txt": "600 t",
+     "t": 151.11,
+     "palavra": "sechshundert"
+    }
+   ],
+   "v0": 150.45,
+   "v1": 153.69
+  },
+  {
+   "id": "04_11",
+   "frase": "04_11",
+   "texto": "Beide Zahlen werden in diesem Krieg wichtiger als jede Kanone.",
+   "t0": 153.77,
+   "t1": 157.99,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil_marcas",
+    "regua": true
+   },
+   "muda": "os dois marcadores (8,4 m e 600 t) ficam juntos no perfil",
+   "dims": "dado·causa",
+   "mk": [],
+   "v0": 153.69,
+   "v1": 159.22
+  },
+  {
+   "id": "05_01",
+   "frase": "05_01",
+   "texto": "Der französische Plan für den Seekrieg war kühn.",
+   "t0": 159.3,
+   "t1": 162.62,
+   "fam": "mapa",
+   "take": {
+    "vista": "plano_baltico"
+   },
+   "muda": "trilha tracejada do plano Cherbourg→Báltico se desenha",
+   "dims": "lugar·plano",
+   "mk": [
+    {
+     "tipo": "trilha",
+     "estilo": "tracejada",
+     "t": 161.04,
+     "palavra": "Seekrieg"
+    }
+   ],
+   "v0": 159.22,
+   "v1": 163.12
+  },
+  {
+   "id": "05_02",
+   "frase": "05_02",
+   "texto": "Und er hatte einen Haken.",
+   "t0": 163.2,
+   "t1": 164.5,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita_escura"
+   },
+   "muda": "a câmera para no casco escuro",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 163.12,
+   "v1": 165.42
+  },
+  {
+   "id": "05_03",
+   "frase": "05_03",
+   "texto": "Die Flotte sollte ein Expeditionskorps an die deutsche Küste bringen, am besten in der Ostsee.",
+   "t0": 165.5,
+   "t1": 170.88,
+   "fam": "mapa",
+   "take": {
+    "vista": "plano_kiel"
+   },
+   "muda": "seta de desembarque na costa alemã",
+   "dims": "lugar·ação",
+   "mk": [],
+   "v0": 165.42,
+   "v1": 172.04
+  },
+  {
+   "id": "05_04",
+   "frase": "05_04",
+   "texto": "Dort wartete ein möglicher Verbündeter: Dänemark, das achtzehnhundertvierundsechzig Schleswig und Holstein an Preußen und Österreich verloren hatte und eine Armee von vierzig- bis fünfzigtausend Mann besaß.",
+   "t0": 172.12,
+   "t1": 178.54,
+   "fam": "mapa",
+   "take": {
+    "vista": "dinamarca"
+   },
+   "muda": "a Dinamarca acende; Schleswig-Holstein perdido em 1864",
+   "dims": "lugar·tempo·causa",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "1864",
+     "t": 176.16,
+     "palavra": "achtzehnhundertvierundsechzig"
+    }
+   ],
+   "v0": 172.04,
+   "v1": 178.46
+  },
+  {
+   "id": "05_04B",
+   "frase": "05_04",
+   "texto": "Dort wartete ein möglicher Verbündeter: Dänemark, das achtzehnhundertvierundsechzig Schleswig und Holstein an Preußen und Österreich verloren hatte und eine Armee von vierzig- bis fünfzigtausend Mann besaß.",
+   "t0": 178.54,
+   "t1": 185.44,
+   "fam": "mapa",
+   "take": {
+    "vista": "dinamarca"
+   },
+   "muda": "40–50.000 escrito sobre a Dinamarca",
+   "dims": "dado",
+   "mk": [
+    {
+     "tipo": "numero",
+     "txt": "40–50.000",
+     "t": 182.7,
+     "palavra": "Armee"
+    }
+   ],
+   "v0": 178.46,
+   "v1": 186.96
+  },
+  {
+   "id": "05_05",
+   "frase": "05_05",
+   "texto": "Aber Dänemark würde nur dann losschlagen, wenn den Franzosen zuerst eine Landung gelang.",
+   "t0": 187.04,
+   "t1": 191.96,
+   "fam": "lapis",
+   "take": {
+    "doc": "plano_nota",
+    "linhas": [
+     "Dänemark?",
+     "– nur nach einer Landung"
+    ],
+    "sublinhar": [
+     1
+    ]
+   },
+   "muda": "'Dänemark – nur nach einer Landung' escrito e sublinhado",
+   "dims": "condição·causa",
+   "mk": [],
+   "v0": 186.96,
+   "v1": 192.7
+  },
+  {
+   "id": "05_06",
+   "frase": "05_06",
+   "texto": "Das heißt: Dieser Plan stand und fiel nicht mit den Schiffen, sondern mit den Soldaten, die auf ihnen fahren sollten.",
+   "t0": 192.78,
+   "t1": 199.59,
+   "fam": "anat",
+   "take": {
+    "cam": "contorno14"
+   },
+   "muda": "transportes tracejados ao lado do couraçado, vazios",
+   "dims": "objeto·causa",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "SOLDATEN?",
+     "t": 197.7,
+     "palavra": "Soldaten"
+    }
+   ],
+   "v0": 192.7,
+   "v1": 200.77
+  },
+  {
+   "id": "06_01",
+   "frase": "06_01",
+   "texto": "Und hier beginnt das Problem.",
+   "t0": 200.85,
+   "t1": 202.55,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita_escura"
+   },
+   "muda": "a câmera para no casco escuro",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 200.77,
+   "v1": 203.47
+  },
+  {
+   "id": "06_02",
+   "frase": "06_02",
+   "texto": "Die Vorbereitungen für die Flotte begannen erst am vierzehnten Juli, fünf Tage vor der Kriegserklärung.",
+   "t0": 203.55,
+   "t1": 209.27,
+   "fam": "lapis",
+   "take": {
+    "doc": "calendario",
+    "linhas": [
+     "14. Juli – Vorbereitung",
+     "19. Juli – Kriegserklärung"
+    ]
+   },
+   "muda": "datas escritas: 14. Juli · 19. Juli Krieg",
+   "dims": "tempo·dado",
+   "mk": [],
+   "v0": 203.47,
+   "v1": 210.49
+  },
+  {
+   "id": "06_03",
+   "frase": "06_03",
+   "texto": "Ihr Kommandeur, Admiral Bouët-Willaumez, wurde am zweiundzwanzigsten Juli ernannt.",
+   "t0": 210.57,
+   "t1": 215.53,
+   "fam": "epoca",
+   "take": {
+    "img": "bouet",
+    "foco": "rosto"
+   },
+   "muda": "retrato de Bouët-Willaumez; zoom no rosto",
+   "dims": "época·pessoa",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "BOUËT-WILLAUMEZ",
+     "t": 211.95,
+     "palavra": "Bouët-Willaumez"
+    }
+   ],
+   "v0": 210.49,
+   "v1": 216.31
+  },
+  {
+   "id": "06_04",
+   "frase": "06_04",
+   "texto": "Man hatte ihm vierzehn Panzerschiffe versprochen, dazu Transporter und Truppen.",
+   "t0": 216.39,
+   "t1": 220.55,
+   "fam": "anat",
+   "take": {
+    "cam": "contorno14"
+   },
+   "muda": "14 contornos tracejados de navios no palco",
+   "dims": "dado·plano",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 0,
+     "ate": 14,
+     "t": 216.85,
+     "palavra": "vierzehn"
+    }
+   ],
+   "v0": 216.31,
+   "v1": 221.29
+  },
+  {
+   "id": "06_05",
+   "frase": "06_05",
+   "texto": "In Cherbourg fand er drei Schiffe vor, und es fehlten sechzehntausend Matrosen.",
+   "t0": 221.37,
+   "t1": 225.65,
+   "fam": "lapis",
+   "take": {
+    "doc": "calendario",
+    "linhas": [
+     "vorhanden: 3 Schiffe",
+     "es fehlen: 16.000 Matrosen"
+    ]
+   },
+   "muda": "'3 Schiffe · 16.000 Matrosen fehlen' escrito e sublinhado",
+   "dims": "dado",
+   "mk": [],
+   "v0": 221.29,
+   "v1": 226.77
+  },
+  {
+   "id": "06_06",
+   "frase": "06_06",
+   "texto": "Am vierundzwanzigsten Juli lief er trotzdem aus, mit sieben Panzerschiffen und Werftarbeitern, die noch an Bord arbeiteten.",
+   "t0": 226.85,
+   "t1": 233.29,
+   "fam": "anat",
+   "take": {
+    "cam": "sai",
+    "sai": true
+   },
+   "muda": "o couraçado sai do palco; 7 dos 14 contornos se preenchem",
+   "dims": "objeto·dado·ação",
+   "mk": [],
+   "v0": 226.77,
+   "v1": 234.29
+  },
+  {
+   "id": "06_07",
+   "frase": "06_07",
+   "texto": "Seine Befehle: die Ostsee, die Elbe und die Jade gleichzeitig zu überwachen.",
+   "t0": 234.37,
+   "t1": 239.01,
+   "fam": "lapis",
+   "take": {
+    "doc": "carta_ordens",
+    "linhas": [
+     "Ostsee · Elbe · Jade"
+    ]
+   },
+   "muda": "'Ostsee · Elbe · Jade' escrito sobre a carta",
+   "dims": "lugar·plano",
+   "mk": [],
+   "v0": 234.29,
+   "v1": 239.35
+  },
+  {
+   "id": "06_08",
+   "frase": "06_08",
+   "texto": "Mit sieben Schiffen.",
+   "t0": 239.43,
+   "t1": 240.19,
+   "fam": "lapis",
+   "take": {
+    "doc": "carta_ordens",
+    "linhas": [
+     "Ostsee · Elbe · Jade",
+     "mit 7 Schiffen"
+    ],
+    "sublinhar": [
+     1
+    ]
+   },
+   "muda": "sublinha 'mit 7 Schiffen'",
+   "dims": "dado",
+   "mk": [],
+   "v0": 239.35,
+   "v1": 240.93
+  },
+  {
+   "id": "06_09",
+   "frase": "06_09",
+   "texto": "Die deutsche Panzerflotte dagegen war schon am sechzehnten Juli in Wilhelmshaven eingelaufen, drei Tage vor dem Krieg.",
+   "t0": 241.01,
+   "t1": 247.69,
+   "fam": "mapa",
+   "take": {
+    "vista": "plymouth_jade"
+   },
+   "muda": "trilha da esquadra alemã Plymouth→Wilhelmshaven, 16.07",
+   "dims": "lugar·tempo",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "16. JULI",
+     "t": 243.49,
+     "palavra": "sechzehnten"
+    }
+   ],
+   "v0": 240.93,
+   "v1": 248.98
+  },
+  {
+   "id": "07_01",
+   "frase": "07_01",
+   "texto": "Während die Schiffe in die Ostsee dampften, entschied sich der Krieg schon an Land.",
+   "t0": 249.06,
+   "t1": 253.42,
+   "fam": "epoca",
+   "take": {
+    "img": "frota_francesa"
+   },
+   "muda": "a frota francesa a vapor (época)",
+   "dims": "época·objeto",
+   "mk": [],
+   "v0": 248.98,
+   "v1": 254.34
+  },
+  {
+   "id": "07_02",
+   "frase": "07_02",
+   "texto": "Ende Juli wurde klar, dass Frankreichs Armee den Deutschen zahlenmäßig unterlegen war.",
+   "t0": 254.42,
+   "t1": 259.36,
+   "fam": "lapis",
+   "take": {
+    "doc": "efetivos",
+    "linhas": [
+     "Frankreich: weniger Soldaten",
+     "als die Deutschen"
+    ]
+   },
+   "muda": "efetivos escritos: Frankreich < Deutschland",
+   "dims": "dado·comparação",
+   "mk": [],
+   "v0": 254.34,
+   "v1": 260.0
+  },
+  {
+   "id": "07_03",
+   "frase": "07_03",
+   "texto": "Anfang August folgten die Niederlagen von Weißenburg, Wörth und Spichern.",
+   "t0": 260.08,
+   "t1": 263.88,
+   "fam": "mapa",
+   "take": {
+    "vista": "fronteira"
+   },
+   "muda": "Weißenburg, Wörth, Spichern marcados um a um",
+   "dims": "lugar·tempo",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "WÖRTH",
+     "t": 263.2,
+     "palavra": "Wörth"
+    }
+   ],
+   "v0": 260.0,
+   "v1": 264.68
+  },
+  {
+   "id": "07_04",
+   "frase": "07_04",
+   "texto": "Und jetzt brauchte Frankreich jeden Soldaten an der Grenze.",
+   "t0": 264.76,
+   "t1": 267.9,
+   "fam": "mapa",
+   "take": {
+    "vista": "fronteira"
+   },
+   "muda": "a fronteira pulsa em laranja",
+   "dims": "lugar·causa",
+   "mk": [],
+   "v0": 264.68,
+   "v1": 268.9
+  },
+  {
+   "id": "07_05",
+   "frase": "07_05",
+   "texto": "Die Division Marineinfanterie, zehntausend Mann, die in Cherbourg auf die Landung gewartet hatte, wurde nach Châlons geschickt, zur Armee von Mac-Mahon.",
+   "t0": 268.98,
+   "t1": 272.96,
+   "fam": "mapa",
+   "take": {
+    "vista": "divisao_cherbourg"
+   },
+   "muda": "10.000 pontos saem de Cherbourg",
+   "dims": "dado·ação",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 0,
+     "ate": 10000,
+     "t": 270.92,
+     "palavra": "zehntausend"
+    }
+   ],
+   "v0": 268.9,
+   "v1": 272.88
+  },
+  {
+   "id": "07_05B",
+   "frase": "07_05",
+   "texto": "Die Division Marineinfanterie, zehntausend Mann, die in Cherbourg auf die Landung gewartet hatte, wurde nach Châlons geschickt, zur Armee von Mac-Mahon.",
+   "t0": 272.96,
+   "t1": 277.18,
+   "fam": "mapa",
+   "take": {
+    "vista": "divisao_chalons"
+   },
+   "muda": "os pontos chegam a Châlons",
+   "dims": "lugar·tempo",
+   "mk": [],
+   "v0": 272.88,
+   "v1": 277.96
+  },
+  {
+   "id": "07_06",
+   "frase": "07_06",
+   "texto": "Mit ihr marschierte sie nach Sedan.",
+   "t0": 278.04,
+   "t1": 279.56,
+   "fam": "mapa",
+   "take": {
+    "vista": "divisao_sedan"
+   },
+   "muda": "os pontos seguem para Sedan",
+   "dims": "lugar·ação",
+   "mk": [],
+   "v0": 277.96,
+   "v1": 280.3
+  },
+  {
+   "id": "07_07",
+   "frase": "07_07",
+   "texto": "Und dort ging sie am zweiten September mit der ganzen Armee in Gefangenschaft.",
+   "t0": 280.38,
+   "t1": 284.18,
+   "fam": "epoca",
+   "take": {
+    "img": "sedan"
+   },
+   "muda": "pintura da capitulação; zoom nas tropas cercadas",
+   "dims": "época·consequência",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "2. SEPTEMBER",
+     "t": 281.78,
+     "palavra": "September"
+    }
+   ],
+   "v0": 280.3,
+   "v1": 285.22
+  },
+  {
+   "id": "07_08",
+   "frase": "07_08",
+   "texto": "Die Landungstruppe der Flotte kapitulierte, ohne die Ostsee je gesehen zu haben.",
+   "t0": 285.3,
+   "t1": 289.78,
+   "fam": "mapa",
+   "take": {
+    "vista": "baltico_apaga"
+   },
+   "muda": "a trilha de desembarque no Báltico se apaga",
+   "dims": "causa→efeito",
+   "mk": [],
+   "v0": 285.22,
+   "v1": 290.52
+  },
+  {
+   "id": "07_09",
+   "frase": "07_09",
+   "texto": "Ohne einen Schuss auf See.",
+   "t0": 290.6,
+   "t1": 291.8,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil_vazio"
+   },
+   "muda": "corte seco: palco vazio",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 290.52,
+   "v1": 292.08
+  },
+  {
+   "id": "07_10",
+   "frase": "07_10",
+   "texto": "Eine französische Kommission stellte später nüchtern fest: Ohne Landungstruppen war an der deutschen Küste nichts zu erreichen.",
+   "t0": 292.16,
+   "t1": 299.52,
+   "fam": "lapis",
+   "take": {
+    "doc": "comissao",
+    "linhas": [
+     "Ohne Landungstruppen –",
+     "nichts zu erreichen."
+    ],
+    "sublinhar": [
+     0
+    ]
+   },
+   "muda": "a conclusão da comissão escrita e sublinhada",
+   "dims": "fonte·causa",
+   "mk": [],
+   "v0": 292.08,
+   "v1": 300.83
+  },
+  {
+   "id": "08_01",
+   "frase": "08_01",
+   "texto": "Aber hätten die Schiffe nicht einfach selbst angreifen können?",
+   "t0": 300.91,
+   "t1": 304.25,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita"
+   },
+   "muda": "a câmera gira até a proa",
+   "dims": "objeto·pergunta",
+   "mk": [],
+   "v0": 300.83,
+   "v1": 304.85
+  },
+  {
+   "id": "08_02",
+   "frase": "08_02",
+   "texto": "Hier kommen die acht Meter zurück.",
+   "t0": 304.93,
+   "t1": 306.85,
+   "fam": "anat",
+   "take": {
+    "cam": "calado",
+    "destaque": "vivas",
+    "regua": true
+   },
+   "muda": "a régua de 8 m volta",
+   "dims": "objeto·dado",
+   "mk": [],
+   "v0": 304.85,
+   "v1": 307.81
+  },
+  {
+   "id": "08_03",
+   "frase": "08_03",
+   "texto": "Die deutsche Nordseeküste ist eine der flachsten Küsten Europas.",
+   "t0": 307.89,
+   "t1": 311.07,
+   "fam": "mapa",
+   "take": {
+    "vista": "costa_nordsee"
+   },
+   "muda": "a costa alemã do Mar do Norte em close",
+   "dims": "lugar",
+   "mk": [],
+   "v0": 307.81,
+   "v1": 312.31
+  },
+  {
+   "id": "08_04",
+   "frase": "08_04",
+   "texto": "Vor ihr liegt das Wattenmeer, durchzogen von Sandbänken und schmalen Rinnen.",
+   "t0": 312.39,
+   "t1": 316.91,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_faixas",
+    "faixasJade": true
+   },
+   "muda": "o Watt aparece em faixas",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "WATTENMEER",
+     "t": 313.27,
+     "palavra": "Wattenmeer"
+    }
+   ],
+   "v0": 312.31,
+   "v1": 318.0
+  },
+  {
+   "id": "08_05",
+   "frase": "08_05",
+   "texto": "Wilhelmshaven war für große Schiffe nur bei Flut erreichbar, durch ein enges, gewundenes Fahrwasser von Wangerooge her.",
+   "t0": 318.08,
+   "t1": 324.97,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_canal",
+    "faixasJade": true
+   },
+   "muda": "o canal estreito se desenha de Wangerooge ao porto; maré alta",
+   "dims": "lugar·tempo",
+   "mk": [],
+   "v0": 318.0,
+   "v1": 326.09
+  },
+  {
+   "id": "08_06",
+   "frase": "08_06",
+   "texto": "Und kein französisches Hochseepanzerschiff lag weniger als sieben Meter tief, die größten über neun.",
+   "t0": 326.17,
+   "t1": 329.69,
+   "fam": "anat",
+   "take": {
+    "cam": "calado_faixa",
+    "destaque": "vivas",
+    "regua": true
+   },
+   "muda": "réguas: 7 m a 9 m no casco",
+   "dims": "objeto·dado",
+   "mk": [
+    {
+     "tipo": "regua",
+     "txt": "7–9 m",
+     "t": 329.95,
+     "palavra": "sieben"
+    }
+   ],
+   "v0": 326.09,
+   "v1": 329.61
+  },
+  {
+   "id": "08_06B",
+   "frase": "08_06",
+   "texto": "Und kein französisches Hochseepanzerschiff lag weniger als sieben Meter tief, die größten über neun.",
+   "t0": 329.69,
+   "t1": 332.95,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_navio_para",
+    "faixasJade": true
+   },
+   "muda": "ícone do couraçado avança e PARA na borda do raso",
+   "dims": "lugar·dado·causa→efeito",
+   "mk": [],
+   "v0": 329.61,
+   "v1": 333.87
+  },
+  {
+   "id": "08_07",
+   "frase": "08_07",
+   "texto": "Die Preußen löschten die Leuchtfeuer und zogen die Tonnen ein, und neutrale Lotsen für die Jade waren verboten.",
+   "t0": 333.95,
+   "t1": 341.15,
+   "fam": "epoca",
+   "take": {
+    "img": "wangerooge"
+   },
+   "muda": "farol/costa de época; a luz se apaga",
+   "dims": "época·ação",
+   "mk": [],
+   "v0": 333.87,
+   "v1": 342.01
+  },
+  {
+   "id": "08_08",
+   "frase": "08_08",
+   "texto": "In der Kieler Förde warteten Sperren, Seeminen und Krupp-Geschütze.",
+   "t0": 342.09,
+   "t1": 345.79,
+   "fam": "mapa",
+   "take": {
+    "vista": "kiel_barreira"
+   },
+   "muda": "barreira de Friedrichsort, minas e baterias em Kiel",
+   "dims": "lugar·objeto",
+   "mk": [
+    {
+     "tipo": "anel",
+     "lugar": "Friedrichsort",
+     "t": 343.53,
+     "palavra": "Sperren"
+    }
+   ],
+   "v0": 342.01,
+   "v1": 346.99
+  },
+  {
+   "id": "08_09",
+   "frase": "08_09",
+   "texto": "Was den Franzosen fehlte, waren Kanonenboote mit wenig Tiefgang.",
+   "t0": 347.07,
+   "t1": 350.59,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil"
+   },
+   "muda": "procura no palco: nenhum barco raso ao lado",
+   "dims": "objeto·ausência",
+   "mk": [],
+   "v0": 346.99,
+   "v1": 351.07
+  },
+  {
+   "id": "08_10",
+   "frase": "08_10",
+   "texto": "Sie hatten keine.",
+   "t0": 351.15,
+   "t1": 351.97,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil_vazio"
+   },
+   "muda": "corte seco: palco vazio",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 351.07,
+   "v1": 352.49
+  },
+  {
+   "id": "08_11",
+   "frase": "08_11",
+   "texto": "Wie es andersherum ging, zeigte die kleine Arminius.",
+   "t0": 352.57,
+   "t1": 355.82,
+   "fam": "epoca",
+   "take": {
+    "img": "arminius"
+   },
+   "muda": "foto do Arminius",
+   "dims": "época·objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "ARMINIUS · 4,5 m",
+     "t": 355.17,
+     "palavra": "Arminius"
+    }
+   ],
+   "v0": 352.49,
+   "v1": 356.37
+  },
+  {
+   "id": "08_12",
+   "frase": "08_12",
+   "texto": "Mit nur viereinhalb Metern Tiefgang schlich sie Ende Juli von Kiel aus dicht an der schwedischen Küste entlang durch den Sund in die Elbe, und niemand bemerkte sie.",
+   "t0": 356.45,
+   "t1": 361.41,
+   "fam": "mapa",
+   "take": {
+    "vista": "arminius_sund"
+   },
+   "muda": "trilha Kiel→Sund colada à costa sueca",
+   "dims": "lugar·ação",
+   "mk": [
+    {
+     "tipo": "trilha",
+     "estilo": "solida",
+     "t": 358.19,
+     "palavra": "schlich"
+    }
+   ],
+   "v0": 356.37,
+   "v1": 361.33
+  },
+  {
+   "id": "08_12B",
+   "frase": "08_12",
+   "texto": "Mit nur viereinhalb Metern Tiefgang schlich sie Ende Juli von Kiel aus dicht an der schwedischen Küste entlang durch den Sund in die Elbe, und niemand bemerkte sie.",
+   "t0": 361.41,
+   "t1": 366.45,
+   "fam": "mapa",
+   "take": {
+    "vista": "arminius_elba"
+   },
+   "muda": "a trilha chega à Elba sem ser vista",
+   "dims": "lugar·tempo",
+   "mk": [],
+   "v0": 361.33,
+   "v1": 367.07
+  },
+  {
+   "id": "08_13",
+   "frase": "08_13",
+   "texto": "Die Minen vor der Jade mussten übrigens kein einziges Schiff versenken.",
+   "t0": 367.15,
+   "t1": 370.27,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_minas"
+   },
+   "muda": "minas como pontos com anel no Jade",
+   "dims": "lugar·objeto",
+   "mk": [],
+   "v0": 367.07,
+   "v1": 370.85
+  },
+  {
+   "id": "08_14",
+   "frase": "08_14",
+   "texto": "Es reichte, dass sie da waren.",
+   "t0": 370.93,
+   "t1": 372.47,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil"
+   },
+   "muda": "o couraçado parado longe da costa",
+   "dims": "objeto·causa",
+   "mk": [],
+   "v0": 370.85,
+   "v1": 373.58
+  },
+  {
+   "id": "08b_01",
+   "frase": "08b_01",
+   "texto": "Und selbst dort, wo das Wasser tief genug war, galt eine alte Regel der Seekriegsführung.",
+   "t0": 373.66,
+   "t1": 379.3,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita"
+   },
+   "muda": "o couraçado gira",
+   "dims": "objeto",
+   "mk": [],
+   "v0": 373.58,
+   "v1": 380.36
+  },
+  {
+   "id": "08b_02",
+   "frase": "08b_02",
+   "texto": "Ein Schiff ist immer ein Kompromiss.",
+   "t0": 380.44,
+   "t1": 382.92,
+   "fam": "anat",
+   "take": {
+    "cam": "tres_quartos"
+   },
+   "muda": "rótulo KOMPROMISS",
+   "dims": "conceito",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "KOMPROMISS",
+     "t": 382.02,
+     "palavra": "Kompromiss"
+    }
+   ],
+   "v0": 380.36,
+   "v1": 383.34
+  },
+  {
+   "id": "08b_03",
+   "frase": "08b_03",
+   "texto": "Es muss schwimmen, es muss fahren, und jede Tonne Panzer und jede Kanone kostet Tiefgang und Geschwindigkeit.",
+   "t0": 383.42,
+   "t1": 391.04,
+   "fam": "anat",
+   "take": {
+    "cam": "cinta",
+    "destaque": "cinta"
+   },
+   "muda": "cinta e bateria acendem; tiques de 'Tiefgang' e 'Tempo'",
+   "dims": "objeto·conceito",
+   "mk": [],
+   "v0": 383.34,
+   "v1": 392.38
+  },
+  {
+   "id": "08b_04",
+   "frase": "08b_04",
+   "texto": "Eine Festung muss nichts davon.",
+   "t0": 392.46,
+   "t1": 394.2,
+   "fam": "epoca",
+   "take": {
+    "img": "forte"
+   },
+   "muda": "fortificação de época em paralaxe",
+   "dims": "época·contraste",
+   "mk": [],
+   "v0": 392.38,
+   "v1": 395.22
+  },
+  {
+   "id": "08b_05",
+   "frase": "08b_05",
+   "texto": "Sie kann so viel Erde und Mauerwerk auftürmen, wie sie will, und so viele Geschütze aufstellen, wie Platz ist.",
+   "t0": 395.3,
+   "t1": 401.24,
+   "fam": "epoca",
+   "take": {
+    "img": "forte"
+   },
+   "muda": "zoom na muralha de terra",
+   "dims": "época·conceito",
+   "mk": [],
+   "v0": 395.22,
+   "v1": 402.28
+  },
+  {
+   "id": "08b_06",
+   "frase": "08b_06",
+   "texto": "Ein Treffer im Wall wird über Nacht wieder zugeschüttet.",
+   "t0": 402.36,
+   "t1": 405.0,
+   "fam": "anat",
+   "take": {
+    "cam": "fatia",
+    "fatia": true
+   },
+   "muda": "a fatia da cinta ao lado de um bloco de terra",
+   "dims": "conceito·comparação",
+   "mk": [],
+   "v0": 402.28,
+   "v1": 405.6
+  },
+  {
+   "id": "08b_07",
+   "frase": "08b_07",
+   "texto": "Ein Treffer unter der Wasserlinie kann ein Schiff versenken.",
+   "t0": 405.68,
+   "t1": 408.82,
+   "fam": "anat",
+   "take": {
+    "cam": "calado",
+    "destaque": "vivas",
+    "regua": true
+   },
+   "muda": "destaque abaixo da linha d'água",
+   "dims": "objeto·causa→efeito",
+   "mk": [],
+   "v0": 405.6,
+   "v1": 409.52
+  },
+  {
+   "id": "08b_08",
+   "frase": "08b_08",
+   "texto": "Vor der Insel Alsen hätte der Tiefgang die Franzosen gezwungen, aus rund drei Kilometern Entfernung zu schießen.",
+   "t0": 409.6,
+   "t1": 416.3,
+   "fam": "mapa",
+   "take": {
+    "vista": "alsen"
+   },
+   "muda": "anel de 3 km em Alsen; o ícone fica fora",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "anel",
+     "lugar": "Alsen",
+     "txt": "3 km",
+     "t": 414.46,
+     "palavra": "Kilometern"
+    }
+   ],
+   "v0": 409.52,
+   "v1": 416.98
+  },
+  {
+   "id": "08b_09",
+   "frase": "08b_09",
+   "texto": "Und vor Kiel, so urteilte die französische Kommission, hätte selbst die ganze Flotte die Sperren nicht durchbrochen.",
+   "t0": 417.06,
+   "t1": 423.7,
+   "fam": "lapis",
+   "take": {
+    "doc": "comissao",
+    "linhas": [
+     "Kiel: selbst die ganze Flotte",
+     "käme nicht durch."
+    ],
+    "sublinhar": [
+     0
+    ]
+   },
+   "muda": "'selbst die ganze Flotte' escrito",
+   "dims": "fonte",
+   "mk": [],
+   "v0": 416.98,
+   "v1": 424.81
+  },
+  {
+   "id": "09_01",
+   "frase": "09_01",
+   "texto": "Blieb die Blockade.",
+   "t0": 424.89,
+   "t1": 425.76,
+   "fam": "epoca",
+   "take": {
+    "img": "frota_francesa"
+   },
+   "muda": "esquadra de bloqueio (época)",
+   "dims": "época·objeto",
+   "mk": [],
+   "v0": 424.81,
+   "v1": 426.51
+  },
+  {
+   "id": "09_02",
+   "frase": "09_02",
+   "texto": "Ab Mitte August sperrten die Franzosen die deutschen Häfen an Nord- und Ostsee.",
+   "t0": 426.59,
+   "t1": 430.87,
+   "fam": "mapa",
+   "take": {
+    "vista": "bloqueio"
+   },
+   "muda": "as linhas se fecham diante dos portos",
+   "dims": "lugar·ação",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "MITTE AUGUST",
+     "t": 427.03,
+     "palavra": "August"
+    }
+   ],
+   "v0": 426.51,
+   "v1": 431.69
+  },
+  {
+   "id": "09_03",
+   "frase": "09_03",
+   "texto": "Deutsche Handelsschiffe gingen ihnen ins Netz.",
+   "t0": 431.77,
+   "t1": 433.71,
+   "fam": "mapa",
+   "take": {
+    "vista": "bloqueio_capturas"
+   },
+   "muda": "pequenos navios mercantes capturados",
+   "dims": "dado·ação",
+   "mk": [],
+   "v0": 431.69,
+   "v1": 434.63
+  },
+  {
+   "id": "09_04",
+   "frase": "09_04",
+   "texto": "Aber eine Blockade lebt von Kohle.",
+   "t0": 434.71,
+   "t1": 436.67,
+   "fam": "anat",
+   "take": {
+    "cam": "bunker",
+    "destaque": "bunker"
+   },
+   "muda": "o bunker acende",
+   "dims": "objeto·causa",
+   "mk": [],
+   "v0": 434.63,
+   "v1": 437.23
+  },
+  {
+   "id": "09_05",
+   "frase": "09_05",
+   "texto": "Helgoland, der ideale Stützpunkt, war britisch, und London verbot die Nutzung.",
+   "t0": 437.31,
+   "t1": 441.81,
+   "fam": "mapa",
+   "take": {
+    "vista": "helgoland_britanica"
+   },
+   "muda": "Helgoland com anel 'britisch – gesperrt'",
+   "dims": "lugar·causa",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "BRITISCH",
+     "t": 439.51,
+     "palavra": "britisch"
+    }
+   ],
+   "v0": 437.23,
+   "v1": 442.37
+  },
+  {
+   "id": "09_06",
+   "frase": "09_06",
+   "texto": "An der dänischen Westküste gab es keinen einzigen Hafen.",
+   "t0": 442.45,
+   "t1": 445.61,
+   "fam": "mapa",
+   "take": {
+    "vista": "dinamarca_costa"
+   },
+   "muda": "costa oeste dinamarquesa: nenhum porto",
+   "dims": "lugar·ausência",
+   "mk": [],
+   "v0": 442.37,
+   "v1": 446.35
+  },
+  {
+   "id": "09_07",
+   "frase": "09_07",
+   "texto": "Also kam die Kohle aus Dünkirchen und Cherbourg, Hunderte Seemeilen entfernt, und wurde auf offener See von Schiff zu Schiff umgeladen, nur bei Tag und nur bei ruhigem Wetter.",
+   "t0": 446.43,
+   "t1": 451.39,
+   "fam": "mapa",
+   "take": {
+    "vista": "carvao_dunquerque"
+   },
+   "muda": "trilha longa do carvão Dunquerque→Helgoland",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "cota",
+     "txt": "Hunderte Seemeilen",
+     "t": 449.61,
+     "palavra": "Seemeilen"
+    }
+   ],
+   "v0": 446.35,
+   "v1": 451.31
+  },
+  {
+   "id": "09_07B",
+   "frase": "09_07",
+   "texto": "Also kam die Kohle aus Dünkirchen und Cherbourg, Hunderte Seemeilen entfernt, und wurde auf offener See von Schiff zu Schiff umgeladen, nur bei Tag und nur bei ruhigem Wetter.",
+   "t0": 451.39,
+   "t1": 456.51,
+   "fam": "epoca",
+   "take": {
+    "img": "carvao_mar"
+   },
+   "muda": "imagem de transferência de carvão no mar",
+   "dims": "época·ação",
+   "mk": [],
+   "v0": 451.31,
+   "v1": 457.55
+  },
+  {
+   "id": "09_08",
+   "frase": "09_08",
+   "texto": "Erinnern Sie sich an die sechshundert Tonnen der Provence.",
+   "t0": 457.63,
+   "t1": 460.09,
+   "fam": "anat",
+   "take": {
+    "cam": "bunker",
+    "destaque": "bunker"
+   },
+   "muda": "600 t no bunker",
+   "dims": "objeto·dado",
+   "mk": [
+    {
+     "tipo": "numero",
+     "txt": "600 t",
+     "t": 458.47,
+     "palavra": "sechshundert"
+    }
+   ],
+   "v0": 457.55,
+   "v1": 460.77
+  },
+  {
+   "id": "09_09",
+   "frase": "09_09",
+   "texto": "Bei voller Fahrt verbrannte so ein Schiff achtzig bis hundertdreißig Tonnen am Tag.",
+   "t0": 460.85,
+   "t1": 465.55,
+   "fam": "lapis",
+   "take": {
+    "doc": "diario_carvao",
+    "linhas": [
+     "600 t",
+     "480",
+     "360",
+     "240",
+     "120"
+    ]
+   },
+   "muda": "diário: 600 → 480 → 360 …",
+   "dims": "dado·tempo",
+   "mk": [],
+   "v0": 460.77,
+   "v1": 465.47
+  },
+  {
+   "id": "09_10",
+   "frase": "09_10",
+   "texto": "Das sind fünf bis acht Tage.",
+   "t0": 465.55,
+   "t1": 467.25,
+   "fam": "lapis",
+   "take": {
+    "doc": "diario_carvao",
+    "linhas": [
+     "600 t",
+     "480",
+     "360",
+     "240",
+     "120",
+     "5–8 Tage"
+    ],
+    "sublinhar": [
+     5
+    ]
+   },
+   "muda": "'5–8 Tage' sublinhado",
+   "dims": "dado",
+   "mk": [],
+   "v0": 465.47,
+   "v1": 468.31
+  },
+  {
+   "id": "09_11",
+   "frase": "09_11",
+   "texto": "Anfang September kam der Herbststurm aus Südwest.",
+   "t0": 468.39,
+   "t1": 471.05,
+   "fam": "mapa",
+   "take": {
+    "vista": "vendaval",
+    "setas": true
+   },
+   "muda": "setas do vendaval de SW varrem o Mar do Norte",
+   "dims": "lugar·tempo·clima",
+   "mk": [],
+   "v0": 468.31,
+   "v1": 471.19
+  },
+  {
+   "id": "09_12",
+   "frase": "09_12",
+   "texto": "Die Schiffe mussten auf See bleiben, gegen den Wind dampfen, Kohle verbrennen.",
+   "t0": 471.27,
+   "t1": 474.67,
+   "fam": "epoca",
+   "take": {
+    "img": "tempestade"
+   },
+   "muda": "pintura de tempestade em paralaxe",
+   "dims": "época·clima",
+   "mk": [],
+   "v0": 471.19,
+   "v1": 475.53
+  },
+  {
+   "id": "09_13",
+   "frase": "09_13",
+   "texto": "Am Ende hatten die meisten kaum noch genug, um Frankreich zu erreichen.",
+   "t0": 475.61,
+   "t1": 479.05,
+   "fam": "mapa",
+   "take": {
+    "vista": "alcance_encolhe"
+   },
+   "muda": "anel de alcance do carvão encolhe até não chegar a Cherbourg",
+   "dims": "dado·causa→efeito",
+   "mk": [],
+   "v0": 475.53,
+   "v1": 479.93
+  },
+  {
+   "id": "09_14",
+   "frase": "09_14",
+   "texto": "Mitte September lag die Nordseeflotte wieder in Cherbourg.",
+   "t0": 480.01,
+   "t1": 482.49,
+   "fam": "mapa",
+   "take": {
+    "vista": "volta_cherbourg"
+   },
+   "muda": "trilha de volta a Cherbourg; meados de setembro",
+   "dims": "lugar·tempo",
+   "mk": [],
+   "v0": 479.93,
+   "v1": 483.07
+  },
+  {
+   "id": "09_15",
+   "frase": "09_15",
+   "texto": "Die Ostseeflotte folgte kurz darauf.",
+   "t0": 483.15,
+   "t1": 485.19,
+   "fam": "epoca",
+   "take": {
+    "img": "tempestade"
+   },
+   "muda": "navios de época voltando no mau tempo",
+   "dims": "época·tempo",
+   "mk": [],
+   "v0": 483.07,
+   "v1": 485.59
+  },
+  {
+   "id": "09_16",
+   "frase": "09_16",
+   "texto": "Die Blockade war vorbei.",
+   "t0": 485.67,
+   "t1": 487.45,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil_vazio"
+   },
+   "muda": "corte seco: palco vazio",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 485.59,
+   "v1": 488.62
+  },
+  {
+   "id": "10_01",
+   "frase": "10_01",
+   "texto": "Und jetzt das, was die meisten Darstellungen übergehen.",
+   "t0": 488.7,
+   "t1": 491.52,
+   "fam": "epoca",
+   "take": {
+    "img": "paris_cerco"
+   },
+   "muda": "imagem do cerco de Paris",
+   "dims": "época·lugar",
+   "mk": [],
+   "v0": 488.62,
+   "v1": 492.14
+  },
+  {
+   "id": "10_02",
+   "frase": "10_02",
+   "texto": "Die französische Flotte hat in diesem Krieg sehr wohl gekämpft.",
+   "t0": 492.22,
+   "t1": 495.58,
+   "fam": "epoca",
+   "take": {
+    "img": "marinheiros_forte"
+   },
+   "muda": "marinheiros num forte",
+   "dims": "época·pessoas",
+   "mk": [],
+   "v0": 492.14,
+   "v1": 496.28
+  },
+  {
+   "id": "10_03",
+   "frase": "10_03",
+   "texto": "Nur nicht auf See.",
+   "t0": 496.36,
+   "t1": 497.2,
+   "fam": "epoca",
+   "take": {
+    "img": "marinheiros_forte"
+   },
+   "muda": "corte seco: zoom no canhão naval",
+   "dims": "época·objeto",
+   "mk": [],
+   "v0": 496.28,
+   "v1": 498.14
+  },
+  {
+   "id": "10_04",
+   "frase": "10_04",
+   "texto": "Schon ab August schickte die Marine zehntausend Matrosen und über hundertsiebzig schwere Schiffsgeschütze nach Paris.",
+   "t0": 498.22,
+   "t1": 504.48,
+   "fam": "mapa",
+   "take": {
+    "vista": "cherbourg_paris"
+   },
+   "muda": "trilha Cherbourg→Paris; 10.000 · 170 contam",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 0,
+     "ate": 10000,
+     "t": 499.96,
+     "palavra": "zehntausend"
+    }
+   ],
+   "v0": 498.14,
+   "v1": 505.32
+  },
+  {
+   "id": "10_05",
+   "frase": "10_05",
+   "texto": "Nach Sedan holte man auch noch die Seesoldaten und die Hälfte der Kanoniere von den Schiffen.",
+   "t0": 505.4,
+   "t1": 509.9,
+   "fam": "anat",
+   "take": {
+    "cam": "tripulacao",
+    "destaque": "bateria"
+   },
+   "muda": "marcadores de tripulação no navio caem pela metade",
+   "dims": "objeto·dado",
+   "mk": [],
+   "v0": 505.32,
+   "v1": 510.56
+  },
+  {
+   "id": "10_06",
+   "frase": "10_06",
+   "texto": "Sie besetzten sechs der Forts rund um die Hauptstadt, von Romainville und Rosny im Osten bis Ivry, Bicêtre und Montrouge im Süden.",
+   "t0": 510.64,
+   "t1": 514.96,
+   "fam": "mapa",
+   "take": {
+    "vista": "paris_fortes"
+   },
+   "muda": "fortes do leste acendem: Romainville, Rosny",
+   "dims": "lugar",
+   "mk": [],
+   "v0": 510.56,
+   "v1": 514.88
+  },
+  {
+   "id": "10_06B",
+   "frase": "10_06",
+   "texto": "Sie besetzten sechs der Forts rund um die Hauptstadt, von Romainville und Rosny im Osten bis Ivry, Bicêtre und Montrouge im Süden.",
+   "t0": 514.96,
+   "t1": 519.02,
+   "fam": "mapa",
+   "take": {
+    "vista": "paris_fortes"
+   },
+   "muda": "fortes do sul acendem: Ivry, Bicêtre, Montrouge",
+   "dims": "lugar·dado",
+   "mk": [],
+   "v0": 514.88,
+   "v1": 519.86
+  },
+  {
+   "id": "10_07",
+   "frase": "10_07",
+   "texto": "Bis zum Februar achtzehnhunderteinundsiebzig kämpften fast sechsundfünfzigtausend Männer der Marine an Land.",
+   "t0": 519.94,
+   "t1": 525.6,
+   "fam": "epoca",
+   "take": {
+    "img": "marinheiros_forte"
+   },
+   "muda": "56.000 sobre a imagem dos fortes",
+   "dims": "época·dado",
+   "mk": [
+    {
+     "tipo": "contador",
+     "de": 0,
+     "ate": 56000,
+     "t": 523.06,
+     "palavra": "sechsundfünfzigtausend"
+    }
+   ],
+   "v0": 519.86,
+   "v1": 526.2
+  },
+  {
+   "id": "10_08",
+   "frase": "10_08",
+   "texto": "Die Flotte hatte ihre Kanonen nicht verloren.",
+   "t0": 526.28,
+   "t1": 528.8,
+   "fam": "epoca",
+   "take": {
+    "img": "marinheiros_forte"
+   },
+   "muda": "zoom lento nos canhões do forte",
+   "dims": "época·conceito",
+   "mk": [],
+   "v0": 526.2,
+   "v1": 529.18
+  },
+  {
+   "id": "10_09",
+   "frase": "10_09",
+   "texto": "Sie hatte sie nur dorthin getragen, wo der Krieg tatsächlich stattfand.",
+   "t0": 529.26,
+   "t1": 532.21,
+   "fam": "mapa",
+   "take": {
+    "vista": "paris_fortes"
+   },
+   "muda": "a câmera recua: a frota está em Paris",
+   "dims": "lugar·causa",
+   "mk": [],
+   "v0": 529.18,
+   "v1": 533.69
+  },
+  {
+   "id": "10b_01",
+   "frase": "10b_01",
+   "texto": "Bleibt die umgekehrte Frage.",
+   "t0": 533.77,
+   "t1": 535.47,
+   "fam": "epoca",
+   "take": {
+    "img": "wilhelmshaven_1869"
+   },
+   "muda": "o porto de Wilhelmshaven",
+   "dims": "época·lugar",
+   "mk": [],
+   "v0": 533.69,
+   "v1": 536.81
+  },
+  {
+   "id": "10b_02",
+   "frase": "10b_02",
+   "texto": "Warum griffen die Deutschen nicht an, als die Franzosen weg waren?",
+   "t0": 536.89,
+   "t1": 540.27,
+   "fam": "epoca",
+   "take": {
+    "img": "koenig_wilhelm"
+   },
+   "muda": "foto do König Wilhelm",
+   "dims": "época·objeto",
+   "mk": [],
+   "v0": 536.81,
+   "v1": 541.29
+  },
+  {
+   "id": "10b_03",
+   "frase": "10b_03",
+   "texto": "Ihr Plan war von Anfang an rein defensiv.",
+   "t0": 541.37,
+   "t1": 544.01,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_wilhelmshaven"
+   },
+   "muda": "anel defensivo em volta do Jade",
+   "dims": "lugar·plano",
+   "mk": [],
+   "v0": 541.29,
+   "v1": 544.67
+  },
+  {
+   "id": "10b_04",
+   "frase": "10b_04",
+   "texto": "Die fünf Panzerschiffe sollten in der Jade liegen und die Küste schützen, nicht mehr.",
+   "t0": 544.75,
+   "t1": 549.31,
+   "fam": "anat",
+   "take": {
+    "cam": "frota5",
+    "frota": [
+     0,
+     5
+    ]
+   },
+   "muda": "as 5 silhuetas alemãs paradas",
+   "dims": "objeto·dado",
+   "mk": [],
+   "v0": 544.67,
+   "v1": 550.11
+  },
+  {
+   "id": "10b_05",
+   "frase": "10b_05",
+   "texto": "Und auch sie hatten ihre Probleme.",
+   "t0": 550.19,
+   "t1": 551.73,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita_escura"
+   },
+   "muda": "o casco escuro",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 550.11,
+   "v1": 552.29
+  },
+  {
+   "id": "10b_06",
+   "frase": "10b_06",
+   "texto": "Die König Wilhelm war seit ihrem Kauf nie im Dock gewesen, ihr Rumpf war bewachsen, und alle drei großen Fregatten litten immer wieder an Maschinenschäden.",
+   "t0": 552.37,
+   "t1": 556.45,
+   "fam": "anat",
+   "take": {
+    "cam": "vivas_sujas",
+    "destaque": "vivas"
+   },
+   "muda": "obras vivas em destaque (bewachsen) e a máquina em alerta",
+   "dims": "objeto·causa",
+   "mk": [],
+   "v0": 552.29,
+   "v1": 556.37
+  },
+  {
+   "id": "10b_06B",
+   "frase": "10b_06",
+   "texto": "Die König Wilhelm war seit ihrem Kauf nie im Dock gewesen, ihr Rumpf war bewachsen, und alle drei großen Fregatten litten immer wieder an Maschinenschäden.",
+   "t0": 556.45,
+   "t1": 560.73,
+   "fam": "anat",
+   "take": {
+    "cam": "maquina",
+    "destaque": "maquina"
+   },
+   "muda": "a casa de máquinas pisca",
+   "dims": "objeto·causa",
+   "mk": [],
+   "v0": 556.37,
+   "v1": 561.65
+  },
+  {
+   "id": "10b_07",
+   "frase": "10b_07",
+   "texto": "Zweimal liefen sie aus, Anfang August und im September, und beide Male fanden sie das Meer leer.",
+   "t0": 561.73,
+   "t1": 567.91,
+   "fam": "mapa",
+   "take": {
+    "vista": "surtidas"
+   },
+   "muda": "duas surtidas saem do Jade e voltam: mar vazio",
+   "dims": "lugar·tempo",
+   "mk": [],
+   "v0": 561.65,
+   "v1": 568.99
+  },
+  {
+   "id": "10b_08",
+   "frase": "10b_08",
+   "texto": "Erst im Winter plante die Marine einen kühnen Schlag: Die Kronprinz sollte die Schleusen von Cherbourg angreifen.",
+   "t0": 569.07,
+   "t1": 575.83,
+   "fam": "mapa",
+   "take": {
+    "vista": "jade_cherbourg"
+   },
+   "muda": "trilha tracejada Jade→Cherbourg se desenha",
+   "dims": "lugar·plano",
+   "mk": [],
+   "v0": 568.99,
+   "v1": 576.71
+  },
+  {
+   "id": "10b_09",
+   "frase": "10b_09",
+   "texto": "Der Waffenstillstand vom achtundzwanzigsten Januar achtzehnhunderteinundsiebzig kam dem zuvor.",
+   "t0": 576.79,
+   "t1": 581.41,
+   "fam": "lapis",
+   "take": {
+    "doc": "calendario",
+    "linhas": [
+     "28. Januar 1871 – Waffenstillstand"
+    ]
+   },
+   "muda": "'28. Januar 1871' escrito; a trilha para",
+   "dims": "tempo·causa",
+   "mk": [],
+   "v0": 576.71,
+   "v1": 582.7
+  },
+  {
+   "id": "11_01",
+   "frase": "11_01",
+   "texto": "Zur See gab es in diesem ganzen Krieg keine einzige Schlacht zwischen Flotten.",
+   "t0": 582.78,
+   "t1": 587.68,
+   "fam": "anat",
+   "take": {
+    "cam": "frota49_5",
+    "frota": [
+     49,
+     5
+    ]
+   },
+   "muda": "as duas frotas nunca se encontram",
+   "dims": "objeto·ausência",
+   "mk": [],
+   "v0": 582.7,
+   "v1": 588.54
+  },
+  {
+   "id": "11_02",
+   "frase": "11_02",
+   "texto": "Das einzige echte Gefecht fand am neunten November achtzehnhundertsiebzig statt, und zwar mehr als siebentausend Kilometer von Wilhelmshaven entfernt, vor Havanna.",
+   "t0": 588.62,
+   "t1": 593.92,
+   "fam": "mapa",
+   "take": {
+    "vista": "havana_globo"
+   },
+   "muda": "globo: Wilhelmshaven→Havana",
+   "dims": "lugar·dado",
+   "mk": [
+    {
+     "tipo": "cota",
+     "txt": "8.000 km",
+     "t": 595.36,
+     "palavra": "Kilometer"
+    }
+   ],
+   "v0": 588.54,
+   "v1": 593.84
+  },
+  {
+   "id": "11_02B",
+   "frase": "11_02",
+   "texto": "Das einzige echte Gefecht fand am neunten November achtzehnhundertsiebzig statt, und zwar mehr als siebentausend Kilometer von Wilhelmshaven entfernt, vor Havanna.",
+   "t0": 593.92,
+   "t1": 598.62,
+   "fam": "mapa",
+   "take": {
+    "vista": "havana"
+   },
+   "muda": "zoom em Havana; data 9. November 1870",
+   "dims": "lugar·tempo",
+   "mk": [],
+   "v0": 593.84,
+   "v1": 599.36
+  },
+  {
+   "id": "11_03",
+   "frase": "11_03",
+   "texto": "Dort lagen das kleine preußische Kanonenboot Meteor, dreihundertfünfzig Tonnen, und der französische Aviso Bouvet.",
+   "t0": 599.44,
+   "t1": 607.68,
+   "fam": "epoca",
+   "take": {
+    "img": "meteor_bouvet"
+   },
+   "muda": "a pintura do duelo em paralaxe",
+   "dims": "época·objeto",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "METEOR · 350 t",
+     "t": 602.58,
+     "palavra": "Meteor"
+    }
+   ],
+   "v0": 599.36,
+   "v1": 608.4
+  },
+  {
+   "id": "11_04",
+   "frase": "11_04",
+   "texto": "Nach den Regeln des neutralen Hafens durfte der eine erst vierundzwanzig Stunden nach dem anderen auslaufen.",
+   "t0": 608.48,
+   "t1": 614.66,
+   "fam": "lapis",
+   "take": {
+    "doc": "regra_24h",
+    "linhas": [
+     "Regel des neutralen Hafens:",
+     "24 Stunden Abstand"
+    ],
+    "sublinhar": [
+     1
+    ]
+   },
+   "muda": "'24 Stunden' escrito; relógio",
+   "dims": "regra·tempo",
+   "mk": [],
+   "v0": 608.4,
+   "v1": 615.1
+  },
+  {
+   "id": "11_05",
+   "frase": "11_05",
+   "texto": "Draußen, in internationalen Gewässern, kämpften sie zwei bis drei Stunden.",
+   "t0": 615.18,
+   "t1": 620.44,
+   "fam": "epoca",
+   "take": {
+    "img": "meteor_bouvet"
+   },
+   "muda": "zoom nos dois navios em combate",
+   "dims": "época·ação",
+   "mk": [],
+   "v0": 615.1,
+   "v1": 621.2
+  },
+  {
+   "id": "11_06",
+   "frase": "11_06",
+   "texto": "Die Bouvet versuchte zu rammen und riss der Meteor die Masten weg, deren Takelage sich in der Schraube verfing.",
+   "t0": 621.28,
+   "t1": 627.54,
+   "fam": "epoca",
+   "take": {
+    "img": "meteor_bouvet",
+    "foco": "mastros"
+   },
+   "muda": "zoom nos mastros caindo",
+   "dims": "época·ação",
+   "mk": [],
+   "v0": 621.2,
+   "v1": 628.14
+  },
+  {
+   "id": "11_07",
+   "frase": "11_07",
+   "texto": "Dann durchschlug ein deutscher Treffer den Kessel der Bouvet, und sie floh unter Segeln in spanische Gewässer.",
+   "t0": 628.22,
+   "t1": 634.2,
+   "fam": "epoca",
+   "take": {
+    "img": "meteor_bouvet",
+    "foco": "caldeira"
+   },
+   "muda": "zoom no vapor da caldeira",
+   "dims": "época·causa",
+   "mk": [],
+   "v0": 628.14,
+   "v1": 635.1
+  },
+  {
+   "id": "11_08",
+   "frase": "11_08",
+   "texto": "Verluste auf beiden Seiten, kein Sieger.",
+   "t0": 635.18,
+   "t1": 637.58,
+   "fam": "epoca",
+   "take": {
+    "img": "meteor_bouvet"
+   },
+   "muda": "recuo para a pintura inteira",
+   "dims": "época",
+   "mk": [],
+   "v0": 635.1,
+   "v1": 638.36
+  },
+  {
+   "id": "11_09",
+   "frase": "11_09",
+   "texto": "Das war der ganze Seekrieg zwischen der zweitgrößten Flotte der Welt und ihrem zehnmal schwächeren Gegner.",
+   "t0": 638.44,
+   "t1": 644.02,
+   "fam": "anat",
+   "take": {
+    "cam": "comparacao"
+   },
+   "muda": "Meteor minúsculo ao lado do couraçado (cota)",
+   "dims": "objeto·comparação",
+   "mk": [],
+   "v0": 638.36,
+   "v1": 645.53
+  },
+  {
+   "id": "12_01",
+   "frase": "12_01",
+   "texto": "Fassen wir zusammen.",
+   "t0": 645.61,
+   "t1": 646.45,
+   "fam": "anat",
+   "take": {
+    "cam": "orbita"
+   },
+   "muda": "o couraçado gira uma última vez",
+   "dims": "narrativa",
+   "mk": [],
+   "v0": 645.53,
+   "v1": 647.51
+  },
+  {
+   "id": "12_02",
+   "frase": "12_02",
+   "texto": "Gesichert ist: Frankreich hatte neunundvierzig Panzerschiffe, der Norddeutsche Bund fünf.",
+   "t0": 647.59,
+   "t1": 653.37,
+   "fam": "anat",
+   "take": {
+    "cam": "frota49_5",
+    "frota": [
+     49,
+     5
+    ]
+   },
+   "muda": "49 e 5 com 'gesichert'",
+   "dims": "dado·fonte",
+   "mk": [
+    {
+     "tipo": "rotulo",
+     "txt": "GESICHERT",
+     "t": 647.59,
+     "palavra": "Gesichert"
+    }
+   ],
+   "v0": 647.51,
+   "v1": 653.97
+  },
+  {
+   "id": "12_03",
+   "frase": "12_03",
+   "texto": "Die Landungsdivision wurde nach Sedan geschickt und ging dort verloren.",
+   "t0": 654.05,
+   "t1": 657.73,
+   "fam": "mapa",
+   "take": {
+    "vista": "divisao_sedan"
+   },
+   "muda": "a trilha da divisão até Sedan",
+   "dims": "lugar·causa",
+   "mk": [],
+   "v0": 653.97,
+   "v1": 658.17
+  },
+  {
+   "id": "12_04",
+   "frase": "12_04",
+   "texto": "Die Schiffe lagen zu tief für die deutsche Küste, und im Herbststurm ging ihnen die Kohle aus.",
+   "t0": 658.25,
+   "t1": 663.23,
+   "fam": "anat",
+   "take": {
+    "cam": "perfil_marcas",
+    "regua": true,
+    "destaque": "bunker"
+   },
+   "muda": "régua 8,4 m e bunker vazio juntos",
+   "dims": "objeto·causa",
+   "mk": [],
+   "v0": 658.17,
+   "v1": 664.73
+  },
+  {
+   "id": "12_05",
+   "frase": "12_05",
+   "texto": "Berechnet haben wir: Zehnmal so viele Schiffe hießen nur etwa fünfmal so viel Tonnage, und vor der deutschen Küste standen am Ende rund fünfzehn französische gegen fünf deutsche Panzerschiffe.",
+   "t0": 664.81,
+   "t1": 670.89,
+   "fam": "lapis",
+   "take": {
+    "doc": "calculo",
+    "linhas": [
+     "10× Schiffe",
+     "5× Tonnage"
+    ]
+   },
+   "muda": "10× Schiffe → 5× Tonnage → 3× vor Ort",
+   "dims": "dado·cálculo",
+   "mk": [],
+   "v0": 664.73,
+   "v1": 670.81
+  },
+  {
+   "id": "12_05B",
+   "frase": "12_05",
+   "texto": "Berechnet haben wir: Zehnmal so viele Schiffe hießen nur etwa fünfmal so viel Tonnage, und vor der deutschen Küste standen am Ende rund fünfzehn französische gegen fünf deutsche Panzerschiffe.",
+   "t0": 670.89,
+   "t1": 676.39,
+   "fam": "lapis",
+   "take": {
+    "doc": "calculo",
+    "linhas": [
+     "10× Schiffe",
+     "5× Tonnage",
+     "15 gegen 5 vor Ort"
+    ],
+    "sublinhar": [
+     2
+    ]
+   },
+   "muda": "'15 gegen 5 vor der Küste' sublinhado",
+   "dims": "dado",
+   "mk": [],
+   "v0": 670.81,
+   "v1": 677.83
+  },
+  {
+   "id": "12_06",
+   "frase": "12_06",
+   "texto": "Unbekannt bleibt, was eine gelungene Landung in der Ostsee bewirkt hätte, und wie viele preußische Truppen die bloße Drohung an der Küste festhielt.",
+   "t0": 677.91,
+   "t1": 686.99,
+   "fam": "mapa",
+   "take": {
+    "vista": "baltico_incerto"
+   },
+   "muda": "anel tracejado no Báltico: 'unbekannt'",
+   "dims": "lugar·incerteza",
+   "mk": [],
+   "v0": 677.83,
+   "v1": 687.65
+  },
+  {
+   "id": "12_07",
+   "frase": "12_07",
+   "texto": "Darüber streiten Historiker bis heute.",
+   "t0": 687.73,
+   "t1": 689.15,
+   "fam": "epoca",
+   "take": {
+    "img": "frota_francesa"
+   },
+   "muda": "a frota de época que nunca desembarcou",
+   "dims": "época·incerteza",
+   "mk": [],
+   "v0": 687.65,
+   "v1": 690.47
+  },
+  {
+   "id": "12_08",
+   "frase": "12_08",
+   "texto": "Ein französischer Offizier schrieb achtzehnhundertdreiundsiebzig über seine eigene Flotte, sie sei zu stark gewesen, um nichts zu tun, und zu schwach, um etwas Ernstes zu unternehmen.",
+   "t0": 690.55,
+   "t1": 701.03,
+   "fam": "lapis",
+   "take": {
+    "doc": "chevalier",
+    "linhas": [
+     "zu stark, um nichts zu tun –",
+     "zu schwach, um etwas Ernstes zu unternehmen"
+    ],
+    "sublinhar": [
+     0,
+     1
+    ]
+   },
+   "muda": "a frase de Chevalier (1873) escrita e sublinhada",
+   "dims": "fonte·conceito",
+   "mk": [],
+   "v0": 690.47,
+   "v1": 701.85
+  },
+  {
+   "id": "12_09",
+   "frase": "12_09",
+   "texto": "Und damit ist auch die Frage vom Anfang beantwortet.",
+   "t0": 701.93,
+   "t1": 704.15,
+   "fam": "mapa",
+   "take": {
+    "vista": "helgoland_jade"
+   },
+   "muda": "volta à abertura: a linha até Wilhelmshaven ainda vazia",
+   "dims": "lugar·narrativa",
+   "mk": [],
+   "v0": 701.85,
+   "v1": 705.23
+  },
+  {
+   "id": "12_10",
+   "frase": "12_10",
+   "texto": "Neunundvierzig gegen fünf griff nie an, weil eine Flotte nur so stark ist wie die Armee, die sie trägt, das Wasser, in dem sie fahren kann, und die Kohle, die sie verbrennen darf.",
+   "t0": 705.31,
+   "t1": 710.49,
+   "fam": "mapa",
+   "take": {
+    "vista": "tres_simbolos"
+   },
+   "muda": "regimento, profundidade e carvão acendem",
+   "dims": "causa·resposta",
+   "mk": [],
+   "v0": 705.23,
+   "v1": 710.41
+  },
+  {
+   "id": "12_10B",
+   "frase": "12_10",
+   "texto": "Neunundvierzig gegen fünf griff nie an, weil eine Flotte nur so stark ist wie die Armee, die sie trägt, das Wasser, in dem sie fahren kann, und die Kohle, die sie verbrennen darf.",
+   "t0": 710.49,
+   "t1": 715.61,
+   "fam": "anat",
+   "take": {
+    "cam": "sai",
+    "sai": true
+   },
+   "muda": "o couraçado sai do palco",
+   "dims": "objeto·fecho",
+   "mk": [],
+   "v0": 710.41,
+   "v1": 715.95
+  },
+  {
+   "id": "12_11",
+   "frase": "12_11",
+   "texto": "Wenn Sie sehen wollen, wie diese Armee bei Sedan in die Falle ging, finden Sie das Video dazu hier.",
+   "t0": 716.03,
+   "t1": 721.81,
+   "fam": "epoca",
+   "take": {
+    "img": "sedan"
+   },
+   "muda": "a pintura de Sedan (tela final)",
+   "dims": "época·gancho",
+   "mk": [],
+   "v0": 715.95,
+   "v1": 722.45
+  },
+  {
+   "id": "12_12",
+   "frase": "12_12",
+   "texto": "Abonnieren Sie Kriegsmomente.",
+   "t0": 722.53,
+   "t1": 723.75,
+   "fam": "epoca",
+   "take": {
+    "img": "sedan"
+   },
+   "muda": "tela final",
+   "dims": "fecho",
+   "mk": [],
+   "v0": 722.45,
+   "v1": 726.25
+  }
+ ]
+}

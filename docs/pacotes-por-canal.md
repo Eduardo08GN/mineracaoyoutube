@@ -76,6 +76,23 @@ Detalhes em `D:\unreal3d\LICENCA_CESIUM.md`.
 
 ---
 
+### Takes explicativos do Kriegsmomente (decisão do Eduardo, 04/11/2026)
+| Peça | Pronto | Licença | Uso |
+|---|---|---|---|
+| Conceito, texto, dado e linha do tempo | **Remotion Skills** (oficial, `remotion-dev/skills`, clonado em `D:/pesquisa_nichos/remotion_skills`), na gramática do vídeo de referência "The Machine That Learned" (leitura a 25 fps em `D:/pesquisa_nichos/leitura_otica/ref_remotion/`) | ver o repo | motion graphics em Remotion |
+| Máquina e mecanismo (telégrafo, Dreyse, Krupp…) | **machine-skill** (`AirsupHQ/machine-skill`, clonado em `D:/pesquisa_nichos/machine_skill`), com shot/record NA G4 por `D:/pesquisa_nichos/machine_skill_g4/g4_machine.py` | MIT | HTML three.js com PBR, solver e explode/cutaway/x-ray + filme |
+| GLB → componente React com peças nomeadas | **gltfjsx** (pmndrs) | MIT | animar peças de modelos prontos (Smithsonian/Sketchfab) dentro do Remotion com `@remotion/three` |
+| Cena 3D em React | **React Three Fiber** + three.js (já em uso no Tracer3D) | MIT | — |
+| Keyframes de câmera 3D | **Theatre.js** | Apache-2.0 (core) | só se for preciso ajustar uma câmera à mão; o padrão segue com keyframes em código, que são determinísticos |
+| Upscale de imagem de época em baixa resolução | **Real-ESRGAN** (xinntao) | BSD-3 | NA G4, 4×, antes de entrar no vídeo (ex.: retrato de Abeken com 680 px) |
+| Recorte de personagem de retrato ou gravura | **rembg** (danielgatis) | MIT | NA G4: o personagem recortado entra sobre o fundo do motion Remotion |
+| Uniformizar a cor das imagens de época | **color-matcher** (hahnec) | GPL-3.0 (só ferramenta, a imagem sai livre) | NA G4: todas as imagens gradeadas para uma referência |
+| Detecção de cortes | **PySceneDetect** | BSD-3 | régua e leitura ótica (no lugar do filtro scene do ffmpeg) |
+| Câmera lenta / interpolação | **RIFE** | MIT | só se preciso (os filmes da machine-skill já saem quadro a quadro) |
+| Fora do nosso uso | Auto-Editor, vid.stab, librosa (DE sem música), HyperFrames (padronizamos Remotion) | — | — |
+| Máquina como prancha de gravura (reserva) | **Kalem / Levha** (leodavincs/kalem; clone em `D:/pesquisa_nichos/kalem`) | MIT | NA G4. Gravura sem Codex: SDXL + ControlNet NA G4 |
+| **Máquina e objeto (PADRÃO do Kriegsmomente, Eduardo 04/11)** | **teardown** (elvarofficial/teardown, base whaleyxbt/claude-motion: captura quadro a quadro + som sincronizado) e machine-skill | MIT | vídeo de máquina moderna ou página interativa; lição: 1 imagem de referência por máquina, 1 entrada move tudo, gráfico que anda com a peça |
+
 ## Onde procurar (fontes além do Fab)
 
 | Fonte | O que tem | Licença típica | Para quê |
@@ -128,3 +145,13 @@ Relatórios completos:
 - **Licença:** aceite na conta do Eduardo, sempre com o OK dele. Compra só com item e valor confirmados.
 - **Arquivos:** nada no C: (cache do Launcher em `D:\EpicVault`, projeto em `D:\unreal3d\fab_projeto`).
 - **Ao adotar um pacote:** começar do mapa de demonstração dele, renderizar com o render de cinema (Lumen convergido, amostras, pós) e comparar lado a lado com a referência (`docs/BATEDOR.md`).
+
+## Segundo a Segundo / vídeos de avião: three.js no teardown (04/11/2026)
+Rota aprovada pelo Eduardo: barata, simples e com boa qualidade (prova em `D:\reconstruccion\08_prova_teardown`). Avião construído por código, look harmônico do Reconstructed.
+| Pacote | Licença | Onde | Uso |
+|---|---|---|---|
+| scottstts/Threejs-Awesome-Graphics-Agent-Skills | MIT | `D:\pesquisa_nichos\Threejs-Awesome-Graphics-Agent-Skills` | direção de câmera, geometria procedural (chanfro/junções), destroços, chuva, exposição/cor, bloom, validação visual |
+| CloudAI-X/threejs-skills | MIT | `D:\pesquisa_nichos\threejs-skills` | API verificada da three r186 (HDR, PBR, pós, gltf-transform) |
+| Poly Haven kloofendal_overcast_puresky | CC0 | `06_greenacres_p2\blender\assets` | HDRI de céu encoberto (reflexo do avião) |
+| ~~@takram/three-clouds~~ | MIT | — | testado e reprovado (realista demais, fora da harmonia) |
+| ~~anything2explainer~~ | PolyForm Noncommercial | — | proibido em canal monetizado |

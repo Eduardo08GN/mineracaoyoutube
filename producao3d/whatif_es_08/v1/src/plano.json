@@ -1,0 +1,1697 @@
+{
+ "fps": 30,
+ "dauer": 444.46,
+ "ancoras": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   2.56,
+   0.3
+  ],
+  [
+   4.28,
+   1
+  ],
+  [
+   5.54,
+   2
+  ],
+  [
+   6.92,
+   3
+  ],
+  [
+   27.6,
+   4
+  ],
+  [
+   30.22,
+   5
+  ],
+  [
+   42.72,
+   10
+  ],
+  [
+   46.23,
+   28
+  ],
+  [
+   57.41,
+   29.5
+  ],
+  [
+   62.02,
+   30
+  ],
+  [
+   65.38,
+   41
+  ],
+  [
+   76.14,
+   50
+  ],
+  [
+   84.18,
+   70
+  ],
+  [
+   138.68,
+   71
+  ],
+  [
+   140.54,
+   80
+  ],
+  [
+   144.46,
+   218
+  ],
+  [
+   166.12,
+   232
+  ],
+  [
+   177.3,
+   300
+  ],
+  [
+   181.76,
+   618
+  ],
+  [
+   184.52,
+   897
+  ],
+  [
+   188.6,
+   1000
+  ],
+  [
+   197.38,
+   1147
+  ],
+  [
+   204.38,
+   1248
+  ],
+  [
+   210.14,
+   1335
+  ],
+  [
+   221.58,
+   1345
+  ],
+  [
+   224.7,
+   1378
+  ],
+  [
+   229.18,
+   1581
+  ],
+  [
+   232.94,
+   1739
+  ],
+  [
+   236.78,
+   1807
+  ],
+  [
+   240.84,
+   2240
+  ],
+  [
+   249.56,
+   2280
+  ],
+  [
+   257.54,
+   2300
+  ],
+  [
+   262.12,
+   2580
+  ],
+  [
+   267.64,
+   2745
+  ],
+  [
+   272.5,
+   2903
+  ],
+  [
+   275.74,
+   2950
+  ],
+  [
+   281.44,
+   3000
+  ],
+  [
+   337.1,
+   3060
+  ],
+  [
+   341.54,
+   3338
+  ],
+  [
+   346.06,
+   3403
+  ],
+  [
+   353.1,
+   3560
+  ],
+  [
+   357.06,
+   3700
+  ],
+  [
+   360.32,
+   3851
+  ],
+  [
+   371.76,
+   4060
+  ],
+  [
+   375.88,
+   4149
+  ],
+  [
+   387.42,
+   4221
+  ],
+  [
+   390.32,
+   4400
+  ],
+  [
+   393.02,
+   5100
+  ],
+  [
+   398.9,
+   5300
+  ],
+  [
+   409.78,
+   6961
+  ],
+  [
+   440.68,
+   6961
+  ],
+  [
+   444.46,
+   6961.0
+  ]
+ ],
+ "beats": [
+  {
+   "cap": "01_gancho",
+   "frases": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "familia": "salinas",
+   "cam": "malecon",
+   "ini": 0.2,
+   "fim_fala": 8.66,
+   "fim": 9.93,
+   "id": "b00"
+  },
+  {
+   "cap": "01_gancho",
+   "frases": [
+    5
+   ],
+   "familia": "cont",
+   "reg": "latam",
+   "mov": "push",
+   "ini": 9.93,
+   "fim_fala": 19.12,
+   "fim": 19.99,
+   "id": "b01"
+  },
+  {
+   "cap": "01_gancho",
+   "frases": [
+    6
+   ],
+   "familia": "cont",
+   "reg": "latam_paises",
+   "mov": "orbita",
+   "ini": 19.99,
+   "fim_fala": 22.08,
+   "fim": 22.75,
+   "id": "b02"
+  },
+  {
+   "cap": "01_gancho",
+   "frases": [
+    7
+   ],
+   "familia": "cont",
+   "reg": "andes_sul",
+   "mov": "dolly",
+   "ini": 22.75,
+   "fim_fala": 24.42,
+   "fim": 25.07,
+   "id": "b03"
+  },
+  {
+   "cap": "01_gancho",
+   "frases": [
+    8
+   ],
+   "familia": "cont",
+   "reg": "aconcagua",
+   "mov": "revela",
+   "ini": 25.07,
+   "fim_fala": 27.6,
+   "fim": 28.55,
+   "id": "b04"
+  },
+  {
+   "cap": "02_orilla",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "yucatan",
+   "mov": "rasante",
+   "ini": 28.55,
+   "fim_fala": 34.4,
+   "fim": 34.99,
+   "id": "b05"
+  },
+  {
+   "cap": "02_orilla",
+   "frases": [
+    1
+   ],
+   "familia": "salinas",
+   "cam": "praia",
+   "ini": 34.99,
+   "fim_fala": 40.8,
+   "fim": 41.49,
+   "id": "b06"
+  },
+  {
+   "cap": "02_orilla",
+   "frases": [
+    2
+   ],
+   "familia": "cont",
+   "reg": "caribe",
+   "mov": "dolly",
+   "ini": 41.49,
+   "fim_fala": 44.58,
+   "fim": 45.43,
+   "id": "b07"
+  },
+  {
+   "cap": "02_orilla",
+   "frases": [
+    3
+   ],
+   "familia": "cont",
+   "reg": "caribe_sul",
+   "mov": "travelling",
+   "ini": 45.43,
+   "fim_fala": 52.62,
+   "fim": 53.19,
+   "id": "b08"
+  },
+  {
+   "cap": "02_orilla",
+   "frases": [
+    4
+   ],
+   "familia": "cont",
+   "reg": "rio",
+   "mov": "push",
+   "ini": 53.19,
+   "fim_fala": 57.41,
+   "fim": 58.67,
+   "id": "b09"
+  },
+  {
+   "cap": "03_plata",
+   "frases": [
+    0
+   ],
+   "familia": "bsas",
+   "cam": "obelisco",
+   "ini": 58.67,
+   "fim_fala": 62.02,
+   "fim": 62.59,
+   "id": "b10"
+  },
+  {
+   "cap": "03_plata",
+   "frases": [
+    1
+   ],
+   "familia": "cont",
+   "reg": "montevideo",
+   "mov": "dolly",
+   "ini": 62.59,
+   "fim_fala": 65.38,
+   "fim": 66.03,
+   "id": "b11"
+  },
+  {
+   "cap": "03_plata",
+   "frases": [
+    2,
+    3
+   ],
+   "familia": "cont",
+   "reg": "plata_parana",
+   "mov": "travelling",
+   "ini": 66.03,
+   "fim_fala": 73.22,
+   "fim": 74.19,
+   "id": "b12"
+  },
+  {
+   "cap": "03_plata",
+   "frases": [
+    4
+   ],
+   "familia": "cont",
+   "reg": "cone_sul",
+   "mov": "pull",
+   "ini": 74.19,
+   "fim_fala": 81.22,
+   "fim": 82.67,
+   "id": "b13"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    0,
+    1
+   ],
+   "familia": "bsas",
+   "cam": "obelisco_topo",
+   "ini": 82.67,
+   "fim_fala": 86.72,
+   "fim": 87.71,
+   "id": "b14"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    2,
+    3
+   ],
+   "familia": "cont",
+   "reg": "latam",
+   "mov": "orbita",
+   "ini": 87.71,
+   "fim_fala": 99.47,
+   "fim": 100.89,
+   "id": "b15"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    4
+   ],
+   "familia": "cont",
+   "reg": "brasil_costa",
+   "mov": "dolly",
+   "ini": 100.89,
+   "fim_fala": 105.98,
+   "fim": 107.13,
+   "id": "b16"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    5,
+    6,
+    7
+   ],
+   "familia": "eureka_gelo",
+   "fase": "puxa",
+   "ini": 107.13,
+   "fim_fala": 115.4,
+   "fim": 116.23,
+   "id": "b17"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    8,
+    9
+   ],
+   "familia": "eureka_gelo",
+   "fase": "solta",
+   "ini": 116.23,
+   "fim_fala": 124.48,
+   "fim": 124.93,
+   "id": "b18"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    10
+   ],
+   "familia": "eureka_gelo",
+   "fase": "vai",
+   "ini": 124.93,
+   "fim_fala": 132.12,
+   "fim": 133.17,
+   "id": "b19"
+  },
+  {
+   "cap": "04_hielo",
+   "frases": [
+    11,
+    12,
+    13
+   ],
+   "familia": "cont",
+   "reg": "latam_alto",
+   "mov": "pull",
+   "ini": 133.17,
+   "fim_fala": 140.54,
+   "fim": 142.4,
+   "id": "b20"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    0,
+    1
+   ],
+   "familia": "cont",
+   "reg": "uruguai",
+   "mov": "dolly",
+   "ini": 142.4,
+   "fim_fala": 146.78,
+   "fim": 147.87,
+   "id": "b21"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    2,
+    3
+   ],
+   "familia": "cont",
+   "reg": "uruguai_perto",
+   "mov": "orbita",
+   "ini": 147.87,
+   "fim_fala": 151.42,
+   "fim": 152.03,
+   "id": "b22"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    4,
+    5
+   ],
+   "familia": "cont",
+   "reg": "rivera",
+   "mov": "rasante",
+   "ini": 152.03,
+   "fim_fala": 162.36,
+   "fim": 163.37,
+   "id": "b23"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    6
+   ],
+   "familia": "cont",
+   "reg": "cuba",
+   "mov": "travelling",
+   "ini": 163.37,
+   "fim_fala": 166.12,
+   "fim": 167.31,
+   "id": "b24"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    7
+   ],
+   "familia": "cont",
+   "reg": "amazonas",
+   "mov": "pull",
+   "ini": 167.31,
+   "fim_fala": 172.72,
+   "fim": 173.59,
+   "id": "b25"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    8
+   ],
+   "familia": "cont",
+   "reg": "latam",
+   "mov": "orbita",
+   "ini": 173.59,
+   "fim_fala": 177.3,
+   "fim": 178.15,
+   "id": "b26"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    9
+   ],
+   "familia": "cont",
+   "reg": "paraguai",
+   "mov": "dolly",
+   "ini": 178.15,
+   "fim_fala": 181.76,
+   "fim": 182.41,
+   "id": "b27"
+  },
+  {
+   "cap": "05_primeros",
+   "frases": [
+    10
+   ],
+   "familia": "cont",
+   "reg": "hispaniola",
+   "mov": "travelling",
+   "ini": 182.41,
+   "fim_fala": 185.8,
+   "fim": 187.63,
+   "id": "b28"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    0,
+    1
+   ],
+   "familia": "cont",
+   "reg": "latam_alto",
+   "mov": "push",
+   "ini": 187.63,
+   "fim_fala": 193.32,
+   "fim": 194.09,
+   "id": "b29"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    2
+   ],
+   "familia": "cont",
+   "reg": "america_central",
+   "mov": "travelling",
+   "ini": 194.09,
+   "fim_fala": 198.98,
+   "fim": 199.65,
+   "id": "b30"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    3
+   ],
+   "familia": "cont",
+   "reg": "brasilia",
+   "mov": "dolly",
+   "ini": 199.65,
+   "fim_fala": 205.49,
+   "fim": 206.55,
+   "id": "b31"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    4,
+    5
+   ],
+   "familia": "cont",
+   "reg": "argentina",
+   "mov": "pull",
+   "ini": 206.55,
+   "fim_fala": 211.26,
+   "fim": 211.49,
+   "id": "b32"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    6
+   ],
+   "familia": "cont",
+   "reg": "aconcagua",
+   "mov": "orbita",
+   "ini": 211.49,
+   "fim_fala": 218.14,
+   "fim": 218.85,
+   "id": "b33"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    7,
+    8
+   ],
+   "familia": "cont",
+   "reg": "aconcagua_perto",
+   "mov": "push",
+   "ini": 218.85,
+   "fim_fala": 221.58,
+   "fim": 222.43,
+   "id": "b34"
+  },
+  {
+   "cap": "06_mil",
+   "frases": [
+    9
+   ],
+   "familia": "cont",
+   "reg": "haiti",
+   "mov": "dolly",
+   "ini": 222.43,
+   "fim_fala": 224.7,
+   "fim": 225.77,
+   "id": "b35"
+  },
+  {
+   "cap": "07_altos",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "venezuela",
+   "mov": "travelling",
+   "ini": 225.77,
+   "fim_fala": 229.18,
+   "fim": 229.59,
+   "id": "b36"
+  },
+  {
+   "cap": "07_altos",
+   "frases": [
+    1,
+    2
+   ],
+   "familia": "cont",
+   "reg": "america_central",
+   "mov": "dolly",
+   "ini": 229.59,
+   "fim_fala": 236.78,
+   "fim": 237.61,
+   "id": "b37"
+  },
+  {
+   "cap": "07_altos",
+   "frases": [
+    3,
+    4
+   ],
+   "familia": "cont",
+   "reg": "atacama",
+   "mov": "rasante",
+   "ini": 237.61,
+   "fim_fala": 246.0,
+   "fim": 246.53,
+   "id": "b38"
+  },
+  {
+   "cap": "07_altos",
+   "frases": [
+    5
+   ],
+   "familia": "cdmx",
+   "cam": "zocalo",
+   "ini": 246.53,
+   "fim_fala": 252.36,
+   "fim": 252.99,
+   "id": "b39"
+  },
+  {
+   "cap": "07_altos",
+   "frases": [
+    6
+   ],
+   "familia": "cdmx",
+   "cam": "lago",
+   "ini": 252.99,
+   "fim_fala": 257.54,
+   "fim": 258.63,
+   "id": "b40"
+  },
+  {
+   "cap": "08_tres",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "bogota",
+   "mov": "push",
+   "ini": 258.63,
+   "fim_fala": 262.12,
+   "fim": 262.67,
+   "id": "b41"
+  },
+  {
+   "cap": "08_tres",
+   "frases": [
+    1
+   ],
+   "familia": "cont",
+   "reg": "tres",
+   "mov": "pull",
+   "ini": 262.67,
+   "fim_fala": 264.68,
+   "fim": 264.91,
+   "id": "b42"
+  },
+  {
+   "cap": "08_tres",
+   "frases": [
+    2
+   ],
+   "familia": "cont",
+   "reg": "toluca",
+   "mov": "orbita",
+   "ini": 264.91,
+   "fim_fala": 269.22,
+   "fim": 269.69,
+   "id": "b43"
+  },
+  {
+   "cap": "08_tres",
+   "frases": [
+    3
+   ],
+   "familia": "cont",
+   "reg": "colombia_andes",
+   "mov": "travelling",
+   "ini": 269.69,
+   "fim_fala": 272.5,
+   "fim": 272.77,
+   "id": "b44"
+  },
+  {
+   "cap": "08_tres",
+   "frases": [
+    4
+   ],
+   "familia": "cont",
+   "reg": "guatemala",
+   "mov": "dolly",
+   "ini": 272.77,
+   "fim_fala": 275.74,
+   "fim": 276.53,
+   "id": "b45"
+  },
+  {
+   "cap": "08_tres",
+   "frases": [
+    5,
+    6
+   ],
+   "familia": "cont",
+   "reg": "andes",
+   "mov": "pull",
+   "ini": 276.53,
+   "fim_fala": 285.34,
+   "fim": 286.53,
+   "id": "b46"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "aconcagua_ilha",
+   "mov": "orbita",
+   "ini": 286.53,
+   "fim_fala": 292.87,
+   "fim": 294.07,
+   "id": "b47"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    1,
+    2
+   ],
+   "familia": "cont",
+   "reg": "andes_pessoas",
+   "mov": "dolly",
+   "ini": 294.07,
+   "fim_fala": 297.6,
+   "fim": 297.87,
+   "id": "b48"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    3,
+    4
+   ],
+   "familia": "eureka_ar",
+   "fase": "corte",
+   "ini": 297.87,
+   "fim_fala": 302.72,
+   "fim": 303.45,
+   "id": "b49"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    5,
+    6
+   ],
+   "familia": "eureka_ar",
+   "fase": "sobe",
+   "ini": 303.45,
+   "fim_fala": 310.98,
+   "fim": 311.61,
+   "id": "b50"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    7
+   ],
+   "familia": "eureka_ar",
+   "fase": "guayaquil",
+   "ini": 311.61,
+   "fim_fala": 315.38,
+   "fim": 315.97,
+   "id": "b51"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    8,
+    9
+   ],
+   "familia": "eureka_ar",
+   "fase": "quito",
+   "ini": 315.97,
+   "fim_fala": 325.5,
+   "fim": 326.07,
+   "id": "b52"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    10
+   ],
+   "familia": "eureka_ar",
+   "fase": "tiwanaku",
+   "ini": 326.07,
+   "fim_fala": 332.04,
+   "fim": 332.33,
+   "id": "b53"
+  },
+  {
+   "cap": "09_eureka",
+   "frases": [
+    11
+   ],
+   "familia": "eureka_ar",
+   "fase": "cielo",
+   "ini": 332.33,
+   "fim_fala": 337.1,
+   "fim": 338.41,
+   "id": "b54"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "quito",
+   "mov": "push",
+   "ini": 338.41,
+   "fim_fala": 341.54,
+   "fim": 342.01,
+   "id": "b55"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    1
+   ],
+   "familia": "cont",
+   "reg": "cusco",
+   "mov": "dolly",
+   "ini": 342.01,
+   "fim_fala": 346.06,
+   "fim": 347.17,
+   "id": "b56"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    2,
+    3,
+    4
+   ],
+   "familia": "cont",
+   "reg": "altiplano",
+   "mov": "orbita",
+   "ini": 347.17,
+   "fim_fala": 353.1,
+   "fim": 354.11,
+   "id": "b57"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    5
+   ],
+   "familia": "lapaz",
+   "cam": "canion",
+   "ini": 354.11,
+   "fim_fala": 357.06,
+   "fim": 357.51,
+   "id": "b58"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    6
+   ],
+   "familia": "cont",
+   "reg": "titicaca",
+   "mov": "rasante",
+   "ini": 357.51,
+   "fim_fala": 369.02,
+   "fim": 369.85,
+   "id": "b59"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    7
+   ],
+   "familia": "lapaz",
+   "cam": "elalto",
+   "ini": 369.85,
+   "fim_fala": 371.76,
+   "fim": 372.31,
+   "id": "b60"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    8
+   ],
+   "familia": "cont",
+   "reg": "bolivia",
+   "mov": "pull",
+   "ini": 372.31,
+   "fim_fala": 375.88,
+   "fim": 376.57,
+   "id": "b61"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    9,
+    10
+   ],
+   "familia": "cont",
+   "reg": "cerro_pasco",
+   "mov": "dolly",
+   "ini": 376.57,
+   "fim_fala": 383.67,
+   "fim": 384.71,
+   "id": "b62"
+  },
+  {
+   "cap": "10_final",
+   "frases": [
+    11
+   ],
+   "familia": "cont",
+   "reg": "peru",
+   "mov": "orbita",
+   "ini": 384.71,
+   "fim_fala": 387.42,
+   "fim": 388.49,
+   "id": "b63"
+  },
+  {
+   "cap": "11_cima",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "puna",
+   "mov": "travelling",
+   "ini": 388.49,
+   "fim_fala": 390.32,
+   "fim": 390.43,
+   "id": "b64"
+  },
+  {
+   "cap": "11_cima",
+   "frases": [
+    1,
+    2
+   ],
+   "familia": "cont",
+   "reg": "rinconada",
+   "mov": "push",
+   "ini": 390.43,
+   "fim_fala": 398.9,
+   "fim": 399.77,
+   "id": "b65"
+  },
+  {
+   "cap": "11_cima",
+   "frases": [
+    3,
+    4
+   ],
+   "familia": "cont",
+   "reg": "andes_ilhas",
+   "mov": "dolly",
+   "ini": 399.77,
+   "fim_fala": 404.2,
+   "fim": 404.87,
+   "id": "b66"
+  },
+  {
+   "cap": "11_cima",
+   "frases": [
+    5
+   ],
+   "familia": "cont",
+   "reg": "aconcagua_cume",
+   "mov": "orbita",
+   "ini": 404.87,
+   "fim_fala": 409.78,
+   "fim": 410.97,
+   "id": "b67"
+  },
+  {
+   "cap": "11_cima",
+   "frases": [
+    6,
+    7
+   ],
+   "familia": "cont",
+   "reg": "aconcagua_ilha",
+   "mov": "pull",
+   "ini": 410.97,
+   "fim_fala": 417.54,
+   "fim": 418.71,
+   "id": "b68"
+  },
+  {
+   "cap": "12_real",
+   "frases": [
+    0
+   ],
+   "familia": "cont",
+   "reg": "oceano",
+   "mov": "pull",
+   "ini": 418.71,
+   "fim_fala": 420.62,
+   "fim": 421.27,
+   "id": "b69"
+  },
+  {
+   "cap": "12_real",
+   "frases": [
+    1,
+    2
+   ],
+   "familia": "real",
+   "fase": "cartao",
+   "ini": 421.27,
+   "fim_fala": 436.45,
+   "fim": 437.49,
+   "id": "b70"
+  },
+  {
+   "cap": "12_real",
+   "frases": [
+    3,
+    4
+   ],
+   "familia": "real",
+   "fase": "pergunta",
+   "ini": 437.49,
+   "fim_fala": 440.68,
+   "fim": 444.46,
+   "id": "b71"
+  }
+ ],
+ "legendas": [
+  {
+   "ini": 0.8,
+   "fim": 2.56,
+   "texto": "El mar empieza a subir."
+  },
+  {
+   "ini": 3.86,
+   "fim": 4.28,
+   "texto": "Un metro."
+  },
+  {
+   "ini": 4.92,
+   "fim": 5.54,
+   "texto": "Dos."
+  },
+  {
+   "ini": 6.42,
+   "fim": 6.92,
+   "texto": "Tres."
+  },
+  {
+   "ini": 7.84,
+   "fim": 8.66,
+   "texto": "Y no se detiene."
+  },
+  {
+   "ini": 10.28,
+   "fim": 19.12,
+   "texto": "La regla es simple: cuando el noventa y nueve por ciento de la gente de un país queda bajo el agua, ese país desaparece del mapa."
+  },
+  {
+   "ini": 20.34,
+   "fim": 22.08,
+   "texto": "Veinte países de Latinoamérica."
+  },
+  {
+   "ini": 23.1,
+   "fim": 24.42,
+   "texto": "Solo uno quedará en pie."
+  },
+  {
+   "ini": 25.42,
+   "fim": 27.6,
+   "texto": "Y no es el que tiene la montaña más alta."
+  },
+  {
+   "ini": 28.9,
+   "fim": 34.4,
+   "texto": "A cinco metros, el agua ya entra en las casas de dieciocho millones de personas."
+  },
+  {
+   "ini": 35.34,
+   "fim": 40.8,
+   "texto": "Cancún, el malecón de Salinas, en Ecuador: la orilla deja de existir."
+  },
+  {
+   "ini": 41.84,
+   "fim": 44.58,
+   "texto": "A diez metros, son cuarenta y cuatro millones."
+  },
+  {
+   "ini": 45.78,
+   "fim": 52.62,
+   "texto": "Y a treinta, el mar ya está en el Malecón de La Habana, en Cartagena, en la Ciudad de Panamá, en Maracaibo."
+  },
+  {
+   "ini": 53.54,
+   "fim": 57.41,
+   "texto": "Río de Janeiro ya no tiene playa: tiene mar en la avenida."
+  },
+  {
+   "ini": 59.02,
+   "fim": 62.02,
+   "texto": "A treinta metros cae Buenos Aires."
+  },
+  {
+   "ini": 62.94,
+   "fim": 65.38,
+   "texto": "Diez metros más, y cae Montevideo."
+  },
+  {
+   "ini": 66.38,
+   "fim": 68.24,
+   "texto": "El Río de la Plata ya no es un río."
+  },
+  {
+   "ini": 68.84,
+   "fim": 73.22,
+   "texto": "Es un brazo del océano que avanza tierra adentro, hacia Paraguay."
+  },
+  {
+   "ini": 74.54,
+   "fim": 81.22,
+   "texto": "Cincuenta metros: uno de cada cuatro latinoamericanos ya vive bajo el agua."
+  },
+  {
+   "ini": 83.02,
+   "fim": 84.18,
+   "texto": "Setenta metros."
+  },
+  {
+   "ini": 85.46,
+   "fim": 86.72,
+   "texto": "Aquí hay que hacer una pausa."
+  },
+  {
+   "ini": 88.06,
+   "fim": 95.16,
+   "texto": "Setenta metros es, más o menos, lo que subiría el mar si se derritiera todo el hielo del planeta."
+  },
+  {
+   "ini": 95.96,
+   "fim": 99.47,
+   "texto": "Groenlandia, la Antártida, todos los glaciares."
+  },
+  {
+   "ini": 101.24,
+   "fim": 105.98,
+   "texto": "Ciento ochenta y cuatro millones de latinoamericanos ya estarían bajo el agua."
+  },
+  {
+   "ini": 107.48,
+   "fim": 108.3,
+   "texto": "Pero hay algo extraño."
+  },
+  {
+   "ini": 109.6,
+   "fim": 113.89,
+   "texto": "Si la Antártida se derritiera, cerca de ella el mar no subiría."
+  },
+  {
+   "ini": 114.68,
+   "fim": 115.4,
+   "texto": "Bajaría."
+  },
+  {
+   "ini": 116.58,
+   "fim": 121.39,
+   "texto": "Su hielo es tan pesado que atrae el océano con su propia gravedad, como un imán."
+  },
+  {
+   "ini": 122.52,
+   "fim": 124.48,
+   "texto": "Al derretirse, lo suelta."
+  },
+  {
+   "ini": 125.28,
+   "fim": 132.12,
+   "texto": "Y esa agua se va lejos, justo hacia nuestras costas, donde subiría más que el promedio."
+  },
+  {
+   "ini": 133.52,
+   "fim": 135.68,
+   "texto": "Desde aquí, ya no queda hielo que derretir."
+  },
+  {
+   "ini": 136.26,
+   "fim": 138.68,
+   "texto": "Lo que sigue es imaginación."
+  },
+  {
+   "ini": 139.8,
+   "fim": 140.54,
+   "texto": "Y el mar sigue subiendo."
+  },
+  {
+   "ini": 142.75,
+   "fim": 144.46,
+   "texto": "Doscientos dieciocho metros."
+  },
+  {
+   "ini": 145.88,
+   "fim": 146.78,
+   "texto": "Cae el primer país."
+  },
+  {
+   "ini": 148.22,
+   "fim": 149.48,
+   "texto": "Y no es una isla del Caribe."
+  },
+  {
+   "ini": 150.44,
+   "fim": 151.42,
+   "texto": "Es Uruguay."
+  },
+  {
+   "ini": 152.38,
+   "fim": 157.28,
+   "texto": "Uno de los países más planos del continente: casi toda su gente vive cerca del agua."
+  },
+  {
+   "ini": 158.4,
+   "fim": 162.36,
+   "texto": "Los últimos uruguayos resisten en el norte, en Rivera y Tacuarembó."
+  },
+  {
+   "ini": 163.72,
+   "fim": 166.12,
+   "texto": "Catorce metros después, cae Cuba."
+  },
+  {
+   "ini": 167.66,
+   "fim": 172.72,
+   "texto": "La cuenca del Amazonas, casi toda por debajo de doscientos metros, ya es un mar interior."
+  },
+  {
+   "ini": 173.94,
+   "fim": 177.3,
+   "texto": "Más de la mitad de la tierra de Latinoamérica es océano."
+  },
+  {
+   "ini": 178.5,
+   "fim": 181.76,
+   "texto": "A seiscientos dieciocho metros cae Paraguay."
+  },
+  {
+   "ini": 182.76,
+   "fim": 185.8,
+   "texto": "A ochocientos noventa y siete, República Dominicana."
+  },
+  {
+   "ini": 187.98,
+   "fim": 188.6,
+   "texto": "Mil metros."
+  },
+  {
+   "ini": 189.98,
+   "fim": 193.32,
+   "texto": "Tres de cada cuatro latinoamericanos ya están bajo el agua."
+  },
+  {
+   "ini": 194.44,
+   "fim": 198.98,
+   "texto": "El Salvador, Nicaragua y Panamá caen en menos de cuarenta metros."
+  },
+  {
+   "ini": 200.0,
+   "fim": 205.49,
+   "texto": "Brasil, el gigante, aguanta hasta mil doscientos cuarenta y ocho, en la meseta de Brasilia."
+  },
+  {
+   "ini": 206.9,
+   "fim": 210.14,
+   "texto": "Y a mil trescientos treinta y cinco metros cae Argentina."
+  },
+  {
+   "ini": 211.02,
+   "fim": 211.26,
+   "texto": "Sí."
+  },
+  {
+   "ini": 211.84,
+   "fim": 218.14,
+   "texto": "El país del Aconcagua, la montaña más alta de toda América, cae en el décimo lugar."
+  },
+  {
+   "ini": 219.2,
+   "fim": 219.84,
+   "texto": "¿Cómo puede ser?"
+  },
+  {
+   "ini": 220.8,
+   "fim": 221.58,
+   "texto": "Guarda esa pregunta."
+  },
+  {
+   "ini": 222.78,
+   "fim": 224.7,
+   "texto": "Cuarenta metros después, Haití."
+  },
+  {
+   "ini": 226.12,
+   "fim": 229.18,
+   "texto": "Venezuela cae a mil quinientos ochenta y uno."
+  },
+  {
+   "ini": 229.94,
+   "fim": 232.94,
+   "texto": "Honduras, a mil setecientos treinta y nueve."
+  },
+  {
+   "ini": 233.88,
+   "fim": 236.78,
+   "texto": "Costa Rica, a mil ochocientos siete."
+  },
+  {
+   "ini": 237.96,
+   "fim": 240.84,
+   "texto": "Chile llega a dos mil doscientos cuarenta."
+  },
+  {
+   "ini": 241.82,
+   "fim": 246.0,
+   "texto": "Sus últimos habitantes viven en el desierto de Atacama, en Calama."
+  },
+  {
+   "ini": 246.88,
+   "fim": 252.36,
+   "texto": "Y a dos mil doscientos ochenta metros, el agua llega a la Ciudad de México."
+  },
+  {
+   "ini": 253.34,
+   "fim": 257.54,
+   "texto": "Donde hace quinientos años había un lago, vuelve a haber agua."
+  },
+  {
+   "ini": 258.98,
+   "fim": 262.12,
+   "texto": "Bogotá se hunde a dos mil quinientos ochenta."
+  },
+  {
+   "ini": 263.02,
+   "fim": 264.68,
+   "texto": "Ahora la pelea es entre tres."
+  },
+  {
+   "ini": 265.26,
+   "fim": 269.22,
+   "texto": "México cae a dos mil setecientos cuarenta y cinco, con sus últimos en Toluca."
+  },
+  {
+   "ini": 270.04,
+   "fim": 272.5,
+   "texto": "Colombia, a dos mil novecientos tres."
+  },
+  {
+   "ini": 273.12,
+   "fim": 275.74,
+   "texto": "Guatemala, a dos mil novecientos cincuenta."
+  },
+  {
+   "ini": 276.88,
+   "fim": 279.34,
+   "texto": "Tres países, en apenas doscientos metros."
+  },
+  {
+   "ini": 280.6,
+   "fim": 285.34,
+   "texto": "A tres mil metros, el noventa y ocho por ciento de los latinoamericanos ya está bajo el agua."
+  },
+  {
+   "ini": 286.88,
+   "fim": 292.87,
+   "texto": "Ahora sí: ¿por qué Argentina, con la montaña más alta, cayó tan pronto?"
+  },
+  {
+   "ini": 294.42,
+   "fim": 295.96,
+   "texto": "Porque el mar no busca montañas."
+  },
+  {
+   "ini": 296.8,
+   "fim": 297.6,
+   "texto": "Busca personas."
+  },
+  {
+   "ini": 298.22,
+   "fim": 301.02,
+   "texto": "Y en los Andes, las personas eligieron vivir arriba."
+  },
+  {
+   "ini": 301.78,
+   "fim": 302.72,
+   "texto": "Por una razón física."
+  },
+  {
+   "ini": 303.8,
+   "fim": 307.46,
+   "texto": "El aire que sube se expande, y al expandirse se enfría."
+  },
+  {
+   "ini": 308.16,
+   "fim": 310.98,
+   "texto": "Por cada kilómetro de altura, unos cuatro grados menos."
+  },
+  {
+   "ini": 311.96,
+   "fim": 315.38,
+   "texto": "En la costa de Ecuador, Guayaquil vive a veintiséis grados."
+  },
+  {
+   "ini": 316.32,
+   "fim": 321.28,
+   "texto": "Subes casi tres kilómetros y llegas a Quito: unos catorce grados, todo el año."
+  },
+  {
+   "ini": 321.88,
+   "fim": 325.5,
+   "texto": "Una primavera eterna, sin el calor ni los mosquitos de la selva."
+  },
+  {
+   "ini": 326.42,
+   "fim": 332.04,
+   "texto": "Por eso hace más de mil años ya había ciudades a casi cuatro mil metros, como Tiwanaku."
+  },
+  {
+   "ini": 332.68,
+   "fim": 337.1,
+   "texto": "Y por eso hoy millones de personas viven en el cielo."
+  },
+  {
+   "ini": 338.76,
+   "fim": 341.54,
+   "texto": "Ecuador cae a tres mil trescientos treinta y ocho."
+  },
+  {
+   "ini": 342.36,
+   "fim": 346.06,
+   "texto": "Cusco, la capital de los incas, se hunde poco después."
+  },
+  {
+   "ini": 347.52,
+   "fim": 347.9,
+   "texto": "Quedan dos."
+  },
+  {
+   "ini": 348.58,
+   "fim": 349.94,
+   "texto": "Bolivia y Perú."
+  },
+  {
+   "ini": 350.7,
+   "fim": 353.1,
+   "texto": "El mismo altiplano, el mismo lago."
+  },
+  {
+   "ini": 354.46,
+   "fim": 357.06,
+   "texto": "El agua sube desde la selva por el cañón de La Paz."
+  },
+  {
+   "ini": 357.86,
+   "fim": 369.02,
+   "texto": "Y a tres mil ochocientos cincuenta y un metros cruza el último paso del altiplano: el Titicaca, el lago navegable más alto del mundo, se une al océano."
+  },
+  {
+   "ini": 370.2,
+   "fim": 371.76,
+   "texto": "El Alto, Potosí."
+  },
+  {
+   "ini": 372.66,
+   "fim": 375.88,
+   "texto": "Bolivia cae a cuatro mil ciento cuarenta y nueve metros."
+  },
+  {
+   "ini": 376.92,
+   "fim": 378.24,
+   "texto": "Y Perú sigue en pie."
+  },
+  {
+   "ini": 379.34,
+   "fim": 383.67,
+   "texto": "Sus últimos habitantes, en Cerro de Pasco y en los pueblos mineros de la puna."
+  },
+  {
+   "ini": 385.06,
+   "fim": 387.42,
+   "texto": "Perú gana por setenta y dos metros."
+  },
+  {
+   "ini": 388.84,
+   "fim": 390.32,
+   "texto": "Pero el agua no se detiene."
+  },
+  {
+   "ini": 390.78,
+   "fim": 397.2,
+   "texto": "A cinco mil cien metros se hunde La Rinconada, el pueblo más alto del mundo."
+  },
+  {
+   "ini": 398.18,
+   "fim": 398.9,
+   "texto": "Ya no queda nadie."
+  },
+  {
+   "ini": 400.12,
+   "fim": 402.58,
+   "texto": "Y la última roca seca de Latinoamérica..."
+  },
+  {
+   "ini": 403.28,
+   "fim": 404.2,
+   "texto": "es argentina."
+  },
+  {
+   "ini": 405.22,
+   "fim": 409.78,
+   "texto": "La cumbre del Aconcagua, a seis mil novecientos sesenta y un metros."
+  },
+  {
+   "ini": 411.32,
+   "fim": 414.6,
+   "texto": "El país de la montaña más alta perdió antes que casi todos."
+  },
+  {
+   "ini": 415.94,
+   "fim": 417.54,
+   "texto": "Pero se queda con la última piedra."
+  },
+  {
+   "ini": 419.06,
+   "fim": 420.62,
+   "texto": "¿Algo de esto es real?"
+  },
+  {
+   "ini": 421.62,
+   "fim": 429.54,
+   "texto": "Los primeros setenta metros podrían pasar si se derritiera todo el hielo del planeta, pero en miles de años, no en uno."
+  },
+  {
+   "ini": 430.58,
+   "fim": 436.45,
+   "texto": "Todo lo demás es imaginación, calculada con el relieve real y con el lugar donde vive cada persona."
+  },
+  {
+   "ini": 437.84,
+   "fim": 439.16,
+   "texto": "¿En qué metro cayó tu país?"
+  },
+  {
+   "ini": 440.1,
+   "fim": 440.68,
+   "texto": "Te leo en los comentarios."
+  }
+ ]
+}
