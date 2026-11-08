@@ -16,6 +16,7 @@ Produção de vídeos para os canais do Eduardo: Kriegsmomente (DE), Segundo a S
   - desligue e confira no fim;
   - nunca desligue com job de outra sessão (`T2_DONO`);
   - a engine Unreal chega à G4 só pela imagem `.sqfs` no Drive.
+  - toda stack nova ou alterada (Remotion/three.js, Blender, TTS…) vira automaticamente uma imagem `.sqfs` no Drive, com hash do `package.json`/lock no nome. A G4 monta essa imagem ao ligar, sem reinstalar nada.
 - **Navegação:** dirija só o navegador de automação; o Chrome pessoal do Eduardo, só pedindo.
 - **Publicação:** é manual, do Eduardo. Respostas no YouTube só com o texto aprovado.
 - **Áudio:** música só instrumental. No Kriegsmomente, a música fica ~20 dB abaixo da voz e não há ambiente contínuo.

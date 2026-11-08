@@ -24,3 +24,15 @@ Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam
 ## 4. Desligamento automático com tarefa pendente
 - **02/11:** a cadeia desligou a G4 segundos depois de o Drive montar, e a imagem da engine não foi gravada.
 - **Regra:** com pendência (cópia ao Drive, conferência), a cadeia não tem `fim → desligar`. Quem confere e desliga é o maestro.
+
+## 5. Stack "Frankenstein", sem unidade de arte
+- **08/11 (reels FB):** o boneco Quaternius cru, a árvore EZ-Tree e o terreno por código vinham cada um com sua paleta. O Eduardo chamou de "rascunho de estudante de animação" e "Frankenstein sem identidade".
+- **Regra:** comece por um kit harmonizado (Polyfork, ou um pacote Fab da biblioteca do Eduardo). Uma paleta, uma receita de luz, um sistema de texto. O que vier de fora é recolorido para a paleta do kit.
+
+## 6. Reinstalar a stack a cada ligada da G4
+- **Até 08/11:** a stack Remotion reinstalava apt, npm e Chrome em toda VM nova. Isso custava minutos de G4 em cada job, de todas as sessões.
+- **Regra:** toda stack nova ou alterada vira uma imagem `.sqfs` no Drive da conta Ultra (ver `docs/g4-imagem-stack.md`).
+
+## 7. Tudo misturado entre canais
+- **Até 08/11:** os reels do FB moravam dentro da pasta de mineração, e os pipelines tinham nome de ferramenta, não de canal.
+- **Regra:** separe por tenant, canal → formato (ver `docs/arquitetura-tenants.md`).
