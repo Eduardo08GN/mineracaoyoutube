@@ -2,7 +2,11 @@
 
 Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam os que atravessam pipelines.
 
-## 1. Construir à mão o que já existe pronto (4 recorrências)
+## 1. Construir à mão o que já existe pronto (5 recorrências)
+- **06/11, K18 Königgrätz (o vídeo ficou bom, mas não retroagir):** o terreno e a animação de campo e chão foram ao ar crus e destoaram do resto. O resto do vídeo era de época e acabado (tinta, pinturas e HUD).
+  - O que ficou cru: chapado sem textura, árvore em bola low-poly, casa-caixa e bloco de soldados.
+  - **Causa:** as 7 frentes cuidaram do desenho da informação, e nenhuma ficou com o acabamento do terreno. Não rodei o levantamento de prontos para isso: Fab/Megascans (o Eduardo já tinha o MW Landscape Auto Material e rochas e plantas Megascans no disco), GitHub three.js (splat de terreno, árvores, grama e casario instanciados) e a G4 (bake e texturas no Cycles).
+  - **Correção:** todo vídeo com mundo 3D tem uma **frente de acabamento** própria, com levantamento Fab, GitHub e G4 antes de construir. Ela entrega o terreno, a vegetação e as construções no mesmo registro visual dos outros takes. Ela faz o still lado a lado com um take de época do próprio vídeo antes do render.
 - **03/11, Kriegsmomente 14 e auditoria do Learjet:** setas, mapa em relevo, nuvem, céu e cidade feitos à mão no three.js. O Unreal ficou deformando um mapa de floresta.
   - O que já existia: perfect-arrows, `@remotion/paths`, a skill de mapas do Remotion, MapStage, VDBs CC0 da JangaFX, Blosm, LiDAR público.
   - Parte disso já estava instalada sem uso.
@@ -74,3 +78,13 @@ Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam
 - **Sintoma:** o `canal.ligar` deu `CANAL_SEM_URL`, e o AI Studio baixou WAV vazio (0 bytes) no mesmo capítulo, várias vezes seguidas.
 - **Causa:** os dois scripts usam o mesmo Dolphin (Ivone) por CDP. O Colab e o AI Studio disputam o foco e o download.
 - **Regra:** nunca rodar ao mesmo tempo nada que dirija o navegador (ligar/reconectar a G4, narração, Flow). O que roda NA G4 depois de ligada não usa o navegador e pode ir em paralelo à vontade. Ordem: narrar → ligar G4 → lote paralelo na G4.
+
+## Dependência nova no projeto não chega à G4 (06/11, K18)
+- **Sintoma:** os stills na G4 falharam com `Can't resolve '@orbat-mapper/control-measures'` (e tegaki, perfect-freehand), embora tudo rodasse no PC.
+- **Causa (dupla):**
+  - o `package.json` do projeto foi copiado da stack ANTES de instalar as bibliotecas novas;
+  - o `vm/preparar.sh` só rodava `npm install` se não existisse `node_modules/remotion`.
+- **Regra:**
+  - toda biblioteca nova vai no `package.json` do PROJETO, com versão exata;
+  - o `preparar.sh` agora compara o `package.json` com `node_modules/.package_ok` e reinstala se mudou;
+  - `r"D:\tracer3d2"` escrito via heredoc/replace em Python vira TAB (`\t`): em scripts gerados use `"D:/tracer3d2"`.
