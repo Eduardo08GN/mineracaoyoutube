@@ -34,6 +34,7 @@ Critério: "ajuda a entender?", nunca "parece real?". Cada take de mecanismo cru
   - nunca desligue com job de outra sessão (`T2_DONO`);
   - a engine Unreal chega à G4 só pela imagem `.sqfs` no Drive.
   - toda stack nova ou alterada (Remotion/three.js, Blender, TTS…) vira automaticamente uma imagem `.sqfs` no Drive, com hash do `package.json`/lock no nome. A G4 monta essa imagem ao ligar, sem reinstalar nada.
+  - **montar a stack é trabalho da G4, nunca do PC** (`npm install`, empacotar, checar tipos, stills, render): a G4 parte do `.sqfs`, instala só o que for novo e regrava a imagem. No PC fica só a edição do código (regra de 08/11, reels do FB).
 - **Navegação:** dirija só o navegador de automação; o Chrome pessoal do Eduardo, só pedindo.
 - **Publicação:** é manual, do Eduardo. Respostas no YouTube só com o texto aprovado.
 - **Takes de animação:** nunca reaproveitar o mesmo take dentro do vídeo. Outro trecho, outra velocidade ou espelho do mesmo clipe também contam como reaproveitamento. Cada batida 3D tem um take renderizado próprio (regra de 03/11, vale a partir do vídeo seguinte à parte 2 do Learjet).

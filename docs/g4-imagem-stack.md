@@ -2,6 +2,8 @@
 
 **Regra do Eduardo (08/11/2026):** toda stack nova ou alterada vira automaticamente uma imagem `.sqfs` no Drive. A G4 monta essa imagem ao ligar e não reinstala `npm`, Chrome nem bibliotecas a cada sessão.
 
+**Montagem só na G4 (08/11):** nada de `npm install`, empacotamento, checagem de tipos ou stills no PC. A G4 parte do `.sqfs`, instala só o que for novo e regrava a imagem no Drive Ultra. No PC fica só a edição do código.
+
 ## Por que
 - Cada VM do Colab começa limpa.
 - O `preparar.sh` reinstalava tudo a cada ligada: libs apt, `npm install` e Chrome for Testing. Isso levava minutos de G4 em todo job, de todas as sessões.
