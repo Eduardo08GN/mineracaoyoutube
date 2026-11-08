@@ -1,0 +1,104 @@
+{
+ "titulo": "¿Qué pasaría si el mar subiera sin parar hasta que solo quedara un país de Latinoamérica?",
+ "regla": "Un país cae cuando el 99 % de su gente queda bajo el agua. Agua entra por el océano (priority-flood). Datos: GHS-POP 2025, ETOPO 2022, Natural Earth.",
+ "kapitel": [
+  {
+   "id": "01_gancho",
+   "nivel": [
+    0,
+    3
+   ],
+   "text": "El mar empieza a subir. Un metro. Dos. Tres. Y no se detiene.\nLa regla es simple: cuando el noventa y nueve por ciento de la gente de un país queda bajo el agua, ese país desaparece del mapa.\nVeinte países de Latinoamérica. Solo uno quedará en pie.\nY no es el que tiene la montaña más alta."
+  },
+  {
+   "id": "02_orilla",
+   "nivel": [
+    3,
+    30
+   ],
+   "text": "A cinco metros, el agua ya entra en las casas de dieciocho millones de personas. Cancún, el malecón de Salinas, en Ecuador: la orilla deja de existir.\nA diez metros, son cuarenta y cuatro millones.\nY a treinta, el mar ya está en el Malecón de La Habana, en Cartagena, en la Ciudad de Panamá, en Maracaibo. Río de Janeiro ya no tiene playa: tiene mar en la avenida."
+  },
+  {
+   "id": "03_plata",
+   "nivel": [
+    30,
+    70
+   ],
+   "text": "A treinta metros cae Buenos Aires. Diez metros más, y cae Montevideo.\nEl Río de la Plata ya no es un río. Es un brazo del océano que avanza tierra adentro, hacia Paraguay.\nCincuenta metros: uno de cada cuatro latinoamericanos ya vive bajo el agua."
+  },
+  {
+   "id": "04_hielo",
+   "nivel": [
+    70,
+    70
+   ],
+   "eureka": "huella gravitacional del hielo (Mitrovica, Gomez y Clark, Science 2009; USGS 70 m)",
+   "text": "Setenta metros. Aquí hay que hacer una pausa.\nSetenta metros es, más o menos, lo que subiría el mar si se derritiera todo el hielo del planeta. Groenlandia, la Antártida, todos los glaciares. Ciento ochenta y cuatro millones de latinoamericanos ya estarían bajo el agua.\nPero hay algo extraño. Si la Antártida se derritiera, cerca de ella el mar no subiría. Bajaría.\nSu hielo es tan pesado que atrae el océano con su propia gravedad, como un imán. Al derretirse, lo suelta. Y esa agua se va lejos, justo hacia nuestras costas, donde subiría más que el promedio.\nDesde aquí, ya no queda hielo que derretir. Lo que sigue es imaginación. Y el mar sigue subiendo."
+  },
+  {
+   "id": "05_primeros",
+   "nivel": [
+    70,
+    900
+   ],
+   "text": "Doscientos dieciocho metros. Cae el primer país.\nY no es una isla del Caribe. Es Uruguay. Uno de los países más planos del continente: casi toda su gente vive cerca del agua. Los últimos uruguayos resisten en el norte, en Rivera y Tacuarembó.\nCatorce metros después, cae Cuba.\nLa cuenca del Amazonas, casi toda por debajo de doscientos metros, ya es un mar interior. Más de la mitad de la tierra de Latinoamérica es océano.\nA seiscientos dieciocho metros cae Paraguay. A ochocientos noventa y siete, República Dominicana."
+  },
+  {
+   "id": "06_mil",
+   "nivel": [
+    900,
+    1400
+   ],
+   "text": "Mil metros. Tres de cada cuatro latinoamericanos ya están bajo el agua.\nEl Salvador, Nicaragua y Panamá caen en menos de cuarenta metros.\nBrasil, el gigante, aguanta hasta mil doscientos cuarenta y ocho, en la meseta de Brasilia.\nY a mil trescientos treinta y cinco metros cae Argentina.\nSí. El país del Aconcagua, la montaña más alta de toda América, cae en el décimo lugar.\n¿Cómo puede ser? Guarda esa pregunta.\nCuarenta metros después, Haití."
+  },
+  {
+   "id": "07_altos",
+   "nivel": [
+    1400,
+    2300
+   ],
+   "text": "Venezuela cae a mil quinientos ochenta y uno. Honduras, a mil setecientos treinta y nueve. Costa Rica, a mil ochocientos siete.\nChile llega a dos mil doscientos cuarenta. Sus últimos habitantes viven en el desierto de Atacama, en Calama.\nY a dos mil doscientos ochenta metros, el agua llega a la Ciudad de México. Donde hace quinientos años había un lago, vuelve a haber agua."
+  },
+  {
+   "id": "08_tres",
+   "nivel": [
+    2300,
+    3000
+   ],
+   "text": "Bogotá se hunde a dos mil quinientos ochenta.\nAhora la pelea es entre tres. México cae a dos mil setecientos cuarenta y cinco, con sus últimos en Toluca. Colombia, a dos mil novecientos tres. Guatemala, a dos mil novecientos cincuenta.\nTres países, en apenas doscientos metros.\nA tres mil metros, el noventa y ocho por ciento de los latinoamericanos ya está bajo el agua."
+  },
+  {
+   "id": "09_eureka",
+   "nivel": [
+    3000,
+    3000
+   ],
+   "eureka": "gradiente na encosta ~4 °C/km (Guayaquil ~26 °C, Quito ~14 °C em ~2,85 km); ar que sobe se expande e esfria; Tiwanaku ~3.850 m",
+   "text": "Ahora sí: ¿por qué Argentina, con la montaña más alta, cayó tan pronto?\nPorque el mar no busca montañas. Busca personas.\nY en los Andes, las personas eligieron vivir arriba. Por una razón física.\nEl aire que sube se expande, y al expandirse se enfría. Por cada kilómetro de altura, unos cuatro grados menos.\nEn la costa de Ecuador, Guayaquil vive a veintiséis grados. Subes casi tres kilómetros y llegas a Quito: unos catorce grados, todo el año. Una primavera eterna, sin el calor ni los mosquitos de la selva.\nPor eso hace más de mil años ya había ciudades a casi cuatro mil metros, como Tiwanaku. Y por eso hoy millones de personas viven en el cielo."
+  },
+  {
+   "id": "10_final",
+   "nivel": [
+    3000,
+    4221
+   ],
+   "text": "Ecuador cae a tres mil trescientos treinta y ocho. Cusco, la capital de los incas, se hunde poco después.\nQuedan dos. Bolivia y Perú. El mismo altiplano, el mismo lago.\nEl agua sube desde la selva por el cañón de La Paz. Y a tres mil ochocientos cincuenta y un metros cruza el último paso del altiplano: el Titicaca, el lago navegable más alto del mundo, se une al océano.\nEl Alto, Potosí. Bolivia cae a cuatro mil ciento cuarenta y nueve metros.\nY Perú sigue en pie. Sus últimos habitantes, en Cerro de Pasco y en los pueblos mineros de la puna.\nPerú gana por setenta y dos metros."
+  },
+  {
+   "id": "11_cima",
+   "nivel": [
+    4221,
+    6961
+   ],
+   "text": "Pero el agua no se detiene.\nA cinco mil cien metros se hunde La Rinconada, el pueblo más alto del mundo. Ya no queda nadie.\nY la última roca seca de Latinoamérica... es argentina. La cumbre del Aconcagua, a seis mil novecientos sesenta y un metros.\nEl país de la montaña más alta perdió antes que casi todos. Pero se queda con la última piedra."
+  },
+  {
+   "id": "12_real",
+   "nivel": [
+    6961,
+    6961
+   ],
+   "text": "¿Algo de esto es real?\nLos primeros setenta metros podrían pasar si se derritiera todo el hielo del planeta, pero en miles de años, no en uno. Todo lo demás es imaginación, calculada con el relieve real y con el lugar donde vive cada persona.\n¿En qué metro cayó tu país? Te leo en los comentarios."
+  }
+ ]
+}

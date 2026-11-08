@@ -56,7 +56,14 @@ Regras fixas da esteira:
 ## 3. Linguagem visual (regras do canal)
 
 - **Gancho em 10 s:** o capítulo 1 abre já no momento crítico (no vídeo 5, o mergulho com as frases do rádio). Nunca abrir com cartão calmo.
-- **Câmera sempre em movimento:** chase, órbita, drone, travelling. Cortes de 2,5–6 s; nada parado por mais de 4 s.
+- **Câmera sempre em movimento:** chase, órbita, drone, travelling. As réguas são as de `docs/plano-qualidade-3d.md` §3: 0% de imagem congelada, **câmera parada ≤ 10%** nos planos 3D (velocidade mínima de cada preset acima do limiar do medidor) e **≥ 12 takes distintos/min**, contando mudança de câmera ou ação dentro da batida. Take longo (30–80 s) só nos blocos de mecanismo, com a câmera andando e algum dado mudando a cada ≤ 1 s. Fora deles, cortes de 2,5–6 s.
+- **Instrumento vivo nos blocos de mecanismo** (o miolo "segundo a segundo"; regra aprovada pelo Eduardo em 03/11):
+  - uma simulação contínua carrega o dado; o número citado vira instrumento sobre ela, nunca cartão separado;
+  - no máximo 3 grandezas em cor de sinal, mais 1 barra amostrada no objeto ("a la altura del avión · dentro de la nube") e o relógio com a compressão de tempo declarada;
+  - os instrumentos entram e saem com a fala;
+  - legenda de ação de 1 linha;
+  - dado do ambiente como volume 3D rotulado;
+  - cartão preto de uma frase: no máximo 10% do vídeo e 3 s cada.
 - **Texto sobre 3D em movimento:** cartão (documento, citação, gráfico) sempre com fundo 3D vivo.
 - **HUD nos capítulos críticos:** relógio local com segundos, altitude, razão de descida (vermelho), contador de segundos.
 - **Explicação para leigo** em 2 a 3 blocos por vídeo, ancorados palavra a palavra, sem anunciar "física".
@@ -119,7 +126,7 @@ A "maquete branca" monocromática deixa de ser o visual do canal. Com `paleta: '
 - chão de longe com textura;
 - sobreposições (UI) com tokens refinados.
 
-O look `blanco` fica restrito a diagrama esquemático.
+O look `blanco` sai também do diagrama. Todo trecho de explicação usa o preset "explicação AiTelly" (`docs/plano-qualidade-3d.md` §2a e `docs/acabamento-threejs.md` §8): palco, uma cor saturada por subsistema, luz de estúdio suave e colorfulness ~30.
 
 ### 4.3 Custo de render
 
@@ -136,7 +143,7 @@ O look `blanco` fica restrito a diagrama esquemático.
 |---|---|---|
 | 1 | "¿Por qué…?", o arquétipo mais forte em espanhol para evento real (mediana ~269 mil views na amostra de 01/11). Tipo do evento + lugar nas primeiras palavras, usando o termo que o hispânico digita ("avión", não o modelo). | "¿Por qué cayó el avión en Florida? El Learjet 60 de Palm Beach, reconstruido en 3D" |
 | 2 | O molde do viral do canal (Urda, 87 mil views): "<tipo> en <lugar>: lo que realmente pasó con/en <x>" | "Accidente de avión en Florida: lo que realmente pasó con el Learjet de Palm Beach" |
-| 3 | Gancho do material que o público procura (no vídeo 5, o áudio: "avion florida audio" no autocompletar dos 5 países) + "últimos N segundos en 3D" | "«Vamos a estrellarnos»: el audio del Learjet en Florida y sus últimos 84 segundos en 3D" |
+| 3 | Gancho do material que o público procura + "últimos N segundos en 3D". **Nunca prometer áudio de controle de tráfego ou caixa-preta**: o canal não usa esse áudio (decisão do Eduardo, 03/11). | "Learjet en Florida: sus últimos 84 segundos, reconstruidos en 3D" |
 
 O que os dados do canal mostram até aqui:
 - O viral (Urda) veio do **evento quente**, com 80% do tráfego vindo do Início e 15% de "A seguir". Não veio do molde: dois casos antigos com o mesmo molde fizeram 203 e 475 views.

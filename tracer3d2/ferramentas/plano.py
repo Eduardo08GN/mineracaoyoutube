@@ -54,12 +54,37 @@ for u in ui: seq = seq + 1 if u else 0; mx = max(mx, seq)
 pct = 100 * sum(ui) / max(1, len(ui))
 print(f"DINAMISMO: {pct:.0f}% cartoes ui (max 40%), maior sequencia de cartoes {mx} (max 2)" + ("  <-- AJUSTAR" if pct > 40 or mx > 2 else "  ok"))
 
+# base visual de cada batida (03/11/2026, video 14 reprovado: 69 batidas do mesmo mapa inclinado contadas como "3D", 54% de mapa na tela).
+# Componente da cena inedita = 1o componente JSX da batida em v1/src/beats/*.tsx; cena do kit = c["comp"].
+# Mapa em 3D (relevo inclinado, setas de exercito, trilhos sobre o mapa) CONTA COMO MAPA. Declarar em roteiro/bases_visuais.json
+# ({"Componente": "mapa" | "objeto" | "terreno" | ...}); sem declaracao, nomes com cara de mapa caem em "mapa".
+import re
+BASES = json.load(open(f"{R}/roteiro/bases_visuais.json", encoding="utf-8")) if os.path.exists(f"{R}/roteiro/bases_visuais.json") else {}
+PARECE_MAPA = re.compile(r"Karte|Map|Mapa|Aufmarsch|Armeen|Schwenk|Front|Lage|Route|Bahn", re.I)
+# so os arquivos registrados no BEATS do index.ts (o projeto e copia do anterior: k13_*.tsx antigos tem os mesmos ids)
+_idx = open(f"{R}/v1/src/beats/index.ts", encoding="utf-8").read() if os.path.exists(f"{R}/v1/src/beats/index.ts") else ""
+_reg = re.findall(r"\.\.\.(\w+)", (re.search(r"BEATS[^=]*=\s*\{([^}]*)\}", _idx) or re.search("()", "")).group(1))
+_arq = {n: f"{R}/v1/src/beats/{p}.tsx" for n, p in re.findall(r"import\s*\{\s*(\w+)\s*\}\s*from\s*'\./([\w-]+)'", _idx)}
+tsx = "".join(open(_arq[n], encoding="utf-8").read() for n in _reg if n in _arq and os.path.exists(_arq[n]))
+pos = [(m.start(), m.group(1)) for m in re.finditer(r"['\"](\d\d_\d\d)['\"]\s*:", tsx)]
+COMP = {}
+for i, (p0, bid) in enumerate(pos):
+    corpo = tsx[p0: pos[i + 1][0] if i + 1 < len(pos) else len(tsx)]
+    COMP[bid] = next((x for x in re.findall(r"<([A-Z]\w+)", corpo) if x not in ("AbsoluteFill", "Sequence", "Img", "Fragment", "Kopf", "KPI", "Chip2")), None)
+def comp(b):
+    c = cenas.get(b["dono"], {}).get(b["id"], {})
+    return c.get("comp") or (COMP.get(b["id"]) if b["dono"].startswith("INEDITO") else None) or b["dono"]
+def base(b):
+    k = comp(b)
+    if k in BASES: return BASES[k]
+    return "mapa" if (b["dono"] == "karten" or PARECE_MAPA.search(k or "")) else None
+
 # mistura de familias (25/10/2026, referencia Tracer Project): mapa <= 35%, 3D >= 25%, imagem de epoca >= 20%, <= 3 seguidas da mesma
 def familia(b):
     c = cenas.get(b["dono"], {}).get(b["id"], {})
     if c.get("comp") == "Gemaelde" or b["dono"] == "epoca": return "epoca"   # cena do kit Gemaelde (pintura 2.5D), em qualquer arquivo de cenas
     if b["dono"] == "ui": return "epoca" if c.get("comp") == "Foto" else "cartao"
-    if b["dono"] == "karten": return "mapa"
+    if b["dono"] == "karten" or base(b) == "mapa": return "mapa"           # mapa em 3D continua sendo mapa
     if b["dono"].startswith("INEDITO_epoca"): return "epoca"
     return "3d"
 fam = [familia(b) for b in beats]; dur = {}
@@ -69,3 +94,18 @@ seq = mx = 0; ult = None
 for x in fam: seq = seq + 1 if x == ult else 1; ult = x; mx = max(mx, seq)
 ok = pc.get("mapa", 0) <= 35 and pc.get("3d", 0) >= 25 and pc.get("epoca", 0) >= 20 and mx <= 3
 print(f"MISTURA (% do tempo): {pc} | maior sequencia da mesma familia {mx} (max 3)" + ("  ok" if ok else "  <-- AJUSTAR (mapa<=35, 3d>=25, epoca>=20)"))
+
+# repertorio (03/11/2026): nenhum componente visual passa de 15% do tempo nem aparece em mais de 2 batidas seguidas;
+# o 3D precisa ter objeto/mecanismo (3 a 5 sequencias por video, feedback-3d-explicativo), nao so terreno e mapa
+cd = {}
+for b in beats: cd[comp(b)] = cd.get(comp(b), 0) + b["e"] - b["s"]
+GENERICOS = ("ui", "epoca", "karten", "Gemaelde", "Foto", "Karte")   # kits que trocam de conteudo a cada batida
+grandes = {k: round(100 * v / tot) for k, v in cd.items() if 100 * v / tot > 15 and k not in GENERICOS}
+seq = mxc = 0; ult = None; pior = None
+for b in beats:
+    k = comp(b); seq = seq + 1 if k == ult and k not in GENERICOS else 1; ult = k
+    if seq > mxc: mxc, pior = seq, k
+obj = sum(v for k, v in cd.items() if BASES.get(k) == "objeto")
+okr = not grandes and mxc <= 2
+print(f"REPERTORIO: componentes acima de 15%: {grandes or 'nenhum'} | maior sequencia do mesmo componente {mxc} ({pior}, max 2) | "
+      f"objeto/mecanismo {round(100 * obj / tot)}% do tempo" + ("  ok" if okr else "  <-- AJUSTAR (trocar por biblioteca 3D / objeto em corte)"))
