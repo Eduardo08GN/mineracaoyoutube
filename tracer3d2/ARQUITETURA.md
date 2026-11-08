@@ -126,3 +126,29 @@ Batedor sempre · G4 sempre desligada quando ociosa · entrega/ só com mp4 com 
   - Regra: no máximo ~6 batidas inéditas 3D por agente, e só onde o kit e a pintura 2.5D não servem.
   - Cena fraca vira `Gemaelde` na hora.
 - **Mistura final:** 3D 30%, época 30%, mapa 23%, cartões 17%. No vídeo 6 tinha sido mapa 59% e época 8%.
+
+## Otimização de 31/10/2026: porteiro, sync em tar, preflight, correção por trecho, medição
+Plano fechado entre a sessão de mineração e a de produção, aprovado pelo Eduardo (a narração **continua no AI Studio**). Medição que motivou: vídeo 10 com 3 h 00, ~55 min perdidos em incidentes de G4. Detalhes e testes em [MIGRACAO_31-10.md](MIGRACAO_31-10.md); backup do antes em `_antes_migracao_3110/`.
+- **Porteiro** (`porteiro.py`): reservas com validade por recurso (`g4_admin`, `navegador`, `render`, `stills` por projeto), em `D:/tmp/porteiro.json`. Reserva morre com o processo ou a validade.
+  - `T2_DONO` = dono das reservas (ex.: `kriegsmomente_v12`); sem ele vale `sessao`, com aviso.
+  - **Só a conversa principal** define `T2_PAPEL=maestro`; sem ele `desligar` é negado. Agentes e batedores nunca.
+  - `navegador` evita dois clientes Playwright no mesmo perfil (1.14, 2.x). No `narrar.py` de cada vídeo, troque a trava `narrar.pid` por `porteiro.esperar("navegador", f"narracao:{os.getpid()}", 7200, prazo=1800, pid=os.getpid())`.
+- **`garantir`** reconecta o proxy e lê `/saude` antes de religar; só faz `preparar` se o daemon de stills não estiver pronto (1.22). Teste: cookies vencidos → 17 s, sem religar.
+- **Sync em tar**: acima de 20 arquivos faltando, um tar em pedaços de 16 MB (4 em paralelo) e `tar -x` na VM pelo `/exec`. O `servidor.py` não mudou. Medido pelo proxy real: 978 arquivos / 506 MB em **104 s** (o envio arquivo a arquivo levou 703 s no vídeo 11).
+- **`baixar`** confere o tamanho de cada pedaço, com 5 tentativas (1.23).
+- **Correção por trecho**: `python canal.py corrigir <v1> <ini_s> <fim_s> <inteiro_mudo.mp4> <saida.mp4>` amplia o trecho para os quadros-chave, re-renderiza só essa janela e junta com `concat -c copy`. O corte inicial é por **contagem de quadros** (cortar por tempo com copy dava +2 quadros com B-frames e dessincronizava a narração). Medido: 5 s do vídeo 11 em 2 min 47 s, com quadros e duração idênticos ao original.
+- **Preflight** (`ferramentas/preflight.py <vídeo> roteiro|voz|plano|entrega`): só leitura; confere as armadilhas do BADPATHS e sai com código 1 se houver ERRO. Rodar `roteiro` antes da narração, `plano` antes do render e `entrega` no fim.
+- **Medição** (`marca.py`): o `canal.py` grava ligar/preparar/garantir/sync/stills/render em `<vídeo>/MEDICAO_auto.jsonl`; etapas manuais e incidentes com `marca.py <vídeo> inicio|fim <etapa>` e `incidente <min> <nota>`; `marca.py <vídeo> relatorio` monta a tabela para o MEDICAO.md.
+- **Fora (decidido):** biblioteca de música, 4 planejadores, alinhamento quente e NVENC/VMAF. A nuvem para assets fica descartada enquanto o tar ficar abaixo de 5 min.
+
+## Publicação (31/10/2026, regra do Eduardo)
+Todo vídeo novo sai com `entrega/PUBLICACAO.txt`, gerado por `ferramentas/publicacao.py <pasta> <config.json>`. A ferramenta lê o canal pela API (~3 unidades) e acha os virais (views/dia ≥ 5× a mediana do canal e ≥ 300/dia).
+
+O `PUBLICACAO.txt` traz:
+- o horário: manhã do país principal, ≥ 24 h depois do último upload, sem esperar o viral esfriar;
+- tela final e cards do viral para o novo, e do novo para o viral, nos pontos onde um cita o outro;
+- uma playlist temática;
+- o comentário fixado no viral;
+- o que não fazer: não mexer em título nem miniatura do viral, e não publicar 2 vídeos no mesmo dia.
+
+A publicação continua manual.

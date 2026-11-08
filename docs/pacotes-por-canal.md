@@ -95,6 +95,34 @@ Detalhes em `D:\unreal3d\LICENCA_CESIUM.md`.
 
 **Levantamento em andamento:** armas, canhões e objetos de 1866–1871 nesses acervos (`D:\unreal3d\LEVANTAMENTO_ARMAS_1870.md`). Os aprovados entram na tabela do Kriegsmomente acima.
 
+## Levantamento de 03/11/2026: código e método prontos (GitHub, npm, Blender, tutoriais)
+
+Relatórios completos:
+- `docs/levantamentos/2026-11-03_repos_stack_3d.md`: cerca de 180 buscas no GitHub, npm/PyPI, extensões do Blender e termos de uso.
+- `docs/levantamentos/2026-11-03_youtube_tutoriais_stack_3d.md`: 28 legendas de tutoriais e os créditos dos concorrentes.
+
+**Antes de construir qualquer peça, consultar estes:**
+
+| Peça | Pronto | Licença | Onde roda |
+|---|---|---|---|
+| Mapas (todos) | skill oficial `remotion-maps` + MapLibre + Turf | BSD-3/MIT | Remotion |
+| Setas, frentes e unidades | perfect-arrows + `@remotion/paths` (`evolvePath`), flubber, milsymbol | MIT | Remotion |
+| Mapa histórico narrativo | MapStage (testar antes de construir) | MIT | Remotion/web |
+| Mar de nuvens (web) | `@takram/three-clouds` | MIT | three.js |
+| Nuvem, fumaça e fogo (Blender) | JangaFX Free VDBs; Mantaflow e céu Nishita nativos | CC0 / nativo | Blender na G4 |
+| Rota de voo | adsb.lol `globe_history` + `traffic` + `pymap3d`; Tacview Flight Path Importer (adaptar) | ODbL / MIT | Python → Blender |
+| Cidade real | Blosm (OSM) + BlenderGIS (DEM); LiDAR USGS 3DEP / ortofoto NAIP (EUA, domínio público) | GPL / PD | Blender na G4 |
+| Corte (estilo Zack D) | Boolean do Blender; clipping com stencil + `three-bvh-csg` | nativo / MIT | Blender ou three.js |
+| Câmera viva | Camera Shakify; `@remotion/motion-blur` | GPL / Remotion | Blender / Remotion |
+| Blender por IA | Blender Lab MCP (oficial) no PC + `blender -b -P` na G4 | — | PC + G4 |
+
+**Fontes vetadas para uso comercial:**
+- Google Photorealistic 3D Tiles e Google Earth Studio;
+- Cesium ion e o plano Free do MapTiler;
+- EOX cloudless de 2018 a 2025 (2016 e 2017 são CC BY 4.0, conferido no WMTS da EOX);
+- OpenSky, ADS-B Exchange e FR24;
+- LiveATC. Áudio de ATC ou caixa-preta não se usa de qualquer forma: decisão do Eduardo em 03/11.
+
 ## Regras de uso
 - **Créditos:** só na descrição, nunca na imagem, salvo se uma licença exigir atribuição na tela. Nesse caso, avaliar antes de usar.
 - **Licença:** aceite na conta do Eduardo, sempre com o OK dele. Compra só com item e valor confirmados.

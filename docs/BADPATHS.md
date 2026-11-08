@@ -2,7 +2,13 @@
 
 Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam os que atravessam pipelines.
 
-## 1. Construir à mão o que já existe pronto (3 recorrências)
+## 1. Construir à mão o que já existe pronto (4 recorrências)
+- **03/11, Kriegsmomente 14 e auditoria do Learjet:** setas, mapa em relevo, nuvem, céu e cidade feitos à mão no three.js. O Unreal ficou deformando um mapa de floresta.
+  - O que já existia: perfect-arrows, `@remotion/paths`, a skill de mapas do Remotion, MapStage, VDBs CC0 da JangaFX, Blosm, LiDAR público.
+  - Parte disso já estava instalada sem uso.
+  - Os concorrentes (Reconstructed) usam modelo grátis do Sketchfab e dados públicos.
+  - **Causa:** o levantamento cobriu só assets. Não houve busca de código (`gh search repos`) nem de método (tutoriais pela YouTube API).
+  - **Correção:** as três frentes viraram obrigatórias no portão 1, e as ferramentas estão em `ferramentas/levantamento/`.
 - **23/10, Dicke Bertha, e 24/10, V3 (Tracer3D 2.0):** pulei o batedor de stack com a desculpa de que a stack era reaproveitada.
 - **02/11, unreal3d (Kriegsmomente) e Segundo a Segundo:** construí à mão o material "ilustrado", as casas peça por peça, a luz, a gradação e o espalhamento de plantas. No three.js, escrevi do zero uma nuvem volumétrica, quando já existe `@takram/three-clouds`.
   - **Resultado:** "cara de PS2", segundo o Eduardo, contra o Elapsed, feito por uma pessoa só em UE5 com a mesma engine.
