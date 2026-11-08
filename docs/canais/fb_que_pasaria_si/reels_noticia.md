@@ -1,6 +1,8 @@
 # Página FB "¿Qué Pasaría Si? 3D": formato reels de notícia reconstruída
 
-**Status (08/11/2026):** o estilo foi provado em stills. O revisor independente aprovou a folha como prova de direção, com notas A 8, B 7 e C 8. O vídeo ainda não foi produzido.
+**ENCERRADO em 08/11/2026** pelo Eduardo: o custo de tokens e de tempo é alto demais para uma página ainda não monetizada. Fica como referência congelada em `fb_reels/tempe_polyfork_congelado/`. Para retomar mais barato: molde parametrizado por JSON, ~0,2 mi de tokens por lote de 4 reels do mesmo mundo.
+
+**Status anterior (08/11/2026):** o estilo foi provado em stills. O revisor independente aprovou a folha como prova de direção, com notas A 8, B 7 e C 8. O vídeo ainda não foi produzido.
 
 **Substitui:** o lote 1 por código, reprovado em 08/11 (roteiro sem contexto, animação "rascunho de estudante", HUD engessado), e a rota de IA por plano. O doc antigo `pipeline-reels-codigo.md` não foi oficializado.
 
