@@ -21,6 +21,7 @@ Lista empírica, montada entre 23/10 e 07/11/2026 nos canais Kriegsmomente, Segu
   - o job longo emite **um** aviso, no fim (sucesso ou falha);
   - o monitor filtra só os eventos que pedem ação;
   - aviso sem ação não ganha resposta longa.
+- **Mas nunca sem vigia (07/11, lote 1 dos reels):** a G4-2 caiu e o pipeline ficou "cego e surdo" por horas. Todo job longo roda com um **sentinela** (script + Monitor) que checa a cada ~2 min a saúde da G4, o processo do job e o progresso do backlog, e que **emite só na mudança de estado**: queda, job morto, backlog parado há 10 min, erro, etapa concluída, fim. Silêncio quer dizer que está tudo andando. Na queda, ele relê a URL (`canal.py ligar`); com a VM viva, reanexa; se a VM morreu, religa e retoma por etapa, nunca do zero.
 
 ### A3. Fork de conversa longa
 - **O que houve:** ~12 forks no K19/K20. Cada um herdou o contexto inteiro e rodou centenas de passos em Opus (300 a 500 mil tokens cada).
