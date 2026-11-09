@@ -35,7 +35,7 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
 | Prompts | Inglês, fala entre aspas em pt-BR, foto da Tomiko como @Imagem1 | `research_notes/prompts_vids_lencol.md` |
 | Geração | Google Vids no Dolphin "12 Ivone", painel "Clipe de vídeo gerado com IA", modo **Criar**, Omni 720p 9:16 10 s; script Playwright por CDP, um take por vez (~2 min cada) | scratchpad `produzir_lencol.py` |
 | Revisão | **O Eduardo revisa** cada take num player embutido na conversa; Claude não olha quadros (economia de tokens) e refaz o take apontado | — |
-| Voz | Converter cada take para a voz oficial com OpenVoice v2 (`D:\masaje-es\vsl-gatillo\voz\normalizar_voz.py <ref> <saida> takes... --tau 0.5`) | `research_notes/voz/TOMIKO55_VOZ_OFICIAL_rouca2.wav` |
+| Voz | **Desde 9/11: Gemini TTS, voz Zali** (Google AI Studio, a mesma da VSL Casa Limpa). Converter só a fala de cada take com OpenVoice v2 (`D:\masaje-es\vsl-gatillo\voz\normalizar_voz.py <ref> <saida> takes... --tau 0.3`); se o Whisper mostrar palavra embolada, subir o tau só nesse take | `research_notes/voz/TOMIKO_VOZ_OFICIAL_zali.wav` (60 s de narração) |
 | Badge | Badge redonda da Tomiko (78% opaca, contorno 1 px) centrada no losango ✦ da marca d'água: (600, 1162) em 720x1280 | `research_notes/voz/badge_tomiko.png` |
 | Hook | ~3–4 s do clímax visual do próprio take (a sujeira saindo) no início, com fala curta adaptada ao fenômeno ("Olha, gente, como sai tudo!"), tirada de um clipe extra só de áudio; cortar só a fala (o OpenVoice vira ruído em chiado) | `prompts_vids_*` último take |
 | Velocidade | **Todo Reel sai acelerado 1,15x com jitter de ±5%** (cada take com velocidade sorteada entre ~1,09x e ~1,21x), vídeo e áudio juntos, sem mudar o tom | montagem |
