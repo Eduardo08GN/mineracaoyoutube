@@ -17,6 +17,15 @@ Vídeo em espanhol de 15–20 min em que uma especialista em limpeza (avatar de 
 
 ## 1. Etapa 0: tema e título pela API do YouTube (sessão de Mineração)
 Antes dos truques e do roteiro. A chave da API fica só no `.env`, nunca no repositório.
+
+**Hipótese (ainda não comprovada).** Os donos desses canais, por exemplo a Mrs. Whitmore, muito provavelmente garimpam pela API do YouTube títulos antigos, de antes da IA, que viralizaram e hoje têm pouca concorrência. Em cima do título garimpado, eles acrescentam um tweak que é a assinatura do microniche do canal: o mecanismo único, estereotipado.
+- Exemplo: "Make Your Home Look Expensive" (viral antigo) + "(The Old English Housekeeper Way)" (tweak) = 109 mil views.
+- Nosso método replica isso: garimpar o viral antigo pela API, conferir a lacuna em ES e aplicar o tweak hispânico da Doña Chayo.
+- O radar de 09/11 testa a hipótese de duas formas:
+  - a origem de cada tema do canal-modelo;
+  - a mediana de views dos títulos com tweak contra os sem tweak.
+
+  O resultado será registrado aqui.
 1. **Raio-X do canal-modelo** (Mrs. Whitmore's Housekeeping): views por dia de cada vídeo e se o título leva o tweak ("Old English Housekeeper Way") ou não.
 2. **Origem do tema:** os virais antigos em EN do mesmo tema.
 3. **Demanda e concorrência em ES** (regiões MX, ES, AR, CO):
