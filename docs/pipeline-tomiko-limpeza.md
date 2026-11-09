@@ -6,8 +6,8 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
 ## 1. O funil
 
 1. **Reel** 9:16 (~50 s) no Instagram e no Facebook, gancho de sujeira, receita caseira, resultado e CTA.
-2. **CTA (igual ao da Cida):** "O que clareia ele está no meu guia. Comenta guia." e o take do Facebook "Tá me vendo pelo
-   Facebook? Toca no meu nome e depois no link. O meu guia completo tá lá." (cards animados por cima).
+2. **CTA (desde 8/11):** dois takes colados: "Comenta guia que eu te mando." + "E segue o meu perfil, tá? Senão o guia não
+   chega até você." Só a animação do comentário "GUIA" no lugar da legenda; sem card de Facebook nem de perfil.
 3. **Direct automático** (Youze, palavra GUIA) → link `https://receitasdatomiko.online/dm`.
 4. **Landing** `receitasdatomiko.online` (raiz = Casa Limpa; `/receitas` = landing antiga de Okinawa). Gerada por
    `D:\low-ticket\Nicho Casa\Tomiko - Casa Limpa\ferramentas\landing_montar.py` + `gera_landing.py`. Publicar sempre a pasta
@@ -35,9 +35,11 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
 | Prompts | Inglês, fala entre aspas em pt-BR, foto da Tomiko como @Imagem1 | `research_notes/prompts_vids_lencol.md` |
 | Geração | Google Vids no Dolphin "12 Ivone", painel "Clipe de vídeo gerado com IA", modo **Criar**, Omni 720p 9:16 10 s; script Playwright por CDP, um take por vez (~2 min cada) | scratchpad `produzir_lencol.py` |
 | Revisão | **O Eduardo revisa** cada take num player embutido na conversa; Claude não olha quadros (economia de tokens) e refaz o take apontado | — |
-| Voz | Converter cada take para a voz oficial com OpenVoice v2 (`D:\masaje-es\vsl-gatillo\voz\normalizar_voz.py <ref> <saida> takes... --tau 0.5`) | `research_notes/voz/TOMIKO55_VOZ_OFICIAL_vids4.wav` |
+| Voz | Converter cada take para a voz oficial com OpenVoice v2 (`D:\masaje-es\vsl-gatillo\voz\normalizar_voz.py <ref> <saida> takes... --tau 0.5`) | `research_notes/voz/TOMIKO55_VOZ_OFICIAL_rouca2.wav` |
 | Badge | Badge redonda da Tomiko (78% opaca, contorno 1 px) centrada no losango ✦ da marca d'água: (600, 1162) em 720x1280 | `research_notes/voz/badge_tomiko.png` |
-| Montagem | Corte pela fala (Whisper), concat, legenda estilo 2, card seguir+comentar "GUIA" no take do CTA, card do Facebook em tela cheia no último take | `research_notes/montar_lencol.py` → `reel_lencol/final.mp4` |
+| Hook | ~3–4 s do clímax visual do próprio take (a sujeira saindo) no início, com fala curta adaptada ao fenômeno ("Olha, gente, como sai tudo!"), tirada de um clipe extra só de áudio; cortar só a fala (o OpenVoice vira ruído em chiado) | `prompts_vids_*` último take |
+| Velocidade | **Todo Reel sai acelerado 1,15x com jitter de ±5%** (cada take com velocidade sorteada entre ~1,09x e ~1,21x), vídeo e áudio juntos, sem mudar o tom | montagem |
+| Montagem | Corte pela fala (Whisper), concat, legenda estilo 2, animação do comentário "GUIA" no CTA, legenda a 0,5 da escala | `research_notes/montar_lencol.py` → `reel_lencol/final.mp4` |
 
 ### Regras dos prompts (feedback do Eduardo)
 - **Efeito visual forte:** a sujeira tem cor muito saturada e chamativa (amarelo-mostarda quase laranja, "impossible to miss"),
@@ -45,8 +47,8 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
   left". Espuma grossa de verdade. O fenômeno visual da limpeza é o protagonista.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
-- **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
-  affectionate. Speech clean, no background music, no sound effects."
+- **Voz no prompt:** parecida com a Zali: "a warm, wise, calm and caring voice of a Japanese-Brazilian woman, natural Brazilian
+  Portuguese with a soft Paraná accent, never European Portuguese, talking to one friend. Speech clean, no background music, no sound effects."
 - **Fechamento fixo:** "Full-frame vertical 9:16 handheld video, no phone or device frame visible. One single continuous shot,
   no cuts, no scene changes. No text, no music, no other speakers." Nunca escrever "smartphone".
 - **Recusas:** o Vids recusou "Me segue e comenta GUIA que eu te mando…" e "toca… no link azul. O meu guia está lá." O CTA da
@@ -63,4 +65,5 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
 - **Flow / Veo 3.1 Lite:** freio de tráfego e inconsistência (3ª mão, objetos voando).
 - **Vídeo→vídeo na G4** (Wan 2.2 Animate): lento (1,5 a 19 min por take) e com objetos inventados. O MiniMax H3 ficou fora
   pela licença.
-- **Voz do Qwen3-TTS:** soou artificial. A voz oficial é a amostra 4 do próprio Vids.
+- **Vozes descartadas:** Qwen3-TTS (artificial), vids4 e rouca2 do Vids. A oficial é a Zali (Gemini TTS).
+- **Limite do Vids:** a conta 12 Ivone bate "Você atingiu seu limite"; a reserva é o perfil Dolphin PLACA DE VIDEO (PERFIL=903382646).
