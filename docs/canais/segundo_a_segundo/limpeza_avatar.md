@@ -15,9 +15,19 @@ Vídeo em espanhol de 15–20 min em que uma especialista em limpeza (avatar de 
 - **Pesado roda na G4.** Toda stack vira imagem `.sqfs` no Drive da conta Ultra (G4-1) **antes** de ligar as G4. A G4-2 lê por link só de leitura e nunca monta o Drive dela. **Nunca instalar do zero.**
 - Publicação manual, do Eduardo.
 
-## 1. Escolha do tema
-- Tema e títulos vêm da sessão de **Mineração** (API do YouTube, modelando Mrs. Whitmore e medindo a corrida EN×ES). Nunca repetir micronicho.
-- Saída: tema + 3 títulos para o Teste A/B, que espelham a forma do título viral de referência.
+## 1. Etapa 0: tema e título pela API do YouTube (sessão de Mineração)
+Antes dos truques e do roteiro. A chave da API fica só no `.env`, nunca no repositório.
+1. **Raio-X do canal-modelo** (Mrs. Whitmore's Housekeeping): views por dia de cada vídeo e se o título leva o tweak ("Old English Housekeeper Way") ou não.
+2. **Origem do tema:** os virais antigos em EN do mesmo tema.
+3. **Demanda e concorrência em ES** (regiões MX, ES, AR, CO):
+   - topo de views e idade dos vídeos;
+   - concorrentes com mais de 50 mil views em 6 meses;
+   - lacuna = EN forte com ES fraco ou velho.
+4. **Tweak hispânico escolhido pelo dado** ("a la antigua", "como lo hacía la abuela" etc.), coerente com a Doña Chayo.
+5. **10 títulos ranqueados**, com Teste A/B nos 3 melhores.
+
+- **Saída:** `D:/pesquisa_nichos/limpeza_es/RADAR_TITULOS_<data>.md`.
+- Nunca repetir micronicho.
 
 ## 2. Pesquisa dos truques (o passo que dá valor ao vídeo)
 Feito pelo maestro com agentes de pesquisa na web, antes de qualquer roteiro.
