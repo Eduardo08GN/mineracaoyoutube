@@ -78,7 +78,7 @@ Feito pelo maestro com agentes de pesquisa na web, antes de qualquer roteiro.
   - fechamento (~1 min): recapitulação das regras e pedido de comentário ("¿cuál hacía al revés?").
 - **Cada bloco** segue a batida do §5: gancho falado → erro comum → jeito certo + porquê → medida → regra curta (vira a tarja ✓).
 - Frase = ação animável: cada frase precisa caber num take de mãos, numa prancha ou na fala do avatar.
-- ~2.300–2.800 palavras. A entrega do roteiro inclui a lista de planos por frase (tipo de take + prompt).
+- **Vídeo de ~12 min**: roteiro com ~1.700 palavras em ES (a voz D fala ~140 palavras/min). A entrega do roteiro inclui a lista de planos por frase (tipo de take + prompt).
 
 ## 4. Voz
 - Qwen3-TTS Base clonando a voz D, best-of-3 por frase.
@@ -90,9 +90,9 @@ Medição: 133 planos, 11,2 cortes/min, plano mediano 4,6 s.
 
 | Tipo de take | % do tempo | Duração | Como fazemos |
 |---|---|---|---|
-| **Mãos fazendo a ação** (primeira pessoa, ação mínima: apontar, segurar, pingar, girar, passar o pano) | ~50% | 4–5 s | Qwen-Image-Edit gera o primeiro quadro (mãos da Chayo, mesma manga/avental) → **MiniMax H3 sem áudio**, 0,4 MP, prompt de UMA ação simples |
-| **Prancha esquemática** (papel creme, gravura colorida, título condensado, selos e caixas vermelhas com setas, linhas de chamada) | ~16% | 6–10 s | ilustração no Qwen-Image **sem nenhuma letra**, fundo liso; todo o texto e a animação no Remotion |
-| **Avatar falando** em tela cheia | ~13% | ~5 s | MiniMax H3 R2V com a voz D, **0,4 MP** + granulado leve; **4 poses** por vídeo |
+| **Mãos mostrando** (primeira pessoa, plano médio com o cômodo visível; ação mínima: segurar, apontar, abrir, medir, virar o objeto, mostrar um prop da história) | ~50% | 4–5 s | Qwen-Image-Edit gera o primeiro quadro → **MiniMax H3 sem áudio**, 0,4 MP, UMA ação simples; **câmera lenta ~0,4–0,5x** na montagem. Limpeza ativa (esfregar, polir, passar pano) só 1 a 2 takes por dica |
+| **Prancha esquemática** (papel creme, gravura colorida, título condensado, selos e caixas vermelhas com setas, linhas de chamada) | ~16% | 6–8 s | ilustração no Qwen-Image **sem nenhuma letra**, fundo liso; todo o texto e a animação no Remotion |
+| **Avatar falando** em tela cheia | ~13% | ~4–5 s | MiniMax H3 R2V com a voz D, **0,7 MP** + granulado leve; **4 poses**; **2 a 3 falas curtas por dica** (abre, meio, fecha), cerca de 19 por vídeo |
 | **Ambiente sem pessoa** (cômodo, pátio, lavadero) | ~10% | ~4 s | Qwen-Image + movimento lento de câmera |
 | **Tela dividida** (avatar \| ação) | ~4% | ~5 s | Remotion compõe dois takes |
 | **Foto colada com fita** + etiqueta de papel rasgado, fundo desfocado | ~3% | ~6 s | Qwen-Image (estilo foto de época, sépia) + Remotion |
@@ -165,3 +165,24 @@ Cada pose tem um retrato-âncora gerado no Qwen-Image-Edit a partir do rosto da 
 - **Pesquisa e roteiro:** `D:/pesquisa_nichos/limpeza_es/`. Contém `hacks_pesquisa.md`, `roteiro_v1.md`, `MAPA_GOVERNANTA.md` e `ref/` (legendas e régua da referência).
 - **Formato:** `D:/producao/segundo_a_segundo/formatos/limpeza_avatar/`. Contém `ferramentas/`, `minimax_vm/`, `qwen_batedor/` e `voz_canal/`. Cada vídeo fica em `chayo_NN/`.
 - **Imagens da stack:** `D:/t2_stacks/segundo_a_segundo/limpeza_avatar/` (cópia local) e no Drive Ultra.
+
+## 10. Correções da leitura a 24 fps (Chayo 2 × governanta, 09/11; valem do vídeo 3 em diante)
+Medidas em `D:/pesquisa_nichos/limpeza_es/DIVERGENCIAS_chayo02_x_governanta.md`.
+
+**Velocidade das mãos.** O movimento na governanta é de 0,23 px/quadro; na Chayo 2 foi de 0,67, cerca de 3x mais rápido. Todo take de mãos e de gesto entra em câmera lenta de ~0,4–0,5x, com interpolação de quadros.
+
+**As mãos ilustram o que ela diz, não a faxina.** Na governanta, cerca de 1 em cada 10 takes é limpeza ativa; na Chayo 2 foi ~1/3. Cada lembrança de casona vira um prop na mão: foto sépia, caderno da abuela, recibo.
+
+**Look de foto de celular.** A Chayo 2 ficou 53% mais saturada que a governanta, mais quente (b* 14 contra 10) e com o fundo desfocado.
+- **Prompt:** "amateur smartphone photo, flat diffused window daylight, overcast soft light, deep focus, everything in focus, muted colors, neutral white balance, slight sensor noise, jpeg compression", plano médio, sem bokeh e sem golden hour.
+- **Pós-processo:** `eq=saturation=0.85:contrast=0.95,unsharp=5:5:0.4,noise=alls=7:allf=t+u` e recompressão em crf 23–26.
+- **Antes da produção:** provar com 3 stills A/B e igualar pelos números (saturação HSV ~87, b* ~10).
+
+**Ritmo.**
+- Plano de ~4–5 s e ~11 cortes/min. Na Chayo 2 foram 8,8 cortes/min.
+- Nenhum take passa de 8 s, exceto prancha.
+- A abertura de cada dica varia: ela falando, mãos com prop ou ambiente. Nunca o mesmo ambiente vazio em todas.
+
+**Duração.** O vídeo tem ~12 min (~1.700 palavras).
+
+**Avatar.** Vai a 0,7 MP (~5 min por take na G4).
