@@ -25,7 +25,17 @@ Antes dos truques e do roteiro. A chave da API fica só no `.env`, nunca no repo
   - a origem de cada tema do canal-modelo;
   - a mediana de views dos títulos com tweak contra os sem tweak.
 
-  O resultado será registrado aqui.
+**Resultado do radar de 09/11 (`D:/pesquisa_nichos/limpeza_es/RADAR_TITULOS_0911.md`): hipótese PARCIALMENTE confirmada.**
+1. **O tema é viral antigo, de antes da IA.** "Casa que parece cara ou barata" e "hábitos de casa limpa" fizeram de 1,3 a 4,6 milhões de views.
+2. **O molde governanta/avó com método antigo é de 2026.** A Betty's British Kitchen fez 498 mil; a Elvira Carpenter copiou o título em 9 dias e fez 205 mil.
+3. **O tweak só rende em tema de STATUS**: mediana de 40 mil views com tweak contra 12 mil sem. Em tema de tarefa ("Best Way to Clean X") não faz diferença. A amostra é pequena (n = 7 e 4).
+
+- **Regra:** aplicar o tweak em tema de status, não em tema de tarefa.
+- **Tweak vencedor em ES:**
+  - "de las abuelas mexicanas" + "olvidados / que ya nadie hace", sempre no ângulo de status ("que hacen que tu casa parezca de ricos");
+  - "abuela" sozinha já saturou;
+  - Teste A/B contra "casonas/amas de llaves de Puebla".
+- **Título nº 1 do radar:** "11 Hábitos de Limpieza de las Abuelas Mexicanas que Hacen que Tu Casa Parezca de Ricos".
 1. **Raio-X do canal-modelo** (Mrs. Whitmore's Housekeeping): views por dia de cada vídeo e se o título leva o tweak ("Old English Housekeeper Way") ou não.
 2. **Origem do tema:** os virais antigos em EN do mesmo tema.
 3. **Demanda e concorrência em ES** (regiões MX, ES, AR, CO):
