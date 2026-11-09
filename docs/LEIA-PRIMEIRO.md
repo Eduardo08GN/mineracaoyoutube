@@ -31,6 +31,7 @@ Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte ess
 **G4 e máquina**
 - **Pesado vai para a G4, inclusive montar a stack.** Isso cobre `npm install`, empacotar, checar tipos, stills, render, voz e música. No PC fica só a edição do código. *(08/11: 20 min de `npm install` no PC.)*
 - **A G4 parte da imagem `.sqfs` da stack no Drive**, instala só o que for novo e regrava a imagem. Nunca reinstala tudo a cada ligada. *(Até 08/11, 4 min por ligada, 3× num único batedor.)*
+- **Imagem de stack só vai do Drive para a G4, nunca do PC para a G4.** A imagem nasce na G4-1 e é gravada direto no Drive Ultra; a G4-2 lê do Drive pelo link. Nunca suba `.sqfs`, modelo ou pesos do PC (upload a ~2 MB/s). *(09/11, vídeo da Doña Chayo: ~1h40 perdidas subindo 3 imagens do PC.)*
 - **Ligue a G4 só com job**, desligue no fim e confira que desligou. Nunca desligue com job de outra sessão (`T2_DONO`). Nunca deslogue a conta da G4-2. Um cliente de navegador por vez.
 - **Job longo roda com sentinela** (script + Monitor) que só emite quando o estado muda: queda, job morto, backlog parado, erro, fim. *(07/11: G4 caiu e o pipeline ficou "cego e surdo".)*
 - **Modo barato, sem path tracer.** *(08/11: 40 min de G4 travada com o `three-gpu-pathtracer`.)*
