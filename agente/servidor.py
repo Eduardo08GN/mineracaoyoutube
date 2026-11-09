@@ -93,6 +93,94 @@ class Chaves(BaseModel):
     chaves: List[str]
 
 
+class NovoAvatar(BaseModel):
+    nome: str = ""
+    imagem: str = ""
+    ext: str = "png"
+    tomiko: bool = False
+    persona: str = ""
+    idioma: str = ""
+    descricao: str = ""
+    prefixo: str = ""
+    voz: str = ""
+    quem: str = ""
+
+
+class ItemLote(BaseModel):
+    avatar: str
+    palavra: str = ""
+
+
+class NovoLote(BaseModel):
+    itens: List[ItemLote]
+    url: str = ""
+    video: str = ""
+    ext: str = "mp4"
+    legenda: int = 0
+    livro: bool = False
+    modelo: str = "gratis"
+
+
+class Imagem(BaseModel):
+    imagem: str
+    ext: str = "png"
+
+
+class NovaCena(BaseModel):
+    nome: str = ""
+    cena: str
+
+
+class AcaoCena(BaseModel):
+    acao: str
+    texto: Optional[str] = None
+
+
+class NovoReel(BaseModel):
+    avatar: str
+    idioma: str
+    url: str = ""
+    video: str = ""
+    ext: str = "mp4"
+    cta: str = "bio"
+    palavra: str = ""
+    livro: bool = False
+    modelo: str = "gratis"
+    legenda: int = 0
+    camera: str = "fonte"
+    ambiente: str = ""
+
+
+class Take(BaseModel):
+    n: int
+    fala: Optional[str] = None
+    movimento: Optional[str] = None
+
+
+class Anotacao(BaseModel):
+    defeito: str = ""
+    etiquetas: List[str] = []
+
+
+class Versao(BaseModel):
+    v: int
+
+
+class Refazer(BaseModel):
+    takes: List[Take]
+
+
+class RevisaoQA(BaseModel):
+    v: int
+    etiqueta: str
+    acao: str
+
+
+class AcaoLicao(BaseModel):
+    acao: str
+    campos: Optional[dict] = None
+
+
 class Ajustes(BaseModel):
     rpm: Optional[float] = None
     rpms: Optional[dict] = None
@@ -283,6 +371,12 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     def pipeline_video():
         return _estudio().pipeline()
 
+    @app.get("/api/instagram/pipeline")
+    def pipeline_instagram():
+        """⭐ (23/10) as regras de producao dos Reels (motor/pipeline_instagram.py), para a aba Instagram."""
+        import pipeline_instagram as _pi
+        return _pi.pipeline()
+
     @app.post("/api/videos/{pid}/abrir")
     def abrir_video(pid: str):
         try:
@@ -305,6 +399,138 @@ def criar_app(nucleo, token, hosts, painel=PAINEL):
     @app.post("/api/videos/{pid}/secao")
     def editar_secao(pid: str, c: Secao):
         return _estudio().editar_secao(pid, c.n, c.texto)
+
+    # ── a aba Instagram (agente/instagram.py) ──
+    def _ig():
+        if not nucleo.instagram: raise HTTPException(503, "a aba Instagram não está ligada nesta janela")
+        return nucleo.instagram
+
+    @app.get("/api/instagram")
+    def instagram():
+        return _ig().tudo()
+
+    @app.post("/api/instagram/ajustes")
+    def ig_ajustes(c: Campos):
+        return _ig().salvar_ajustes(**c.campos)
+
+    @app.post("/api/instagram/avatares")
+    def ig_novo_avatar(c: NovoAvatar):
+        return _ig().criar_avatar(c.nome, c.imagem, c.ext, c.descricao, c.prefixo, c.voz, c.quem, c.tomiko,
+                                  c.persona, c.idioma)
+
+    @app.post("/api/instagram/lotes")
+    def ig_novo_lote(c: NovoLote):
+        return _ig().criar_lote([i.model_dump() if hasattr(i, "model_dump") else i.dict() for i in c.itens], c.url,
+                                c.video, c.ext, c.legenda, c.livro, c.modelo)
+
+    @app.post("/api/instagram/avatares/{aid}")
+    def ig_editar_avatar(aid: str, c: Campos):
+        return _ig().editar_avatar(aid, c.campos)
+
+    @app.post("/api/instagram/avatares/{aid}/imagem/{qual}")
+    def ig_imagem(aid: str, qual: str, c: Imagem):
+        return _ig().enviar_imagem(aid, qual, c.imagem, c.ext)
+
+    @app.get("/api/instagram/avatares/{aid}/imagem/{qual}")
+    def ig_ver_imagem(aid: str, qual: str):
+        from fastapi.responses import FileResponse
+        return FileResponse(_ig().arquivo_avatar(aid, qual), headers={"Cache-Control": "no-cache"})
+
+    @app.post("/api/instagram/avatares/{aid}/pool")
+    def ig_pool(aid: str):
+        return _ig().gerar_pool(aid)
+
+    @app.post("/api/instagram/avatares/{aid}/cenas")
+    def ig_nova_cena(aid: str, c: NovaCena):
+        return _ig().adicionar_cena(aid, c.nome, c.cena)
+
+    @app.post("/api/instagram/avatares/{aid}/cenas/{cid}/imagem")
+    def ig_cena_imagem(aid: str, cid: str, c: Imagem):
+        return _ig().enviar_cena(aid, cid, c.imagem, c.ext)
+
+    @app.post("/api/instagram/avatares/{aid}/cenas/{cid}")
+    def ig_cena(aid: str, cid: str, c: AcaoCena):
+        return _ig().cena(aid, cid, c.acao, c.texto)
+
+    @app.post("/api/instagram/reels")
+    def ig_novo_reel(c: NovoReel):
+        return _ig().criar_reel(c.avatar, c.idioma, c.url, c.video, c.ext, c.cta, c.palavra, c.livro, c.modelo,
+                                 c.legenda, camera=c.camera, ambiente=c.ambiente)
+
+    @app.get("/api/instagram/reels/{rid}")
+    def ig_reel(rid: str):
+        return _ig().reel(rid)
+
+    @app.get("/api/instagram/reels/{rid}/arquivo/{qual}")
+    def ig_arquivo(rid: str, qual: str):
+        from fastapi.responses import FileResponse
+        return FileResponse(_ig().arquivo_reel(rid, qual), headers={"Cache-Control": "no-cache"})
+
+    @app.post("/api/instagram/reels/{rid}/rodar")
+    def ig_rodar(rid: str, c: Etapa):
+        return _ig().rodar(rid, c.etapa)
+
+    # o editor de curadoria (telas/EditorReel.tsx)
+    @app.get("/api/instagram/reels/{rid}/editor")
+    def ig_editor(rid: str):
+        return _ig().editor(rid)
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/anotar")
+    def ig_anotar(rid: str, n: int, c: Anotacao):
+        return _ig().anotar_take(rid, n, c.defeito, c.etiquetas)
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/aceitar")
+    def ig_aceitar(rid: str, n: int):
+        return _ig().aceitar_take(rid, n)
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/versao")
+    def ig_versao(rid: str, n: int, c: Versao):
+        return _ig().escolher_versao(rid, n, c.v)
+
+    @app.post("/api/instagram/reels/{rid}/refazer")
+    def ig_refazer(rid: str, c: Refazer):
+        return _ig().refazer_takes(rid, [t.model_dump() if hasattr(t, "model_dump") else t.dict() for t in c.takes])
+
+    @app.post("/api/instagram/reels/{rid}/takes/{n}/qa")
+    def ig_qa_take(rid: str, n: int, c: RevisaoQA):
+        return _ig().qa_take(rid, n, c.v, c.etiqueta, c.acao)
+
+    @app.post("/api/instagram/reels/{rid}/qa")
+    def ig_checar(rid: str):
+        return _ig().checar_reel(rid)
+
+    # as licoes da curadoria (motor/instagram_licoes.py): o Claude propoe, a pessoa aprova
+    @app.get("/api/instagram/licoes")
+    def ig_licoes():
+        return _ig().licoes()
+
+    @app.post("/api/instagram/licoes/destilar")
+    def ig_destilar():
+        return _ig().destilar()
+
+    @app.post("/api/instagram/licoes/{lid}")
+    def ig_licao(lid: str, c: AcaoLicao):
+        return _ig().licao(lid, c.acao, c.campos)
+
+    @app.post("/api/instagram/reels/{rid}/take")
+    def ig_take(rid: str, c: Take):
+        return _ig().editar_take(rid, c.n, c.fala, c.movimento)
+
+    @app.post("/api/instagram/reels/{rid}/subir")
+    def ig_subir(rid: str):
+        return _ig().subir(rid)
+
+    @app.post("/api/instagram/reels/{rid}/abrir")
+    def ig_abrir(rid: str):
+        return _ig().abrir(rid)
+
+    @app.post("/api/instagram/reels/{rid}/apagar")
+    def ig_apagar(rid: str):
+        return _ig().apagar(rid)
+
+    @app.post("/api/instagram/repo/limpar")
+    def ig_limpar():
+        return _ig().limpar_repo()
 
     @app.post("/api/ajustes")
     def ajustes(c: Ajustes):
@@ -480,6 +706,26 @@ def _autoteste():
     caso("⛔ chave que nao existe: 404", c.post("/api/chaves/naoexiste/remover", headers=h).status_code == 404)
     caso("⛔ colar nada: 400", c.post("/api/chaves", headers=h, json={"chaves": [" "]}).status_code == 400)
     caso("⛔ RPM absurdo: 400", c.post("/api/ajustes", headers=h, json={"rpm": 500}).status_code == 400)
+    caso("aba Instagram responde", "avatares" in c.get("/api/instagram", headers=h).json())
+    caso("⛔ Instagram: id com ../ = 404",
+         c.get("/api/instagram/reels/..%2F..%2Fdata/arquivo/final", headers=h).status_code == 404)
+    caso("⛔ Instagram: Reel sem avatar = 404", c.post("/api/instagram/reels", headers=h,
+                                                       json={"avatar": "nao-existe", "idioma": "pt"}).status_code == 404)
+    caso("⛔ curadoria: editor de Reel que nao existe = 404",
+         c.get("/api/instagram/reels/nao-existe/editor", headers=h).status_code == 404
+         and c.post("/api/instagram/reels/nao-existe/takes/1/versao", headers=h, json={"v": 2}).status_code == 404)
+    caso("⛔ curadoria: refazer sem takes = 400", c.post("/api/instagram/reels/nao-existe/refazer", headers=h,
+                                                        json={"takes": []}).status_code == 400)
+    caso("⛔ QA: Reel que nao existe = 404", c.post("/api/instagram/reels/nao-existe/takes/1/qa", headers=h,
+                                                   json={"v": 1, "etiqueta": "fala", "acao": "dispensar"}).status_code == 404
+         and c.post("/api/instagram/reels/nao-existe/qa", headers=h).status_code == 404)
+    pi = c.get("/api/instagram/pipeline", headers=h).json()
+    caso("⭐ pipeline dos Reels: as etapas e a regra da frase inteira", [e["id"] for e in pi["etapas"]][:2] == ["fonte", "roteiro"]
+         and any("frases COMPLETAS" in r for e in pi["etapas"] for r in e["regras"]))
+    li = c.get("/api/instagram/licoes", headers=h).json()
+    caso("licoes respondem", isinstance(li.get("licoes"), list) and "taxas" in li and "pendentes" in li)
+    caso("⛔ licoes: licao que nao existe = 404", c.post("/api/instagram/licoes/l-nada", headers=h,
+                                                        json={"acao": "aprovar"}).status_code == 404)
     try:
         with c.websocket_connect("/api/eventos?t=errada") as ws:
             ws.receive_json()

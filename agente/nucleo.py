@@ -106,6 +106,9 @@ class Nucleo:
         # ⭐ a aba Producao: fio proprio, um video nunca segura um garimpo (agente/estudio.py)
         from estudio import Estudio
         self.estudio = Estudio(self) if iniciar else None
+        # ⭐ a aba Instagram: fio proprio tambem (agente/instagram.py)
+        from instagram import Instagram
+        self.instagram = Instagram(self) if iniciar else None
         if iniciar:
             for g in self.banco.garimpos_abertos():
                 # ⛔ rodando num processo vivo (outra janela, um script): e' dele, nao se toca
@@ -598,6 +601,7 @@ class Nucleo:
     def encerrar(self):
         self._vivo = False
         if self.estudio: self.estudio.encerrar()
+        if self.instagram: self.instagram.encerrar()
         with self._t:
             if self._atual and self._atual["tipo"] == "garimpo": self._cancelar.add(self._atual["id"])
 

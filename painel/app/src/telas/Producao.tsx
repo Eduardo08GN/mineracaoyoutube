@@ -94,21 +94,23 @@ function Comecar({ m }: { m: MIN }) {
   );
 }
 
-/** O pipeline como roda hoje: cada etapa, onde roda e as regras que valem (motor/pipeline_video.py). */
-function PipelineAtual({ m }: { m: MIN }) {
+/** O pipeline como roda hoje: cada etapa, onde roda e as regras que valem (motor/pipeline_video.py; o dos Reels,
+ *  motor/pipeline_instagram.py, aparece na aba Instagram com a mesma caixa). */
+export function PipelineAtual({ m, url = "/api/videos/pipeline", titulo = "O pipeline de produção", aberta = "avatar" }:
+  { m: MIN; url?: string; titulo?: string; aberta?: string }) {
   const [p, setP] = useState<Pipeline | null>(null);
-  useEffect(() => { obter<Pipeline>("/api/videos/pipeline").then(setP).catch((e) => m.avisar(String(e), "erro")); }, [m.avisar]);
+  useEffect(() => { obter<Pipeline>(url).then(setP).catch((e) => m.avisar(String(e), "erro")); }, [m.avisar, url]);
   if (!p) return null;
   return (
     <section className="panel bloco pipeline">
       <div className="linha-titulo">
-        <h3><Workflow size={18} aria-hidden /> O pipeline de produção</h3>
+        <h3><Workflow size={18} aria-hidden /> {titulo}</h3>
         <span className="meta">atualizado em {p.atualizado}</span>
       </div>
       <ol className="pipe-etapas">
         {p.etapas.map((e, i) => (
           <li key={e.id}>
-            <details open={e.id === "avatar"}>
+            <details open={e.id === aberta}>
               <summary>
                 <span className="pipe-num">{i + 1}</span>
                 <b>{e.nome}</b>

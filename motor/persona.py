@@ -204,14 +204,16 @@ def ambiente_limpo():
             if k not in _DO_HOSPEDEIRO and (not k.startswith("CLAUDE_CODE_") or k == "CLAUDE_CODE_GIT_BASH_PATH")}
 
 
-def chamar_claude(pedido, timeout=300):
-    """Texto cru da resposta. Levanta RuntimeError com o motivo em portugues."""
+def chamar_claude(pedido, timeout=300, pastas=()):
+    """Texto cru da resposta. Levanta RuntimeError com o motivo em portugues.
+    `pastas`: o Claude pode LER os arquivos delas (so' a ferramenta Read), ex.: os quadros do video de origem."""
     exe = binario()
     if not exe: raise RuntimeError("o Claude Code não está instalado nesta máquina")
     extra = {"creationflags": 0x08000000} if os.name == "nt" else {}       # CREATE_NO_WINDOW
     cmd = [exe, "-p", "--output-format", "json"]
     modelo = os.environ.get("MINERADOR_MODELO")
     if modelo: cmd += ["--model", modelo]
+    if pastas: cmd += ["--allowedTools", "Read", "--add-dir", *pastas]
     r = subprocess.run(cmd, cwd=tempfile.gettempdir(), env=ambiente_limpo(), input=pedido, capture_output=True,
                        text=True, encoding="utf-8", errors="replace", timeout=timeout, **extra)
     try:

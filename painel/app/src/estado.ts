@@ -26,6 +26,8 @@ export interface MIN {
   versaoRadar: number;
   /** muda quando um video da aba Producao muda */
   versaoProducao: number;
+  /** muda quando algo da aba Instagram muda */
+  versaoInstagram: number;
   fecharAviso: () => void;
   avisar: (texto: string, tom?: "ok" | "erro") => void;
 }
@@ -48,6 +50,7 @@ export function useMinerador(): MIN {
   const [versaoOps, setVersaoOps] = useState(0);
   const [versaoRadar, setVersaoRadar] = useState(0);
   const [versaoProducao, setVersaoProducao] = useState(0);
+  const [versaoInstagram, setVersaoInstagram] = useState(0);
   const pendente = useRef<number | undefined>(undefined);
 
   const recarregar = useCallback(async () => {
@@ -91,6 +94,7 @@ export function useMinerador(): MIN {
           if (ev.o === "radar") { setVersaoRadar((v) => v + 1); setVersaoOps((v) => v + 1); }
           if (ev.o === "retratos") setVersaoOps((v) => v + 1);
           if (ev.o === "producao") { setVersaoProducao((v) => v + 1); break; }
+          if (ev.o === "instagram") { setVersaoInstagram((v) => v + 1); break; }
           agendar();
           break;
       }
@@ -114,7 +118,7 @@ export function useMinerador(): MIN {
   }, [recarregar, agendar]);
 
   return {
-    estado, catalogo, garimpos, registro, aviso, conectado, erro, versaoOps, versaoRadar, versaoProducao,
+    estado, catalogo, garimpos, registro, aviso, conectado, erro, versaoOps, versaoRadar, versaoProducao, versaoInstagram,
     fecharAviso: useCallback(() => setAviso(null), []),
     avisar: useCallback((texto: string, tom?: "ok" | "erro") => setAviso({ texto, id: Date.now(), tom }), []),
   };

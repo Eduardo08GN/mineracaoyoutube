@@ -1,0 +1,1102 @@
+# -*- coding: utf-8 -*-
+r"""INSTAGRAM ROTEIRO — da fala do Reel de origem aos prompts de cada take (funcoes puras).
+
+    python motor/instagram_roteiro.py --autoteste
+
+    cortar(palavras, idioma)          palavras com tempo (whisper) -> takes de ate' 8 s
+    pedido_adaptacao(...)             o pedido ao Claude: traduz/adapta cada take, escreve o movimento e o CTA
+    ler_adaptacao(texto, n)           a resposta do Claude -> lista de takes (ou None se veio fora do formato)
+    prompt_video(...)                 o prompt do Veo no formato testado (ficha da Tomiko)
+    prompt_cena(...)                  o prompt da imagem de um comodo do universo-lar
+    PROMPT_OBJETO                     a ancora do take com o livro (duas referencias)
+
+As regras vem da ficha da Tomiko (instacontasac/avatar/tomiko/README.md), que resume o que foi testado
+no ow_agente (pedido.py, regras.py, turbo.py) e no projetosweb.
+"""
+import json, re
+
+# ⭐ os idiomas do seletor da aba. "lingua" entra no prompt da voz; "whisper" e' o codigo da transcricao.
+IDIOMAS = {
+    "pt": {"nome": "Português (Brasil)", "lingua": "Brazilian Portuguese", "whisper": "pt"},
+    "en": {"nome": "Inglês (EUA)", "lingua": "American English", "whisper": "en"},
+    "es": {"nome": "Espanhol (LATAM)", "lingua": "Mexican Spanish", "whisper": "es"},
+    # ⭐ (26/10, Eduardo) o frei de Castela fala o espanhol da Espanha, nunca o mexicano
+    "es-es": {"nome": "Espanhol (Espanha)", "lingua": "Castilian Spanish from Spain", "whisper": "es"},
+    "fr": {"nome": "Francês", "lingua": "French", "whisper": "fr"},
+    "de": {"nome": "Alemão", "lingua": "German", "whisper": "de"},
+}
+# ⛔ palavras por take de 8 s: o limite de 24 do ow_agente e' medido em ingles; o portugues e' mais longo (~18)
+PALAVRAS_TAKE = {"pt": 18, "en": 24, "es": 20, "es-es": 20, "fr": 20, "de": 18}
+# ⭐ (18/10, auditoria do Veo) a FALA do take e' medida em tempo: ~5 s falados num take de 8 s, folga nas duas pontas.
+#    No run de 18/10 as falas de 18 palavras em pt deram 5,4-7,3 s: no limite, o final corta e o Reel incha.
+FALA_S = 5.0
+FALA_MAX_PALAVRAS = {"pt": 14, "en": 18, "es": 15, "es-es": 15, "fr": 15, "de": 13}
+MAX_S_TAKE = 8.0
+MIN_S_TAKE = 2.0
+# ⭐ fim de frase fecha o take so' a partir daqui: take curto custa uma geracao inteira de 8 s do mesmo jeito
+FRASE_FECHA_S = 4.5
+# ⛔ um take nunca termina numa palavra que pede continuacao ("de", "para", "um"...): o Veo corta no ar
+FRACAS = {
+    "pt": {"de", "da", "do", "das", "dos", "para", "pra", "um", "uma", "o", "a", "os", "as", "e", "que", "com", "em",
+           "no", "na", "por", "se", "mas", "ou", "como", "meu", "minha", "seu", "sua"},
+    "en": {"the", "a", "an", "and", "of", "to", "for", "with", "in", "on", "my", "your", "that", "but", "or", "is"},
+    "es": {"de", "del", "la", "el", "los", "las", "un", "una", "y", "que", "para", "con", "en", "por", "mi", "tu"},
+    "es-es": {"de", "del", "la", "el", "los", "las", "un", "una", "y", "que", "para", "con", "en", "por", "mi", "tu"},
+    "fr": {"de", "du", "des", "la", "le", "les", "un", "une", "et", "que", "pour", "avec", "en", "à", "mon", "ma"},
+    "de": {"der", "die", "das", "ein", "eine", "und", "zu", "mit", "für", "von", "in", "auf", "mein", "meine"},
+}
+
+# ⭐ (18/10, auditoria: reports/Prompts Veo para takes interpolados.md) a ordem e' a da formula oficial do Veo 3.1:
+#    camera, sujeito, acao, audio. A camera travada abre o prompt (sem ela o Veo inventa movimento e corte).
+CAMERA = ("Single continuous shot, static locked-off camera holding the exact framing of the frame, "
+          "no zoom, no cuts.")
+# ⭐ uma acao concreta antes da primeira palavra: o silencio do comeco vira gesto, e a primeira consoante sai inteira
+ENTRADA_DA_FALA = "For the first second she stays silent, looking at the camera, then"
+# ⭐ (20/10, Eduardo: "os objetos estao mudando pra outros como magica na mao dela"; o copo virou amassador)
+OBJETOS_FIXOS = ("Every object keeps its identity from the first to the last frame: nothing turns into another object, "
+                 "appears from nowhere or disappears.")
+# ⭐⭐ (23/10, Eduardo) ela aparece SEMPRE, mesmo quando a fonte mostra so' as maos ou so' a comida
+SEMPRE_APARECE = "She stays in the frame for the whole shot, her face always visible."
+# ⛔⛔ (27/10, Eduardo: "pare de ancorar a Tomiko de forma hardcoded, isso mata a dinamicidade") "abrir o quadro e
+#    subir" punha a Tomiko de pe', no meio, em plano medio em TODO take: o forno nao tinha perspectiva nem espaco no
+#    quadro e o Veo o encaixava a forca. Agora ela ocupa o lugar da pessoa da fonte: a mesma pose, posicao e distancia.
+# ⛔⛔ (27/10, Eduardo: "ha takes em que a Tomiko nao mantem a consistencia da aparencia") com o rosto escondido no
+#    quadro (de costas, atras da tigela, cortado na borda) o Veo inventava OUTRO rosto quando ela virava: o rosto dela
+#    fica sempre inteiro e visivel no quadro, mesmo copiando a pose da fonte.
+SEMPRE_NO_QUADRO = ("She ALWAYS appears, in the place of the person of the FIRST reference: the same pose, body angle, "
+                    "position in the frame, size and distance from the camera (leaning in close to the lens, bending to "
+                    "the oven, at the side or off-center, exactly as that person is). Her WHOLE face is always clearly "
+                    "visible and recognizable, from the front or in three-quarter view: never turned away, never cut by "
+                    "the frame edge, never covered by her hands, a bowl or the items. When the person of the FIRST "
+                    "reference hides the face or shows only hands, items or food, keep the angle, the closeness and the "
+                    "action, and she leans in so her whole face shows next to or just above the items, turned toward "
+                    "the camera.")
+# ⭐⭐ (27/10, ordem do Eduardo, pacote de CTA) a faixa e o cartaz do CTA ficam no alto do Reel (de 15% a ~35% da
+#    altura, abaixo da interface do app): o rosto desce no quadro para nao ficar embaixo do texto. A unica excecao ao
+#    enquadramento copiado da fonte.
+#    (27/10, Eduardo: "a bancada se transforma na boca do forno") com os olhos a 40% em TODO take, todos os quadros
+#    viraram o mesmo plano medio e a troca de lugar entre takes parecia magica: agora so' o take do CTA (o cartaz
+#    completo) pede o alto livre; os outros seguem o enquadramento da fonte (a faixa fica colada no topo, a 5%).
+ESPACO_TEXTO = ("The one exception to the source framing: leave room for on-screen text at the top. The top quarter of "
+                "the frame shows only background (wall, shelves, sky or trees) and her head starts below it.")
+ESPACO_TEXTO_POV = ("The one exception to the source framing: leave room for on-screen text at the top. The top quarter of "
+                    "the frame shows only background (wall, shelves, sky or trees), never her hands or the main items.")
+# ⭐⭐ (27/10) o gerador seguia a IMAGEM da fonte no que a comida e' (blueberry no bolo, embora o roteiro tivesse
+#    trocado por uva-passa): o texto do quadro manda no que os itens e ingredientes sao; da fonte vem so' o lugar, o
+#    angulo e onde as coisas estao
+ITENS_DO_TEXTO = ("WHAT the food, ingredients and items are comes from this text, even when the FIRST reference shows "
+                  "something else (another fruit, another dish): ")
+# ⭐ o tempo que sobra depois da fala ganha uma acao silenciosa: tempo vazio e' o que o Veo enche repetindo a linha
+FALA_UMA_VEZ = "She says the line once, then stays silent, smiling softly at the camera, until the end of the shot."
+# ⭐⭐ (26/10, ordem do Eduardo) o modo PRIMEIRA PESSOA (ficha com "pov"): a camera sao os olhos do avatar, so' as maos
+#    e os antebracos dele aparecem, e a voz narra em off (o Reel de referencia do Fray Tomas: limoeiro, 15 planos POV)
+POV_NO_QUADRO = ("First-person point of view: the camera IS her own eyes, looking down at her work. Only her own forearms "
+                 "and hands appear, coming in from the bottom edge of the frame toward the items; her face, head and body "
+                 "are NEVER visible. Keep the angle of the FIRST reference.")
+POV_APARECE = ("First-person point of view for the whole shot: the camera is her own eyes; only her hands and forearms "
+               "are in the frame, never her face or body.")
+POV_ENTRADA = ("For the first second there are only the quiet sounds around her hands, then her voice says off-screen "
+               "(voice-over narration: nobody on screen speaks or moves lips)")
+POV_FALA_UMA_VEZ = "She says the line once as a voice-over, then her hands keep working in silence until the end of the shot."
+SEM_TEXTO_TELA = "Clean frame: no captions, no subtitles, no on-screen text."
+# ⛔ porte de MUDANCA_DURANTE_A_FALA (ow_agente pedido.py): com quadros diferentes o Veo segura o primeiro e muda no fim,
+#    depois da fala; a montagem apara a cauda e a mudanca (o livro aparecendo) seria cortada.
+MUDANCA_DURANTE_A_FALA = (
+    "Pace the change between the two frames across the whole shot, in step with the speech: it is already visibly "
+    "under way on the first word, about halfway through by the middle of the line, and fully complete on the last "
+    "word. Do not hold the first frame and then change at the end.")
+
+# ⛔ porte do PROMPT_OBJETO do ow_agente (motor/idiomas.py): identidade e objeto amarrados cada um a' sua referencia.
+PROMPT_OBJETO = (
+    "Using the FIRST reference image for the person and the place and the SECOND reference image for the object: "
+    "the same person, in the same place, with the same lighting, clothing and framing, now holding up that exact "
+    "object toward the camera with BOTH HANDS firmly gripping its edges, at chest height, front facing the viewer. "
+    "The object rests in the hands, never floating in front of the person. If it is a book, it is CLOSED: only its "
+    "front cover shows, never open pages, and there is no other book on the table. The cover reproduces the second "
+    "reference EXACTLY as a printed cover: every element (title, photo, colors, seal, text lines), never simplified "
+    "to plain text. Her hands hold only that object "
+    "(nothing else, no food). The object must be the SAME as in the "
+    "second reference: same design, same printed text, same colors, same proportions. The person must be the SAME "
+    "person as in the first reference: same face, same hair, same body, same clothes. Vertical 9:16 photo, natural "
+    "light, no on-screen text of any kind, no caption, no watermark.")
+# ⭐ (26/10) o livro no CTA do avatar em PRIMEIRA PESSOA (Fray Tomas): as maos dele seguram o livro para a camera,
+#    nunca o rosto (o PROMPT_OBJETO acima poe a pessoa de frente, de rosto)
+PROMPT_OBJETO_POV = (
+    "Using the FIRST reference image for the place, the light, the framing and the hands (a first-person view: the "
+    "camera is the person's own eyes) and the SECOND reference image for the object: the same place and light, now the "
+    "person's own two hands hold that exact object up toward the camera, at the lower center of the frame, firmly "
+    "gripping its edges, front facing the lens; the hands and the sleeves come in from the bottom edge of the frame. "
+    "No face, head or body is ever visible. The object rests in the hands, never floating. If it is a book, it is "
+    "CLOSED: only its front cover shows, never open pages. The cover reproduces the second reference EXACTLY as a "
+    "printed cover: every element (title, photo, colors, band, text lines), never simplified to plain text. The hands "
+    "hold only that object. The hands and sleeves are the SAME as in the first reference. Vertical 9:16 photo, natural "
+    "light, no on-screen text of any kind, no caption, no watermark.")
+
+# ⭐ o avatar pronto da Tomiko (fonte canonica: docs/personas/tomiko-hayashi). A foto sobe pela aba.
+TOMIKO = {
+    "nome": "Tomiko Hayashi",
+    "descricao": (
+        "Tomiko, a 75-year-old Japanese-Brazilian woman (sansei granddaughter of immigrants, from Londrina, Paraná, "
+        "Brazil), petite and slim, about 150 cm tall, short silver hair with a soft side part, warm crinkled smile, "
+        "lively attentive eyes, real wrinkles and sun spots. She wears a loose white cotton long-sleeve blouse, an "
+        "indigo denim apron with a small white sashiko embroidery square on the chest, charcoal trousers and simple "
+        "dark flat shoes."),
+    "prefixo": "The same 75-year-old Japanese-Brazilian woman from the frame, same face, hands, clothes and setting.",
+    "voz": ("the warm, slow, slightly raspy voice of a 75-year-old woman, {lingua} with a soft Japanese-Brazilian "
+            "accent, spoken by the woman in frame"),
+    "quem": ("a 75-year-old Japanese-Brazilian grandmother from Londrina who teaches herbs, teas and home "
+             "fermentation (umeboshi, miso, tsukemono); calm, patient, warm"),
+    "cenas": [
+        ("cozinha", "Cozinha da chácara", "Her farmhouse kitchen: dark wood cabinets, open wooden shelves with glass "
+         "jars of herbs and ceramic bowls, large brown ceramic fermentation jars, a window with red earth fields outside."),
+        ("varanda", "Varanda com plantas", "Her covered wooden porch with potted herbs and medicinal plants along the "
+         "railing, a small bamboo bench, warm afternoon light, red earth yard beyond."),
+        ("horta", "Horta dos fundos", "Her backyard herb garden: raised wooden beds with basil, shiso and mint, a woven "
+         "bamboo trellis, soft morning light, the farmhouse behind."),
+        ("sala", "Sala de chá", "A simple farmhouse living room: a low wooden table with a tea set, floor cushions, "
+         "a wooden shelf with old photo frames, warm lamp light."),
+        ("despensa", "Despensa de fermentados", "A cool pantry with wooden shelves lined with glass jars of pickled "
+         "vegetables, umeboshi and miso, dried herbs hanging, soft light from a small window."),
+        ("quintal", "Mesa no quintal", "A rustic wooden table under a mango tree in the backyard, a ceramic teapot and "
+         "two cups, dappled sunlight through the leaves, red earth around."),
+        ("bancada", "Bancada de preparo", "A wooden kitchen counter with a cutting board, fresh ginger and turmeric "
+         "roots, dried herbs and a ceramic mortar and pestle, soft window light."),
+        ("engawa", "Corredor externo", "A narrow covered wooden veranda along the side of the farmhouse, potted plants "
+         "on a low wooden stand, green garden visible, late afternoon light."),
+    ],
+    "idioma": "pt", "cta": "receitas", "genero": "f",
+    # ⭐ (26/10, ordem do Eduardo) o CTA pede para seguir: a DM de quem nao segue cai em "Pedidos de mensagem"
+    # ⭐⭐ (27/10, ordem do Eduardo, pacote de CTA) promessa concreta e palavra unica: "receitas" (a Youze aceita
+    #    RECEITAS, EU QUERO e LIVRO). O livro tem 150 receitas (a capa diz). "promessa" = a 2a linha da faixa na tela.
+    # (27/10, Eduardo) bem claro: se a pessoa nao seguir, ela nao consegue mandar as receitas
+    # ⭐ (27/10) {palavra} = a palavra do CTA do Reel ("receitas", "eu quero"): a mesma frase serve a qualquer uma
+    "cta_fala": "Me segue, senão eu não consigo te mandar as cento e cinquenta receitas. Comenta {palavra} aqui.",
+    "promessa": "TE MANDO AS 150 RECEITAS",
+    # ⭐⭐ (27/10, Eduardo: "substitua os blueberries por uva-passa, adequacao cultural") ingrediente caro ou dificil
+    #    de achar no Brasil vira o equivalente comum daqui, igual na fala e na imagem
+    "roteiro_extra": (
+        "Ingredients: when the source uses an ingredient that is expensive or hard to find in an ordinary Brazilian "
+        "market (blueberries, cranberries, kale, maple syrup, pecans...), swap it for a common Brazilian equivalent that "
+        "plays the same role in the recipe (blueberries become uva-passa, raisins; cranberries become uva-passa; pecans "
+        "become castanha-do-pará), and use that same ingredient in \"fala\", \"quadro\", \"quadro_fim\", \"acao\" "
+        "and \"movimento\" (in English there: \"raisins\"), so the image shows it too: in \"quadro\" and \"quadro_fim\" "
+        "describe how the swapped ingredient LOOKS and name the one that must not appear (\"small wrinkled dark brown "
+        "raisins, no blueberries, no purple juice\"), because the source image shows the original. Keep every ingredient that is "
+        "common in Brazil exactly as the source says."),
+    "mundo": ("her small farm (chácara) near Londrina, Paraná, Brazil: rustic dark wood, ceramic fermentation jars, "
+              "potted herbs, red earth, warm natural light"),
+}
+
+# ⭐⭐ (19/10, ordem do Eduardo) um avatar por mercado, cada um com o seu universo-lar: um video-fonte vira 3 Reels.
+#    Fichas canonicas em docs/personas/<id>. O arquetipo e' o mesmo (quem cura pela tradicao e pela cozinha), vestido
+#    na cultura de cada mercado. ⛔ Nada de xama indigena: apropriacao e reacao contraria (mesmo motivo da Cherokee).
+CUCA = {
+    "nome": "Doña Cuca Morales",
+    "descricao": (
+        "Doña Refugio 'Cuca' Morales, a 79-year-old mestiza Mexican grandmother from Atlixco, Puebla, short and sturdy, "
+        "sun-weathered brown skin, long grey hair in a single thick braid, deep laugh wrinkles, sharp warm motherly "
+        "eyes, strong quick hands. She wears a simple printed cotton dress, a red-and-white checkered apron with a front "
+        "pocket, a small gold Virgin of Guadalupe medal on a thin chain, and a dark woven rebozo shawl over her "
+        "shoulders."),
+    "prefixo": "The same 79-year-old Mexican grandmother from the frame, same face, braid, hands, clothes and setting.",
+    "voz": ("the warm, lively, slightly husky voice of a 79-year-old grandmother, {lingua} with a soft Mexican accent "
+            "from Puebla, spoken by the woman in frame"),
+    "quem": ("a 79-year-old Mexican grandmother herbalist (yerbera) from Atlixco, Puebla, who sells herbs at the Sunday "
+             "market and teaches the remedies of the kitchen: teas, syrups (jarabes) and broths; Catholic, warm, funny "
+             "and motherly: 'la salud empieza en la cocina de la abuela'"),
+    "cenas": [
+        ("cocina", "Cozinha da avó", "Her rustic Mexican kitchen: blue-and-white Talavera tiles, clay pots hanging on "
+         "the wall, a stone molcajete and bunches of dried herbs on a wooden table, a small home altar shelf with a "
+         "Virgin of Guadalupe picture and a candle, morning light from a small window."),
+        ("patio", "Pátio com vasos", "Her sunny back patio: herbs growing in painted tin cans and clay pots along a "
+         "colorful wall, bougainvillea, a couple of hens in the background, warm light."),
+        ("mercado", "Banca do mercado", "Her herb stall at the Sunday market in Atlixco: bundles of fresh herbs, baskets "
+         "of dried chamomile and cinnamon sticks, hand-written cardboard price signs, colorful papel picado overhead."),
+        ("huerta", "Horta do quintal", "Her small backyard garden: rows of mint, epazote and aloe vera, a weathered "
+         "wooden fence, a clay water jar, warm late-afternoon light."),
+        ("comedor", "Mesa da sala", "A simple dining table with a flowered oilcloth, clay mugs of café de olla, a basket "
+         "of pan dulce, family photos and a crucifix on the wall."),
+        ("fogon", "Fogão a lenha", "An outdoor wood-fired stove (fogón) under a tin roof, a big clay pot simmering, "
+         "firewood stacked beside it, soft smoke in the light."),
+        ("alacena", "Armário de remédios", "A wooden cupboard with recycled glass bottles of syrup, small jars of "
+         "ointment, dried herbs in paper bags with hand-written labels, soft light."),
+        ("corredor", "Varanda de adobe", "A covered corridor of an old adobe house with terracotta floor tiles, potted "
+         "ferns and geraniums, a wooden chair with a woven palm seat."),
+    ],
+    "idioma": "es", "cta": "libro", "genero": "f",
+    "mundo": ("her humble home in Atlixco, Puebla, Mexico: Talavera tiles, clay pots, painted tin planters, colorful "
+              "walls, warm light"),
+}
+
+WENDELIN = {
+    "nome": "Bruder Wendelin",
+    "descricao": (
+        "Bruder Wendelin, an 80-year-old Benedictine monk from a small monastery in the Allgäu, Bavaria, tall and thin, "
+        "slightly stooped, monastic tonsure with a crown of white hair, short grey beard, serene kind eyes, large "
+        "weathered hands with garden soil in the creases. He wears a black Benedictine habit with scapular and a plain "
+        "natural linen work apron over it, and simple leather sandals."),
+    "prefixo": "The same 80-year-old Benedictine monk from the frame, same face, tonsure, hands, habit and setting.",
+    "voz": ("the calm, low, slow voice of an 80-year-old monk, {lingua} with a soft southern Bavarian (Allgäu) "
+            "warmth, spoken by the monk in frame"),
+    "quem": ("an 80-year-old Benedictine monk who has tended the walled herb garden of a small Allgäu monastery for "
+             "over 40 years, following the monastic medicine of the brothers and Saint Hildegard of Bingen; calm, "
+             "humble, unhurried: 'I only pass on what was passed to me'"),
+    "cenas": [
+        ("klostergarten", "Horta do mosteiro", "The walled monastery herb garden: raised beds of sage, thyme, lemon "
+         "balm, calendula and lavender, old stone walls, a wooden gate, the Alps faint in the distance, soft morning light."),
+        ("kreuzgang", "Claustro", "The monastery cloister: stone arches, a small central garden with a well, a wooden "
+         "bench, quiet diffuse light."),
+        ("apotheke", "Botica do mosteiro", "The old monastery apothecary: wooden shelves with amber glass tincture "
+         "bottles and labeled jars, a brass scale, dried herb bundles, a leather-bound garden notebook on the counter."),
+        ("kueche", "Cozinha do mosteiro", "The monastery kitchen: a big scrubbed wooden table, copper pots, a tiled "
+         "stove, bowls of herbs and vegetables from the garden, light from a deep stone window."),
+        ("bibliothek", "Biblioteca", "A quiet monastery library with old books, a wooden lectern, a window onto the "
+         "garden, warm lamp light."),
+        ("gewaechshaus", "Estufa", "A small old glasshouse in the monastery garden with seedlings in clay pots, a "
+         "wooden potting bench and garden tools."),
+        ("kraeuterboden", "Sótão das ervas", "The drying loft under the roof beams: bundles of herbs hanging to dry, "
+         "linen sachets, wooden crates, warm light through small windows."),
+        ("bank", "Banco no jardim", "A wooden bench against the sunny garden wall, a wicker basket of freshly cut herbs "
+         "beside him, bees on the lavender."),
+    ],
+    "idioma": "de", "cta": "Buch", "genero": "m",
+    "mundo": ("his small Benedictine monastery in the Allgäu, Bavaria: old stone walls, a walled herb garden, simple "
+              "wooden furniture, the Alps in the distance, soft light"),
+}
+
+# ⭐⭐ (19/10, ordem do Eduardo) a segunda conta em pt-BR, no nicho de horta e plantio (substitui o espanhol e o
+#    alemao). Colono italiano da serra capixaba: longe do gaucho que domina o nicho (Bento Silveira).
+BEPPE = {
+    "nome": "Nonno Beppe",
+    "descricao": (
+        "Nonno Beppe (Giuseppe Bortolini), a 72-year-old Italian-Brazilian farmer, grandson of immigrants from Veneto, "
+        "from Venda Nova do Imigrante in the mountains of Espírito Santo, Brazil, stocky and strong, sun-tanned weathered "
+        "face, thick white moustache, bushy grey eyebrows, cheerful twinkling eyes, large rough hands with soil in the "
+        "creases. He wears a flat grey wool cap, a light blue button-up cotton shirt with the sleeves rolled up, brown "
+        "suspenders, dark work trousers and worn leather boots."),
+    "prefixo": ("The same 72-year-old Italian-Brazilian farmer from the frame, same face, moustache, cap, hands, clothes "
+                "and setting."),
+    "voz": ("the warm, slightly raspy, cheerful voice of a 72-year-old man, {lingua} with a soft Italian accent from "
+            "the Italian colony of Espírito Santo, spoken by the man in frame"),
+    "quem": ("a 72-year-old Italian-Brazilian farmer (colono) from Venda Nova do Imigrante, Espírito Santo, who teaches "
+             "vegetable gardening, saved seeds, natural compost and the preserves of the harvest; cheerful, proud of "
+             "his garden, practical, and lets slip an Italian word now and then ('mangia', 'bello', 'porca miséria')"),
+    "cenas": [
+        ("horta", "Horta em fileiras", "His vegetable garden in neat straight rows: staked tomatoes, lettuce, cabbage and "
+         "herbs, a wooden fence, the green mountains of Espírito Santo behind, soft morning light."),
+        ("parreiral", "Parreiral", "A grape pergola heavy with green and purple grapes over a stone path, old wooden "
+         "posts, dappled sunlight."),
+        ("adega", "Adega", "A small cool cellar with straw-covered wine demijohns, wooden barrels, shelves of preserves "
+         "in glass jars, braids of garlic hanging, warm dim light."),
+        ("cozinha", "Cozinha com fogão a lenha", "A farmhouse kitchen with a wood-fired stove, a copper polenta pot, a "
+         "long wooden table with a red checkered cloth, braids of onions hanging by the window."),
+        ("galpao", "Galpão de ferramentas", "A wooden tool shed with hoes, rakes and a wheelbarrow, saved seeds in "
+         "labeled glass jars and paper envelopes on a workbench."),
+        ("sementeira", "Sementeira", "A seedling nursery: trays of young seedlings on wooden benches under a shade "
+         "cloth, a metal watering can, potting soil."),
+        ("varanda", "Varanda da casa", "The covered veranda of an old colonial farmhouse with a wooden bench, a basket "
+         "of fresh vegetables and red geraniums in pots."),
+        ("pomar", "Pomar", "A small orchard with lemon, orange and fig trees, hens pecking around, a wooden crate of "
+         "picked fruit."),
+    ],
+    "idioma": "pt", "cta": "livro", "genero": "m",
+    "mundo": ("his family farm (sítio) in the green mountains of Espírito Santo, Brazil, built by Italian immigrants: "
+              "old wooden colonial buildings, stone walls, rows of vegetables, mountains in the background, natural light"),
+}
+
+# ⭐⭐ (26/10, ordem do Eduardo) a conta de jardinagem para o publico de lingua espanhola, mercado da Espanha:
+#    o arquetipo do Bruder Wendelin (ja' testado no alemao) vestido de frei franciscano de Castela. Ficha canonica em
+#    docs/personas/fray-tomas. ⭐ "bio" = a bio do Instagram da conta (nome do perfil + texto). ⛔ (26/10, Eduardo) no
+#    maximo 3 linhas curtas (ate' ~35 caracteres, sem quebrar): mais que isso o app corta em "mais" e esconde o link.
+FRAY = {
+    "nome": "Fray Tomás",
+    "descricao": (
+        "Fray Tomás, a 74-year-old Franciscan friar from an old convent in a village of Castilla y León, Spain, of medium "
+        "height and sturdy, ruddy sun-weathered face, bald crown with a fringe of short white hair, trimmed white beard, "
+        "bright kind brown eyes behind small round wire-rimmed glasses, big work-worn hands with garden soil in the "
+        "creases. He wears a brown Franciscan habit with a hood and a white knotted cord at the waist, the sleeves rolled "
+        "up, a faded green canvas work apron over it, and leather sandals with grey wool socks."),
+    "prefixo": ("First-person view through the eyes of the same 74-year-old Franciscan friar: his own weathered hands "
+                "and the rolled-up sleeves of his brown habit, the same setting."),
+    "voz": ("the calm, warm, slightly gravelly voice of a 74-year-old friar narrating off-screen, {lingua} with a soft "
+            "Castilian accent"),
+    # ⭐⭐ (26/10, ordem do Eduardo) os Reels dele sao em PRIMEIRA PESSOA: so' as maos, a voz em off
+    "pov": True,
+    "maos": ("his own big old weathered hands with garden soil in the creases, and the rolled-up sleeves of a brown "
+             "Franciscan habit on his forearms."),
+    # ⭐ (26/10, ordem do Eduardo) as plantas do Brasil viram as equivalentes dos paises hispanicos, com a mesma dica
+    "roteiro_extra": (
+        "Plants: when the source shows a plant that is hard to find in Spain and the Spanish-speaking countries (a native "
+        "Brazilian plant like jabuticaba, acerola, cupuaçu, pitanga or taioba), swap it for a common equivalent there that "
+        "takes the SAME care tip (same kind of plant, same pruning, fertilizing, watering or planting advice), and use "
+        "that same plant in \"fala\", \"quadro\", \"quadro_fim\" and \"movimento\". Most plants exist there too: "
+        "keep the source's plant whenever it is common in Spain or Latin America (lemon, orange, tomato, lettuce, "
+        "rosemary, banana). He narrates in the first person what his own hands are doing (\"yo abro un surco...\")."),
+    "quem": ("a 74-year-old Franciscan friar who has tended the walled vegetable garden (huerta) of an old convent in a "
+             "Castilian village for over 40 years; teaches sowing by the moon, natural compost, saving seeds, pruning "
+             "and growing food at home; serene, humble, with a gentle sense of humour: 'la tierra devuelve lo que le "
+             "das'"),
+    "cenas": [
+        ("huerta", "Horta do convento", "The walled convent vegetable garden in Castilla: neat rows of tomatoes on cane "
+         "stakes, lettuces, onions, beans and herbs, an old stone wall, a stone well with a wooden bucket, the convent "
+         "bell tower behind, soft morning light."),
+        ("claustro", "Claustro", "The convent cloister: Romanesque stone arches around a small garden with an old orange "
+         "tree and a stone fountain, terracotta pots of geraniums, quiet light."),
+        ("semillero", "Sementeira", "A small old greenhouse of wooden frames and glass: seedling trays and clay pots on "
+         "a wooden potting bench, a zinc watering can, paper envelopes of saved seeds."),
+        ("cocina", "Cozinha do convento", "The convent kitchen: a long scrubbed wooden table, a wood-fired stove, copper "
+         "pots, baskets of vegetables from the garden, braids of garlic and dried red peppers hanging, light from a "
+         "deep stone window."),
+        ("frutales", "Pomar", "A small convent orchard of apple, fig, quince and almond trees on low stone terraces, a "
+         "wooden ladder and a wicker basket of picked fruit."),
+        ("compost", "Composteira", "A corner of the garden with wooden compost bins, a pitchfork, dry leaves and an old "
+         "wheelbarrow, by the stone wall."),
+        ("despensa", "Despensa", "A cool stone pantry with shelves of preserved vegetables in glass jars, strings of "
+         "red peppers and garlic, clay jars, wooden crates of potatoes, soft dim light."),
+        ("banco", "Banco sob a parreira", "A stone bench under a grapevine pergola against the sunny garden wall, a straw "
+         "hat and a wicker basket of freshly picked vegetables beside him, the wide Castilian plain beyond the wall."),
+    ],
+    "idioma": "es-es", "cta": "huerta", "genero": "m",
+    # ⭐ (26/10, ordem do Eduardo) todo CTA final pede para seguir, para podermos mandar o material
+    # ⭐⭐ (27/10, ordem do Eduardo) promessa concreta: o cuaderno (nao "la guía", que deixava o "enviártela" solto)
+    # (27/10, Eduardo) si no le siguen, no puede enviarlo
+    "cta_fala": "Sígueme, si no, no puedo enviarte el cuaderno del convento. Escribe {palavra} aquí abajo.",
+    "promessa": "TE MANDO EL CUADERNO",
+    "mundo": ("his old Franciscan convent in a village of Castilla y León, Spain: honey-coloured stone walls, a walled "
+              "vegetable garden, terracotta tiles, simple wooden furniture, the wide Castilian plain beyond, warm "
+              "natural light"),
+    "bio": ("Fray Tomás · La huerta del convento\n"
+            "🌿 Fraile hortelano del convento\n"
+            "🥬 Siembra, abono y luna\n"
+            "👇 Escribe HUERTA y te mando la guía"),
+}
+
+PERSONAS = {"tomiko": TOMIKO, "beppe": BEPPE, "cuca": CUCA, "wendelin": WENDELIN, "fray": FRAY}
+
+
+def genero(texto, avatar):
+    """As regras e os prompts em ingles foram escritos para uma mulher ("she", "her hands"): com avatar homem, viram
+    "he"/"his". ⛔ So' no texto em INGLES escrito por nos (regras, movimento, quadro): nunca na fala, que esta' no
+    idioma do Reel ("her" e' palavra em alemao: "komm her")."""
+    if not avatar or avatar.get("genero") != "m": return texto
+    for a, b in ((r"\bof her\b", "of him"), (r"\bto her\b", "to him"), (r"\bShe\b", "He"), (r"\bshe\b", "he"),
+                 (r"\bHer\b", "His"), (r"\bher\b", "his"), (r"\bwoman\b", "man"), (r"\bgrandmother\b", "old man")):
+        texto = re.sub(a, b, texto)
+    return texto
+
+
+def pov(avatar):
+    """⭐ (26/10) o avatar grava em primeira pessoa: a ficha (ou o proprio avatar) tem "pov"."""
+    if not avatar: return False
+    return bool(avatar.get("pov", PERSONAS.get(avatar.get("persona", ""), {}).get("pov", False)))
+
+
+def maos(avatar):
+    """As maos e as mangas do avatar em primeira pessoa (no lugar da descricao do rosto, que puxaria o rosto)."""
+    return (avatar.get("maos") or PERSONAS.get(avatar.get("persona", ""), {}).get("maos") or "").strip()
+
+
+def extra_roteiro(avatar):
+    """⭐ (26/10) regras do roteiro que sao da conta (adaptar as plantas, narrar em primeira pessoa)."""
+    if not avatar: return ""
+    return (avatar.get("roteiro_extra") or PERSONAS.get(avatar.get("persona", ""), {}).get("roteiro_extra") or "").strip()
+
+
+def promessa(avatar):
+    """⭐ (27/10) a 2a linha da faixa do CTA na tela ("TE MANDO AS 150 RECEITAS"); "" = a faixa so' com a palavra."""
+    if not avatar: return ""
+    return (avatar.get("promessa") or PERSONAS.get(avatar.get("persona", ""), {}).get("promessa") or "").strip()
+
+
+def espaco_texto(avatar, cta=False):
+    """⭐ (27/10) o alto do quadro livre para o cartaz completo do CTA: so' no take do CTA ("" nos outros)."""
+    if not cta: return ""
+    return genero(ESPACO_TEXTO_POV if pov(avatar) else ESPACO_TEXTO, avatar)
+
+
+def mundo(avatar, cena=""):
+    """⭐⭐ (19/10, ordem do Eduardo) o ambiente de cada take vem do VIDEO-FONTE (o canteiro, o tanque de peixes, a
+    cozinha); o universo do avatar entra so' como estilo: "o mundo dele". Sem ficha, vale o texto do comodo."""
+    base = PERSONAS.get(avatar.get("persona", ""), {})
+    return avatar.get("mundo") or base.get("mundo") or cena
+
+
+def prompt_retrato(persona):
+    """O retrato-ancora de um avatar novo (sem referencia): a pessoa da ficha no primeiro comodo do lar dela.
+    `persona` = a ficha (comodos em tuplas) ou o avatar ja' criado (comodos em dicts)."""
+    c0 = persona["cenas"][0] if persona.get("cenas") else ""
+    lugar = c0.get("cena", "") if isinstance(c0, dict) else (c0[2] if c0 else "")
+    return (f"Vertical 9:16 photo, smartphone UGC style, natural light, realistic skin texture. "
+            f"{persona['descricao'].strip()} {lugar} Upper body and hands visible, looking at the "
+            f"camera with a warm, natural expression, as if about to explain a family recipe. "
+            f"No text, no captions, no logos, no watermark.")
+
+
+def _limpa(p):
+    return re.sub(r"[^\wÀ-ÿ']", "", p.lower())
+
+
+def cortar(palavras, idioma="pt", max_s=MAX_S_TAKE, max_palavras=None):
+    """Palavras com tempo [{"w", "ini", "fim"}] -> takes [{"n", "ini", "fim", "texto"}].
+
+    Fecha o take em fim de frase quando ele ja' tem folego (FRASE_FECHA_S). No limite de tempo/palavras recua para
+    o ultimo fim de frase dentro dele, senao para a ultima virgula, senao enquanto a ultima palavra for fraca.
+    ⛔ Nenhum take passa de `max_s` nem do limite de palavras do idioma."""
+    max_palavras = max_palavras or PALAVRAS_TAKE.get(idioma, 18)
+    fracas = FRACAS.get(idioma, set())
+    takes, atual = [], []
+
+    def recuo(fim_re):
+        for i in range(len(atual) - 1, 0, -1):
+            if re.search(fim_re, atual[i - 1]["w"].strip()) and atual[i - 1]["fim"] - atual[0]["ini"] >= MIN_S_TAKE:
+                return i
+        return 0
+
+    def fechar(ate):
+        nonlocal atual
+        bloco, atual = atual[:ate], atual[ate:]
+        if bloco:
+            takes.append({"n": len(takes) + 1, "ini": round(bloco[0]["ini"], 2), "fim": round(bloco[-1]["fim"], 2),
+                          "texto": " ".join(p["w"].strip() for p in bloco).strip()})
+
+    for p in palavras:
+        if not p.get("w", "").strip(): continue
+        if atual and (p["fim"] - atual[0]["ini"] > max_s or len(atual) >= max_palavras):
+            corte = recuo(r"[.!?…]$") or recuo(r"[,;:]$")
+            if not corte:
+                corte = len(atual)
+                while corte > 1 and _limpa(atual[corte - 1]["w"]) in fracas: corte -= 1
+            fechar(corte)
+        atual.append(p)
+        if re.search(r"[.!?…]$", p["w"].strip()) and atual[-1]["fim"] - atual[0]["ini"] >= FRASE_FECHA_S:
+            fechar(len(atual))
+    fechar(len(atual))
+    return takes
+
+
+def cta_fala(avatar, cta=None):
+    """A frase FIXA do take do CTA do avatar (ficha ou avatar), ou "" quando o Claude escreve. ⛔ So' vale quando a
+    palavra do CTA do Reel esta' nela (um Reel com "umeboshi" nao pode pedir "eu quero")."""
+    if not avatar: return ""
+    base = PERSONAS.get(avatar.get("persona", ""), {})
+    fixa = (avatar.get("cta_fala") or base.get("cta_fala") or "").strip()
+    palavra = ((cta or {}).get("palavra") or "").strip().lower()
+    # ⭐ (27/10) frase-modelo: {palavra} vira a palavra do CTA do Reel (sem Reel, a palavra padrao do avatar)
+    if "{palavra}" in fixa:
+        if cta is not None and cta.get("tipo") != "palavra": return ""
+        fixa = fixa.replace("{palavra}", palavra or (avatar.get("cta") or base.get("cta") or "").strip().lower())
+    if fixa and cta is not None and (cta.get("tipo") != "palavra" or (palavra and palavra not in fixa.lower())): return ""
+    return fixa
+
+
+def regra_cta(cta, avatar=None):
+    """A regra do take do CTA (o mesmo texto no roteiro e no corretor da curadoria)."""
+    fixa = cta_fala(avatar, cta)
+    if fixa:
+        regra = f'The call to action take says exactly this line, word for word, in "fala": "{fixa}"'
+    elif cta.get("tipo") == "palavra":
+        regra = (f'The call to action invites viewers to comment '
+                 f'"{cta.get("palavra", "").strip().lower()}," (lowercase, no accent, followed by a comma) to '
+                 f'receive the full material. Write it exactly like that inside the line. Do not say where or how '
+                 f'it is sent (no DM, direct, inbox).')
+    else:
+        regra = ("The call to action is a plain, calm line saying the complete material is at the link in the "
+                 "profile. No hype.")
+    if pov(avatar) and not cta.get("livro"):
+        regra += (" That last take is first person too: her own hand holds the best of what the video grew or made "
+                  "(the fruit, the vegetable, the plant) toward the camera, steady, while her voice says the line.")
+    if cta.get("livro") and pov(avatar):
+        regra += (" In that last take her own hands ALREADY hold her closed book toward the camera from the first to the "
+                  "last frame (first person: the camera is her eyes): its \"quadro\" is \"Her own hands hold her closed "
+                  "book toward the camera, front cover facing the lens; nothing else is in her hands.\" and its "
+                  "\"movimento\" is \"As she speaks, her hands hold the closed book steady toward the camera.\" then "
+                  "\"Her hands keep holding it the same way until the end of the shot.\"")
+    elif cta.get("livro"):
+        # ⛔⛔ (23/10, Eduardo: "tirou o livro de dentro da pagina do nada, feito magica") o livro na mesa saia aberto
+        #    no quadro de abertura e o Veo fazia a capa brotar das paginas: agora ela JA' segura o livro fechado do
+        #    primeiro ao ultimo quadro, sem pegar nada da mesa e sem nada mais nas maos
+        regra += (" In that last take she ALREADY holds her closed book from the first to the last frame: its "
+                  "\"quadro\" is \"She holds her closed book with both hands at chest height, front cover toward the "
+                  "camera; nothing else is in her hands.\" and its \"movimento\" is \"As she speaks, she holds her "
+                  "closed book steady with both hands at chest height, front cover toward the camera.\" then \"She "
+                  "keeps holding it the same way until the end of the shot.\"")
+    return genero(regra, avatar)
+
+
+# ⭐ (19/10, ordem do Eduardo) a fala e' no idioma POPULAR de quem assiste, nunca a traducao literal: "quase ninguem
+#    sabe o que e' arroz demolhado". Exemplos do que ja' saiu errado, para o Claude calibrar o registro.
+POPULAR = {
+    "pt": ' In Brazilian Portuguese: "arroz deixado de molho", not "arroz demolhado"; "cominho", not "nigela"; '
+          '"bater no liquidificador", "forma de pão", "colherada", "um tiquinho", the way a Brazilian grandmother talks.',
+    "es": ' In Mexican Spanish: "licuadora", not "batidora"; "jugo", not "zumo"; "piña", "una cucharadita", "un vasito '
+          'de agua", "comino negro", not "nigella"; the way a Mexican grandmother talks in her kitchen, with "mijita" '
+          'and "fíjate" when it fits.',
+    "es-es": ' In Spanish from Spain: "batidora", "zumo", "una cucharadita", "un vaso de agua", "el huerto", "el abono", '
+             '"regar", "sembrar"; the plain way an old friar talks in the convent garden, never Latin American words '
+             '("jugo", "licuadora", "mijito", "ahorita") nor technical or Latin terms.',
+    "de": ' In German: plain everyday words ("Mixer", "ein Glas Wasser", "ein Teelöffel", "Schwarzkümmel"), never '
+          'Latin or clinical terms; the calm, simple way an old monk explains things in the monastery kitchen. German '
+          'law forbids healing claims: never "heilt", "entgiftet", "gegen <Krankheit>" or "wirkt bei"; only tradition '
+          'and well-being ("tut gut", "stärkt", "für das Wohlbefinden", "so haben es die Brüder gemacht").',
+}
+
+
+def regras_take(idioma, extras="", avatar=None):
+    """As regras de "fala", "quadro" e "movimento" de um take: as mesmas no roteiro e no corretor da curadoria.
+    `extras` = as licoes ativas (motor/instagram_licoes.py: regras_texto), acrescentadas no fim."""
+    lingua, lim = IDIOMAS[idioma]["lingua"], FALA_MAX_PALAVRAS.get(idioma, 14)
+    return genero(f"""- "fala": what the presenter says in {lingua}: what the ORIGINAL line says, sentence by sentence and in the
+  same order, with the same facts, claims, hook and rhythm. Only the wording changes, never the content: do not add
+  any idea, benefit, sentence or persona color that the original line does not have (no "tradition", "grandma",
+  "family", "balance", "strengthen" unless the original says it; the only exception is the call to action described
+  below), and do not soften, swap or drop a claim of the
+  original. At most {lim} words, speakable in about {FALA_S:.0f} seconds at a calm pace. Each take is generated
+  and spoken on its own, with a closing intonation: so each "fala" is one or more COMPLETE sentences that sound
+  finished alone and end with a period, an exclamation or a question mark. Never split a sentence or a phrase
+  across two takes ("as bactérias boas" | "do intestino" sounds like two broken sentences); when the original
+  splits mid-sentence, move words between neighbouring takes so every break falls at the end of a sentence. Do
+  not repeat the same verb or word in neighbouring takes (bater, bater): vary it. Never end a take on
+  a word that asks for continuation (articles, prepositions, conjunctions). No dash characters of any kind inside the
+  line. Numbers in words. Prefer common, easy-to-pronounce words: avoid words with a repeated syllable and word
+  pairs where a vowel ending meets a vowel start (the voice merges them).
+  Write it in the everyday spoken {lingua} of ordinary people, the popular register a common person uses at home
+  and in the kitchen: never formal, technical, literary or rare words, even when they are the literal translation
+  of the original.{POPULAR.get(idioma, "")}
+  Keep every ingredient, quantity, temperature and time said in the original line: to fit the time, cut filler
+  words, never a recipe item. Convert units to the ones used in the target country (400 Fahrenheit is "two
+  hundred degrees" Celsius in Brazil, Mexico and Germany). Never promise something "free" unless the material
+  below is free.
+- "quadro": one short English sentence naming the items of this exact step and where they are at the START of
+  the step, in front of her (ingredients, bowl, blender, pan, the finished food), concretely. Every item and tool
+  she uses in the step is named here for what it really is in the source (a drinking glass used to smash potatoes
+  is "a drinking glass", never "a masher"), and the SAME noun is used in "quadro_fim" and "movimento": nothing
+  turns into another item, appears or disappears. Never add an item the source does not show (no phone, no
+  screen). Only the items and
+  her hands: never the camera, the framing, her face, hair or clothes (the shot itself is copied from the source).
+- "quadro_fim": one short English sentence with the SAME items at the END of the step, after the action is done
+  (e.g. "the salt is inside the blender jar and the small dish is empty in her right hand"). Repeat the "quadro"
+  ONLY when "acao" is empty; with an action, "quadro_fim" shows its result and is never the same as "quadro".
+- "acao": the hand actions of this step, in order, in short English ("whips the chickpea water with a whisk;
+  sprinkles cocoa powder over it"), taken from the source frames of the step AND from the original line: when the
+  line names an action (whip, beat, pour, sprinkle, stir, mix, cut, put in the fridge, taste), that action is in
+  "acao" even if no frame shows it. "" only when the source step shows no hand action and the line names none (she
+  only talks or shows the finished food).
+- "movimento": exactly two short English sentences, in positive phrasing (what she does, never what she does not
+  do). The original line says what is being done in the source video: she does THAT action for real and
+  completely, exactly as the source does it (if the source pours the salt into the blender, she pours it in;
+  never a half gesture that only lifts the item and puts it back). When she cuts, copy the source cut: which hand
+  holds the item and how, the knife direction (across the carrot into round slices, or along it into sticks) and
+  that each stroke of the knife makes exactly one piece, the pieces piling up one by one (nothing appears, splits
+  or multiplies on its own).
+  When "acao" is not empty, holding the item and talking is NEVER the movement: she performs the action of "acao"
+  for real (the whisk turns inside the bowl and the mixture foams, the cocoa powder falls from the spoon over the
+  mixture). When the source step has several quick actions (several shots), she does them in ONE continuous motion,
+  at most two, in the order of the line. Every tool and ingredient of the action is already in her hands or in front
+  of her in the "quadro" (the whisk inside the bowl, the small bowl of cocoa powder in her hand above it): nothing
+  appears later.
+  1st sentence starts with "As she speaks," and describes the whole action from the "quadro" state to the
+  "quadro_fim" state: name the hand (right hand, left hand or both hands), the contact point, the item with the
+  SAME noun used in the "quadro", and what happens to it (it falls into, is poured into, is sprinkled over...).
+  One continuous, slow action.
+  2nd sentence starts with "By the last word," and states the "quadro_fim" result, """
+        + ("with her hands still in view (first-person shot: the camera is her own eyes, her face is never seen)."
+           if pov(avatar) else "with her looking at the\n  camera.")
+        + (f"\n- {extra_roteiro(avatar)}" if extra_roteiro(avatar) else ""), avatar) \
+        + (f"\n{extras.rstrip()}" if extras.strip() else "")
+
+
+REGRAS_CONTEUDO = """Content rules (mandatory):
+- Wellness and tradition language: "strengthen", "balance", "well-being". Never promise to cure, treat or heal
+  a disease; never attack doctors or medicine; no invented numbers, testimonials or scarcity.
+- Keep the original's own claims as the original says them (that is not a cure promise); add nothing of your own."""
+
+
+def texto_quadros(quadros):
+    """⭐⭐ (20/10) o Claude so' via a TRANSCRICAO e adivinhava os objetos (um celular no "me segue", um amassador no
+    lugar do copo): agora ele le os quadros do video de origem (o inicio e o fim de cada take) antes de escrever.
+    ⭐⭐ (26/10, Eduardo) com so' o inicio e o fim ele nao via a acao do meio (bater, polvilhar o cacau) e punha a
+    Tomiko so' segurando a tigela: agora vai a sequencia do take, do inicio ao fim.
+    quadros = {n: (inicio.jpg, meio1.jpg, ..., fim.jpg)}"""
+    if not quadros: return ""
+
+    def seq(fotos):
+        return f"start {fotos[0]} ; " + "".join(f"then {f} ; " for f in fotos[1:-1]) + f"end {fotos[-1]}"
+    linhas = "\n".join(f"- take {n}: {seq(fotos)}" for n, fotos in sorted(quadros.items()))
+    return f"""
+Frames of the source video, in order, from the start to the end of each take (open EVERY one with the Read tool
+BEFORE writing; they are the truth about what is on screen in each take: the items, the tools, the hands and every
+action that happens between them, like whisking, pouring or sprinkling):
+{linhas}
+"quadro", "quadro_fim", "acao" and "movimento" describe what these frames show, never what the speech suggests
+(except that an action named in the line is always in "acao").
+"""
+
+
+def pedido_adaptacao(takes, idioma, avatar, cta, extras="", quadros=None):
+    """O pedido ao Claude: a fala de cada take no idioma de destino, na boca do avatar, + movimento + CTA.
+
+    cta = {"tipo": "bio" | "palavra", "palavra": "umeboshi", "livro": bool}; quadros = {n: (inicio, fim)}"""
+    info = IDIOMAS[idioma]
+    linhas = "\n".join(f'{t["n"]}. ({t["fim"] - t["ini"]:.1f} s) {t["texto"]}' for t in takes)
+    return f"""You adapt a short vertical video (Instagram Reel) for a new presenter. Return ONLY JSON.
+
+The presenter: {avatar.get("quem") or avatar.get("descricao", "")}
+Target language: {info["lingua"]}.
+
+Original takes (speech transcribed from the source video, any language):
+{linhas}
+{texto_quadros(quadros)}
+Write, for EACH original take, in the same order:
+{regras_take(idioma, extras, avatar)}
+Mark each take with "cta": false, except the call to action.
+The only change at the end: if the LAST original takes are themselves a call to action or its lead-in (comment a
+word, get a guide by DM, follow first, "I gathered all my tips in a notebook"), do NOT write them: list their numbers
+in "cta_origem" (e.g. [9, 10]; [] when the original has none) and leave them out of "takes". Our call to action
+replaces them all. Then add ONE take at the end for the call to action, with "cta": true and the same fields.
+{regra_cta(cta, avatar)}
+
+{REGRAS_CONTEUDO}
+
+Also write "legenda_post": the Instagram post caption in {info["lingua"]} (2 to 4 short lines, one emoji at most per
+line). Its FIRST line is the same call to action (the app hides the other lines behind "more"); the next lines say
+what the video teaches.
+
+JSON format:
+{{"takes": [{{"n": 1, "fala": "...", "quadro": "...", "acao": "...", "quadro_fim": "...", "movimento": "...", "cta": false}}, ...],
+ "cta_origem": [], "legenda_post": "..."}}"""
+
+
+def frases_partidas(takes):
+    """⭐ (23/10) os takes cuja fala nao fecha a frase (nao termina em . ! ? ou reticencias) ou cujo seguinte comeca
+    continuando a frase (minuscula). Devolve os numeros dos takes."""
+    ruins = []
+    for i, t in enumerate(takes):
+        fala = (t.get("fala") or "").strip().rstrip('"”»\'')
+        prox = (takes[i + 1].get("fala") or "").strip() if i + 1 < len(takes) else ""
+        if not re.search(r"[.!?…]$", fala) or (prox[:1].islower()):
+            ruins.append(t["n"])
+    return ruins
+
+
+def takes_parados(takes):
+    """⭐⭐ (26/10, Eduardo) os takes com acao ("acao" nao vazia) em que a Tomiko termina como comecou (o "quadro_fim"
+    igual ao "quadro"): ela so' segura a tigela e fala. Devolve os numeros dos takes (o CTA fica de fora)."""
+    norm = lambda s: " ".join((s or "").lower().split())                  # noqa: E731
+    return [t["n"] for t in takes if not t.get("cta") and (t.get("acao") or "").strip()
+            and norm(t.get("quadro_fim")) == norm(t.get("quadro"))]
+
+
+def ler_adaptacao(texto, n_origem):
+    """A resposta do Claude -> {"takes": [{"n", "fala", "quadro", "movimento", "cta"}], "legenda_post"} ou None.
+    ⭐ (20/10) o CTA da fonte vira o nosso CTA, traduzido: entao vem 1 take por take de origem (os do CTA marcados
+    "cta") ou, sem CTA na fonte, 1 a mais no fim. Sem nenhum marcado, o ultimo e' o CTA.
+    ⭐⭐ (27/10, ordem do Eduardo: encurtar) os takes de CTA do FIM da fonte ("cta_origem") saem do roteiro: o nosso
+    take de CTA os substitui (antes viravam uma frase de fechamento da persona, enchimento antes do CTA).
+    ⛔ Fora do formato (sem JSON, takes faltando, campo vazio, cta_origem fora do fim) = None: quem chama tenta de novo."""
+    m = re.search(r"\{.*\}", texto or "", flags=re.S)
+    if not m: return None
+    try:
+        d = json.loads(m.group(0))
+    except ValueError:
+        return None
+    takes = d.get("takes")
+    co = d.get("cta_origem") or []
+    if not isinstance(co, list) or not all(isinstance(x, int) for x in co): return None
+    co = sorted(set(co))
+    if co and co != list(range(n_origem - len(co) + 1, n_origem + 1)) or len(co) >= n_origem: return None
+    n_origem -= len(co)
+    if not isinstance(takes, list) or len(takes) < n_origem: return None
+    takes = takes[:n_origem + 1]
+    saida = []
+    for i, t in enumerate(takes, 1):
+        fala = t.get("fala") if isinstance(t, dict) else None
+        mov = t.get("movimento") if isinstance(t, dict) else None
+        if not isinstance(fala, str) or not fala.strip() or not isinstance(mov, str) or not mov.strip(): return None
+        fala = re.sub(r"\s*[—–]\s*|\s+-\s+", ", ", fala.strip())      # ⛔ o Veo vocaliza o travessao
+        quadro, quadro_fim = t.get("quadro"), t.get("quadro_fim")
+        quadro = quadro.strip() if isinstance(quadro, str) else ""
+        acao = t.get("acao") if isinstance(t.get("acao"), str) else ""
+        saida.append({"n": i, "fala": fala, "quadro": quadro, "acao": " ".join(acao.split()),
+                      "quadro_fim": quadro_fim.strip() if isinstance(quadro_fim, str) and quadro_fim.strip() else quadro,
+                      "movimento": mov.strip(), "cta": t.get("cta") is True or i == n_origem + 1})
+    if not any(t["cta"] for t in saida): saida[-1]["cta"] = True
+    return {"takes": saida, "legenda_post": str(d.get("legenda_post") or "").strip(), "cta_origem": co}
+
+
+# ⭐ o tipo de acao do take (escopo das licoes de gesto): o verbo da 1a frase do "movimento"
+ACOES = {
+    "pegar": r"\b(pick|picks|picking|grab|grabs|take|takes)\b",
+    "levantar": r"\b(lift|lifts|raise|raises|hold|holds|show|shows|turn|turns)\b",
+    "apontar": r"\b(point|points|gesture|gestures|open|opens|bring|brings)\b",
+    "tocar": r"\b(touch|touches|rest|rests|lay|lays|tap|taps)\b",
+    "despejar": r"\b(pour|pours|sprinkle|sprinkles|scatter|scatters|spoon|spoons|slide|slides|dust|dusts)\b",
+}
+
+
+def tipo_acao(movimento):
+    """O tipo de acao do take ("pegar", "levantar"...) ou "" (sem verbo conhecido)."""
+    frase = re.split(r"(?<=[.!?])\s", (movimento or "").strip().lower())[0]
+    achados = [(m.start(), a) for a, rx in ACOES.items() for m in [re.search(rx, frase)] if m]
+    return min(achados)[1] if achados else ""
+
+
+def voz(avatar, idioma):
+    return (avatar.get("voz") or TOMIKO["voz"]).replace("{lingua}", IDIOMAS[idioma]["lingua"])
+
+
+def camera_prompt(camera=""):
+    """⭐ (22/10, Eduardo) a camera do take: travada (o padrao de antes) ou o movimento lido na fonte (leitura optica,
+    motor/instagram_qa.py: camera_da_fonte), suave e continuo, sem corte."""
+    if not (camera or "").strip(): return CAMERA
+    return (f"Single continuous shot, no cuts. The camera moves exactly like the source shot: {camera.strip()}; smooth "
+            f"and continuous from the first to the last frame, starting from the exact framing of the first frame.")
+
+
+def prompt_video(avatar, idioma, movimento, fala, muda=False, extras=(), camera=""):
+    """O prompt de um take: camera travada, quem (so' invariantes), a fala atribuida com o idioma e a voz, o gesto,
+    o silencio depois da fala e o audio. `extras` = frases das licoes ativas do tipo "prompt" (no maximo 3), antes
+    do audio. ⛔ Com a ancora no quadro, a roupa e o cenario NAO sao descritos de novo: a
+    prosa compete com a imagem e as vezes ganha. ⛔ "(no subtitles)" logo depois da fala: a legenda queimada e' o
+    defeito mais relatado do Veo com dialogo, e a restricao rende mais colada nela."""
+    partes = [camera_prompt(camera), avatar.get("prefixo") or TOMIKO["prefixo"]]
+    if fala.strip() and pov(avatar):
+        partes += [genero(f'{POV_ENTRADA} in {IDIOMAS[idioma]["lingua"]}, in {voz(avatar, idioma)}: ', avatar)
+                   + f'"{fala.strip()}" (no subtitles)', genero(movimento.strip(), avatar), OBJETOS_FIXOS,
+                   genero(POV_APARECE, avatar), genero(POV_FALA_UMA_VEZ, avatar)]
+        if muda: partes.append(MUDANCA_DURANTE_A_FALA)
+    elif fala.strip():
+        partes += [genero(f'{ENTRADA_DA_FALA} says in {IDIOMAS[idioma]["lingua"]}, in {voz(avatar, idioma)}: ', avatar)
+                   + f'"{fala.strip()}" (no subtitles)', genero(movimento.strip(), avatar), OBJETOS_FIXOS,
+                   genero(SEMPRE_APARECE, avatar),
+                   genero(FALA_UMA_VEZ, avatar)]
+        if muda: partes.append(MUDANCA_DURANTE_A_FALA)
+    else:
+        partes += [genero(movimento.strip(), avatar), genero("She stays silent.", avatar)]
+    partes += [e.strip() for e in extras if e.strip()]
+    partes += [genero("Audio: only her narrating voice and quiet natural sounds of the place, no music." if pov(avatar)
+                      else "Audio: only her voice and quiet room tone, no music.", avatar), SEM_TEXTO_TELA]
+    return " ".join(p for p in partes if p)
+
+
+def prompt_cena(avatar, cena):
+    """A imagem 9:16 de um comodo do lar, com a foto do avatar como referencia."""
+    return (f"Vertical 9:16 photo, smartphone UGC style. Using the reference image for the person: "
+            f"{avatar.get('descricao', '').strip()} {cena.strip()} Upper body visible, looking at the camera. "
+            f"No text, no captions, no logos, no watermark.")
+
+
+def prompt_quadro(avatar, lugar, quadro, novo_lugar=False, cta=False, ancora=False):
+    """O quadro de abertura de UM take. Refs: 1a = o quadro do video de origem naquele take, 2a = a foto do avatar.
+    ⛔ O angulo, a distancia e a composicao vem SO' do video de origem (cada Reel tem os seus). O comodo entra so'
+    pelo TEXTO: a imagem dele como referencia domina o quadro e poe o avatar de corpo inteiro, longe da camera.
+    ⭐ Maos e itens EM REPOUSO: o quadro do meio do trecho de origem pode pegar um gesto no ar, e o take comeca e
+    termina nesse quadro (com a jarra inclinada nas duas pontas, o gesto reversivel fica impossivel)."""
+    return genero(f"Recreate the shot of the FIRST reference image: the same camera angle, the same camera distance and "
+            f"zoom, the same framing and crop, the person at the SAME size in the frame (a close-up of head, chest and "
+            f"hands stays a close-up: never a full-body or wide shot), and the same kind of items in the same places of the frame, as they are "
+            f"at the START of the step. ⭐ The framing comes ONLY from the FIRST reference, never from the SECOND: an "
+            f"overhead close-up of a bowl stays a close shot of the bowl; a tight close-up of the face and the food "
+            f"stays that tight. {POV_NO_QUADRO if pov(avatar) else SEMPRE_NO_QUADRO} {espaco_texto(avatar, cta)} Items "
+            f"at the START of the step (nothing being poured yet). Each item and tool keeps the SAME orientation and "
+            f"direction as in the FIRST reference (a carrot lying left to right stays left to right, the knife blade "
+            f"crosses it at the same angle, a jar handle points the same side), and whatever is already cut or done "
+            f"there stays done. "
+            + (f"The hands and sleeves are those of the person of the SECOND reference image: {maos(avatar)} Nothing "
+               f"of the first reference's person stays: not the skin, the sleeves or the gloves. " if pov(avatar) else
+               f"Replace the person with HER. The SECOND reference image shows HER FACE (a close crop, or a sheet of "
+               f"several views of the same face): her face "
+               f"matches it EXACTLY (the same face shape, eyes, nose, mouth, wrinkles and age: never older, heavier "
+               f"or different), but it is never used for her pose, position, size or the background. Her "
+               f"pose, position and gestures are those of the person of the FIRST reference; her clothes are these: "
+               f"{avatar.get('descricao', '').strip()} Nothing of the first reference's person stays: not the face, "
+               f"the hair, the headwear, the clothes, the glasses, the jewelry or any accessory (she wears glasses only "
+               f"if her face crop shows them). ")
+            + (f"The scene takes place in this setting (it replaces what is around and behind the items in the FIRST "
+               f"reference, keeping its camera angle, framing and items): {lugar.strip()} Every fixture the step uses in "
+               f"the FIRST reference stays, at the same place of the frame (an open oven, a stove, a sink, a grill, a "
+               f"garden bed): the setting changes around it, never removes it. " if novo_lugar else
+               f"Keep the kind of place and setting of the FIRST reference "
+               f"image (what is around and behind the items: a kitchen stays a kitchen, a garden bed stays a garden bed, a "
+               f"chicken coop stays a chicken coop), restyled as part of {lugar.strip()} ")
+            # ⭐⭐ (28/10, Eduardo: "3 pessoas diferentes? voce ta ancorando a imagem do rosto dela?") cada quadro
+            #    era gerado sozinho, so' com o rosto: cada take saia uma Tomiko. Agora vai junto um quadro JA FEITO deste
+            #    video (o take anterior): a mesma mulher em todos os takes
+            + ("The THIRD reference image is HER in an earlier shot of this same video: the same woman, with the same "
+               "face, hair, skin, age, blouse and apron (never a different woman); only her pose and the place come "
+               "from the FIRST reference. " if ancora and not pov(avatar) else "")
+            + f"{ITENS_DO_TEXTO}{quadro.strip()} Vertical 9:16 photo, smartphone UGC style. "
+            f"No text, no captions, no logos, no watermark.", avatar)
+
+
+def prompt_reenquadrar(avatar, quadro="", cta=False, rosto=False):
+    """⭐⭐ (22/10, Eduardo: "respeite mais os angulos e o enquadramento do video original") a 2a passada do quadro de
+    abertura. Refs: 1a = o quadro da fonte, 2a = o quadro ja' gerado (a Tomiko no lugar dela). ⛔ Com a foto do avatar
+    como referencia, o gerador puxa a composicao do retrato (plano medio) e ignora o close da fonte; reenquadrar uma
+    imagem que ja' tem a pessoa e o lugar certos e' o que ele faz bem (o quadro final ja' acertava assim)."""
+    return genero(f"Reframe the SECOND image so its framing matches the FIRST image exactly: the same camera angle "
+                  f"(eye level, overhead or low), the same distance and zoom, the same crop. The framing comes ONLY from "
+                  f"the FIRST image, even when it is much closer than the SECOND: an overhead close-up of a bowl becomes "
+                  f"a close shot of the bowl; a tight close-up of the face and the food held near the lens stays that "
+                  f"tight. "
+                  + (f"{POV_NO_QUADRO} " if pov(avatar) else
+                     f"{SEMPRE_NO_QUADRO} Her face stays visible (the food is held "
+                     f"where the FIRST image holds it, never covering her face). Her pose, body angle and position in the "
+                     f"frame follow the person of the FIRST image, not the SECOND. ")
+                  + f"{espaco_texto(avatar, cta)} Every dish, bowl and tray keeps resting "
+                  f"on the table or counter exactly as in the FIRST image, with the surface visible under it: nothing "
+                  f"floats in the air. Everything else comes from the SECOND "
+                  + ("image: the same hands and sleeves, the same place and light, the same items. " if pov(avatar) else
+                     "image: the same woman, her face, hair, blouse and apron, the same place and light, the same items. ")
+                  + f"{ITENS_DO_TEXTO}{quadro.strip()} Nothing of the FIRST image's person stays (not the glasses or "
+                  f"accessories either). "
+                  # ⭐⭐ (27/10) o recorte do rosto vai tambem no reenquadramento: nos closes o gerador redesenhava o rosto
+                  #    (mais velha, mais cheia)
+                  + ("The THIRD reference image shows her face (a close crop, or a sheet of several views of the same "
+                     "face): her face matches it EXACTLY (the same face "
+                     "shape, eyes, nose, mouth, wrinkles and age: never older, heavier or different). " if rosto else "")
+                  + f"Vertical 9:16 photo, smartphone UGC "
+                  f"style. No text, no captions, no logos, no watermark.", avatar)
+
+
+def prompt_quadro_fim(avatar, lugar, quadro_fim, camera=""):
+    """O quadro FINAL de um take: o fim do mesmo passo no video de origem, com a mesma pessoa, lugar e luz do quadro
+    de abertura. Refs: 1a = o quadro do video de origem no FIM do trecho, 2a = o quadro de abertura ja' gerado,
+    3a = a foto do avatar. ⭐⭐ (19/10, ordem do Eduardo) com o mesmo quadro nas duas pontas o Veo nao completa a
+    acao (o sal nao cai no liquidificador): o take vai do quadro de abertura a este, e a acao acontece de verdade."""
+    # (27/10, Eduardo: "voce nao variou a ancoragem") com a camera parada o quadro final tinha o enquadramento do
+    #    FIM DA FONTE (outro plano, outro momento: o liquidificador de volta na mao): o Veo fazia uma fusao no fim do
+    #    take. Agora, sem camera andando, o enquadramento e' o do quadro de abertura e a fonte so' mostra o resultado.
+    if not (camera or "").strip():
+        return genero(f"Keep EXACTLY the camera angle, distance, framing and crop of the SECOND reference image (the opening "
+                      f"frame of this same shot): the camera did not move, the place and every fixture stay where they are. "
+                      f"Change ONLY what the action of the step changed, as this text says (when the FIRST reference, the "
+                      f"end of the step in the source video, shows another moment or another shot, this text wins): "
+                      f"{ITENS_DO_TEXTO}{quadro_fim.strip()} "
+                      + (f"{POV_NO_QUADRO} The hands and sleeves are those of the THIRD reference image: {maos(avatar)} "
+                         if pov(avatar) else
+                         f"The person is the same woman of the SECOND reference, in the same pose; the THIRD "
+                         f"reference shows her face (a crop or several views), only for who she is (face and hair). ")
+                      + f"It is part of {lugar.strip()} Vertical 9:16 photo, smartphone UGC style. "
+                      f"No text, no captions, no logos, no watermark.", avatar)
+    return genero(f"Recreate the shot of the FIRST reference image, which is the END of the same step: the same camera "
+                  f"angle, distance, framing and crop. "
+                  + (f"The camera MOVED during this step ({camera.strip()}): the framing comes ONLY from the FIRST "
+                     f"reference, even when it is much closer, wider or shifted than the SECOND. "
+                     f"{POV_NO_QUADRO if pov(avatar) else SEMPRE_NO_QUADRO} "
+                     if (camera or "").strip() else "")
+                  + f"Everything else stays exactly as in the SECOND reference image (the "
+                  f"opening frame of this same shot): the same person, the same clothes, the same place and light, the same "
+                  f"items in the same places, except what the action changed: {ITENS_DO_TEXTO}{quadro_fim.strip()} "
+                  + (f"{POV_NO_QUADRO} The hands and sleeves are those of the THIRD reference image: {maos(avatar)} "
+                     if pov(avatar) else
+                     f"The person is the same woman of the SECOND reference (her clothes: "
+                     f"{avatar.get('descricao', '').strip()}); the THIRD reference shows her face (a crop or several "
+                     f"views), only for who she is (face and hair). Her pose and position follow the person of the FIRST "
+                     f"reference. "
+                     f"Nothing of the first reference's person stays: not the face, the hair, the headwear, the clothes, "
+                     f"the glasses or any accessory. ")
+                  + f"It is part of {lugar.strip()} Vertical 9:16 photo, smartphone UGC style. "
+                  f"No text, no captions, no logos, no watermark.", avatar)
+
+
+def proxima_cena(cenas, usos):
+    """O comodo do proximo video: entre as aprovadas, a menos usada; no empate, a que esta' ha' mais tempo sem uso.
+    usos = {cena_id: [timestamps]}. ⛔ Um comodo por video; a variacao e' de video para video."""
+    aprovadas = [c for c in cenas if c.get("estado") == "aprovada"]
+    if not aprovadas: return None
+    return min(aprovadas, key=lambda c: (len(usos.get(c["id"], [])), max(usos.get(c["id"], [0]))))["id"]
+
+
+def _autoteste():
+    ok = True
+
+    def caso(nome, cond):
+        nonlocal ok; print(("  OK  " if cond else "  ERRO"), nome); ok &= bool(cond)
+
+    ws, t = [], 0.0
+    frase = ("Você sabia que o gengibre fortalece a digestão de manhã. Minha avó fazia um chá com casca de "
+             "limão e mel para o inverno inteiro. E ninguém da família ficava sem energia para trabalhar na roça "
+             "de café de Londrina. Comente umeboshi, e eu te mando a receita").split()
+    for w in frase:
+        ws.append({"w": w, "ini": t, "fim": t + 0.38}); t += 0.42
+    tk = cortar(ws, "pt")
+    caso("cortar: gera varios takes", len(tk) >= 3)
+    caso("⛔ nenhum take passa de 8 s", all(x["fim"] - x["ini"] <= MAX_S_TAKE + 0.01 for x in tk))
+    caso("⛔ nenhum take passa de 18 palavras", all(len(x["texto"].split()) <= 18 for x in tk))
+    caso("⛔ nenhum take termina em palavra fraca", all(_limpa(x["texto"].split()[-1]) not in FRACAS["pt"] for x in tk[:-1]))
+    caso("⭐ no limite, o corte recua para o fim da frase", all(x["texto"].endswith(".") for x in tk[:-1]))
+    curtas = [{"w": w, "ini": i * 0.4, "fim": i * 0.4 + 0.35} for i, w in enumerate("Uma frase. Outra frase. Mais uma.".split())]
+    caso("⭐ frases curtas se juntam num take so'", len(cortar(curtas, "pt")) == 1)
+    ped = pedido_adaptacao([{"n": 1, "ini": 0, "fim": 3, "texto": "x"}], "pt", {}, {"tipo": "bio"})
+    caso("⭐ pedido: a fala e' a do original (nada acrescentado); (27/10) o CTA do fim da fonte sai (cta_origem) e o "
+         "nosso o substitui; o CTA na 1a linha da legenda do post",
+         "sentence by sentence" in ped and "warm closing line" not in ped and '"cta_origem"' in ped
+         and "add ONE take at the end" in ped and "Only the wording changes" in ped and "Its FIRST line is the same call" in ped)
+    caso("⭐ frase partida entre takes: acusa o take que nao fecha e o que continua",
+         frases_partidas([{"n": 1, "fala": "Alimentam as bactérias boas"}, {"n": 2, "fala": "do intestino."},
+                          {"n": 3, "fala": "Fica uma delícia!"}, {"n": 4, "fala": "Quer?"}]) == [1]
+         and frases_partidas([{"n": 1, "fala": "Uma frase."}, {"n": 2, "fala": "outra frase."}]) == [1]
+         and "COMPLETE sentences" in regras_take("pt"))
+    q3 = texto_quadros({1: ("o1.jpg", "m1.jpg", "m2.jpg", "f1.jpg")})
+    caso("⭐ (26/10) o roteiro le a sequencia do take, do inicio ao fim, e a acao entra no JSON",
+         "start o1.jpg ; then m1.jpg ; then m2.jpg ; end f1.jpg" in q3 and "open EVERY one" in q3
+         and '"acao": "..."' in ped and "holding the item and talking is NEVER the movement" in regras_take("pt"))
+    lido_a = ler_adaptacao(json.dumps({"takes": [
+        {"fala": "Bata.", "quadro": "A bowl and a whisk.", "acao": "whisks  the water", "quadro_fim": "a bowl and a whisk.",
+         "movimento": "m"},
+        {"fala": "Mostre.", "quadro": "The mousse.", "acao": "", "movimento": "m"},
+        {"fala": "Polvilhe.", "quadro": "A bowl.", "acao": "sprinkles cocoa", "quadro_fim": "Cocoa over the bowl.",
+         "movimento": "m"},
+        {"fala": "Escreva.", "quadro": "The book.", "acao": "holds the book", "movimento": "m", "cta": True}]}), 3)
+    caso("⭐ (26/10) take com acao em que ela termina como comecou e' acusado (o CTA e o take sem acao, nao)",
+         lido_a["takes"][0]["acao"] == "whisks the water" and takes_parados(lido_a["takes"]) == [1])
+    linha = "Me segue, senão eu não consigo te mandar as cento e cinquenta receitas. Comenta receitas aqui."
+    caso("⭐ (27/10) CTA fixo da Tomiko: promessa concreta e palavra unica, palavra por palavra na regra",
+         cta_fala({"persona": "tomiko"}) == linha
+         and linha in regra_cta({"tipo": "palavra", "palavra": "receitas"}, {"persona": "tomiko"})
+         and cta_fala({"persona": "tomiko"}, {"tipo": "palavra", "palavra": "eu quero"}).endswith("Comenta eu quero aqui.")
+         and cta_fala({"persona": "tomiko"}, {"tipo": "bio"}) == ""
+         and "uva-passa" in regras_take("pt", avatar={"persona": "tomiko"})
+         and cta_fala({"persona": "beppe"}) == "" and TOMIKO["cta"] == "receitas"
+         and "cuaderno" in cta_fala({"persona": "fray"}) and "enviártela" not in cta_fala({"persona": "fray"})
+         and promessa({"persona": "tomiko"}) == "TE MANDO AS 150 RECEITAS" and promessa({"persona": "beppe"}) == "")
+    d5 = [{"fala": f"f{i}.", "quadro": "q", "movimento": "m", "cta": i == 4} for i in (1, 2, 3, 4)]
+    l5 = ler_adaptacao(json.dumps({"takes": d5, "cta_origem": [4, 5]}), 5)
+    caso("⭐ (27/10) encurtar: os takes de CTA do fim da fonte saem, o nosso CTA os substitui",
+         l5 and len(l5["takes"]) == 4 and [t["cta"] for t in l5["takes"]] == [False, False, False, True]
+         and l5["cta_origem"] == [4, 5])
+    caso("⛔ (27/10) cta_origem fora do fim da fonte = refaz",
+         ler_adaptacao(json.dumps({"takes": d5, "cta_origem": [2]}), 5) is None
+         and ler_adaptacao(json.dumps({"takes": d5, "cta_origem": "4"}), 5) is None)
+    caso("⭐ (27/10) o alto livre so' no take do CTA; os outros seguem o enquadramento da fonte",
+         "top quarter" in prompt_quadro(TOMIKO, "x", "q", cta=True) and "top quarter" not in prompt_quadro(TOMIKO, "x", "q")
+         and "top quarter" in prompt_reenquadrar(TOMIKO, cta=True) and "never his hands" in prompt_quadro(FRAY, "x", "q", cta=True))
+    pf0 = prompt_quadro_fim(TOMIKO, "kitchen", "The batter fills the pan, topped with seeds.")
+    caso("⭐⭐ (27/10) quadro final sem camera andando: o enquadramento do quadro de abertura; o texto vence a fonte",
+         "Keep EXACTLY the camera angle" in pf0 and "this text wins" in pf0 and "Recreate the shot of the FIRST" not in pf0
+         and "Recreate the shot of the FIRST" in prompt_quadro_fim(TOMIKO, "kitchen", "x", camera="a slow push-in"))
+    caso("⭐ (27/10) o ambiente do Reel nao apaga o forno do passo", "never removes it" in prompt_quadro(TOMIKO, "x", "q", True))
+    caso("⭐⭐ (27/10) o texto manda no que a comida e' (uva-passa, nao o blueberry da fonte); oculos da fonte nunca passam",
+         ITENS_DO_TEXTO in prompt_quadro(TOMIKO, "x", "q") and ITENS_DO_TEXTO in prompt_reenquadrar(TOMIKO)
+         and ITENS_DO_TEXTO in prompt_quadro_fim(TOMIKO, "k", "x") and "the glasses" in prompt_quadro(TOMIKO, "x", "q")
+         and "glasses" in prompt_reenquadrar(TOMIKO))
+    pq0 = prompt_quadro(TOMIKO, "x", "q")
+    caso("⭐⭐ (27/10) sem Tomiko engessada: a pose, a posicao e a distancia sao as da pessoa da fonte; a foto so' da' o rosto",
+         "the same pose, body angle" in pq0 and "shows HER FACE" in pq0 and "never used for her pose" in pq0
+         and "wider and higher" not in pq0 and "WHOLE face is always clearly visible" in pq0 and "never cut by" in pq0
+         and "matches it EXACTLY" in prompt_reenquadrar(TOMIKO, rosto=True) and "THIRD" not in prompt_reenquadrar(TOMIKO)
+         and "not the SECOND" in prompt_reenquadrar(TOMIKO) and "shows her face" in prompt_quadro_fim(TOMIKO, "k", "x"))
+    caso("⭐⭐ (28/10) a mesma Tomiko em todos os takes: o quadro leva um take anterior ja' feito como ancora",
+         "earlier shot of this same video" in prompt_quadro(TOMIKO, "x", "q", ancora=True)
+         and "earlier shot" not in prompt_quadro(TOMIKO, "x", "q") and "earlier shot" not in prompt_quadro(FRAY, "x", "q", ancora=True))
+    caso("⭐⭐ (27/10) CTA: sem seguir, ela nao consegue mandar", "senão eu não consigo" in cta_fala({"persona": "tomiko"})
+         and "si no, no puedo" in cta_fala({"persona": "fray"}))
+    d3 = [{"fala": f"f{i}", "quadro": "q", "movimento": "m", "cta": i >= 2} for i in (1, 2, 3)]
+    l3 = ler_adaptacao(json.dumps({"takes": d3}), 3)
+    caso("⭐ ler_adaptacao: CTA da fonte = os takes marcados, sem take a mais", [t["cta"] for t in l3["takes"]] == [False, True, True])
+    l4 = ler_adaptacao(json.dumps({"takes": [{**x, "cta": False} for x in d3]}), 3)
+    caso("ler_adaptacao: nenhum marcado, o ultimo e' o CTA", [t["cta"] for t in l4["takes"]] == [False, False, True])
+    caso("todas as palavras entram", sum(len(x["texto"].split()) for x in tk) == len(frase))
+
+    av = {"quem": TOMIKO["quem"], "prefixo": TOMIKO["prefixo"], "voz": TOMIKO["voz"]}
+    ped = pedido_adaptacao(tk, "pt", av, {"tipo": "palavra", "palavra": "Umeboshi", "livro": True})
+    caso("pedido: palavra minuscula com virgula", '"umeboshi,"' in ped)
+    caso("⭐ pedido: livro no CTA ja' na mao, fechado, sem pegar da mesa", "ALREADY holds her closed book" in ped
+         and "picks up" not in ped)
+    caso("⭐ pedido: fala medida em tempo (pt = 14 palavras, ~5 s)", "At most 14 words, speakable in about 5 seconds" in ped)
+    caso("⭐ pedido: fala no idioma popular, com os exemplos do pt-BR", "everyday spoken Brazilian Portuguese" in ped
+         and '"arroz deixado de molho", not "arroz demolhado"' in ped
+         and "everyday spoken German" in regras_take("de") and "demolhado" not in regras_take("de"))
+    caso("⭐ pedido: ingrediente, quantidade, temperatura e tempo nunca saem da fala",
+         "Keep every ingredient, quantity, temperature and time" in ped)
+    caso("⭐ pedido: a acao COMPLETA como no video de origem, do quadro ao quadro_fim, com a mao e o mesmo substantivo",
+         '"As she speaks,"' in ped and '"By the last word,"' in ped and "completely, exactly as the source" in ped
+         and "never a half gesture" in ped and '"quadro_fim"' in ped and "SAME noun" in ped and "Never pouring" not in ped)
+    lq = ler_adaptacao(json.dumps({"takes": [{"fala": "a", "quadro": "Q1", "quadro_fim": "Q2", "movimento": "m"},
+                                             {"fala": "b", "quadro": "Q3", "movimento": "m"}]}), 1)
+    caso("ler: quadro_fim lido; sem ele, vale o quadro (passo sem acao)",
+         lq["takes"][0]["quadro_fim"] == "Q2" and lq["takes"][1]["quadro_fim"] == "Q3")
+    pf = prompt_quadro_fim(WENDELIN, "garden", "the salt is inside the blender jar", camera="a slow push-in")
+    caso("⭐ mundo: o universo da ficha (Beppe no sitio capixaba); sem ficha, o texto do comodo",
+         "Espírito Santo" in mundo({"persona": "beppe"}) and mundo({}, "a kitchen") == "a kitchen"
+         and mundo({"persona": "beppe", "mundo": "outro"}) == "outro")
+    pq = prompt_quadro(BEPPE, mundo({"persona": "beppe"}), "Seed potatoes in a black bucket.")
+    caso("⭐ o lugar do quadro vem do video-fonte, refeito no mundo do avatar (nao o comodo sorteado)",
+         "Keep the kind of place and setting of the FIRST reference" in pq and "restyled as part of his family farm" in pq
+         and "Change only the setting" not in pq)
+    caso("⭐ quadro final: enquadramento do fim da origem, o resto do quadro de abertura, e o resultado da acao",
+         "END of the same step" in pf and "SECOND reference image (the" in pf and "the salt is inside the blender jar" in pf
+         and "THIRD reference" in pf and " she " not in pf)
+    caso("pedido: regra de cura", "Never promise to cure" in ped)
+
+    resp = "aqui: " + json.dumps({"takes": [{"n": i, "fala": f"Fala {i} — com travessão", "movimento": "She smiles."}
+                                            for i in range(1, len(tk) + 2)], "legenda_post": "Receita 🍵"})
+    a = ler_adaptacao(resp, len(tk))
+    caso("ler_adaptacao: le o JSON no meio do texto", a and len(a["takes"]) == len(tk) + 1)
+    caso("⛔ ler_adaptacao: travessao sai da fala", a and all("—" not in x["fala"] for x in a["takes"]))
+    caso("ler_adaptacao: ultimo take e' o CTA", a and a["takes"][-1]["cta"] and not a["takes"][0]["cta"])
+    caso("⛔ ler_adaptacao: take faltando = None", ler_adaptacao(json.dumps({"takes": []}), 3) is None)
+    caso("⛔ ler_adaptacao: lixo = None", ler_adaptacao("sem json", 1) is None)
+
+    p = prompt_video(av, "pt", "She lifts a jar of umeboshi.", "Essa conserva atravessa o inverno.")
+    caso("⭐ prompt_video: a camera travada abre o prompt", p.startswith(CAMERA))
+    caso("⭐ prompt_video: fala atribuida, com idioma, aspas e (no subtitles) colado nela",
+         'then says in Brazilian Portuguese, in the warm' in p and '"Essa conserva atravessa o inverno." (no subtitles)' in p)
+    caso("⭐ prompt_video: gesto depois da fala, silencio depois e texto limpo no fim",
+         p.index("She lifts") > p.index("(no subtitles)") and "stays silent" in p and p.endswith(SEM_TEXTO_TELA))
+    caso("prompt_video: o avatar so' por invariantes", "same face, hands" in p and "apron" not in p)
+    caso("prompt_video: voz no idioma", "Brazilian Portuguese with a soft Japanese-Brazilian accent" in p)
+    caso("⛔ prompt_video: sem 'no text, no logos' (apaga rotulos)", "no logos" not in p)
+    caso("⭐ quadros diferentes: a mudanca acontece durante a fala", "in step with the speech" in prompt_video(av, "pt", "x", "y", muda=True)
+         and "in step with the speech" not in p)
+    caso("prompt_video sem fala", "She stays silent." in prompt_video(av, "en", "She lifts the cup.", "")
+         and "says" not in prompt_video(av, "en", "She lifts the cup.", ""))
+    pe = prompt_video(av, "pt", "She lifts a jar.", "Fala.", extras=["Her hands stay with five fingers.", " "])
+    caso("⭐ prompt_video: licoes do tipo prompt antes do audio",
+         pe.index("Her hands stay with five fingers.") < pe.index("Audio:") and "  " not in pe)
+    caso("⭐ regras_take: licoes no fim; sem licao, o texto de sempre", regras_take("pt", "- LICAO X").endswith("- LICAO X")
+         and regras_take("pt", "  ") == regras_take("pt") and "LICAO X" in pedido_adaptacao(tk, "pt", av, {}, "- LICAO X"))
+    caso("tipo_acao: o verbo da 1a frase", tipo_acao("As she speaks, both hands lift the loaf. After the line, she "
+                                                     "sets it back.") == "levantar"
+         and tipo_acao("She sprinkles a pinch of salt and presses the lid.") == "despejar" and tipo_acao("She smiles.") == "")
+    caso("voz em ingles", "American English" in voz(av, "en"))
+    caso("⭐ personas: Tomiko e Beppe (pt), Cuca (es), Wendelin (de) e Fray Tomás (es-es), cada uma com 8 comodos, CTA e genero",
+         {k: (p["idioma"], p["cta"], p["genero"], len(p["cenas"])) for k, p in PERSONAS.items()}
+         == {"tomiko": ("pt", "receitas", "f", 8), "beppe": ("pt", "livro", "m", 8), "cuca": ("es", "libro", "f", 8),
+             "wendelin": ("de", "Buch", "m", 8), "fray": ("es-es", "huerta", "m", 8)}
+         and all(len({c[0] for c in p["cenas"]}) == 8 for p in PERSONAS.values()))
+    pw = prompt_video(WENDELIN, "de", "As she speaks, her right hand lifts the jar.", "Komm her, ich zeige es dir.")
+    caso("⭐ genero: o monge vira 'he/his' no texto nosso, e a fala em alemao fica intacta",
+         "he stays silent, looking at the camera" in pw and "As he speaks, his right hand" in pw and '"Komm her, ich zeige es dir."' in pw
+         and "only his voice" in pw and "She " not in pw)
+    caso("genero: as regras do take do monge no masculino; as da Tomiko como estavam",
+         '"As he speaks,"' in regras_take("de", avatar=WENDELIN) and '"As she speaks,"' in regras_take("pt", avatar=TOMIKO)
+         and regras_take("pt", avatar=TOMIKO).startswith(regras_take("pt")))
+    pd = pedido_adaptacao(tk, "de", WENDELIN, {"tipo": "palavra", "palavra": "Buch"})
+    pb = pedido_adaptacao(tk, "pt", BEPPE, {"tipo": "palavra", "palavra": "livro"})
+    caso("⭐ Beppe: pt popular, no masculino ('the way a Brazilian old man talks') e o colono como apresentador",
+         "everyday spoken Brazilian Portuguese" in pb and "Brazilian old man" in pb and "grandmother" not in pb
+         and '"As he speaks,"' in pb and "Italian-Brazilian farmer" in pb and '"livro,"' in pb)
+    caso("⭐ pedido em alemao: popular, sem promessa de cura e com o CTA na lingua", "everyday spoken German" in pd
+         and '"heilt"' in pd and '"buch,"' in pd)
+    caso("pedido em espanhol mexicano", "Mexican Spanish" in pedido_adaptacao(tk, "es", CUCA, {}) and '"licuadora"' in pedido_adaptacao(tk, "es", CUCA, {}))
+    caso("retrato-ancora: a pessoa da ficha no primeiro comodo", CUCA["descricao"] in prompt_retrato(CUCA)
+         and CUCA["cenas"][0][2] in prompt_retrato(CUCA) and "No text" in prompt_retrato(CUCA))
+    pc = prompt_cena({"descricao": TOMIKO["descricao"]}, TOMIKO["cenas"][0][2])
+    caso("prompt_cena: 9:16 + referencia + comodo", pc.startswith("Vertical 9:16") and "reference image" in pc
+         and "fermentation jars" in pc)
+    caso("Tomiko: 8 comodos com ids unicos", len({c[0] for c in TOMIKO["cenas"]}) == 8)
+
+    cenas = [{"id": "a", "estado": "aprovada"}, {"id": "b", "estado": "aprovada"}, {"id": "c", "estado": "pronta"}]
+    caso("rodizio: a nunca usada primeiro", proxima_cena(cenas, {"a": [10]}) == "b")
+    caso("rodizio: empate vai na usada ha' mais tempo", proxima_cena(cenas, {"a": [10], "b": [20]}) == "a")
+    caso("⛔ rodizio: so' aprovadas", proxima_cena(cenas, {"a": [1], "b": [1, 2]}) == "a"
+         and proxima_cena([{"id": "c", "estado": "pronta"}], {}) is None)
+    print("\nautoteste:", "PASSOU" if ok else "FALHOU")
+    return ok
+
+
+if __name__ == "__main__":
+    import sys
+    if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.exit(0 if _autoteste() else 1)

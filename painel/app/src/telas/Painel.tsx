@@ -6,14 +6,14 @@ import { BarraCota, CardOportunidade, Vazio } from "../componentes/base";
 import { link } from "../rota";
 import { nomePersona } from "../textos";
 
-function Atividade({ linhas }: { linhas: Linha[] }) {
+export function Atividade({ linhas, vazio = "Nada aconteceu desde que o painel abriu." }: { linhas: Linha[]; vazio?: string }) {
   const visiveis = linhas.slice(0, 8);
-  if (!visiveis.length) return <p className="meta feed-vazio">Nada aconteceu desde que o painel abriu.</p>;
+  if (!visiveis.length) return <p className="meta feed-vazio">{vazio}</p>;
   return (
     <ul className="feed">
       {visiveis.map((l, i) => {
         const ruim = /⚠|falhou|parou|acabou/i.test(l.texto);
-        const bom = /terminou|reescreveu|gravadas|passaram|canal\(is\) novo/i.test(l.texto);
+        const bom = /terminou|reescreveu|gravadas|passaram|canal\(is\) novo|pronto|enviada/i.test(l.texto);
         return (
           <li key={i}>
             <time>{l.hora}</time>
