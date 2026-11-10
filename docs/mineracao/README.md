@@ -52,7 +52,7 @@ inédita ao nosso público, desde que ninguém a tenha trazido ainda.
 4. **Curadoria em lote:** juntar **4 ou 5 links** e levar a uma conversa fixa do Claude que já tem o estilo da conta
    e os guias que vendemos. A pergunta é qual ideia tem mais chance de **viralizar e vender**, e qual detalhe fica
    para o guia.
-5. **Roteiro:** copy **nova** na voz da persona, a partir da ideia escolhida. Daí em diante segue a produção
+5. **Roteiro:** copy **nova** na voz da persona, a partir da ideia escolhida. O molde está em [modelagem.md](modelagem.md). Daí em diante segue a produção
    ([../pipeline-tomiko-limpeza.md](../pipeline-tomiko-limpeza.md)).
 6. **Registro:** anotar a palavra, a classe e os números do Reel fonte. Depois de publicar, anotar a nossa entrega,
    para descobrir quais classes rendem mais.
