@@ -63,6 +63,15 @@ resposta direta que trabalham assim, afiando ponto por ponto da fala.
 - **Fala de vídeo de vendas (Benson, criador do formato VSL):** frases curtas, uma ideia por frase, cada uma
   abrindo uma curiosidade ou um medo que a seguinte resolve.
 
+**Outras alavancas da mesma passada (Eduardo, 10/11).** A lista não fecha nessas duas; para cada frase da fala,
+testar qual alavanca cabe:
+
+- **Medo oculto:** o perigo que a pessoa já vive sem perceber ("você respira isso toda vez que toma banho").
+- **FOMO (medo de ficar de fora):** todo mundo já sabe ou já faz, menos ela; ou a chance acaba.
+- **Desejo oculto do público daquele tema:** o que a pessoa quer de verdade por trás da tarefa (a casa que a
+  visita elogia, a sensação de dar conta), não só "tirar a mancha".
+- **Mecanismo único** e **curiosidade encadeada**, descritos acima.
+
 ## 4. A estrutura da fala (38 s)
 
 | Tempo | Bloco | Fala |
