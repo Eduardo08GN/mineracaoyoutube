@@ -53,6 +53,11 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
 
   Motivo: o contraste é a prova de que o mecanismo funciona. Se quem assiste não vê a diferença sem esforço, a
   receita parece fraca. Take com antes e depois parecidos, ou com limpeza gradual e apagada, é reprovado e refeito.
+- **Copy visual (10/11), vale para qualquer nicho:** a imagem também é copy, e a meta é reter a atenção.
+  - **Sintoma no máximo de intensidade.** A dor aparece pronunciada: mofo cobrindo a parede de cima a baixo, nunca
+    um mofo pequeno e comum. Sintoma tímido é oportunidade perdida de hook e de retenção, e reprova o take.
+  - **A persona reforça o hook nos 3 primeiros segundos:** olho arregalado, cara assustada, apontando para o
+    problema, fala veemente (ordem direta, "agora"). Sintoma extremo, expressão e frase entram juntos no 1º segundo.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
