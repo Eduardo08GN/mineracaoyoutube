@@ -38,6 +38,8 @@ O painel já vai montado em `painel/app/dist`. Para mexer nele: `cd painel/app &
 - [docs/referencia-bigstepsmedia.md](docs/referencia-bigstepsmedia.md) — a fórmula e o pipeline dos canais de avatar
 - [docs/fontes.md](docs/fontes.md) — quem olhar no X e os números de referência
 - [docs/apostas.md](docs/apostas.md) — as 6 apostas fora da curva e o que o teste mostrou
+- [docs/inteligencia-conteudo-inedito.md](docs/inteligencia-conteudo-inedito.md) — por que o Reel inédito entrega e o reciclado flopa; como escolher a fonte (Instagram)
+- [docs/pipeline-tomiko-limpeza.md](docs/pipeline-tomiko-limpeza.md) — a produção dos Reels da Tomiko Casa Limpa
 
 ## Regras
 
