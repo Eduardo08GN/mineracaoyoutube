@@ -71,6 +71,14 @@ testar qual alavanca cabe:
 - **Desejo oculto do público daquele tema:** o que a pessoa quer de verdade por trás da tarefa (a casa que a
   visita elogia, a sensação de dar conta), não só "tirar a mancha".
 - **Mecanismo único** e **curiosidade encadeada**, descritos acima.
+- **"Antes de gastar dinheiro" (economia de item caro).** A dor não é a sujeira, é a compra que a pessoa acha
+  inevitável ("vou ter que comprar outra", "vou jogar fora"). A persona entra salvando o bolso com uma receita de
+  centavos. Funciona melhor quanto mais caro o bem (geladeira, sofá, colchão, jaqueta de marca). Visto nos Reels da
+  geladeira enferrujada e da jaqueta manchada do colega.
+- **Diálogo com a vizinha.** Uma segunda pessoa diz em voz alta a objeção de quem assiste, e a persona responde a
+  ela. Quem assiste se vê na vizinha.
+- **Pergunta que amplia.** Depois do caso único, uma pergunta de perda leva ao guia ("Quantas coisas você já pensou
+  em jogar fora sem saber que ainda tinham jeito?").
 
 ## 4. A estrutura da fala (38 s)
 

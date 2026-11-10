@@ -110,6 +110,18 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     7. Fecho com antes e depois do mesmo ponto, em close.
     8. Cada efeito prometido acontece na tela, e a dica falada é a mesma da legenda.
     9. CTA com promessa: "Comenta [palavra] que eu te mando".
+- **Caso da geladeira: ângulo forte, execução fraca (10/11).** Reel da geladeira enferrujada do colega (05/10,
+  33,3 s, 31 mil curtidas, 6,8 mil comentários). O ângulo "antes de gastar dinheiro" está em
+  [mineracao/modelagem.md](mineracao/modelagem.md). Tempos aproximados: diálogo em plano aberto fixo até 8 s,
+  receita até 14 s, um close de limpeza de 1 s, resultado até 18 s e CTA de 15 s. Sem legenda na tela.
+  - **O que ficou fraco:** hook parado por 4 s com a ferrugem pequena no quadro; transformação de 1 s, sem antes,
+    durante e depois; nenhuma emoção forte; CTA em quase metade do vídeo; promessa pouco crível (ferrugem que comeu a
+    pintura não some com limão).
+  - **Como fazer melhor com o mesmo ângulo:** hook em close do sintoma com a objeção falada no segundo zero; o preço
+    do bem dito na fala e em um cartão (bem novo contra o custo da receita); o clímax da limpeza no hook de 3 s; a
+    transformação em três estágios no mesmo take; vizinha aflita e persona veemente; mecanismo visível (pasta
+    mudando de cor); CTA de 6 a 7 s; legenda na tela; prometer só o que a receita entrega (mancha superficial,
+    amarelado).
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
