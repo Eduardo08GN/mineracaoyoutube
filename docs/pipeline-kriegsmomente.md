@@ -119,3 +119,48 @@ Por isso, a partir do K21:
 1. Extrair do K19/K20 um **kit** (componentes por família + contrato + `BRIEF_FRENTES.md` padrão), para as frentes Sonnet só preencherem.
 2. **Scripts únicos** para narração, lote cinematográfico com fiscal e download por bloco, e render + mux + entrega.
 3. **Imagem `.sqfs`** no Drive das duas contas.
+
+## 6. Adendo K21 (10/11/2026): o que melhorou na rota
+O K21 (*Warum hungerten Preußens Soldaten vor Paris 1870 nicht*, inverno de 1870/71) foi o primeiro vídeo feito com a rota barata das seções 2 e 3. O Eduardo aprovou: "muito bom esse vídeo". O roteiro e as batidas dinâmicas ficaram no ponto, e ele quer levar essa espinha para outros nichos no futuro. Pasta: `D:/kriegschronik/k21_inverno/`.
+
+**Números:**
+- **Tempo:** ~5 h do início à entrega (09/11 21h40 → 10/11 02h45), com os 2 portões no meio.
+- **Agentes:** ~3,9 M tokens somados (15 agentes novos, nenhum fork), mais a conversa do maestro, que ficou curta.
+- **Resultado:** 162 batidas, 18:30, −14,0 LUFS.
+
+**O que mudou e passa a ser padrão:**
+1. **Uma conversa por vídeo, aberta por um `ABERTURA.md`** na pasta do vídeo, com tema, regras-chave e portões. O maestro só orquestra; dossiê, roteiro, crítica, prompts, projeto, frentes, integração e miniaturas são agentes novos com contrato curto.
+2. **Modelo por nível, de fato:**
+
+   | Etapa | Modelo |
+   |---|---|
+   | Dossiê | Sonnet |
+   | Roteiro | Opus, uma vez |
+   | Crítica de fatos | Sonnet, que **aplica** as correções no `skript_de.md` e no `falas.tsv` e corrige os títulos |
+   | Frentes | Sonnet; Opus só nas 2 frentes 3D com o take eureka |
+   | Integração e miniaturas | Sonnet |
+
+3. **3D dividido por tema em várias famílias** (`eureka`, `eureka_carga`, `eureka_comida`, `eureka_abrigo`). São 6 a 11 batidas por agente, nunca 37 num agente só. O maestro cria um stub por família (`export {Cena} from './eureka'`) e o mapa `SUB3D` no `gerar_plano.py`.
+4. **Frentes começam junto com a voz e o lote,** assim que o projeto v1 sai (seção 2, regra B3). As 8 frentes rodaram em paralelo com a G4.
+5. **Stills e `tsc` só na G4** (`canal.py stills` e `canal.py exec "npx tsc …"`), nada no PC. Os agentes **não abrem imagens**: conferem por script (luminância, desvio, "só papel", diferença entre u) e entregam `v1/teste/folha_<familia>.jpg` para o Portão B.
+6. **Passo de integração antes do Portão B** (um agente Sonnet), que faz três coisas:
+   - regera os `palavras.json` de todas as famílias com a narração final;
+   - aplica a espera de cena estável nas cenas 3D (`eureka/refaz.tsx`), porque o ThreeCanvas às vezes saía só com papel no render paralelo;
+   - prova a correção com 2 rodadas de stills: 222 quadros, 0 falhas.
+7. **Voz:** antes de refazer frase "reprovada", retranscrever só as reprovadas (`voz/vm/asr_check.py`) e ler o texto. No K21 as 36 reprovadas estavam todas certas; a reprovação vinha da normalização (ponto de milhar, ordinal, nome francês).
+8. **Lote cine com fiscal:**
+   - etapa `olho` (Qwen3-VL) e depois `rodar_refazer.sh`;
+   - uma 2ª refação dirigida pelo maestro (`rodar_refazer2.sh`), só para defeito real: texto na imagem, gente em cena vazia, capacete errado;
+   - o que sobrar vai marcado ao Eduardo no Portão B.
+9. **Render longo:** o `render.sh` não imprime nada até o fim, e o vigia corta em 900 s. Com a VM viva, não relançar: `esperar_render.sh` espera o mp4 e baixa. Um "G4_FORA" no meio era a troca da URL do proxy: `canal.py ligar` achou a mesma VM, com o render pronto.
+10. **Áudio:** mix só de voz com `ton/mix_k21.py`. O alvo é −17 LUFS no mono, porque a cópia para estéreo soma +3 LU e o resultado fica em −14. O limitador é de pico por envelope, conferido com `ebur128=peak=true` no mp4 final.
+11. **Entrega:** mp4 com áudio, `.srt`, 3 miniaturas e `.txt` com os 3 títulos, a descrição (< 5 mil caracteres, capítulos com os tempos reais, créditos e 5 hashtags) e o mesmo conteúdo no chat. Depois, `desligar`, conferido pelo `/saude`. Se cair em `ReadTimeout`, rodar `desligar` de novo.
+
+**Ainda pendente** (seção 5):
+- o **kit** extraído (no K21 cada frente copiou e adaptou o K20);
+- um script único de entrega;
+- a imagem `.sqfs` da stack do Kriegsmomente.
+
+Tem também um custo novo: a espera de cena estável pesa ~6 s por quadro 3D. Encurtar isso antes do K22.
+
+Lições técnicas detalhadas: `tracer3d2/BADPATHS.md` §7.
