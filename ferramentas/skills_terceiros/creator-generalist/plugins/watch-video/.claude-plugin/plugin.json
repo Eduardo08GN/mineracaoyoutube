@@ -1,0 +1,13 @@
+{
+  "name": "watch-video",
+  "version": "0.6.4",
+  "description": "Watch a video or a whole tutorial channel the way a viewer does: frame sheets, cuts, spectrograms and a sound timeline, transcripts in many languages, tone of voice. Learn a video into a checked recipe to remake, or a channel into a skill with a required verify pass (names against the installed software, values from full-size frames, current docs).",
+  "author": {
+    "name": "CodePawl",
+    "url": "https://codepawl.com"
+  },
+  "homepage": "https://github.com/codepawl/creator-generalist",
+  "repository": "https://github.com/codepawl/creator-generalist",
+  "license": "MIT",
+  "keywords": ["video", "youtube", "tutorial", "transcript", "sound-design", "recipe", "skill-authoring", "blender"]
+}

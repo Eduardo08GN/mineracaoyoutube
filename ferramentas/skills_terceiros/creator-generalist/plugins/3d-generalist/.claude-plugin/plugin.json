@@ -1,0 +1,25 @@
+{
+  "name": "3d-generalist",
+  "version": "0.9.4",
+  "description": "Full-pipeline 3D generalist studio for content creators: source and kitbash CC0/CC BY scans, model 3D characters in any style (low poly, sculpt, base mesh, realistic), sculpt heads, creatures and rocks, use Blender, three.js, Godot, Unity and Unreal, rig and animate characters with grounded IK and expressive acting, stage perspective cutaways and rich worlds, shoot with tracked cameras, Depth of Field and 180-degree shutter blur, and pass 10-point anti-slop QA gates across Blender, Three.js and 67js.",
+  "author": {
+    "name": "CodePawl",
+    "url": "https://codepawl.com"
+  },
+  "homepage": "https://github.com/codepawl/creator-generalist",
+  "repository": "https://github.com/codepawl/creator-generalist",
+  "license": "MIT",
+  "keywords": [
+    "3d",
+    "blender",
+    "three.js",
+    "67js",
+    "animation",
+    "shorts",
+    "cutaway",
+    "content-creator",
+    "kitbash",
+    "low-poly",
+    "character"
+  ]
+}
