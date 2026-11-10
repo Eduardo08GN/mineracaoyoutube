@@ -43,7 +43,7 @@ inédita ao nosso público, desde que ninguém a tenha trazido ainda.
 
 ## 3. A pipeline (versão 1)
 
-1. **Busca:** escolher 2 ou 3 classes e buscar as palavras no Instagram (hashtag e busca comum). Abrir a aba
+1. **Busca:** escolher 2 ou 3 classes (para conta fora do Brasil, usar a tabela do país, seção 5) e buscar as palavras no Instagram (hashtag e busca comum). Abrir a aba
    "Para você" da hashtag.
 2. **Triagem rápida:** anotar só os Reels que passam nos 5 critérios da seção 1. Descartar na hora:
    - vídeo feito por IA (rosto perfeito demais, legenda em cima de cena sintética, texto colado no cenário);
@@ -59,11 +59,52 @@ inédita ao nosso público, desde que ninguém a tenha trazido ainda.
 
 ## 4. Registro das minerações
 
-| Data | Classe | Palavra | Reel fonte (views) | Virou | Nossa entrega |
-|---|---|---|---|---|---|
-| 10/11/2026 | sintoma | `#mofo` | 3 Reels de 8 mi, 6,2 mi e 1,9 mi (achados pelo Eduardo) | ainda não | — |
+| Data | País | Classe | Palavra | Reel fonte (views) | Virou | Nossa entrega |
+|---|---|---|---|---|---|---|
+| 10/11/2026 | BR | sintoma | `#mofo` | 3 Reels de 8 mi, 6,2 mi e 1,9 mi (achados pelo Eduardo) | ainda não | — |
 
-## 5. Próximos passos
+## 5. Adaptação cultural e geográfica (contas na Europa)
+
+As classes da seção 2 valem em qualquer país. O que muda são as **palavras dentro de cada classe**: o clima, a casa,
+os produtos e os costumes são outros, então os sintomas e as dores também são. Antes de minerar para uma conta de
+fora (França ou Alemanha, a decidir), refazer a tabela da seção 2 para aquele país.
+
+**Regras:**
+- Buscar **no idioma local**, com a palavra que a pessoa de lá usa (não a tradução literal do português).
+- Partir do **clima e da casa** do país: inverno frio e aquecimento, água dura, apartamento pequeno, roupa secando
+  dentro de casa. O que é dor grande aqui (barata, ferrugem do litoral) pode ser rara lá, e o contrário também.
+- Usar os **produtos que existem no mercado de lá** (o ingrediente "da vó" muda de país para país).
+- Seguir o **calendário local**: limpeza de primavera, temporada de aquecimento, onda de calor, Natal.
+- O Reel fonte pode ser de outro país: a ideia brasileira chega inédita na Europa, e a europeia no Brasil. A
+  checagem de saturação (passo 3 da pipeline) é feita no idioma da conta.
+
+**Ponto de partida (hipóteses, ainda não validadas na busca):**
+
+| Classe | França (fr) | Alemanha (de) |
+|---|---|---|
+| Sintoma | moisissure, condensation, calcaire, joints noircis, humidité, mauvaise odeur | Schimmel, Kalk, Kondenswasser, Feuchtigkeit, Grünbelag (terraço e fachada), muffiger Geruch |
+| Praga | punaises de lit, mites, acariens, moustique tigre, fourmis, guêpes | Silberfischchen, Lebensmittelmotten, Fruchtfliegen, Milben, Wespen, Kleidermotten |
+| Ofício | femme de ménage, gouvernante d'hôtel, astuces de grand-mère | Putzfrau, Reinigungskraft, Hausmeister, Omas Hausmittel |
+| Erro ou medo | ne mélangez jamais, erreur de ménage | niemals mischen, Putzfehler |
+| Ingrediente | vinaigre blanc, bicarbonate de soude, savon noir, cristaux de soude, pierre d'argile | Natron, Essigessenz, Zitronensäure, Gallseife, Schmierseife |
+| Objeto | lave-linge, four, plaque vitrocéramique, radiateur, joints de douche, matelas | Waschmaschine, Backofen, Ceranfeld, Heizkörper, Duschfugen, Matratze |
+| Situação | grand ménage de printemps, canicule, hiver, déménagement | Frühjahrsputz, Heizperiode, Lüften im Winter, Energie sparen, Umzug |
+| Desejo | maison qui sent bon, linge blanc | Wohnung riecht gut, strahlend weiße Wäsche |
+
+Diferenças que já parecem fortes:
+- **Calcário (calcaire / Kalk):** a água dura é dor grande nos dois países (chuveiro, chaleira, máquina de lavar).
+  No Brasil ela quase não aparece.
+- **Mofo de condensação:** nasce do inverno, do aquecimento e da roupa secando dentro de casa. Na Alemanha há a
+  cultura de arejar a casa (Stoßlüften), e o erro de arejar errado vira gancho.
+- **Pragas:** barata e cupim pesam menos; traça de roupa e de despensa, ácaro e (na França) percevejo de cama
+  pesam mais.
+- **Remédio da vó:** "astuces de grand-mère" e "Omas Hausmittel" são buscas grandes nos dois idiomas e casam com a
+  persona da avó.
+
+Confirmar cada palavra buscando no Instagram do país (views do Reel e quantidade de posts) antes de usar, e anotar
+o resultado no registro da seção 4 com a coluna de país.
+
+## 6. Próximos passos
 
 - Medir quais classes rendem Reels com mais views por seguidor.
 - Testar a mesma tabela em outro idioma antes de abrir conta nova. França tem 59% de mulheres entre os ~28 mi de
