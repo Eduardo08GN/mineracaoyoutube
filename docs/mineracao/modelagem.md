@@ -71,6 +71,10 @@ testar qual alavanca cabe:
 - **Desejo oculto do público daquele tema:** o que a pessoa quer de verdade por trás da tarefa (a casa que a
   visita elogia, a sensação de dar conta), não só "tirar a mancha".
 - **Mecanismo único** e **curiosidade encadeada**, descritos acima.
+- **Sintoma como porta de entrada.** A fala abre pelo incômodo que a pessoa já sente e aponta a causa escondida
+  ("Se sua roupa sai da máquina com cheiro estranho, olha o que pode estar escondido aqui dentro").
+- **Falsa solução derrubada.** Dizer por que o que a pessoa já tentou não resolve ("Não adianta usar o melhor sabão
+  se a máquina está suja por dentro").
 - **Segredo dentro de casa.** Um ponto escondido de algo que todo mundo tem ("Tem uma portinha escondida embaixo
   da sua máquina de lavar"). A revelação vira causa de um sintoma que a pessoa já sente (não centrifuga, roupa com
   cheiro) e a ponte para o guia é "Se isso te deu nojo, imagina o que mais está escondido pela sua casa".

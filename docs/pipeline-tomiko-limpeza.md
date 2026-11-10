@@ -152,6 +152,24 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     produto do país.
   - **Regra tirada do caso:** em hook de sujeira escondida, a revelação é o primeiro quadro. Preparar a cena
     (toalha, bandeja, abrir a porta) vem depois.
+- **Caso da mangueira: sujeira "escondida" que estava à vista (10/11).** Reel da limpeza interna da máquina do
+  colega (25/08, 57 s, 60 mil curtidas, 2,6 mil comentários). Montagem: 10 takes, sem legenda; hook até 4,9 s, água
+  marrom no cesto até 9 s, mangueira jorrando até 14 s, persona só aos 14 s, receita de 20 s, resultado até 46,4 s e
+  CTA de 10,6 s.
+  - **Defeitos:** o cesto aparece coberto de crosta desde o primeiro quadro, o que contradiz "escondido" e tira a
+    credibilidade (o comentário mais curtido reclama que ninguém lava roupa numa máquina assim); o clímax (mangueira
+    jorrando) só aos 9 s; a mangueira despeja no piso, lugar onde ninguém drena a máquina; persona ausente por 14 s
+    e sorrindo; receita lenta; fala cheia de "pode" e "ajuda".
+  - **CTA sem palavra de comentário:** o vídeo manda tocar no nome e abrir o link. Foram 60 mil curtidas para 2,6 mil
+    comentários, a pior proporção entre os Reels analisados. Os que pedem "Comenta [palavra] que eu te mando" têm de
+    13 mil a 57 mil comentários.
+  - **Como fazer melhor:** o objeto parece limpo por fora e a sujeira só aparece na água que sai; hook pelo clímax,
+    com a mangueira jorrando água preta num balde transparente e a persona de olho arregalado; fala do medo no hook
+    ("é nessa água que a sua roupa é lavada"); prova lado a lado, um copo da primeira drenagem e outro da segunda, já
+    clara; uma toalha cheirada com nojo, ligando ao sintoma; receita em 10 s com um motivo por ingrediente; mangueira
+    no tanque ou no balde; CTA de 7 s com palavra; legenda na tela.
+  - **Regra tirada do caso:** sujeira escondida precisa estar escondida na imagem. Se o objeto já aparece imundo, o
+    público desconfia que foi sujado de propósito.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
