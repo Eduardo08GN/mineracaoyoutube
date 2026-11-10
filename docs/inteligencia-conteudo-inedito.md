@@ -55,6 +55,8 @@ oferta dele. Exemplo medido: um Reel de sobrevivencialismo sobre estoque de comi
 - **Continua valendo:** o hook com o clímax da limpeza nos primeiros 3 s (close macro, sujeira extrema, ação e
   resultado limpo no mesmo take), o CTA com o caminho até "Pedidos", a badge e a voz da persona.
 
+Como achar a fonte, passo a passo: [mineracao/README.md](mineracao/README.md).
+
 ## 4. Padrões de montagem medidos nos Reels dele
 
 | Medida | Falando para a câmera (kit, 49 s) | Narração em off (horta, 40 s) |

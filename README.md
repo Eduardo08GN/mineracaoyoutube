@@ -49,6 +49,7 @@ O painel já vai montado em `painel/app/dist`. Para mexer nele: `cd painel/app &
 - [docs/fontes.md](docs/fontes.md) — quem olhar no X e os números de referência
 - [docs/apostas.md](docs/apostas.md) — as 6 apostas fora da curva e o que o teste mostrou
 - [docs/inteligencia-conteudo-inedito.md](docs/inteligencia-conteudo-inedito.md) — por que o Reel inédito entrega e o reciclado flopa; como escolher a fonte (Instagram)
+- [docs/mineracao/](docs/mineracao/README.md) — pipeline de mineração de Reels: as classes de busca e o registro
 
 ## Regras
 

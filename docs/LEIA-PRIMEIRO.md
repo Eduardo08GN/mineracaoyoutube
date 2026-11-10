@@ -24,6 +24,7 @@ Leitura obrigatória antes do primeiro passo. São ~5 minutos, que poupam horas.
 | Mineração / radar de notícias | `docs/radar-noticias-quentes.md` | `ferramentas/radar_noticias/` | — |
 | Organização por canal | `docs/arquitetura-tenants.md` | `D:/producao/<canal>/formatos/<formato>/` | — |
 | Reels do Instagram (Tomiko Casa Limpa) | `docs/inteligencia-conteudo-inedito.md` (como escolher a fonte: ideia inédita, copy nova) + `docs/pipeline-tomiko-limpeza.md` (produção) | `motor/instagram_*.py`, branch `instagram` | — |
+| Mineração de Reels para modelar (Instagram) | `docs/mineracao/README.md` (classes de busca: sintoma, praga, ofício...) | — | — |
 | Imagem da stack na G4 | `docs/g4-imagem-stack.md` | `tracer3d2/vm/preparar_img.sh` | — |
 
 Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte esse doc antes de qualquer levantamento novo.
