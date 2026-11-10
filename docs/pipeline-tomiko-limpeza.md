@@ -168,6 +168,9 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     ("é nessa água que a sua roupa é lavada"); prova lado a lado, um copo da primeira drenagem e outro da segunda, já
     clara; uma toalha cheirada com nojo, ligando ao sintoma; receita em 10 s com um motivo por ingrediente; mangueira
     no tanque ou no balde; CTA de 7 s com palavra; legenda na tela.
+  - **Reforço do Eduardo (10/11):** o take da sujeira saindo pela mangueira é o take inicial do hook, no quadro
+    zero, e com ainda mais sujeira: água mais escura, com pedaços, espalhando pelo piso branco. A poça crescendo
+    ocupa mais tela que um balde enchendo; o balde ou os dois copos ficam para a prova do resultado.
   - **Regra tirada do caso:** sujeira escondida precisa estar escondida na imagem. Se o objeto já aparece imundo, o
     público desconfia que foi sujado de propósito.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
