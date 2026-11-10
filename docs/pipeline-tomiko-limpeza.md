@@ -58,6 +58,20 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     um mofo pequeno e comum. Sintoma tímido é oportunidade perdida de hook e de retenção, e reprova o take.
   - **A persona reforça o hook nos 3 primeiros segundos:** olho arregalado, cara assustada, apontando para o
     problema, fala veemente (ordem direta, "agora"). Sintoma extremo, expressão e frase entram juntos no 1º segundo.
+- **Hook de sujeira escondida, o "mecanismo único visual" (10/11):** segunda classe de hook, ao lado da
+  transformação sujo → limpo. Aqui a transformação é invertida: o objeto parece limpo e a prova é a sujeira que sai
+  dele. Medido num Reel de referência de 32,6 s (chuveiro com um saco de mistura preso; 36 mil curtidas, 8,5 mil
+  comentários):
+  - **Dispositivo inusitado:** um objeto fora do lugar que torna visível o que não se vê (o saco cheio de líquido
+    pendurado no chuveiro). A pessoa para só para entender o que é aquilo.
+  - **Sujeira em movimento:** as gosmas caem e se acumulam durante os 3 s do hook; não é foto de sujeira parada.
+  - **Contraste de cor:** líquido âmbar e gosma preta contra azulejo branco, legível em miniatura.
+  - **O fenômeno ocupa dois terços do quadro;** a persona fica pequena embaixo, olhando para a câmera e apontando.
+  - **A fala nomeia o medo oculto:** "Olha o que estava escondido dentro desse chuveiro."
+  - **Montagem:** take 1 (0–3,25 s) é o clímax antecipado; take 2 (até 13 s) são mãos em primeira pessoa montando
+    a receita; take 3 (até 17 s) mostra o líquido transparente ficando sujo ("Olha isso!"); take 4 é a persona
+    falando num take só de 15,7 s, com explicação, guia e CTA.
+  - **Onde cabe:** coisas que parecem limpas e escondem sujeira (chuveiro, máquina de lavar, ralo, colchão, filtro).
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
