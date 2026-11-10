@@ -27,6 +27,7 @@ oferta dele. Exemplo medido: um Reel de sobrevivencialismo sobre estoque de comi
    fala, mesma estrutura e mesmo tema, publicados depois, têm cara de reciclado mesmo com imagem nova.
 4. **Ideia validada em outro público.** A ideia que viralizou em outro nicho já provou que prende, e no nosso
    nicho ela é nova.
+5. **Pouca gente modela vídeo real.** Quase todo mundo modela o vídeo sintético (feito no Veo) de outro produtor; quem parte do Reel orgânico de pessoa real tem pouca concorrência (conclusão do Eduardo, 10/11).
 
 **Limite da evidência:** é hipótese, não medição. Os perfis do colega tinham menos de 10 dias, a venda é irregular
 ("tem dia que nem vende") e não temos views nem conversão dele. Confirmar com os nossos números a cada Reel.
