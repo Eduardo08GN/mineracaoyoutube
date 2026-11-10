@@ -54,6 +54,15 @@ oportunidade de melhorar um ponto da fala é usada.
 - **A pergunta para cada peça do nosso roteiro:** qual é a versão mais comum, mais dolorosa e mais específica disso
   para o nosso público? Se a peça do orgânico já é a mais forte, fica; se dá para subir, sobe.
 
+**Referências de copy para essa passada (indicação do Eduardo):** Jon Benson e Stefan Georgi, copywriters de
+resposta direta que trabalham assim, afiando ponto por ponto da fala.
+
+- **Mecanismo único (Georgi, método RMBC):** a solução ganha um "porquê funciona" diferente do que o público já
+  tentou. É a troca da água sanitária pela água oxigenada "sem cloro": a pessoa que já falhou com o cloro tem
+  motivo para tentar de novo.
+- **Fala de vídeo de vendas (Benson, criador do formato VSL):** frases curtas, uma ideia por frase, cada uma
+  abrindo uma curiosidade ou um medo que a seguinte resolve.
+
 ## 4. A estrutura da fala (38 s)
 
 | Tempo | Bloco | Fala |
