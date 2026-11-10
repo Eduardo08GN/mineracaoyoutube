@@ -173,6 +173,26 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     ocupa mais tela que um balde enchendo; o balde ou os dois copos ficam para a prova do resultado.
   - **Regra tirada do caso:** sujeira escondida precisa estar escondida na imagem. Se o objeto já aparece imundo, o
     público desconfia que foi sujado de propósito.
+- **Caso da pia entupida: o mais fraco da série, mapeamento completo (10/11).** Reel do desentupimento com
+  bicarbonato, vinagre e refrigerante de cola do colega (18/08, 31,2 s, 35 mil curtidas, 3,5 mil comentários).
+  Montagem: 7 takes, sem legenda; hook até 3 s ("Para! Não faz assim!"), balde pronto até 4,4 s, redemoinho até
+  7,7 s, reação da vizinha até 10,1 s, receita até 23,5 s e CTA de 7,7 s.
+  - **O que segurou o vídeo:** ação interrompida com fala no segundo zero; força contra truque; ingrediente
+    inesperado, que gera discussão; o redemoinho da água descendo; a emoção vinda da vizinha; duração curta.
+  - **Hook:** sintoma mais extremo (pia transbordando, água preta com gordura); close da pia no quadro zero; persona
+    alarmada, não sorrindo; consequência na fala ("assim você estoura o cano"); o redemoinho como clímax de 3 s.
+  - **Lógica e coerência:** o balde aparece pronto e resolve a pia antes de a receita existir; o líquido do balde não
+    é o da tigela; a mistura preparada nunca é usada; a pia limpa, com a água descendo livre, nunca aparece;
+    embalagens estrangeiras ao lado de produto do país.
+  - **Mecanismo e credibilidade:** mostrar a espuma da reação subindo pelo ralo; conferir se a receita funciona antes
+    de modelar e dar uma explicação que convença; refrigerante sem rótulo; dizer quanto tempo esperar.
+  - **Copy falada:** nomear o inimigo (o desentupidor que empurra a gordura, a soda que corrói o cano); trazer a
+    economia ("antes de chamar o encanador"); curiosidade encadeada ("o terceiro ingrediente está na sua geladeira");
+    pergunta de perda antes do guia.
+  - **Fecho e CTA:** um pedido só, com palavra ("Comenta ralo que eu te mando"), no lugar de três; ponte por lacuna
+    (o mau cheiro que volta pelo ralo); legenda na tela e cartão com as medidas; antes e depois da mesma pia.
+  - **Regra tirada do caso:** a ordem dos takes precisa fazer sentido. O que resolve o problema na tela é a mistura
+    que o vídeo ensina, feita antes ou identificada como a mesma.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
