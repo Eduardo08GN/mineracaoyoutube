@@ -72,6 +72,25 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     a receita; take 3 (até 17 s) mostra o líquido transparente ficando sujo ("Olha isso!"); take 4 é a persona
     falando num take só de 15,7 s, com explicação, guia e CTA.
   - **Onde cabe:** coisas que parecem limpas e escondem sujeira (chuveiro, máquina de lavar, ralo, colchão, filtro).
+- **Coerência da copy visual e empilhamento de dimensões (10/11):** caso de estudo, um Reel de referência sobre
+  escorpião no ralo (59,5 s, ~14 takes, 38 mil curtidas, 3,5 mil comentários). Viralizou mesmo com a lógica
+  visual errada, o que mostra quanto espaço há para fazer melhor.
+  - **O que estava errado:** escorpiões parados em volta do ralo (não acontece na vida real, e nada se mexe nos
+    3 primeiros segundos); persona calma ao lado do perigo; ralo em cima de uma bancada, não no chão de uma casa;
+    o líquido do hook (branco, derramado, com espuma) não é a receita (transparente, borrifada); e o efeito mostrado
+    contradiz a promessa (os bichos andam para a mistura que deveria afastá-los).
+  - **O que segurou o vídeo:** praga perigosa em quantidade no quadro zero, gancho de mito quebrado ("veneno comum
+    não mata"), maquete em corte mostrando o bicho escondido na fresta, ritmo alto e capa do guia na tela na oferta.
+  - **Regra 1, coerência:** a imagem tem de mostrar o que a fala afirma. O que o hook usa é o mesmo produto da
+    receita; o efeito na tela é o efeito prometido; a cena acontece onde o problema acontece (chão da casa).
+  - **Regra 2, herói e vilão:** o efeito ruim pertence ao inimigo. Se a fala diz que o veneno comum espalha os
+    escorpiões, é o veneno comum que aparece espalhando; a nossa mistura aparece como barreira (o bicho chega, para
+    e volta).
+  - **Regra 3, empilhar dimensões:** antes de fechar o roteiro, conferir se o hook soma sintoma extremo, movimento,
+    emoção da persona (olho arregalado, apontando, fala veemente), mito ou medo nomeado na fala e mecanismo visível.
+    Dimensão que cabe e ficou de fora é oportunidade perdida.
+  - **Cuidado:** em tema de risco à saúde (animal peçonhento), prometer prevenção (borrifar, tampar o ralo, vedar
+    frestas), nunca eliminação; manter os avisos na legenda.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
