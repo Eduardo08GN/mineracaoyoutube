@@ -43,6 +43,16 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
 - **Efeito visual forte:** a sujeira tem cor muito saturada e chamativa (amarelo-mostarda quase laranja, "impossible to miss"),
   em close, com contraste sujeira × parte limpa. A limpeza é **extrema**: "spotless, snow-white like brand new, not a trace
   left". Espuma grossa de verdade. O fenômeno visual da limpeza é o protagonista.
+- **Transformação pronunciada (10/11):** vale para toda cena em que algo é limpo, não só para o hook. Três estados
+  no mesmo take, sem corte:
+  1. **Antes:** sujeira extrema, escura e espalhada; nada limpo no 1º quadro.
+  2. **Durante:** a cada passada da ferramenta fica uma faixa totalmente limpa, com borda nítida contra a sujeira
+     ao lado. A mudança de cor acontece na hora, na frente da câmera (ex.: teto preto de mofo que fica branco atrás
+     do rodo).
+  3. **Depois:** o mesmo ponto impecável, sem resto nem sombra de mancha.
+
+  Motivo: o contraste é a prova de que o mecanismo funciona. Se quem assiste não vê a diferença sem esforço, a
+  receita parece fraca. Take com antes e depois parecidos, ou com limpeza gradual e apagada, é reprovado e refeito.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
