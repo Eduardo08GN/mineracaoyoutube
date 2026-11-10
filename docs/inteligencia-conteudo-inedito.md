@@ -54,6 +54,9 @@ oferta dele. Exemplo medido: um Reel de sobrevivencialismo sobre estoque de comi
 - **Antes de escolher:** checar se a ideia já foi traduzida ou copiada no nosso nicho e idioma. Se foi, descartar.
 - **Continua valendo:** o hook com o clímax da limpeza nos primeiros 3 s (close macro, sujeira extrema, ação e
   resultado limpo no mesmo take), o CTA com o caminho até "Pedidos", a badge e a voz da persona.
+- **Condição do hook:** ele só entra quando o Reel mostra limpeza de verdade. Se a ideia modelada for de outro
+  tema (por exemplo, sobrevivencialismo: o que fazer quando a luz acaba), não há processo de limpeza e o Reel
+  não leva esse hook.
 
 Como achar a fonte, passo a passo: [mineracao/README.md](mineracao/README.md).
 
