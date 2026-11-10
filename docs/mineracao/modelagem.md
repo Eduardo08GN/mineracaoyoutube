@@ -41,6 +41,19 @@ na mesma busca. A comparação mostra o *tipo* de transformação, não a prova 
 
 Nenhuma frase do orgânico se repete. A fala é toda nova.
 
+### Trocar é melhorar (ponto do Eduardo, 10/11)
+
+Ele não troca as peças só para ficar diferente: **cada troca deixa a peça mais forte que a do orgânico**. Toda
+oportunidade de melhorar um ponto da fala é usada.
+
+- **Lugar mais doloroso e mais local.** Parede vira teto do banheiro, que é uma dor muito comum e recorrente nas
+  casas brasileiras e difícil de resolver. A peça é adaptada à dor latente **daquele país** (ver a seção 5 do
+  [README.md](README.md) para outros países).
+- **Gancho com copy de resposta direta.** Sai a curiosidade e entra o medo oculto: "você respira isso toda vez que
+  toma banho". O perigo já existia na vida da pessoa; a fala só o revela.
+- **A pergunta para cada peça do nosso roteiro:** qual é a versão mais comum, mais dolorosa e mais específica disso
+  para o nosso público? Se a peça do orgânico já é a mais forte, fica; se dá para subir, sobe.
+
 ## 4. A estrutura da fala (38 s)
 
 | Tempo | Bloco | Fala |
@@ -67,6 +80,8 @@ Nenhuma frase do orgânico se repete. A fala é toda nova.
 6. **Oferta:** o guia com nome próprio, ligado ao sintoma, prometendo as outras receitas.
 7. **CTA:** convite por identidade + a palavra para comentar + "eu te mando".
 8. **Conferência final:** nenhuma frase igual à do orgânico.
+9. **Passada de melhoria:** reler peça por peça (lugar, gancho, ingrediente, ferramenta, fecho) e subir cada uma
+   para a versão mais dolorosa e mais local que existir.
 
 O que já alinhamos continua: o clímax da limpeza abre o Reel nos primeiros 3 s e o fim mostra o caminho até
 "Pedidos" (ver [../pipeline-tomiko-limpeza.md](../pipeline-tomiko-limpeza.md)).
