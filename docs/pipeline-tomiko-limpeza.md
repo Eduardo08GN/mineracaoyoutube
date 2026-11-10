@@ -122,6 +122,20 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     transformação em três estágios no mesmo take; vizinha aflita e persona veemente; mecanismo visível (pasta
     mudando de cor); CTA de 6 a 7 s; legenda na tela; prometer só o que a receita entrega (mancha superficial,
     amarelado).
+- **Caso do piso: copy falada forte, copy visual morna (10/11).** Reel "método dos hotéis de luxo" do colega (28/10,
+  61 s, 72 mil curtidas, 13 mil comentários, cerca de 23 mil envios). Cerca de 30 cortes, um a cada 2 s. Montagem:
+  hook até 6 s, prova com rodo até 11 s, receita de cinco ingredientes até 43 s, aplicação até 47 s e CTA de 14 s. As
+  alavancas da fala estão em [mineracao/modelagem.md](mineracao/modelagem.md).
+  - **O que ficou morno na imagem:** o piso já está limpo desde o primeiro quadro (sem sintoma, sem transformação);
+    a mistura marrom despejada em piso branco parece água suja; o inimigo (pano só com água) nunca aparece; o
+    resultado vem antes da receita e o vídeo termina sem fecho visual; "hotel de luxo" fica só na fala; CTA com dois
+    pedidos.
+  - **Como fazer melhor:** piso encardido em close no quadro zero; hook de 3 s com o rodo abrindo uma faixa branca;
+    mostrar o pano só com água espalhando sujeira; mistura clara ou de espuma branca; o mesmo piso metade tratado e
+    metade não; um plano curto que sustente a referência de hotel; receita em 45 a 50 s; close do rejunte preto antes
+    do CTA por lacuna; um pedido só.
+  - **Cuidado com receita:** antes de modelar uma mistura de vários produtos, conferir se a combinação é segura e
+    repetir na legenda o aviso do que não misturar.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and

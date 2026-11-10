@@ -71,6 +71,17 @@ testar qual alavanca cabe:
 - **Desejo oculto do público daquele tema:** o que a pessoa quer de verdade por trás da tarefa (a casa que a
   visita elogia, a sensação de dar conta), não só "tirar a mancha".
 - **Mecanismo único** e **curiosidade encadeada**, descritos acima.
+- **Autoridade emprestada.** O método vem de um lugar que o público admira ("o método dos hotéis de luxo"), seguido
+  de uma prova pessoal ("é o que eu uso na pousada onde eu trabalho"). O desejo por trás é status: casa com padrão
+  de hotel.
+- **Inimigo no hábito.** A abertura condena o que quem assiste já faz ("Nunca mais passa pano só com água").
+- **Um motivo por ingrediente.** Em Reel de receita, cada ingrediente resolve uma dor diferente e a fala diz qual
+  (cheiro por dias, gordura que deixa grudento, encardido, seca sem marca, clareia o rejunte).
+- **CTA por lacuna.** O vídeo entrega uma solução completa e o CTA vende o problema seguinte, que a receita grátis
+  não resolve ("Rejunte que já ficou preto não sai nem esfregando de joelho. A receita está no meu guia. Comenta
+  rejunte"). A palavra do CTA é a do problema seguinte.
+- **Pedido de engajamento no meio.** "Minhas dicas só chegam pra quem curte, comenta e compartilha", dito durante
+  uma ação (mexendo a mistura), sem parar o vídeo.
 - **"Antes de gastar dinheiro" (economia de item caro).** A dor não é a sujeira, é a compra que a pessoa acha
   inevitável ("vou ter que comprar outra", "vou jogar fora"). A persona entra salvando o bolso com uma receita de
   centavos. Funciona melhor quanto mais caro o bem (geladeira, sofá, colchão, jaqueta de marca). Visto nos Reels da
