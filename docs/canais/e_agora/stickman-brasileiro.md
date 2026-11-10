@@ -1,6 +1,16 @@
 # Stickman Brasileiro: happy path e pipeline de HUD (canal "E Agora?", Instagram)
 
-**Status:** reel 02 (apagão em prédio) aprovado na imagem em 10/11. Voz em troca (a do Vids saiu aguda). HUD em Remotion: plano abaixo, ainda **não renderizado** (falta o batedor na G4).
+**Status (10/11, fim do dia):** formato **PAUSADO** pelo Eduardo. Ficou pronto e documentado para retomar:
+- reel 02 (apagão em prédio): 7 takes com a voz A, fala conferida;
+- base de 70 s e `tempos.json`;
+- HUD escrito;
+- badge aprovada.
+
+O que falta é rodar na G4, sem nada novo a decidir:
+- ligar, `kit`, `reelstill` (stills ao Eduardo), `reelrender`, desligar;
+- antes de publicar, a fonte brasileira do fato do monóxido e o `post.txt`.
+
+O código do HUD (`ReelVids.tsx`, `pedidos.tsx`) **nunca foi compilado**. Espere corrigir erros do `tsc` no primeiro `reelstill`.
 
 **O que é:** reel de 55 a 70 s de sobrevivencialismo para o público brasileiro. Um boneco palito 2D (cabeça branca redonda, boné preto, camiseta verde, membros finos pretos) age sobre a **foto realista de um ambiente típico do brasileiro** (cozinha de azulejo, mercadinho, prédio). Narração em off, HUD por código por cima.
 
@@ -51,6 +61,24 @@ A voz do Vids não é fixa: o mesmo prompt pode sair agudo. Duas rotas, nesta or
 1. **Voz descrita no prompt do Vids** (grave, peito, idade, "never high-pitched"). Gerar 3 candidatas do take 1 e mandar ao Eduardo. Serve se a escolhida se mantiver igual nos 7 takes.
 2. **Narração separada, voz fixa do canal** (Qwen3-TTS na G4, a voz aprovada do canal). Como o boneco não fala, a troca de áudio é limpa: os takes do Vids ficam só com a imagem e a narração única define o tempo de tudo. É a rota de reserva se a voz do Vids variar entre takes.
 
+## 4.1 Voz aprovada (voz A, 10/11)
+Trecho que vai no prompt do Vids no lugar da voz:
+
+"a very deep, low-pitched bass male voice-over, a 50-year-old Brazilian radio news anchor, slow, grave and firm, chest voice, never high-pitched, with a Brazilian accent from São Paulo"
+
+A voz antiga ("calm, serious adult male") saiu aguda e foi reprovada.
+
+## 4.2 Badge do canal (aprovada 10/11)
+- **Arte:** `reel_02/badge/badge_arte_sem_q.png`, gerada no Gemini: o stickman com o dedo levantado tipo eureka e "E AGORA?" em arco, sobre amarelo sólido. O "?" extra foi apagado por código.
+- **Recorte:** círculo de 195 px a 78% de opacidade, contorno de 1 px (`badge_eagora_195.png`).
+- **Posição:** centro em (900, 1743) no 1080×1920, em cima do losango ✦ que o Vids grava no canto inferior direito. O molde é o da Tomiko (sessão "Imagens do lar-universo"): (600, 1162) em 720×1280.
+- **Fonte de vídeo que não é do Vids:** medir onde fica a marca antes de posicionar.
+
+## 4.3 Contas do Vids (ordem do Eduardo, 10/11)
+- Cada sessão usa uma conta só. Este formato usa **só a PLACA DE VIDEO** (perfil 903382646), num doc próprio. A 12 Ivone é da sessão Instagram/Tomiko.
+- Duas sessões gerando no mesmo doc baixam o clipe uma da outra. Aconteceu aqui: os takes 5 e 6 vieram com a fala da Tomiko.
+- O whisper por take pega esse erro: **sempre conferir a fala de cada take antes de montar**.
+
 ## 5. Pipeline de HUD (Remotion)
 ### 5.1 Reaproveitado (levantamento de prontos)
 - **Kit do formato** (`kit/`, Remotion 4): `tema.ts` (cores, fontes Oswald e Barlow Condensed OFL, molas), `tempo.ts` (`na_palavra`: todo elemento entra numa palavra da fala), `Legenda.tsx`, `dados.tsx` (etiqueta, carimbo, anel), `cartoes.tsx` (contador, barras, grade, notificação), `medir.mjs` (metas que travam o render).
@@ -100,7 +128,23 @@ Fundo: o próprio take desfocado e escurecido. No topo, o trilho **1 MENSAGENS �
 
 No `hud.json`: `{"tipo": "pedidos", "na_palavra": "chegou", "na_palavra_b": "Pedidos", "na_palavra_c": "aceita", "perfil": "E Agora?"}`.
 
-### 5.6 Como o HUD é produzido
+### 5.6 Como o HUD é produzido (código pronto)
+Arquivos fora do repo, em `D:/producao/e_agora/formatos/historia_escolha/`:
+- **`kit/src/ReelVids.tsx`:** composições `ReelVids` e `StillReel` (registradas no `Root.tsx`). Tem a câmera viva (zoom lento por take + soco no corte), o degradê de leitura, a legenda karaokê, a badge e todos os elementos do HUD: `alerta`, `carimbo`, `passo` (trilho 1·2·3), `medidor`, `relogio`, `troca`, `proibidos`, `varredura`, `selo`, `aviao`, `comentario`, `seguir`, `pedidos`.
+- **`reel_NN/remotion/preparar.py` (PC, leve):**
+  - concatena os 7 takes em `base.mp4` (1080×1920, 30 fps, com áudio);
+  - alinha o whisper ao roteiro e grava `tempos.json`;
+  - lê `hud.json` (lista de elementos por take) e grava `video.json`;
+  - copia a `badge.png`;
+  - imprime as palavras que não casaram.
+- **Etapas novas no `g4/produzir.sh`:**
+  - `kit`: só a imagem Node do Drive, sem pesos de IA;
+  - `reelstill <s> …`: stills;
+  - `reelrender`.
+
+  Elas rodam assim: `bash produzir.sh ../reel_NN/remotion <etapa>`.
+
+Passos legados do kit de imagens:
 1. `hud.json` do reel: por take, a lista de elementos com `tipo`, `na_palavra` e os textos.
 2. `pos.json`: ponto (x, y de 0 a 1) do objeto de cada marcador.
 3. **Batedor na G4:** um still por elemento novo (`still.sh`), folha de contato ao Eduardo. Elemento já aprovado num reel anterior não volta ao batedor.
@@ -108,6 +152,8 @@ No `hud.json`: `{"tipo": "pedidos", "na_palavra": "chegou", "na_palavra_b": "Ped
 5. `render.sh` na G4, a partir da imagem `.sqfs` da stack no Drive. No PC só se edita código.
 
 ## 6. Caminhos ruins já pagos
+- **G4 caiu logo depois de ligar e ninguém viu (10/11, ~1 h perdida).** Toda etapa na G4 roda com sentinela (Monitor) desde o `ligar`.
+- **Parar produção na G4:** além do `desligar`, matar o `canal.py ligar` pendente e o filho dele (`taskkill /T /F`), senão a G4 religa sozinha.
 - **Trocar a arte sem pedido.** Custou três rodadas e a paciência do Eduardo.
 - **Dois jobs do Vids ao mesmo tempo:** o laço do job morto continuou e um take saiu sem fala. Conferir que o processo morreu antes de lançar outro.
 - **Recusa "parece violar":** trocar o quadro e deixar a ação neutra (apontar, joinha). Repetir o mesmo prompt não resolve.
