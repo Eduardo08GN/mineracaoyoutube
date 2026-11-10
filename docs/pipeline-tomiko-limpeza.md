@@ -91,6 +91,25 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     Dimensão que cabe e ficou de fora é oportunidade perdida.
   - **Cuidado:** em tema de risco à saúde (animal peçonhento), prometer prevenção (borrifar, tampar o ralo, vedar
     frestas), nunca eliminação; manter os avisos na legenda.
+- **Caso da mancha: ideia forte, copy visual morna (10/11).** Reel da jaqueta manchada do colega (18/10, 34,5 s,
+  45 mil curtidas, 17 mil comentários). Montagem medida: hook de 5,3 s, quatro soluções de ~5 s cada (café,
+  canetinha, molho, caneta), fecho de 3 s e CTA de 7 s com "Comenta mancha".
+  - **O que segurou o vídeo:** ação interrompida (alguém jogando a peça fora e a persona impedindo), a pergunta de
+    perda ("Quanta roupa boa você já jogou fora por mancha?"), lista de utilidade com uma solução a cada 5 s, a mancha
+    passando para o pano branco (prova visual) e CTA de uma palavra do tema.
+  - **O que ficou morno:** primeiro segundo sem fala e em plano aberto; manchas só visíveis aos 3,5 s e pequenas;
+    persona sem emoção; nenhum inimigo ou medo oculto; resultado final mostrado de longe; no take da caneta a fala
+    (colher quente) diverge da legenda do post (álcool) e o rabisco não some na tela.
+  - **Lista de conferência tirada do caso**, para todo Reel de lista:
+    1. Sintoma em close no quadro zero, com a fala no segundo zero.
+    2. O valor da perda dito na fala (preço da peça, tempo, dinheiro).
+    3. Emoção da persona empilhada: olho arregalado, apontando, fala veemente.
+    4. Um inimigo ou mito que explique o erro de quem assiste. Conferir a dica antes de afirmar.
+    5. Curiosidade encadeada: anunciar no início que o último item surpreende.
+    6. O melhor momento visual (a mancha saindo no pano, em macro) vai para o hook de 3 s.
+    7. Fecho com antes e depois do mesmo ponto, em close.
+    8. Cada efeito prometido acontece na tela, e a dica falada é a mesma da legenda.
+    9. CTA com promessa: "Comenta [palavra] que eu te mando".
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and
