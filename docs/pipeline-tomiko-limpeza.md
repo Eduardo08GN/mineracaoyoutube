@@ -136,6 +136,22 @@ Memória de longo prazo do funil da Tomiko 55 no nicho de limpeza (desde 6/11/20
     do CTA por lacuna; um pedido só.
   - **Cuidado com receita:** antes de modelar uma mistura de vários produtos, conferir se a combinação é segura e
     repetir na legenda o aviso do que não misturar.
+- **Caso da máquina de lavar: sujeira escondida com hook parado (10/11).** Reel do filtro da máquina do colega
+  (17/09, 55,4 s, 45 mil curtidas, 18 mil comentários), mesma classe do hook de sujeira escondida do chuveiro.
+  Montagem: 11 takes, sem legenda; hook até 4,5 s, revelação de 9 a 17 s, macro do filtro até 22 s, borracha e
+  tampa superior até 37,6 s, CTA de 18 s.
+  - **Defeitos:** 4,5 s apontando para uma porta fechada, com a sujeira só aos 9 s e o melhor quadro aos 17 s; o
+    filtro passa de imundo a limpo num corte, sem a limpeza; emoção só aos 17 s; o mau cheiro na roupa ficou só na
+    legenda; figurantes ao fundo, máquina que muda de modelo e produto de marca estrangeira; mofo quase invisível no
+    take da tampa superior; CTA com três pedidos em um terço do vídeo.
+  - **Como fazer melhor:** abrir pelo clímax (água suja jorrando e o filtro coberto no quadro zero, "Olha o que
+    estava escondido embaixo da sua máquina"); medo oculto na fala ("toda a sua roupa é lavada com essa água");
+    emoção no primeiro segundo; a limpeza do filtro em três estágios em macro; antes e depois do sintoma (máquina
+    trepidando, depois girando); mofo extremo na borracha com o pano saindo preto; responder ou usar como lacuna a
+    dúvida da tampa superior; CTA de 7 s com um pedido; legenda na tela; um aparelho só, sem figurantes e com
+    produto do país.
+  - **Regra tirada do caso:** em hook de sujeira escondida, a revelação é o primeiro quadro. Preparar a cena
+    (toalha, bandeja, abrir a porta) vem depois.
 - **Ação junto com a fala:** ela faz a ação enquanto fala, desde o 1º segundo; nunca "faz e depois fala".
 - **Orçamento de mãos:** mão que segura algo está ocupada; nunca "both hands" se uma está ocupada.
 - **Voz no prompt:** "a low, warm, relaxed voice of a 55-year-old Brazilian woman from the countryside of São Paulo, slow and

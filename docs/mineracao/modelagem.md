@@ -71,6 +71,11 @@ testar qual alavanca cabe:
 - **Desejo oculto do público daquele tema:** o que a pessoa quer de verdade por trás da tarefa (a casa que a
   visita elogia, a sensação de dar conta), não só "tirar a mancha".
 - **Mecanismo único** e **curiosidade encadeada**, descritos acima.
+- **Segredo dentro de casa.** Um ponto escondido de algo que todo mundo tem ("Tem uma portinha escondida embaixo
+  da sua máquina de lavar"). A revelação vira causa de um sintoma que a pessoa já sente (não centrifuga, roupa com
+  cheiro) e a ponte para o guia é "Se isso te deu nojo, imagina o que mais está escondido pela sua casa".
+- **Dúvida que gera comentário.** Quando o vídeo deixa de fora o caso de parte do público (o filtro na máquina de
+  tampa superior), as pessoas perguntam nos comentários. Pode ser usado de propósito como a lacuna do CTA.
 - **Autoridade emprestada.** O método vem de um lugar que o público admira ("o método dos hotéis de luxo"), seguido
   de uma prova pessoal ("é o que eu uso na pousada onde eu trabalho"). O desejo por trás é status: casa com padrão
   de hotel.
