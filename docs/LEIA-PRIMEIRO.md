@@ -20,6 +20,7 @@ Leitura obrigatória antes do primeiro passo. São ~5 minutos, que poupam horas.
 | What If ES (Eddie3D) | `docs/whatif-es/STACK.md`, `docs/whatif-es/BATEDOR.md` | `eddie3d/` | `docs/whatif-es/erros-pipeline.md` |
 | Segundo a Segundo (ES) | `docs/segundo-a-segundo-stack.md` | `spanish3d/` | `docs/BADPATHS.md` |
 | FB ¿Qué Pasaría Si? 3D, reels de notícia/acidente (**PAUSADO 08/11 por custo**) | `docs/formato-acidentes-fb.md` + `docs/canais/fb_que_pasaria_si/reels_noticia.md` (bíblia: Polyfork, modo barato, água/chuva, HUD) | Remotion + R3F | `docs/BADPATHS.md` #5–7 |
+| KriegsChronik (DE), **catástrofes técnicas** (pivô 11/11) | `docs/canais/kriegschronik/catastrofes-tecnicas.md` | pipeline do Kriegsmomente | `tracer3d2/BADPATHS.md` |
 | E Agora? (Instagram), reels **Stickman Brasileiro** | `docs/canais/e_agora/stickman-brasileiro.md` (happy path Vids + pipeline de HUD) | `D:/producao/e_agora/formatos/historia_escolha/` (kit Remotion) | seção 6 do doc |
 | Tema e título do Kriegsmomente | `docs/pipeline-temas-kriegsmomente.md` | `ferramentas/radar_kriegsmomente/` | — |
 | Mineração / radar de notícias | `docs/radar-noticias-quentes.md` | `ferramentas/radar_noticias/` | — |
