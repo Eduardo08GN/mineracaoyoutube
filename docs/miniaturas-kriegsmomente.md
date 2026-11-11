@@ -32,3 +32,11 @@ Rosto venceu 2/2; a simulação (3D sem rosto) ficou em último. Por isso o padr
 
 ## Estado (10/11/2026)
 Só a T3 (controle) foi gerada. O perfil de automação 903382646 (porta 63452) fechou durante o trabalho e o perfil 869356248 (porta 65196, em uso com Colab) não aceitou a conexão do Playwright (timeout). Sem rostos, T1 e T2 ainda são as antigas.
+
+## Rota que funcionou no K21 (11/11/2026): Qwen-Image na G4-1
+- O perfil do Gemini caiu e a G4-1 resolveu em ~20 min (instalação do venv + modelo + 8 rostos 1664×928, 40 passos).
+- Script: `D:/kriegschronik/k21_inverno/rostos/gerar_rostos.py` + `rodar.sh` (liga, instala, gera, baixa).
+- Prompt do capacete: descrever a Pickelhaube de 1870 (cúpula alta de couro preto, uma ponta de latão, viseira pequena). Só "Pickelhaube" saiu como capacete da 1ª Guerra com águia.
+- Negativo obrigatório: `eagle, swastika, nazi, World War I, World War II, Stahlhelm, steel helmet, peaked cap, helmet plate, cap badge`. Sem ele, o quepe saiu com águia, o que é inaceitável no canal.
+- Composição: o Qwen põe o rosto no centro, ignorando "terço direito". O `rosto()` do `miniaturas_v2.py` desloca o centro do rosto (`fx`) para `alvo≈0,80` com zoom 1,15 e esfuma antes da cabeça.
+- Desligar a G4: o `ReadTimeout` no `POST /desligar` ainda acontece (BADPATHS 7.4); rodar `desligar` de novo.
