@@ -101,6 +101,19 @@ Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam
 - **Até 08/11:** os reels do FB moravam dentro da pasta de mineração, e os pipelines tinham nome de ferramenta, não de canal.
 - **Regra:** separe por tenant, canal → formato (ver `docs/arquitetura-tenants.md`).
 
+## 8. Canal reprovado na monetização por "conteúdo não original" (14/11, Kriegsmomente)
+- **O que houve:** o YouTube recusou a monetização do Kriegsmomente por violação das políticas de monetização. Ele pode se inscrever de novo a partir de 12/02/2027. A leitura do Eduardo é que o canal pareceu produção em massa:
+  - títulos quase todos no mesmo molde ("Warum … – obwohl …?");
+  - temas muito parecidos entre si (Krupp, artilharia, 1870/71);
+  - miniaturas muito parecidas.
+- **Regra (vale para todos os canais, desde o vídeo 1):**
+  - **Títulos:** nenhum molde de frase em mais de ~1 a cada 3 vídeos. Alternar pelo menos 4 estruturas: pergunta, afirmação com número, lugar + ano, citação ou cena. Antes de fechar um título, compare com os 10 últimos do canal.
+  - **Temas:** não repetir o mesmo objeto ou protagonista em vídeos seguidos. Expandir por adjacência: do mesmo interesse do público para outro cenário.
+  - **Miniaturas:** variar composição, cor dominante e tipo de imagem (objeto, mapa, pessoa, cena). As 3 do teste A/B de um vídeo podem seguir o padrão do canal, mas a de um vídeo não pode parecer a do vídeo anterior.
+  - **Sinais de autoria em todo vídeo:** análise e comentário próprios na narração e fontes na descrição. Nenhuma abertura ou encerramento idêntico entre vídeos.
+  - **Portão antes de pedir monetização:** olhar a grade do canal (títulos e miniaturas lado a lado). Se parecer fábrica, corrigir títulos e miniaturas antes de se inscrever.
+- **Não retroage sozinho:** trocar títulos e miniaturas dos vídeos já publicados do Kriegsmomente só com o OK do Eduardo.
+
 ## Troca de personagem (v2v) que altera objetos fora da pessoa (06/11, piloto Tomiko com Wan 2.2 Animate)
 - **O que houve:** no modo replacement, o Wan trocou a Cida pela Tomiko com perfeição, mas também alterou a cena. A tigela de vidro virou um pote com esponja, o fio de água do copo sumiu e o rótulo do bicarbonato quebrou.
 - **Regra (etapa obrigatória do script, não manual):**
