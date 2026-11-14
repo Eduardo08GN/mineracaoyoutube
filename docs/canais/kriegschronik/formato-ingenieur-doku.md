@@ -4,6 +4,18 @@
 
 **O que muda em relação ao Kriegsmomente:** na guerra, o herói é a manobra no mapa. Aqui, o herói é **uma estrutura**. O formato inteiro gira em volta de um único modelo 3D dela, que o espectador aprende a ler e depois vê falhar.
 
+## 0. Atualização de 13/11: versão enxuta do vídeo 1 (vale sobre as seções abaixo)
+Decisões do Eduardo depois deste plano:
+- **Duração: ~12 min** (~1.500 palavras em alemão, ~100 batidas).
+- **Mistura:** ~60% imagem e vídeo gerados (MiniMax na G4, lote por prompt), ~25% 3D e esquema por código, ~15% mapa e réguas de tempo. Take gerado custa uma linha de prompt; take por código custa um agente. O 3D fica só onde o vídeo ensina o mecanismo, porque vídeo gerado erra a física.
+- **Colapso:** animado por chaves no gêmeo, sem simulação física. A simulação fica para o vídeo 2, se o 1 performar.
+- **Edição das geradas:** parallax 2,5D, recorte com contorno, congela e anota, corte por semelhança, cortina antes/depois, tela dividida, foco que muda, aceleração, atmosfera e luz que varre. Cada batida do roteiro traz a sigla da técnica.
+- **MiniMax:** planos abertos e pessoas de longe ou de costas, uma ação por take de 3 a 4 s. Quando a ponte precisa estar certa, o quadro inicial é o render do gêmeo.
+- **Regra de ensino:** cada conceito em três tempos: a coisa de casa, a mesma coisa na ponte, o número preso ao objeto.
+- **Famílias de código:** 4 em vez de 9. **Teto:** ~4 h e ~3 M tokens.
+
+Material do vídeo (fora do repo): `D:/producao/kriegschronik/formatos/ingenieur_doku/v01_reichsbruecke/`, com `ABERTURA.md`, `dossie.md` e `ROTEIRO_40.md` (bíblia, primeiros 40% escritos e esqueleto do resto).
+
 ## 1. Os seis dispositivos do formato
 1. **Gêmeo da estrutura (Bauwerk-Zwilling).** Um só modelo 3D, com medidas reais, usado do começo ao fim em quatro escalas: cidade, obra inteira, elemento (pilar, corrente, apoio) e material (corte). O espectador nunca se perde, porque é sempre o mesmo objeto.
 2. **Fluxo de forças (Kraftfluss).** A carga desenhada dentro da estrutura como tinta que corre: compressão em vermelho-ferrugem, tração em azul-tinta, com espessura proporcional à força. É o abstrato do nicho tornado visível (`docs/take-explicativo.md`). Quando uma peça falha, a tinta procura outro caminho e não acha.
