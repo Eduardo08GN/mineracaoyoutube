@@ -22,6 +22,7 @@ Leitura obrigatória antes do primeiro passo. São ~5 minutos, que poupam horas.
 | FB ¿Qué Pasaría Si? 3D, reels de notícia/acidente (**PAUSADO 08/11 por custo**) | `docs/formato-acidentes-fb.md` + `docs/canais/fb_que_pasaria_si/reels_noticia.md` (bíblia: Polyfork, modo barato, água/chuva, HUD) | Remotion + R3F | `docs/BADPATHS.md` #5–7 |
 | KriegsChronik (DE), **catástrofes técnicas** (pivô 11/11) | `docs/canais/kriegschronik/formato-ingenieur-doku.md` (formato e plano do vídeo 1) + `docs/canais/kriegschronik/catastrofes-tecnicas.md` (nicho e título) | pipeline do Kriegsmomente | `tracer3d2/BADPATHS.md` |
 | E Agora? (Instagram), reels **Stickman Brasileiro** | `docs/canais/e_agora/stickman-brasileiro.md` (happy path Vids + pipeline de HUD) | `D:/producao/e_agora/formatos/historia_escolha/` (kit Remotion) | seção 6 do doc |
+| **Monetização recusada: erros, correções e auditoria do KriegsChronik** (14/11) | `docs/canais/kriegsmomente/LICOES-MONETIZACAO.md` (ler antes de título, miniatura ou descrição de qualquer canal do nicho) | — | `docs/BADPATHS.md` #8 |
 | Tema e título do Kriegsmomente | `docs/pipeline-temas-kriegsmomente.md` | `ferramentas/radar_kriegsmomente/` | — |
 | Mineração / radar de notícias | `docs/radar-noticias-quentes.md` | `ferramentas/radar_noticias/` | — |
 | Organização por canal | `docs/arquitetura-tenants.md` | `D:/producao/<canal>/formatos/<formato>/` | — |

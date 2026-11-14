@@ -112,6 +112,7 @@ Os de cada pipeline ficam no doc dela (como `tracer3d2/BADPATHS.md`). Aqui ficam
   - **Miniaturas:** variar composição, cor dominante e tipo de imagem (objeto, mapa, pessoa, cena). As 3 do teste A/B de um vídeo podem seguir o padrão do canal, mas a de um vídeo não pode parecer a do vídeo anterior.
   - **Sinais de autoria em todo vídeo:** análise e comentário próprios na narração e fontes na descrição. Nenhuma abertura ou encerramento idêntico entre vídeos.
   - **Portão antes de pedir monetização:** olhar a grade do canal (títulos e miniaturas lado a lado). Se parecer fábrica, corrigir títulos e miniaturas antes de se inscrever.
+- **Detalhe completo** (os 10 erros, o que foi corrigido no Studio em 14/11, testes A/B, checklist e a auditoria do KriegsChronik): `docs/canais/kriegsmomente/LICOES-MONETIZACAO.md`.
 - **Não retroage sozinho:** trocar títulos e miniaturas dos vídeos já publicados do Kriegsmomente só com o OK do Eduardo.
 
 ## Troca de personagem (v2v) que altera objetos fora da pessoa (06/11, piloto Tomiko com Wan 2.2 Animate)
