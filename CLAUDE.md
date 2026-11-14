@@ -37,6 +37,7 @@ Critério: "ajuda a entender?", nunca "parece real?". Cada take de mecanismo cru
   - **montar a stack é trabalho da G4, nunca do PC** (`npm install`, empacotar, checar tipos, stills, render): a G4 parte do `.sqfs`, instala só o que for novo e regrava a imagem. No PC fica só a edição do código (regra de 08/11, reels do FB).
 - **Navegação:** dirija só o navegador de automação; o Chrome pessoal do Eduardo, só pedindo.
 - **Publicação:** é manual, do Eduardo. Respostas no YouTube só com o texto aprovado.
+- **Variedade do canal (14/11, Kriegsmomente reprovado na monetização por "conteúdo não original"):** títulos, temas e miniaturas não podem repetir o mesmo molde de um vídeo para o outro. Compare com os 10 últimos do canal antes de fechar. Detalhe em `docs/BADPATHS.md` #8.
 - **Takes de animação:** nunca reaproveitar o mesmo take dentro do vídeo. Outro trecho, outra velocidade ou espelho do mesmo clipe também contam como reaproveitamento. Cada batida 3D tem um take renderizado próprio (regra de 03/11, vale a partir do vídeo seguinte à parte 2 do Learjet).
 - **Áudio:** música só instrumental. No Kriegsmomente, **sem música** desde 03/11 (só voz e efeitos pontuais; comentários reclamaram) e sem ambiente contínuo.
 
