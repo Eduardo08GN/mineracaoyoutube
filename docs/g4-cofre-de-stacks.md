@@ -90,7 +90,21 @@ Cada passo é aditivo: sem pacote no cofre, o caminho antigo continua funcionand
 - **Decisão pela medição (19/11): pesos públicos NÃO vão para o cofre.** O HF entrega ~300 MB/s com `hf_transfer`; o Drive por rclone, ~110 MB/s. Os pacotes de pesos de teste (Qwen-Image-Edit e Qwen3-TTS) foram para a lixeira do Drive.
 - **O cofre guarda só o que não existe em outro lugar ou que demora a instalar:** ambientes (venv, ComfyUI, node_modules), Unreal, e pesos que só existem no nosso Drive (os do FL2V do MiniMax, em `gerente_g4/h3/`).
 - **Pesos públicos:** sempre do HF com `HF_HUB_ENABLE_HF_TRANSFER=1` e, quando houver, `HF_TOKEN` (sem token o HF limita a taxa). Baixar em segundo plano logo depois do `/saude`, em paralelo com o envio do projeto, como já faz o `prefetch.sh` da limpeza_avatar.
-- **Alternativa em estudo:** cofre num repositório privado do Hugging Face no lugar do Drive (sem OAuth do Google, upload mais rápido). Depende do limite de espaço do plano e de um token do HF, que ainda não existe no PC.
+- **Unreal descartado (19/11, Eduardo):** não usamos Unreal. A imagem `ue_5.8.4.sqfs` e a pasta `unreal3d/` foram para a lixeira do Drive.
+
+### 6.1 Cofre principal no Hugging Face (19/11)
+O cofre passou do Drive para um **dataset privado do Hugging Face** (`MrEddie10/g4-cofre`), com o mesmo layout de `t2_stacks/`. O Drive fica como reserva.
+
+| Medição na G4-1 | Hugging Face | Drive (rclone) |
+|---|---|---|
+| `qwen_image_env.sqfs` (3,9 GB) | 14 s | 15 s |
+| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` (21 GB) | **72 s** | 111 s |
+| Gravar o cofre inteiro (36 GB) | **48 s** | ~36 min para 57 GB |
+
+- **Por que o HF:** é grátis até 100 GB privados (o cofre tem ~36 GB), não depende de OAuth do Google nem de 2FA, baixa mais rápido e grava em segundos.
+- **Token:** fica num arquivo local fora do repositório e o `cofre.py` o envia à VM. Escrita só pela conta do Eduardo.
+- **Código:** `tracer3d2/vm/cofre_hf.sh` (`puxar`, `gravar`, `espelhar`). O `cofre.puxar` tenta o HF e cai no Drive se falhar. O `cofre.gravar` grava nos dois.
+- **Não usar várias contas grátis** (Cloudflare ou outra) para somar cotas: vai contra os termos de uso e arrisca suspender as contas.
 
 ## 7. Regras que continuam valendo
 - Token, ID de link e conta: só no `.env` local. Nada disso no GitHub.
