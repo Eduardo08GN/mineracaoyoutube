@@ -37,3 +37,9 @@ Triagem feita na sessão do Lanús e do CE-25A. Aqui fica **só o que vale**; os
 | Claude-Video-Editing-Skills (Viprasol) | Edita vídeo gravado (silêncio, corte de podcast); repositório com 2 dias. |
 | Biblioteca de sites do @tobiadonadon_ | Template de landing page, pago. |
 | Já na stack | three.quarks, react-postprocessing, react-three-fiber, WhisperX, stable-ts, librosa, Remotion skills. |
+
+## Formato a portar: Silicon Up Close (de olho)
+- Canal criado em 07/10/2026: 12,8 mil inscritos, 13 vídeos, cerca de US$ 13,8 mil por mês estimados (post @SojAutomation, 19/11).
+- Vídeos: "What Happens Inside an AI Chip" (1 mi), "1s Inside a CPU" (447 mil), "How Did Phone Cameras Get This Good?" (269 mil).
+- **Molde:** "por dentro da máquina", em 1 segundo ou em zoom extremo, com motion graphics Remotion barato e 12 a 25 min de duração.
+- **Ideia:** levar o molde para outro nicho ou idioma, por exemplo em ES: "1 segundo dentro de un motor de avión", "dentro de una batería", "dentro del cuerpo". O CE-25A já é um piloto desse território.
