@@ -1,0 +1,22 @@
+{
+  "name": "design-sound",
+  "version": "0.3.1",
+  "description": "Make, find, choose and mix SFX and music for a video, game or reel: CLAP library search with sheets, web and ElevenLabs fetching, foley from the picture with HunyuanVideo-Foley (local, fits a 12 GB GPU), an effects stem from an event list, music fitted to the cut, and a mix to platform loudness with sync, masking and phone checks.",
+  "author": {
+    "name": "CodePawl",
+    "url": "https://codepawl.com"
+  },
+  "homepage": "https://github.com/codepawl/creator-generalist",
+  "repository": "https://github.com/codepawl/creator-generalist",
+  "license": "MIT",
+  "keywords": [
+    "sound-design",
+    "sfx",
+    "foley",
+    "video-to-audio",
+    "music",
+    "mixing",
+    "loudness",
+    "elevenlabs"
+  ]
+}
