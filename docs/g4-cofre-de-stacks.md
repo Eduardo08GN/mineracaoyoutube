@@ -29,7 +29,7 @@ Toda stack vira **dois pacotes**, cada um num arquivo só, com nome por hash:
   {"canal": "segundo_a_segundo", "formato": "limpeza_avatar",
    "pacotes": ["env_qwen_image_<hash>", "pesos_qwen_edit_2509_fp4_<hash>"]}
   ```
-- **Hoje** os pesos do MiniMax já estão assim (`modelos_h3v2.sqfs`); os do Qwen e do TTS ainda vêm do HF a cada ligada. A regra passa a valer para todos.
+- **Atualizado pela medição de 19/11 (seção 6):** o pacote de pesos só vale para pesos que **não** estão no Hugging Face. Pesos públicos vêm do HF, que é 2,8× mais rápido que o Drive.
 
 ### 3.2 Acesso sem navegador (como trazer)
 A montagem do Drive pelo Colab (`drive.mount`) depende de um clique de consentimento no navegador, e é o ponto que trava. Ela sai do caminho principal.
@@ -69,7 +69,7 @@ fila de pedidos → resultados baixados pelo canal
 
 ## 5. Ordem de implementação
 1. **rclone** no `ligar` (resolve o travamento do Drive). Depende da autorização única do Eduardo.
-2. **Pesos no cofre + manifesto:** começar pelo Qwen-Image-Edit e pelo Qwen3-TTS, que hoje vêm do HF a cada ligada.
+2. **Manifesto + ambientes no cofre** (feito em parte: Qwen, TTS, ComfyUI, Remotion e Unreal já estão). Pesos públicos ficam no HF (seção 6). Faltam os ambientes do ACE-Step, do MOSS e do Blender.
 3. **A/B do Qwen FP4 Lightning** contra o completo.
 4. **Servidor quente** do Qwen e **autodesligar** por fila vazia.
 
@@ -80,12 +80,17 @@ Cada passo é aditivo: sem pacote no cofre, o caminho antigo continua funcionand
 |---|---|---|
 | Ambiente do Qwen (`qwen_image_env.sqfs`) do Drive por rclone, sem clique | 3,9 GB | 15 s para baixar, <1 s para montar |
 | Pesos do Qwen-Image-Edit-2509 do Hugging Face (caminho antigo) | 54 GB | 178 s |
-| Pesos empacotados (`_comum/pesos/qwen_edit_2509.sqfs`, sem compressão) | 57,7 GB | gravação no Drive em andamento; falta medir a volta |
+| Os mesmos pesos empacotados, de volta do Drive por rclone (`_comum/pesos/qwen_edit_2509.sqfs`) | 57,7 GB | **498 s** para baixar (2,8× mais lento que o HF) |
+| Gravar esse pacote no Drive a partir da G4 | 57,7 GB | ~36 min (~27 MB/s de upload) |
+| Unreal Engine 5.8.4 copiado para `t2_stacks/unreal3d/` dentro do próprio Drive | 22 GB | 15 s (cópia do lado do Drive, sem baixar) |
 
 - Código: `tracer3d2/cofre.py`, `tracer3d2/vm/cofre.sh` e `tracer3d2/vm/pesos_qwen.sh`. No `ligar`, `T2_COFRE="<rel.sqfs>:<destino>,..."` puxa em segundo plano.
 - O token do rclone fica fora do repositório (`T2_RCLONE_CONF`).
 - O rclone avisa que o client_id compartilhado dele será aposentado em 2026: criar um client_id próprio no Google Cloud antes disso.
-- O download do HF já é rápido (~300 MB/s). O ganho do pacote de pesos só se confirma se a volta do Drive for mais rápida que 178 s; se não for, os pesos continuam vindo do HF e o cofre fica só com os ambientes.
+- **Decisão pela medição (19/11): pesos públicos NÃO vão para o cofre.** O HF entrega ~300 MB/s com `hf_transfer`; o Drive por rclone, ~110 MB/s. Os pacotes de pesos de teste (Qwen-Image-Edit e Qwen3-TTS) foram para a lixeira do Drive.
+- **O cofre guarda só o que não existe em outro lugar ou que demora a instalar:** ambientes (venv, ComfyUI, node_modules), Unreal, e pesos que só existem no nosso Drive (os do FL2V do MiniMax, em `gerente_g4/h3/`).
+- **Pesos públicos:** sempre do HF com `HF_HUB_ENABLE_HF_TRANSFER=1` e, quando houver, `HF_TOKEN` (sem token o HF limita a taxa). Baixar em segundo plano logo depois do `/saude`, em paralelo com o envio do projeto, como já faz o `prefetch.sh` da limpeza_avatar.
+- **Alternativa em estudo:** cofre num repositório privado do Hugging Face no lugar do Drive (sem OAuth do Google, upload mais rápido). Depende do limite de espaço do plano e de um token do HF, que ainda não existe no PC.
 
 ## 7. Regras que continuam valendo
 - Token, ID de link e conta: só no `.env` local. Nada disso no GitHub.
