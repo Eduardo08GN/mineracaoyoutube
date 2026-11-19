@@ -65,3 +65,4 @@ Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte ess
 ## 3. Ao terminar
 - Lição nova vai **na hora** para o BADPATHS do pipeline e, se for geral, para este arquivo.
 - Commit num branch com PR. Diga ao maestro e ao Eduardo que o PR precisa de merge para a próxima sessão ver.
+- **Skills de motion (anti-slideshow):** `docs/skills-motion.md` (motionmaxxing, reanimate, huashu-art-motion).
