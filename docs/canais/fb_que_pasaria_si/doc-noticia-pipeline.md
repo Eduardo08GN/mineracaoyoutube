@@ -55,3 +55,9 @@ Transições: `whip`, `fumaca`, `tinta`, `luz`, `zoom`, `glitch`, `corte`. Look 
 - `foto25d` com câmera lenta ficou 75% parado. Com percurso 3x e soco de zoom caiu para 41%, e a meta é < 20%.
 - Imagens do Flow vêm em pares quase iguais (quadros inicial e final): use só uma de cada.
 - Mais detalhes em `docs/auditorias/friccao-pipeline-reel-lanus-1911.md`.
+
+## Passo 0 obrigatório (Eduardo, 19/11): partir do Kriegsmomente
+O Lanús saiu com cara de slideshow porque o kit foi feito do zero, sem abrir o pipeline aprovado do K19/K20. Antes de qualquer cena do próximo vídeo:
+1. Ler `docs/receita-k19-stack.md` e `docs/pipeline-kriegsmomente.md` e listar o que entra pronto: mapas com marcadores, HUD com o dado nascendo na cena, takes cinematográficos, transições, ritmo de corte.
+2. Medir o K19 e o Lanús v2 a 24 fps (cortes/min, câmera parada, movimento) e mostrar a diferença ao Eduardo.
+3. Construir só o que não existir lá, como a imagem do Flow em 2.5D.
