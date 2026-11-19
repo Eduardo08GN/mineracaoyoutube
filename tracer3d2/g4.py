@@ -22,8 +22,10 @@ class Trava:
         while True:
             try: os.mkdir(self.d); return self
             except FileExistsError:
-                if time.time() - os.path.getmtime(self.d) > 30: os.rmdir(self.d)   # trava orfa
-                elif time.time() - t0 > 60: raise SystemExit("G4_TRAVA_PRESA " + self.d)
+                try:   # 19/11: a trava pode sumir entre o mkdir e o getmtime (outro processo a soltou): so tentar de novo
+                    if time.time() - os.path.getmtime(self.d) > 30: os.rmdir(self.d)   # trava orfa
+                except (FileNotFoundError, OSError): continue
+                if time.time() - t0 > 60: raise SystemExit("G4_TRAVA_PRESA " + self.d)
                 time.sleep(0.2)
     def __exit__(self, *a): os.rmdir(self.d)
 
@@ -146,6 +148,7 @@ def cmd_zelador(a):
         while True:
             os.utime(f"{TMP}/g4_zelador.lock")
             for g in ("1", "2"):
+              try:   # 19/11: um erro passageiro numa volta nao pode matar o zelador
                 with Trava(f"g4_res_{g}"): r = vivas(g)
                 env = {**os.environ, "T2_G4": g, "T2_DONO": "g4_zelador", "T2_PAPEL": "maestro"}
                 if g == "2": env["T2_PORTEIRO"] = f"{TMP}/porteiro_2.json"
@@ -160,6 +163,7 @@ def cmd_zelador(a):
                     print(time.strftime("%H:%M:%S"), f"zelador: G4-{g} sem reserva nem job ha {a.ocioso} s; desligando", flush=True)
                     subprocess.run([sys.executable, "-X", "utf8", "canal.py", "desligar"], cwd=AQUI, env=env, timeout=600)
                     vazio.pop(g, None)
+              except Exception as e: print(time.strftime("%H:%M:%S"), "zelador: erro na volta", g, repr(e)[:160], flush=True)
             time.sleep(60)
     finally: os.rmdir(f"{TMP}/g4_zelador.lock")
 
