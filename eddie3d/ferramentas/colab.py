@@ -94,14 +94,22 @@ def rodar(codigo, espera=600, marca=None):
         nb.keyboard.insert_text(codigo); time.sleep(0.8)
         nb.keyboard.press("Control+Enter")
         fim = time.time() + espera; t0 = time.time(); bat = t0
+        def _tudo():   # 19/11/2026: saida() parava no .output nao vazio e nao via a marca que estava no iframe -> ligar esperava os 240 s
+            t = saida(nb)
+            if marca and marca not in t:
+                for fr in nb.frames:
+                    if fr != nb.main_frame:
+                        try: t += " " + fr.evaluate("() => document.body ? document.body.innerText : ''")
+                        except Exception: pass
+            return t
         while time.time() < fim and marca:
             time.sleep(5)
-            if marca in saida(nb): break
+            if marca in _tudo(): break
             if time.time() - bat >= 30:   # batimento (vai direto ao stdout real, mesmo com redirect): esperar nunca e calado
                 bat = time.time(); ult = (saida(nb).strip().splitlines() or [""])[-1][:90]
                 sys.__stdout__.write(f"BATIMENTO rodar: {time.time() - t0:.0f}s aguardando {marca[:20]} | {ult}" + chr(10)); sys.__stdout__.flush()
         time.sleep(2)
-        txt = saida(nb); print(txt[-3000:]); return txt
+        txt = _tudo(); print(txt[-3000:]); return txt
 
 
 if __name__ == "__main__":
