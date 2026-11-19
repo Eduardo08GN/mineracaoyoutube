@@ -43,3 +43,7 @@ As duas correções ainda não foram testadas numa ligada real. O teste é a pr�
 ## 5. Referência medida no mesmo dia
 
 Vídeo "Why Is Nvidia's AI Chip So Hard to Copy?" (canal Silicon Up Close, 21:40, 83 mil views em 2 dias). O Eduardo levantou a hipótese de que esse formato, quase todo em Remotion com three.js pontual, sai bem mais barato que cena 3D completa. A leitura a 24 fps foi interrompida a pedido dele antes das folhas; os quadros medidos ficaram fora do repositório.
+
+## 6. Lição do documentário de 12 min (19/11, Eduardo)
+- O planejador v2 (`planejar2.py`) trocou as batidas de **mapa** por imagem e o vídeo saiu **sem nenhum take de localização**. No próximo vídeo entra sempre, mesmo em proporção pequena: um take de mapa no gancho ou no 1º capítulo (país → cidade → bairro → esquina) e outro quando o lugar volta à história. É barato e sai rápido.
+- Os tipos explicativos aprovados (corte do cano, nuvem com a janela de 5–15%, relógio) ficam; a imagem 2.5D do Flow não substitui a explicação.
