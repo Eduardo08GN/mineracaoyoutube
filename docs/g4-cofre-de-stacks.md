@@ -75,7 +75,19 @@ fila de pedidos → resultados baixados pelo canal
 
 Cada passo é aditivo: sem pacote no cofre, o caminho antigo continua funcionando. Medir antes e depois com o mesmo job: tempo do `ligar` até o primeiro resultado.
 
-## 6. Regras que continuam valendo
+## 6. Medições de 19/11 (G4-1)
+| Etapa | Tamanho | Tempo |
+|---|---|---|
+| Ambiente do Qwen (`qwen_image_env.sqfs`) do Drive por rclone, sem clique | 3,9 GB | 15 s para baixar, <1 s para montar |
+| Pesos do Qwen-Image-Edit-2509 do Hugging Face (caminho antigo) | 54 GB | 178 s |
+| Pesos empacotados (`_comum/pesos/qwen_edit_2509.sqfs`, sem compressão) | 57,7 GB | gravação no Drive em andamento; falta medir a volta |
+
+- Código: `tracer3d2/cofre.py`, `tracer3d2/vm/cofre.sh` e `tracer3d2/vm/pesos_qwen.sh`. No `ligar`, `T2_COFRE="<rel.sqfs>:<destino>,..."` puxa em segundo plano.
+- O token do rclone fica fora do repositório (`T2_RCLONE_CONF`).
+- O rclone avisa que o client_id compartilhado dele será aposentado em 2026: criar um client_id próprio no Google Cloud antes disso.
+- O download do HF já é rápido (~300 MB/s). O ganho do pacote de pesos só se confirma se a volta do Drive for mais rápida que 178 s; se não for, os pesos continuam vindo do HF e o cofre fica só com os ambientes.
+
+## 7. Regras que continuam valendo
 - Token, ID de link e conta: só no `.env` local. Nada disso no GitHub.
 - Do Drive para a G4, nunca do PC para a G4 nem do PC para o Drive.
 - Nunca desligar a G4 com job de outra sessão (`T2_DONO`); `desligar` só com `T2_PAPEL=maestro`.

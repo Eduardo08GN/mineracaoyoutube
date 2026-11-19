@@ -28,7 +28,8 @@ Leitura obrigatória antes do primeiro passo. São ~5 minutos, que poupam horas.
 | Reels do Instagram (Tomiko Casa Limpa) | `docs/inteligencia-conteudo-inedito.md` (como escolher a fonte: ideia inédita, copy nova) + `docs/pipeline-tomiko-limpeza.md` (produção) | `motor/instagram_*.py`, branch `instagram` | — |
 | Mineração de Reels para modelar (Instagram) | `docs/mineracao/README.md` (classes de busca: sintoma, praga, ofício...) | — | — |
 | Imagem da stack na G4 | `docs/g4-imagem-stack.md` | `tracer3d2/vm/preparar_img.sh` | — |
-| Cofre de stacks da G4 (pesos, rclone sem clique, modelo quente) | `docs/g4-cofre-de-stacks.md` (adotado 19/11) | `tracer3d2/canal.py` (a implementar) | — |
+| Cofre de stacks da G4 (pesos, rclone sem clique, modelo quente) | `docs/g4-cofre-de-stacks.md` (adotado 19/11) | `tracer3d2/cofre.py`, `tracer3d2/vm/cofre.sh` | — |
+| **G4 com várias conversas ao mesmo tempo** (pedir/rodar/soltar; sessão não liga nem desliga) | `docs/g4-concomitante.md` (adotado 19/11) | `tracer3d2/g4.py` | — |
 
 Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte esse doc antes de qualquer levantamento novo.
 
