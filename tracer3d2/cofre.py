@@ -13,6 +13,9 @@ def preparar_vm():
     if canal.G4N != "1" and "gravar" in sys.argv: raise SystemExit("COFRE: so a G4-1 grava no Drive Ultra")
     canal.subir(CONF, "/root/.config/rclone/rclone.conf")
     canal.subir(os.path.join(AQUI, "vm", "cofre.sh"), "/content/t2/vm/cofre.sh")
+    # token do HF (D:/segredos, nunca no repositorio): sem ele o HF limita a taxa dos downloads de pesos publicos
+    hf = os.environ.get("HF_TOKEN_ARQ", "D:/segredos/hf_token.txt")
+    if os.path.exists(hf): canal.subir(hf, "/root/.cache/huggingface/token")
 
 
 def puxar(itens):
