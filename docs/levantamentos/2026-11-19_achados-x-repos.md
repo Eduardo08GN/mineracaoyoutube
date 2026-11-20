@@ -86,3 +86,25 @@ O render 3D demonstra o mecanismo, e os contadores ao vivo (rotação, força, p
 
 ### Descartados nesta rodada
 Shorts faceless no piloto automático com Zapier (molde repetido, contra a regra de variedade de 14/11); a lista de 18 libs de motion (Typed.js, GSAP, anime.js, react-spring, mo.js, Rive, Paper.js, p5, PixiJS, matter.js, tsParticles, Lenis…), que são básicas e já estão cobertas pelo Remotion e pelo three.js. O HyperFrames entra só via motionmaxxing. Também: CAD com agente (freelance chinês, isca de engajamento) e o curso de "perfis dark".
+
+## Rodada 3: 10 canais de animação que acertaram em semanas (artigo @morgsmariana, 18/11)
+Filtro dela: vídeo mais visto com pelo menos 10 vezes o número de inscritos e no mínimo 250 mil views. As estimativas de receita são dela.
+
+| Canal | Formato | Viral | Lição para nós |
+|---|---|---|---|
+| **Minute Zero** | "e se…" científico em 3D, primeira pessoa, **sem narração**, um número crescendo no canto | "e se você acelerasse e não conseguisse parar?", 2,4 mi; o seguinte, 2,2 mi | **Parado desde 31/10.** A pergunta precisa crescer sem limite. Quase sem fala, então porta fácil para ES. É o nosso What If ES somado ao POV. |
+| **Fossil** | animais pré-históricos | título de "eu simulei" (182 mil) trocado por "quanto tempo **você** duraria em cada era" (13 mi) | Título em "você". Serve ao canal pré-história POV. |
+| **Depth Theory** | perigo de bicho do oceano | "por que você nunca ia querer encontrar um cachalote", 8,7 mi | Bicho famoso + perigo desconhecido + você dentro da água. Sem o bicho famoso, cai para 40 mil. |
+| **Fortune of Nations** | economia contada em mapa com relevo animado | "por que os EUA ficaram ricos e a América Latina nunca ficou?", 1,8 mi | Rivais que o público sente na pele. O tema é latino-americano por natureza (ES). O mapa é a stack do Kriegsmomente. **Cuidado** com a regra "sem política": fazer pela história econômica. |
+| **RUNULL** | minidoc de tecnologia real, 3D no Blender feito com o Claude | "o update de software mais difícil da história" (Voyager 1), 728 mil num canal de 4 mil inscritos | O assunto pesa mais que o capricho. |
+| Lullorin | terror de regras, um vídeo por dia | 3,2 mi | Já tem clone em ES (ver acima). |
+| A Better Mind, Day One Films, The Rep Theory, Strabo | psicologia, motivação, treino, geopolítica | 5,3 mi, 6,2 mi, 5,4 mi, 1,3 mi | Fora do nosso território. Strabo é política. |
+
+**Sete fórmulas de título:** falar com "você"; desafio ("duvido você terminar"); regra de sobrevivência; ideia contra o senso comum; "e se… e não conseguisse parar?"; "por que esse e não aquele?" (rivais); "o mais difícil da história".
+
+**Atenção:** "um formato que vira série" conflita com a regra de variedade de 14/11. A série tem de variar título, tema e miniatura entre vídeos (`docs/BADPATHS.md` #8).
+
+**Candidatos para nós, nesta ordem:**
+1. **Minute Zero em ES:** o original parou; formato quase sem fala; three.js com câmera em primeira pessoa e contador crescente.
+2. **Fortune of Nations para a América Latina:** mapas do K19.
+3. Títulos em "você" no canal pré-história e no What If ES.
