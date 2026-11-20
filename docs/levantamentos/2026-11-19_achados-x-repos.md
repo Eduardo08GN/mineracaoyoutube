@@ -25,8 +25,8 @@ Triagem feita na sessão do Lanús e do CE-25A. Aqui fica **só o que vale**; os
 ## Avaliados e descartados (não reabrir)
 | Repo ou coisa | Motivo |
 |---|---|
-| Pixelle-Video, Jellyfish, waoowaoo | Fábricas de drama curto com IA: uma imagem ou vídeo por frase, mais TTS e música. É slideshow e vídeo gerado; risco de "conteúdo não original". |
-| LTX-Video, FramePack | Vídeo gerado, proibido. |
+| Pixelle-Video, Jellyfish, waoowaoo | Fábricas de drama curto com IA: uma imagem ou vídeo por frase, mais TTS e música. Molde de slideshow, uma imagem por frase; risco de "conteúdo não original" quando vira série igual. O Toonflow (MIT) é o candidato a estúdio se a novelinha com o H3 virar batedor. |
+| LTX-Video, FramePack | Vídeo gerado: o MiniMax H3 na G4 cobre melhor (corrigido em 19/11: vídeo por IA não é proibido em geral; só ficou fora do documentário do Lanús). |
 | RobustVideoMatting, CoTracker, ProPainter | Pressupõem filmagem real; o nosso material é código. |
 | Motion Canvas, Revideo | Duplicam o Remotion. |
 | Motion (framer), Theatre.js | Animação de interface e editor manual de keyframes; quem dirige a câmera é o planejador. |
@@ -56,7 +56,7 @@ Um teste dela comparou dois caminhos. O cenário 100% em código (three.js) fico
 
 ### Imagem na G4 em vez do Flow: MiniMax H3 (pesos abertos)
 - `MiniMaxAI/MiniMax-H3-Image` está no Hugging Face (03/11, 821 mil downloads). O app de teste é animede/Diffusers_minimax-h3 e roda a partir de 6 GB de VRAM.
-- Usar **só o modo imagem**, de texto (T2I) e de referência (Ref2I). O Ref2I é a nossa âncora com a foto real. O vídeo continua proibido.
+- Usar **só o modo imagem**, de texto (T2I) e de referência (Ref2I). O Ref2I é a nossa âncora com a foto real. O vídeo do H3 também pode entrar, onde o formato pedir.
 - **Ganho:** sem cota e sem o perfil da Ivone, em lote por script na G4.
 - **Antes de adotar:** ler a licença ("other"; confirmar uso comercial) e fazer o batedor de 5 imagens H3 contra Flow.
 - O **FreeVideo** (outro app que promete o H3 com 8 GB) não deve ser instalado: é um instalador desconhecido.

@@ -44,7 +44,7 @@ Os três vendem um produto (templates, master prompt ou skill). O que vale é o 
 - Folha de personagens para manter a consistência das imagens (Flow ou MiniMax H3).
 - Contrato de 2 prompts por cena.
 - **Manequim sem rosto resolve gore e rosto de vítima.**
-- O vídeo do Flow continua fora pela regra.
+- O vídeo por IA (Omni ou MiniMax H3) pode entrar onde o formato pedir; no Lanús ficou fora por decisão daquele vídeo.
 
 ## 3. Skill de true crime (Money Mastery Hub; referência: canal Gloam)
 **Gloam:** 5 vídeos e ~8 mil inscritos. "How Binance Lost $6,300,000,000 in One Night" fez 2,5 mi em 2 semanas.

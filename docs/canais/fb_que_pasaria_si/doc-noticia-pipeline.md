@@ -39,7 +39,7 @@ Transições: `whip`, `fumaca`, `tinta`, `luz`, `zoom`, `glitch`, `corte`. Look 
 
 ## Regras do Eduardo nesta rodada (19/11)
 1. **Não é slideshow.** O que vale do vídeo da Nvidia é o pipeline barato; o dinamismo vem do vídeo alemão: paralaxe, transição de fumaça, câmera e batida.
-2. **Imagens no Flow, só IMAGEM.** As fotos reais servem de âncora e nunca aparecem no vídeo. Nada de Veo ou vídeo gerado.
+2. **No Lanús: imagens do Flow, só IMAGEM.** Foi uma decisão daquele vídeo, não uma proibição geral de vídeo por IA (Eduardo, 19/11). As fotos reais servem de âncora e nunca aparecem no vídeo.
 3. **Zero gore:** fora feridos, sangue, vítimas e rostos.
 4. **A animação explicativa fica** (corte do cano, nuvem de gás, relógio). A imagem do Flow não substitui a explicação.
 5. **Take de mapa sempre** (país → cidade → bairro → esquina), mesmo em proporção pequena. O 1º vídeo saiu sem, e foi reclamado.
