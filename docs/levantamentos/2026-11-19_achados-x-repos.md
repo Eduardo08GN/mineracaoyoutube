@@ -43,3 +43,46 @@ Triagem feita na sessão do Lanús e do CE-25A. Aqui fica **só o que vale**; os
 - Vídeos: "What Happens Inside an AI Chip" (1 mi), "1s Inside a CPU" (447 mil), "How Did Phone Cameras Get This Good?" (269 mil).
 - **Molde:** "por dentro da máquina", em 1 segundo ou em zoom extremo, com motion graphics Remotion barato e 12 a 25 min de duração.
 - **Ideia:** levar o molde para outro nicho ou idioma, por exemplo em ES: "1 segundo dentro de un motor de avión", "dentro de una batería", "dentro del cuerpo". O CE-25A já é um piloto desse território.
+
+## Rodada 2 (19/11, noite)
+
+### Receita da foto 2.5D v2 (post @kaulabs)
+Um teste dela comparou dois caminhos. O cenário 100% em código (three.js) ficou com cara de protótipo. A imagem gerada **reprojetada quadro a quadro** com câmera de grua e travelling foi aprovada.
+1. A câmera **se desloca** (sobe e avança): zoom não gera paralaxe.
+2. O chão é tratado como plano em perspectiva: o perto anda mais que o horizonte.
+3. O personagem ou objeto fica numa camada separada, presa ao chão (SAM 2).
+
+**Batedor do CE-25A:** avião recortado pelo SAM 2, pista reprojetada, câmera de grua, comparado lado a lado com o `foto25d` atual (meta: < 20% de câmera parada).
+
+### Imagem na G4 em vez do Flow: MiniMax H3 (pesos abertos)
+- `MiniMaxAI/MiniMax-H3-Image` está no Hugging Face (03/11, 821 mil downloads). O app de teste é animede/Diffusers_minimax-h3 e roda a partir de 6 GB de VRAM.
+- Usar **só o modo imagem**, de texto (T2I) e de referência (Ref2I). O Ref2I é a nossa âncora com a foto real. O vídeo continua proibido.
+- **Ganho:** sem cota e sem o perfil da Ivone, em lote por script na G4.
+- **Antes de adotar:** ler a licença ("other"; confirmar uso comercial) e fazer o batedor de 5 imagens H3 contra Flow.
+- O **FreeVideo** (outro app que promete o H3 com 8 GB) não deve ser instalado: é um instalador desconhecido.
+
+### Pipeline de personagem a testar (post @kenonews)
+- **MPFB** (MakeHuman para Blender): humano completo com rosto e esqueleto, por script e com licença livre. É a saída para o veto do visual de "PS2".
+- **FlowHMR:** vídeo de celular vira animação FBX. O Eduardo grava o movimento exato que a cena pede.
+- **Puppeteer** (Seed3D): põe esqueleto e anima qualquer modelo do Fab ou do Sketchfab.
+- Somar ao mocap da CMU. Saída para Blender (G4) ou GLB (three.js). Destrava pessoas nas reconstruções e o formato POV.
+
+### Formato POV de desastre (Instagram, @playafterbell)
+- Primeira pessoa (o espectador vê os próprios braços), título de escolha ("Boat or Helicopter?", "Door or Window?"), desastre famoso e 3D cartoon. São 32,8 mi de views com 4 posts, **mas 19,7 mi vêm de um só**.
+- Dá para fazer na nossa stack (three.js + mocap). **Antes:** medir de 5 a 10 perfis do formato e ver se já existe em ES.
+
+### Referência de take explicativo: o torno do @0xKapri
+O render 3D demonstra o mecanismo, e os contadores ao vivo (rotação, força, potência, diâmetro de 40 para 30,5 mm) nascem da ação, com corte lateral, vista de cima e peças numeradas no mesmo quadro. É o "instrumento vivo" bem feito. **CE-25A:** o avião com contadores de kWh, km, empuxo e **peso constante**, ao lado do esquema de bateria contra querosene. É o take eureka.
+
+### Método SIMULAB (ecapri-dev/simulab-skill, MIT): absorver, não instalar
+- Números com fonte antes do desenho; o resto é marcado como suposição.
+- **O modelo vem primeiro, como funções puras**: todo número na tela sai de uma fonte só.
+- **Capítulos por contraste: errado, certo, exagerado.** No CE-25A: bateria de carro não chega a 150 km; a de 500 Wh/kg chega a 400; com bateria demais, o peso derruba o alcance.
+- O kit (44 objetos de eletrônica e café, isométrico interativo) não serve ao nosso vídeo narrado.
+
+### Pistas sem ação
+- **Silicon Up Close portado:** ver a seção acima.
+- **Terror de regras EN→ES** (Lullorin, 33 mil inscritos, para o clone ES Expediente Doméstico, 2,4 mil): o clone pega entre um décimo e um terço do original. Vale o método (formato EN em alta e sem clone ES), não esse nicho, que já está clonado e é commodity.
+
+### Descartados nesta rodada
+Shorts faceless no piloto automático com Zapier (molde repetido, contra a regra de variedade de 14/11); a lista de 18 libs de motion (Typed.js, GSAP, anime.js, react-spring, mo.js, Rive, Paper.js, p5, PixiJS, matter.js, tsParticles, Lenis…), que são básicas e já estão cobertas pelo Remotion e pelo three.js. O HyperFrames entra só via motionmaxxing. Também: CAD com agente (freelance chinês, isca de engajamento) e o curso de "perfis dark".
