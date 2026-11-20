@@ -17,7 +17,7 @@ Três skills de agente foram instaladas globalmente em `~/.claude/skills/`, com 
 ## Avaliados e descartados no mesmo dia
 - **Já estão na stack:** three.quarks, react-postprocessing, WhisperX, librosa, Remotion skills.
 - **Baixo valor:** mg-styles-15, anidoodle, cinetic (feito para filme de produto; servem só as animações de texto dele), motion-design-skill, EffectCraft, Manim, Tweakpane, Openverse.
-- **Fábricas de "drama curto com IA": Pixelle-Video, Jellyfish e waoowaoo.** Todas geram cena por IA de imagem e vídeo, uma imagem por frase mais TTS e música. Isso é o slideshow que o Eduardo reprovou, e conflita com as regras do canal: vídeo gerado proibido, Flow só para imagem, risco de "conteúdo não original" (`docs/BADPATHS.md` #8). Não usar.
+- **Fábricas de "drama curto com IA": Pixelle-Video, Jellyfish e waoowaoo.** Todas geram cena por IA de imagem e vídeo, uma imagem por frase mais TTS e música. Isso é o slideshow que o Eduardo reprovou, e tem risco de "conteúdo não original" (`docs/BADPATHS.md` #8). Não usar.
 
 ## Atualizar
 ```sh
