@@ -69,3 +69,4 @@ Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte ess
 - **Achados de repositórios do X (19/11) e próximo passo do foto25d (SAM 2):** `docs/levantamentos/2026-11-19_achados-x-repos.md`.
 - **Documentários com Claude (3 tutoriais a 24 fps + método @kaulabs, 19/11):** docs/referencias/2026-11-19_documentarios-com-claude.md
 - **rea-video (engenharia reversa de vídeo plano a plano):** docs/levantamentos/rea-video.md
+- **Blender como pré-visualização para vídeo de IA (3 tutoriais, 19/11):** docs/referencias/2026-11-19_blender-previs-video-ia.md
