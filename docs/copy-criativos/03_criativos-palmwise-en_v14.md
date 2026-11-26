@@ -1,4 +1,4 @@
-# Palmwise (EN/EUA) · 10 criativos · v13 (cada promessa termina no ganho da massagista)
+# Palmwise (EN/EUA) · 10 criativos · v14 (cena ataca o medo oculto: perder a cliente para outra massagista)
 
 > **Data:** 25/11/2026 · **Status:** molde e os três primeiros (01, 02, 03) **aprovados pelo Eduardo, segundo relato da sessão de Mineração** ("Aprovado, repasse as 10 copys para o VSL Maker começar a produção"). Os outros sete (04 a 10) foram escritos pelo copymaster no mesmo molde. **Em 25/11/2026 o Eduardo liberou os sete para a produção, direto na sessão do copymaster ("Podem ir"), sem pedir para ler antes.**
 > **Os três aprovados** estão gravados exatamente como a sessão de Mineração enviou.
@@ -46,7 +46,7 @@
 **Copy (EN)**
 
 Massage therapist, what is a client really asking for when he says deeper?
-You know this client. He says, "Go deeper. You can't hurt me."
+You know this client. He says, "Go deeper. You can't hurt me." Next week, he books the therapist down the street who can go deeper.
 He is not asking for more pressure. He is asking for the technique to hit that spot.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -66,7 +66,7 @@ And the app costs less than what you charge for twenty minutes of massage. Tap L
 **Copy (EN)**
 
 Massage therapist, why do thumbs wear out years before forearms do?
-It's your fifth client of the day. Your thumbs are cooked, and he wants more pressure on his glutes.
+It's your fifth client of the day. Your thumbs are cooked, and he wants more pressure on his glutes. And you wonder how many more years your hands can do this.
 Your thumbs wear out first because your thumbs do the work that your forearms should do.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -86,7 +86,7 @@ And the app costs less than a new set of sheets for your massage table. Tap Lear
 **Copy (EN)**
 
 Massage therapist, what happens to the technique you saved at eleven last night?
-You saved one more video. Then Monday comes, and you are back on autopilot.
+You saved one more video. Then Monday comes, and you are back on autopilot. Your regulars get the same massage again, and one day they try someone new.
 That video did not show you which muscle is under your hands.
 The Palmwise app shows you that muscle, with one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -105,7 +105,7 @@ And the app costs less than one bolster for your table. Tap Learn More and see m
 **Copy (EN)**
 
 Massage therapist, why does a client leave a big tip and never rebook?
-She said, "The pressure was good." She tipped big. Then you got crickets.
+She said, "The pressure was good." She tipped big. Then you got crickets. Two weeks later, she was on another therapist's table.
 The pressure was too much, and it hurt her. She was too polite to tell you. Her shoulders went up, and she held her breath.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -124,7 +124,7 @@ And the app costs less than one bottle of good massage oil. Tap Learn More and s
 **Copy (EN)**
 
 Massage therapist, why does a client with a herniated disc leave your table with the same pain?
-His form says "herniated disc." So you stay away from his lower back, and he gets fluff and buff.
+His form says "herniated disc." So you stay away from his lower back, and he gets fluff and buff. Next time, he books someone who is not afraid of his lower back.
 Your hands never touch his disc. Your hands loosen the tight muscles around that disc.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -143,7 +143,7 @@ And the app costs less than a tank of gas. Tap Learn More and see more free bonu
 **Copy (EN)**
 
 Massage therapist, why does a pregnant client leave with the same aching lower back?
-She is six months along, and her lower back is killing her. One instructor said yes, your last CEU class said no, so she gets a massage that is way too light.
+She is six months along, and her lower back is killing her. One instructor said yes, your last CEU class said no, so she gets a massage that is way too light. Next month, she books a prenatal specialist instead of you.
 She does not need a lighter massage. She needs to lie on her side, with the right pillows.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -163,7 +163,7 @@ And the app costs less than what you charge for twenty minutes of massage. Tap L
 **Copy (EN)**
 
 Massage therapist, why does the shoulder she asked for get ten minutes?
-Your regular told you, "It's my right shoulder." Then your hands ran the usual routine, and you were going through the motions.
+Your regular told you, "It's my right shoulder." Then your hands ran the usual routine, and you were going through the motions. She noticed. Next month, she books someone who listens.
 She did not book the whole routine. She booked an hour for that shoulder.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -202,7 +202,7 @@ And the app costs less than one bolster for your table. Tap Learn More and see m
 **Copy (EN)**
 
 Massage therapist, why does a specialist charge more for the same sixty minutes?
-Her table is the same as yours. Her oil is the same. And her schedule is booked solid.
+Her table is the same as yours. Her oil is the same. And her schedule is booked solid, while yours still has gaps.
 She does not sell a full-body routine. She works the one muscle that hurts, and she can name that muscle.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -222,7 +222,7 @@ And the app costs less than one bottle of good massage oil. Tap Learn More and s
 **Copy (EN)**
 
 Massage therapist, why does a compliment from a client feel like a lie?
-He says, "You've got magic hands." You smile, and inside you think he is just being nice.
+He says, "You've got magic hands." You smile, and inside you think he is just being nice. And you are afraid that one day he will figure it out.
 That doubt does not come from your hands. That feeling comes from not knowing which muscle you just worked.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
