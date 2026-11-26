@@ -124,7 +124,7 @@ And the app costs less than one bottle of good massage oil. Tap Learn More and s
 **Copy (EN)**
 
 Massage therapist, why does a client with a herniated disc leave your table with the same pain?
-His form says "herniated disc." So you stay away from his lower back, and he gets fluff and buff. Next time, he books someone who is not afraid of his lower back.
+His form says "herniated disc." So you stay away from his lower back, and he gets fluff and buff. His next appointment is with someone who works on his lower back.
 Your hands never touch his disc. Your hands loosen the tight muscles around that disc.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -143,7 +143,7 @@ And the app costs less than a tank of gas. Tap Learn More and see more free bonu
 **Copy (EN)**
 
 Massage therapist, why does a pregnant client leave with the same aching lower back?
-She is six months along, and her lower back is killing her. One instructor said yes, your last CEU class said no, so she gets a massage that is way too light. Next month, she books a prenatal specialist instead of you.
+She is six months along, and her lower back is killing her. One instructor said yes, your last CEU class said no, so she gets a massage that is way too light. Her next appointment is with a prenatal specialist.
 She does not need a lighter massage. She needs to lie on her side, with the right pillows.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
@@ -163,7 +163,7 @@ And the app costs less than what you charge for twenty minutes of massage. Tap L
 **Copy (EN)**
 
 Massage therapist, why does the shoulder she asked for get ten minutes?
-Your regular told you, "It's my right shoulder." Then your hands ran the usual routine, and you were going through the motions. She noticed. Next month, she books someone who listens.
+Your regular told you, "It's my right shoulder." Then your hands ran the usual routine, and you were going through the motions. She noticed. A month later, she books someone else for that shoulder.
 She did not book the whole routine. She booked an hour for that shoulder.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
