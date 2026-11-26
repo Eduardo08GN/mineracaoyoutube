@@ -128,8 +128,8 @@ Your hands never work on his disc. Your hands work on the muscles guarding aroun
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see what changes on a lower back after a disc herniation.
-You also see false sciatica, which starts in a glute muscle.
-A free bonus called "The spine: disc herniations, sciatica and neck pain" gives you safe positions for a client with a herniated disc.
+You also see how to spot false sciatica, which starts in a glute muscle.
+A free bonus called "The spine: disc herniations, sciatica and neck pain" tells you what to work on and when to refer.
 And the app costs less than a tank of gas. Tap Learn More and see more free bonuses inside the app.
 
 **Tradução curta:** A ficha diz "hérnia de disco", a lombar recebe só um toque superficial e ele sai com a mesma dor. As mãos não trabalham o disco, e sim os músculos que se defendem em volta. O app mostra o que muda nessa lombar e a falsa ciática que começa no glúteo. Bônus: coluna (posições seguras). Objeção: o app diz quando encaminhar.
@@ -207,7 +207,7 @@ Her table is the same as yours. Her oil is the same. And her schedule is booked 
 She does not sell a full-body routine. She works the one muscle that hurts, and she can name that muscle.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see referred pain, when the sore spot is far from the muscle causing the pain.
+In the app, you see how referred pain works, when the sore spot is far from the muscle causing the pain.
 You also get a ten-minute intake to run before your client lies down.
 A free bonus called "The massage therapist's professional kit" gives you a price list and a session sheet.
 And the app costs less than one bottle of good massage oil. Tap Learn More and see more free bonuses inside the app.
