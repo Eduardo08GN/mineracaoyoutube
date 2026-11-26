@@ -124,7 +124,7 @@ And the app costs less than one bottle of good massage oil. Tap Learn More and s
 **Copy (EN)**
 
 Massage therapist, why does a client with a herniated disc leave your table with the same pain?
-His form says "herniated disc." So his lower back gets fluff and buff, and he leaves with the same pain.
+His form says "herniated disc." So you stay away from his lower back, and he gets fluff and buff.
 Your hands never touch his disc. Your hands loosen the tight muscles around that disc.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
