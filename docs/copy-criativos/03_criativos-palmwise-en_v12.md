@@ -67,6 +67,7 @@ And the app costs less than what you charge for twenty minutes of massage. Tap L
 
 Massage therapist, why do thumbs wear out years before forearms do?
 It's your fifth client of the day. Your thumbs are cooked, and he wants more pressure on his glutes.
+Your thumbs wear out first because your thumbs do the work that your forearms should do.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 Inside the app, you learn to use your forearm and your elbow instead of your thumb on the glutes and on the back.
@@ -104,7 +105,7 @@ And the app costs less than one bolster for your table. Tap Learn More and see m
 
 Massage therapist, why does a client leave a big tip and never rebook?
 She said, "The pressure was good." She tipped big. Then you got crickets.
-Her "good" meant too much pressure. Her shoulders went up, she held her breath, and she said nothing.
+The pressure was too much, and it hurt her. She was too polite to tell you. Her shoulders went up, and she held her breath.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see the body signs of too much pressure.
@@ -124,7 +125,7 @@ And the app costs less than one bottle of good massage oil. Tap Learn More and s
 
 Massage therapist, why does one word on the intake form change the whole session?
 His form says "herniated disc." So his lower back gets fluff and buff, and he leaves with the same pain.
-Your hands never work on his disc. Your hands work on the muscles guarding around that disc.
+Your hands never touch his disc. Your hands loosen the tight muscles around that disc.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see what changes on a lower back after a disc herniation.
