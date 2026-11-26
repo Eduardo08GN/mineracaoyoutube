@@ -5,7 +5,7 @@ Registro do que deu errado e do que deu certo ao escrever os 10 criativos do Pal
 Arquivos relacionados nesta pasta:
 - `01_criativo-campeao_vturb-cartpanda.md`: o que faz um criativo campeão.
 - `02_mapa-massoterapeutas-en.md`: a voz do cliente.
-- `03_criativos-palmwise-en_v14.md`: os 10 aprovados.
+- `03_criativos-palmwise-en_v15.md`: os 10 aprovados.
 
 ---
 
@@ -160,6 +160,10 @@ Pegos na conferência das fichas:
 - **Regra:** quando a correção vier, reler a frase do Eduardo ao pé da letra e aplicar só aquilo. Contar antes de informar números.
 
 ---
+
+### 22. Dez criativos com o mesmo miolo
+- **O que aconteceu:** na v14, os 10 criativos dividiam as mesmas 39 palavras do app e o mesmo fecho. O Andromeda, da Meta, tende a tratar isso como variações de um anúncio só e não testa cada um.
+- **Regra:** em lote, a frase do app e o fecho entram com várias redações em rodízio. Cada roteiro ganha 3 ganchos (A: fala da cliente; B: afirmação da cena; C: pergunta paradoxal), todos com "Massage therapist,". A narração é feita inteira para cada versão, sem emendar take. Ficou assim na v15.
 
 ## Riscos que ficaram (decisão consciente do Eduardo)
 
