@@ -182,7 +182,7 @@ And the app costs less than a new set of sheets for your massage table. Tap Lear
 **Copy (EN)**
 
 Massage therapist, why does the pain between her shoulder blades keep coming back?
-You worked your regular's rhomboids for twenty minutes. A few days later, she rebooks with the same pain.
+You worked your regular's rhomboids for twenty minutes. A few days later, you find out she booked another therapist for the same pain.
 Her rhomboids are not tight. Her chest muscles pull her shoulders forward, and that pull overstretches her rhomboids.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
