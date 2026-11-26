@@ -31,7 +31,7 @@ Pesquisa e copys para criativos de anúncio de produto digital. Três documentos
 5. Duas promessas concretas, que dizem o que se aprende.
 6. Um bônus só, pelo nome exato ("A free bonus called…"), em rodízio entre os criativos.
 7. Uma frase de quebra de objeção.
-8. Fecho: "And the app costs less than [X]. Tap Learn More and see more free bonuses inside the app."
+8. Fecho: "And the app costs less than [X]. Tap Learn More and see more free bonuses."
 
 ## Regras de linguagem (decisões do Eduardo)
 
