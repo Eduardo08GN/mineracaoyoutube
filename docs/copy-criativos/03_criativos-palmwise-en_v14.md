@@ -143,7 +143,7 @@ And the app costs less than a tank of gas. Tap Learn More and see more free bonu
 **Copy (EN)**
 
 Massage therapist, why does a pregnant client leave with the same aching lower back?
-She is six months along, and her lower back is killing her. One instructor said yes, your last CEU class said no, so she gets a massage that is way too light. Her next appointment is with a prenatal specialist.
+She is six months along, and her lower back is killing her. One instructor said yes, your last CEU class said no, so she gets a massage that is way too light. She spends the rest of her pregnancy on a prenatal specialist's table.
 She does not need a lighter massage. She needs to lie on her side, with the right pillows.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
