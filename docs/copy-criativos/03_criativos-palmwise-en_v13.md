@@ -70,9 +70,9 @@ It's your fifth client of the day. Your thumbs are cooked, and he wants more pre
 Your thumbs wear out first because your thumbs do the work that your forearms should do.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-Inside the app, you learn to use your forearm and your elbow instead of your thumb on the glutes and on the back.
+Inside the app, you learn to use your forearm and your elbow instead of your thumb on the glutes and on the back, so your thumbs last for years.
 A module called "Your body at work" teaches you how to set your table height using your own knuckles, so your back and your neck still feel fine after your last client.
-A free bonus called "20 ready-to-use massage sequences" gives you full sessions, step by step, so your forearms do the work and your thumbs last for years.
+A free bonus called "20 ready-to-use massage sequences" gives you full sessions, step by step, so you never stand at the table wondering what comes next.
 And the app costs less than a new set of sheets for your massage table. Tap Learn More and see more free bonuses inside the app.
 
 **Tradução curta:** Quinto cliente do dia, polegares acabados, e ele quer mais pressão nos glúteos. No app ela aprende a usar antebraço e cotovelo no lugar do polegar, e a ajustar a altura da maca pelos nós dos dedos. Bônus: vinte sequências. Objeção: abre uma lição e usa no próximo cliente.
@@ -128,7 +128,7 @@ His form says "herniated disc." So you stay away from his lower back, and he get
 Your hands never touch his disc. Your hands loosen the tight muscles around that disc.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see how to spot false sciatica, which starts in a glute muscle, so he walks out with less pain and books you again.
+In the app, you see how to spot false sciatica, which starts in a glute muscle, so you stop avoiding his lower back and his glutes, and he books you again.
 A free bonus called "The spine: disc herniations, sciatica and neck pain" tells you what to work on and when to refer.
 And the app costs less than a tank of gas. Tap Learn More and see more free bonuses inside the app.
 
@@ -187,7 +187,7 @@ Her rhomboids are not tight. Her chest muscles pull her shoulders forward, and t
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see the rhomboids, between her shoulder blade and her spine, and the mistake of stretching them more.
-You also see how to work the chest muscles on a client with rounded shoulders, so the pain stops coming back and she tells her friends about you.
+You also see how to work the chest muscles on a client with rounded shoulders, so you work the muscle that is pulling, and she tells her friends about you.
 A free bonus called "The spine: disc herniations, sciatica and neck pain" gives you a twenty-minute protocol for posture-related neck pain.
 And the app costs less than one bolster for your table. Tap Learn More and see more free bonuses inside the app.
 
