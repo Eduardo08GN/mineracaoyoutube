@@ -1,4 +1,4 @@
-# Palmwise (EN/EUA) · 10 criativos · v12 (arquivo final para produção)
+# Palmwise (EN/EUA) · 10 criativos · v13 (cada promessa termina no ganho da massagista)
 
 > **Data:** 25/11/2026 · **Status:** molde e os três primeiros (01, 02, 03) **aprovados pelo Eduardo, segundo relato da sessão de Mineração** ("Aprovado, repasse as 10 copys para o VSL Maker começar a produção"). Os outros sete (04 a 10) foram escritos pelo copymaster no mesmo molde. **Em 25/11/2026 o Eduardo liberou os sete para a produção, direto na sessão do copymaster ("Podem ir"), sem pedir para ler antes.**
 > **Os três aprovados** estão gravados exatamente como a sessão de Mineração enviou.
@@ -51,7 +51,7 @@ He is not asking for more pressure. He is asking for the technique to hit that s
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see how to hit that deep spot with your forearm and your body weight, without more force.
-You also see the forearm mistake that sets off guarding in his back.
+You also see the forearm mistake that sets off guarding in his back, so he finally feels the depth and books you again.
 A free bonus called "The spine: disc herniations, sciatica and neck pain" tells you what to work on and when to refer.
 And the app costs less than what you charge for twenty minutes of massage. Tap Learn More and see more free bonuses inside the app.
 
@@ -71,8 +71,8 @@ Your thumbs wear out first because your thumbs do the work that your forearms sh
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 Inside the app, you learn to use your forearm and your elbow instead of your thumb on the glutes and on the back.
-A module called "Your body at work" teaches you how to set your table height using your own knuckles.
-A free bonus called "20 ready-to-use massage sequences" gives you full sessions, step by step.
+A module called "Your body at work" teaches you how to set your table height using your own knuckles, so your back and your neck still feel fine after your last client.
+A free bonus called "20 ready-to-use massage sequences" gives you full sessions, step by step, so your forearms do the work and your thumbs last for years.
 And the app costs less than a new set of sheets for your massage table. Tap Learn More and see more free bonuses inside the app.
 
 **Tradução curta:** Quinto cliente do dia, polegares acabados, e ele quer mais pressão nos glúteos. No app ela aprende a usar antebraço e cotovelo no lugar do polegar, e a ajustar a altura da maca pelos nós dos dedos. Bônus: vinte sequências. Objeção: abre uma lição e usa no próximo cliente.
@@ -90,7 +90,8 @@ You saved one more video. Then Monday comes, and you are back on autopilot.
 That video did not show you which muscle is under your hands.
 The Palmwise app shows you that muscle, with one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-A free bonus called "Pregnancy and postpartum on the massage table" gives you the side-lying sequence for a new mom's neck and back.
+On Monday, your hands go straight to the right muscle, and your regulars feel the difference.
+A free bonus called "Pregnancy and postpartum on the massage table" gives you the side-lying sequence for a new mom's neck and back, so you can say yes when a new mom wants to book you.
 And the app costs less than one bolster for your table. Tap Learn More and see more free bonuses inside the app.
 
 **Tradução curta:** Ela salva mais um vídeo e na segunda volta ao piloto automático, porque o vídeo não mostrou qual músculo está debaixo das mãos. O app mostra o músculo desenhado e o erro mais comum nele. Bônus: gestante e pós-parto. Objeção: o app põe as técnicas em ordem.
@@ -109,7 +110,7 @@ The pressure was too much, and it hurt her. She was too polite to tell you. Her 
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see how to ask about pressure, so she comes back, becomes one of your regulars, and brings you money every month.
-A free bonus called "The massage therapist's professional kit" gives you a body map, so your client marks where it hurts.
+A free bonus called "The massage therapist's professional kit" gives you a body map, so your client marks where it hurts and you start on the right spot.
 And the app costs less than one bottle of good massage oil. Tap Learn More and see more free bonuses inside the app.
 
 **Tradução curta:** Ela disse que a pressão estava boa, deu gorjeta alta e sumiu. A pressão foi demais e a machucou; ela foi educada demais para falar. O app mostra os sinais do corpo de pressão demais e como perguntar sobre a pressão, para ela voltar, virar cliente fixa e trazer dinheiro todo mês. Bônus: kit profissional (mapa corporal).
@@ -122,13 +123,12 @@ And the app costs less than one bottle of good massage oil. Tap Learn More and s
 
 **Copy (EN)**
 
-Massage therapist, why does one word on the intake form change the whole session?
+Massage therapist, why does a client with a herniated disc leave your table with the same pain?
 His form says "herniated disc." So his lower back gets fluff and buff, and he leaves with the same pain.
 Your hands never touch his disc. Your hands loosen the tight muscles around that disc.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see what changes on a lower back after a disc herniation.
-You also see how to spot false sciatica, which starts in a glute muscle.
+In the app, you see how to spot false sciatica, which starts in a glute muscle, so he walks out with less pain and books you again.
 A free bonus called "The spine: disc herniations, sciatica and neck pain" tells you what to work on and when to refer.
 And the app costs less than a tank of gas. Tap Learn More and see more free bonuses inside the app.
 
@@ -147,7 +147,7 @@ She is six months along, and her lower back is killing her. One instructor said 
 She does not need a lighter massage. She needs to lie on her side, with the right pillows.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see how to work with a pregnant client in her second trimester.
+In the app, you see how to work with a pregnant client in her second trimester, so she gets real relief and books you every month until the baby comes.
 You also get the red flags to check at intake, before she gets on your table.
 A free bonus called "Pregnancy and postpartum on the massage table" shows you the full side-lying setup with pillows.
 And the app costs less than what you charge for twenty minutes of massage. Tap Learn More and see more free bonuses inside the app.
@@ -167,8 +167,7 @@ Your regular told you, "It's my right shoulder." Then your hands ran the usual r
 She did not book the whole routine. She booked an hour for that shoulder.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see the tight upper trapezius, on the top of her shoulder.
-You also see the levator scapulae, from her neck to the corner of her shoulder blade.
+In the app, you see the levator scapulae, from her neck to the corner of her shoulder blade, so she gets off the table and turns her neck without pain.
 A free bonus called "20 ready-to-use massage sequences" has a thirty-minute session for the neck and the upper back.
 And the app costs less than a new set of sheets for your massage table. Tap Learn More and see more free bonuses inside the app.
 
@@ -188,7 +187,7 @@ Her rhomboids are not tight. Her chest muscles pull her shoulders forward, and t
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see the rhomboids, between her shoulder blade and her spine, and the mistake of stretching them more.
-You also see how to work the chest muscles on a client with rounded shoulders.
+You also see how to work the chest muscles on a client with rounded shoulders, so the pain stops coming back and she tells her friends about you.
 A free bonus called "The spine: disc herniations, sciatica and neck pain" gives you a twenty-minute protocol for posture-related neck pain.
 And the app costs less than one bolster for your table. Tap Learn More and see more free bonuses inside the app.
 
@@ -207,9 +206,9 @@ Her table is the same as yours. Her oil is the same. And her schedule is booked 
 She does not sell a full-body routine. She works the one muscle that hurts, and she can name that muscle.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see how referred pain works, when the sore spot is far from the muscle causing the pain.
-You also get a ten-minute intake to run before your client lies down.
-A free bonus called "The massage therapist's professional kit" gives you a price list and a session sheet.
+In the app, you see how referred pain works, when the sore spot is far from the muscle causing the pain, so you find the muscle the other therapists missed.
+You also get a ten-minute intake to run before your client lies down, so she hears you name her problem before you touch her.
+A free bonus called "The massage therapist's professional kit" gives you a price list and a session sheet, so you can raise your price with something to show.
 And the app costs less than one bottle of good massage oil. Tap Learn More and see more free bonuses inside the app.
 
 **Tradução curta:** A especialista tem a mesma maca e o mesmo óleo, e a agenda cheia. Ela não vende rotina de corpo inteiro: trabalha o músculo que dói e sabe dizer o nome dele. O app mostra a dor referida e a entrevista de dez minutos. Bônus: kit profissional (tabela de preços e ficha de sessão). Objeção: o app não promete renda.
@@ -227,8 +226,8 @@ He says, "You've got magic hands." You smile, and inside you think he is just be
 That doubt does not come from your hands. That feeling comes from not knowing which muscle you just worked.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see how to find a muscle with your fingers before you press on that muscle.
-You also get the body order for a full session, from the first touch to the closing.
+In the app, you see how to find a muscle with your fingers before you press on that muscle, so when he says "magic hands," you know exactly why.
+You also get the body order for a full session, from the first touch to the closing, so every session feels planned and every client wants to come back.
 A free bonus called "20 ready-to-use massage sequences" gives you a sixty-minute full-body session, step by step.
 And the app costs less than a tank of gas. Tap Learn More and see more free bonuses inside the app.
 
