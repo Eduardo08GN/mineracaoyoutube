@@ -108,8 +108,7 @@ She said, "The pressure was good." She tipped big. Then you got crickets.
 The pressure was too much, and it hurt her. She was too polite to tell you. Her shoulders went up, and she held her breath.
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
-In the app, you see the body signs of too much pressure.
-You also see how to ask about pressure, so she comes back, becomes one of your regulars, and brings you money every month.
+In the app, you see how to ask about pressure, so she comes back, becomes one of your regulars, and brings you money every month.
 A free bonus called "The massage therapist's professional kit" gives you a body map, so your client marks where it hurts.
 And the app costs less than one bottle of good massage oil. Tap Learn More and see more free bonuses inside the app.
 
