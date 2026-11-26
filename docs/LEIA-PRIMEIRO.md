@@ -71,3 +71,4 @@ Pacotes prontos já avaliados ficam em `docs/pacotes-por-canal.md`. Consulte ess
 - **rea-video (engenharia reversa de vídeo plano a plano):** docs/levantamentos/rea-video.md
 - **Blender como pré-visualização para vídeo de IA (3 tutoriais, 19/11):** docs/referencias/2026-11-19_blender-previs-video-ia.md
 - **Avatar real e natural (happy path, 22/11):** docs/avatar-real-happy-path.md
+- **Copy de criativo (caminhos ruins e bom, 25/11):** docs/copy-criativos/04_badpaths-happypaths-copy.md
