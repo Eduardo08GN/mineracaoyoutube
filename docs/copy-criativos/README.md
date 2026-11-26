@@ -6,8 +6,9 @@ Pesquisa e copys para criativos de anúncio de produto digital. Três documentos
 |---|---|
 | `01_criativo-campeao_vturb-cartpanda.md` | O que faz um criativo ser campeão, com foco em copy. Vem de 27 episódios de podcast (17 do VTurb, 10 da Cartpanda) e de um reel. Inclui a leitura do agente COPY Master (seção 11). |
 | `02_mapa-massoterapeutas-en.md` | Voz do cliente de massoterapeutas dos EUA: dores, medos ocultos, desejos ocultos, vilões, objeções, glossário literal e zonas proibidas, com link para cada frase. |
-| `03_criativos-palmwise-en_v14.md` | Os 10 criativos em inglês do app Palmwise, no molde aprovado pelo Eduardo, com as fichas do app que sustentam cada frase. |
+| `03_criativos-palmwise-en_v15.md` | Os 10 roteiros em inglês do Palmwise em matriz (3 ganchos × 10 = 30 vídeos, PW-EN-01A a 10C), com 5 pontes do app e 5 fechos em rodízio. Aprovado em 26/11. |
 | `04_badpaths-happypaths-copy.md` | Os 21 caminhos ruins (cada reprovação do Eduardo, com a regra que nasceu dela) e o caminho bom: processo, molde aprovado e regras de linguagem. |
+| `05_comparativo-v14-x-espanhol.md` | Comparativo independente da v14 com os criativos em espanhol que já venderam; deu origem à v15. |
 
 ## Como foi feito
 
