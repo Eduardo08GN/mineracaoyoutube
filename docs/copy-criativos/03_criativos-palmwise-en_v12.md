@@ -109,11 +109,11 @@ The pressure was too much, and it hurt her. She was too polite to tell you. Her 
 The Palmwise app has one hundred and twenty massage techniques, on your phone and on your computer.
 For each muscle, the app shows you the muscle drawn under the skin, the technique, the direction, how much pressure to use, and the most common mistake.
 In the app, you see the body signs of too much pressure.
-You also see how to ask about pressure, so a client tells you more than "good."
+You also see how to ask about pressure, so she comes back, becomes one of your regulars, and brings you money every month.
 A free bonus called "The massage therapist's professional kit" gives you a body map, so your client marks where it hurts.
 And the app costs less than one bottle of good massage oil. Tap Learn More and see more free bonuses inside the app.
 
-**Tradução curta:** Ela disse que a pressão estava boa, deu gorjeta alta e sumiu. "Boa" queria dizer pressão demais: os ombros subiram, ela prendeu a respiração e não falou. O app mostra os sinais do corpo e como perguntar sobre a pressão. Bônus: kit profissional (mapa corporal). Objeção: lê em casa.
+**Tradução curta:** Ela disse que a pressão estava boa, deu gorjeta alta e sumiu. A pressão foi demais e a machucou; ela foi educada demais para falar. O app mostra os sinais do corpo de pressão demais e como perguntar sobre a pressão, para ela voltar, virar cliente fixa e trazer dinheiro todo mês. Bônus: kit profissional (mapa corporal).
 
 **Fichas:** 1.07 ("Signals that say more than words", "How to ask"); 5.08 (ombro que sobe, respiração presa); B4.03
 
